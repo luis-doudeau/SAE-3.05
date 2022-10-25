@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2022-12-27" view-index="0" gantt-divider-location="396" resource-divider-location="300" version="3.2.3240" locale="fr_FR">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2022-11-25" view-index="0" gantt-divider-location="396" resource-divider-location="300" version="3.2.3240" locale="fr_FR">
     <description/>
     <view zooming-state="default:0" id="gantt-chart">
-        <field id="tpd3" name="Nom" width="224" order="0"/>
-        <field id="tpd4" name="Date de début" width="85" order="1"/>
-        <field id="tpd5" name="Date de fin" width="86" order="2"/>
+        <field id="tpd3" name="Nom" width="215" order="0"/>
+        <field id="tpd4" name="Date de début" width="81" order="1"/>
+        <field id="tpd5" name="Date de fin" width="84" order="2"/>
         <option id="filter.completedTasks" value="false"/>
     </view>
     <view id="resource-table">
@@ -34,7 +34,9 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="6" name="Planification du projet" color="#8cb6ce" meeting="false" start="2022-10-24" duration="1" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="true"/>
+        <task id="6" name="Planification du projet" color="#8cb6ce" meeting="false" start="2022-10-24" duration="1" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="true">
+            <depend id="11" type="2" difference="0" hardness="Strong"/>
+        </task>
         <task id="1" name="DIagramme UML" meeting="false" start="2022-10-24" duration="3" complete="0" expand="true">
             <depend id="4" type="2" difference="0" hardness="Strong"/>
             <depend id="5" type="2" difference="0" hardness="Strong"/>
@@ -53,7 +55,7 @@
             <task id="24" name="Création du script" color="#8cb6ce" meeting="false" start="2022-11-07" duration="1" complete="0" thirdDate="2022-10-05" thirdDate-constraint="0" expand="true">
                 <depend id="25" type="1" difference="0" hardness="Strong"/>
             </task>
-            <task id="25" name="Création des triggers" color="#8cb6ce" meeting="false" start="2022-11-07" duration="1" complete="0" thirdDate="2022-10-05" thirdDate-constraint="0" expand="true">
+            <task id="25" name="Création des triggers" color="#8cb6ce" meeting="false" start="2022-11-07" duration="1" complete="0" thirdDate="2022-10-05" thirdDate-constraint="0" expand="false">
                 <depend id="26" type="1" difference="0" hardness="Strong"/>
             </task>
             <task id="26" name="Création des insertions (tests)" color="#8cb6ce" meeting="false" start="2022-11-07" duration="1" complete="0" thirdDate="2022-10-06" thirdDate-constraint="0" expand="true"/>
@@ -64,8 +66,8 @@
                 <depend id="8" type="2" difference="0" hardness="Strong"/>
                 <depend id="9" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="8" name="Création d'un répertoire" meeting="false" start="2022-11-09" duration="1" complete="0" expand="true"/>
-            <task id="9" name="Création du fichier AppliFestival" meeting="false" start="2022-11-09" duration="1" complete="0" expand="true"/>
+            <task id="8" name="Création d'un répertoire" color="#8cb6ce" meeting="false" start="2022-11-09" duration="1" complete="0" thirdDate="2022-11-09" thirdDate-constraint="0" expand="true"/>
+            <task id="9" name="Création du fichier AppliFestival" color="#8cb6ce" meeting="false" start="2022-11-09" duration="1" complete="0" thirdDate="2022-11-09" thirdDate-constraint="0" expand="false"/>
         </task>
         <task id="13" name="Implémenter l'application" meeting="false" start="2022-11-10" duration="2" complete="0" expand="true">
             <task id="11" name="Générer une feuille pdf automatiquement" color="#8cb6ce" meeting="false" start="2022-11-10" duration="2" complete="0" thirdDate="2022-10-27" thirdDate-constraint="0" expand="true"/>
@@ -97,14 +99,45 @@
         <allocation task-id="0" resource-id="0" function="1" responsible="false" load="100.0"/>
         <allocation task-id="2" resource-id="0" function="1" responsible="true" load="100.0"/>
         <allocation task-id="5" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="3" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="24" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="7" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="25" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="26" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="8" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="11" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="12" resource-id="0" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="21" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="16" resource-id="0" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="22" resource-id="0" function="1" responsible="false" load="100.0"/>
         <allocation task-id="6" resource-id="1" function="2" responsible="false" load="0.0"/>
         <allocation task-id="0" resource-id="1" function="2" responsible="false" load="100.0"/>
         <allocation task-id="2" resource-id="1" function="2" responsible="true" load="100.0"/>
         <allocation task-id="5" resource-id="1" function="2" responsible="true" load="100.0"/>
         <allocation task-id="5" resource-id="1" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="3" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="7" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="26" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="25" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="8" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="11" resource-id="1" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="15" resource-id="1" function="2" responsible="true" load="100.0"/>
+        <allocation task-id="16" resource-id="1" function="2" responsible="false" load="100.0"/>
+        <allocation task-id="22" resource-id="1" function="2" responsible="false" load="100.0"/>
         <allocation task-id="0" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
         <allocation task-id="3" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
         <allocation task-id="4" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="25" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="8" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="9" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="11" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="12" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="20" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="16" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="22" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
     </allocations>
     <vacations/>
     <previous/>
