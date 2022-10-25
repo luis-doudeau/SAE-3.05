@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2022-10-13" view-index="0" gantt-divider-location="270" resource-divider-location="300" version="3.2.3240" locale="fr_FR">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2022-10-14" view-index="0" gantt-divider-location="270" resource-divider-location="300" version="3.2.3240" locale="fr_FR">
     <description/>
     <view zooming-state="default:2" id="gantt-chart">
         <field id="tpd3" name="Nom" width="153" order="0"/>
@@ -38,13 +38,13 @@
         <task id="1" name="DIagramme UML" meeting="false" start="2022-10-24" duration="3" complete="0" expand="true">
             <depend id="4" type="2" difference="0" hardness="Strong"/>
             <depend id="5" type="2" difference="0" hardness="Strong"/>
-            <task id="0" name="Diagramme MCD" color="#8cb6ce" meeting="false" start="2022-10-24" duration="1" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="true">
+            <task id="0" name="Diagramme MCD" color="#8cb6ce" meeting="false" start="2022-10-24" duration="2" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="true">
                 <depend id="3" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="3" name="Diagramme de classe" color="#8cb6ce" meeting="false" start="2022-10-25" duration="1" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="false">
-                <depend id="2" type="2" difference="0" hardness="Strong"/>
+            <task id="2" name="Diagramme cas d'utilisation" color="#8cb6ce" meeting="false" start="2022-10-25" duration="1" complete="0" thirdDate="2022-10-26" thirdDate-constraint="0" expand="true">
+                <depend id="3" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="2" name="Diagramme cas d'utilisation" color="#8cb6ce" meeting="false" start="2022-10-26" duration="1" complete="0" thirdDate="2022-10-26" thirdDate-constraint="0" expand="true"/>
+            <task id="3" name="Diagramme de classe" color="#8cb6ce" meeting="false" start="2022-10-26" duration="1" complete="0" thirdDate="2022-10-24" thirdDate-constraint="0" expand="false"/>
         </task>
         <task id="4" name="Maquetage" color="#8cb6ce" meeting="false" start="2022-10-27" duration="2" complete="0" thirdDate="2022-10-27" thirdDate-constraint="0" expand="true"/>
         <task id="5" name="Cahier des charges" color="#8cb6ce" meeting="false" start="2022-10-27" duration="2" complete="0" thirdDate="2022-10-27" thirdDate-constraint="0" expand="false"/>
