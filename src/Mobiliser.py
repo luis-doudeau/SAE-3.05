@@ -7,8 +7,7 @@ Base = declarative_base()
 class Mobiliser(Base):
     __tablename__ = "MOBILISER"
     idVoy = Column(Integer, primary_key = True)
-    idNavette = Column(Date)
-    DureeVoy = Column(Date)
+    idNavette = Column(Date, primary_key = True)
 
     def __init__(self, idVoy, idNavette) -> None:
         self.idVoy = idVoy
