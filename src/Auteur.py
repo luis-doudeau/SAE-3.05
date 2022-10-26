@@ -14,4 +14,3 @@ class Auteur(Base):
 
     def __repr__(self) -> str:
         return "ID auteur : " + str(self.idA) + ", ID ME : " + str(self.idMe)
-        
