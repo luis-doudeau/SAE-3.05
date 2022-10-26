@@ -3,72 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
+    <link rel="stylesheet" href="styleConnexion.css">
+    <link href="https://fr.allfont.net/allfont.css?fonts=londrina-shadow" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <header>
         <ul>
             <li>
-                <p></p>
+                <p>Rejoignez la communauté #BDBoum</p>
             </li>
             <li>
-                <a href=""> <img src="" alt=""> </a>
+                <a href="https://www.instagram.com/bdboum/?hl=fr"> <img id="imginsta" src="../img/logoInsta.png" alt=""> </a>
             </li>
             <li>
-                <a href=""> <img src="" alt=""> </a>
+                <a href="https://www.facebook.com/bdboum?fref=ts"> <img id="imgface" src="../img/logoFacebook.png" alt=""> </a>
             </li>
             <li>
-                <a href=""> <img src="" alt=""> </a>
+                <a href="https://www.youtube.com/channel/UCZzbuXSrKg_De4i7H9BaW1Q"> <img id="imgyout" src="../img/logoYoutube.png" alt=""> </a>
             </li>
-            <li>
-                <p></p>
+            <li id="last-li-header">
+                <a href="https://www.maisondelabd.com/">Site Officiel bdBoum</a>
             </li>
         </ul>
-        <a href=""></a>
+        
     </header>
     <main>
         <header>
             <ul>
                 <li>
-                    <img src="" alt="">
+                    <img src="../img/logo_maison_de_la_bd.jpg" alt="">
                 </li>
                 <li>
-                    <p></p>
+                    <p> 18 → 20 Novembre 2022</p>
                 </li>
                 <li>
-                    <p></p>
+                    <p>Infos pratiques</p>
                 </li>
                 <li>
-                    <p></p>
-                </li>
-                <li>
-                    <img src="" alt="">
+                    <img src="../img/logo_maison_de_la_bd.jpg" alt="">
                 </li>
             </ul>
         </header>
-        <section>
+        <section class="box-info">
             <header>
-                <h2></h2>
+                <h2>BIENVENUE !</h2>
             </header>
             <ul>
-                <li>
-                    <p></p>
-                </li>
-                <li>
-                    <input type="text">
-                    <label for=""></label>
-                </li>
-                <li>
-                    <input type="text">
-                    <label for=""></label>
-                </li>
-                <li>
-                    <input type="text">
-                    <label for=""></label>
-                </li>
-                <li>
-                    <input type="text">
-                    <label for=""></label>
-                </li>
+                <form action=""></form>
+                    <li>
+                        <p>Connectez-vous pour accéder</p>
+                        <p id="p2">à votre espace</p>
+                    </li>
+                    <li>
+                        <input type="text" placeholder="Email">
+                        <label for=""></label>
+                    </li>
+                    <li>
+                        <input type="password" placeholder="Mot de passe">
+                    </li>
+                    <li>
+                        <div>
+                            <input type="checkbox" id = CbSouvenir>
+                            <label for="CbSouvenir">Se souvenir de moi</label>
+                        </div>
+                    </li>
+                    <li>
+                        <input id="boutonConnecter" type="submit" value="SE CONNECTER">
+                    </li>
+                </form>
             </ul>
         </section>
     </main>
