@@ -27,4 +27,4 @@ class Personne(Base):
         self.moyenLocomotion = moyenLocomotion
 
     def __repr__(self) -> str:
-        return self.nomP + " " + self.prenomP + " d'id : " + str(self.idP)
+        return self.nomP + " " + self.prenomP + ", id : " + str(self.idP)

@@ -14,5 +14,5 @@ class Loger(Base):
         self.idHotel = idHotel
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idIntervenant) + ", id hotel : " + str(self.idHotel)
+        return "ID intervenant : " + str(self.idIntervenant) + ", ID hotel : " + str(self.idHotel)
         

@@ -1,4 +1,4 @@
-from sqlalchemy import Date
+from sqlalchemy import DATETIME
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -7,8 +7,8 @@ Base = declarative_base()
 class Voyage(Base):
     __tablename__ = "VOYAGE"
     idVoy = Column(Integer, primary_key = True)
-    heureDebVoy = Column(Date)
-    DureeVoy = Column(Date)
+    heureDebVoy = Column(DATETIME)
+    DureeVoy = Column(DATETIME)
 
     def __init__(self, idVoy, heureDebVoy, DureeVoy) -> None:
         self.idVoy = idVoy

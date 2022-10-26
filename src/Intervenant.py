@@ -1,6 +1,4 @@
-from datetime import date
-from xmlrpc.client import Boolean
-from sqlalchemy import Date, BOOLEAN
+from sqlalchemy import DATETIME
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -9,8 +7,8 @@ Base = declarative_base()
 class Intervenant(Base):
     __tablename__ = "INTERVENANT"
     idIntervenant = Column(Integer, primary_key = True)
-    dateArrive = Column(Date)
-    dateDepart = Column(Date)
+    dateArrive = Column(DATETIME)
+    dateDepart = Column(DATETIME)
     transport = Column(Text)
     intervention = Column(Text)
 
