@@ -42,7 +42,7 @@ CREATE TABLE CRENEAU (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE CRENEAU_REPAS (
-  idCreneauRepas int(42),
+  idCreneauRepas int,
   dateDeb datetime,
   dateFin datetime,
   PRIMARY KEY (idCreneauRepas)
@@ -113,7 +113,7 @@ CREATE TABLE MOBILISER(
 
 CREATE TABLE EXPOSANT (
   idE int,
-  numStand int(42),
+  numStand int,
   PRIMARY KEY (idE),
   FOREIGN KEY EXPOSANT(idE) REFERENCES PERSONNE(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
@@ -127,7 +127,6 @@ CREATE TABLE CONSOMMATEUR (
 
 CREATE TABLE REPAS (
   idRepas int,
-  jourR date,
   estMidi boolean,
   idRest int,
   idCreneauRepas int,
