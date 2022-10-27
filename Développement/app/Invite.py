@@ -5,10 +5,10 @@ Base = declarative_base()
 
 class Invite(Base):
     __tablename__ = "INVITE"
-    idInvite = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
 
-    def __init__(self, idInvite) -> None:
-        self.idInvite = idInvite
+    def __init__(self, idP) -> None:
+        self.idP = idP
 
     def __repr__(self) -> str:
-        return "ID invite : " + str(self.idInvite)
+        return "ID invite : " + str(self.idP)

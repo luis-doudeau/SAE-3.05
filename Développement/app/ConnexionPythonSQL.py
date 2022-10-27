@@ -1,3 +1,4 @@
+from curses import set_escdelay
 from sqlite3 import DatabaseError
 from statistics import quantiles
 import sqlalchemy
@@ -6,7 +7,9 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import date
+
+from Consommateur import Consommateur
+from Personne import Personne
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -45,3 +48,40 @@ connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnard
 #     cnx.close()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+def get_max_id_Personne(session):
+    max_id = session.query(func.max(Personne.idP)).first()
+    if (max_id._data[0]) is None:
+        return 0
+    else:
+        return max_id._data[0]
+
+def ajoute_personne(session, personne):
+    personneP = session.query(Personne).filter(Personne.idP == personne.idP).first()
+    if personneP is None:
+        session.add(personne)
+        try:
+            session.commit()
+            print("La personne "+ str(personne) +" a bien été inséré dans la base de donnée")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Une personne a déjà cet identifiant dans la base de donnée")
+    
+def ajoute_Consommateur(session, consommateur):
+    consommateurC = session.query(Consommateur).filter(Consommateur.idP == consommateur.idP).first()
+    if consommateurC is None:
+        personne = session.query(Personne).filter(Personne.idP == consommateur.idP).first()
+        session.add(consommateur)
+        try:
+            session.commit()
+            print("La personne " + str(personne) + " est devenu un(e) consommateur")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Un consommateur a déjà cet identifiant dans la base de donnée")
+
+#ajoute_personne(session, Personne(get_max_id_Personne(session)+1, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"))
+ajoute_Consommateur(session, Consommateur(1))

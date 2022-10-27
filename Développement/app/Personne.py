@@ -1,3 +1,4 @@
+from sqlalchemy import DATE
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -8,7 +9,7 @@ class Personne(Base):
     idP = Column(Integer, primary_key = True)
     nomP = Column(Text)
     prenomP = Column(Text)
-    ddnP = Column(Text)
+    ddnP = Column(DATE)
     telP = Column(Text)
     emailP = Column(Text)
     mdpP = Column(Text)
