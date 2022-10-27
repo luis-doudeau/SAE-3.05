@@ -150,7 +150,7 @@ CREATE TABLE LOGER(
   idP int,
   idHotel int,
   dateDeb datetime,
-  dateFin datetime
+  dateFin datetime,
   PRIMARY KEY (idP, idHotel, dateDeb),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
   FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel)
