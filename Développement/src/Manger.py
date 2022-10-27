@@ -6,11 +6,11 @@ Base = declarative_base()
 class Manger(Base):
     __tablename__ = "MANGER"
     idRepas = Column(Integer, primary_key = True)
-    idC = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
 
-    def __init__(self, idRepas, idC) -> None:
+    def __init__(self, idRepas, idP) -> None:
         self.idRepas = idRepas
-        self.idC = idC
+        self.idP = idP
 
     def __repr__(self) -> str:
-        return "ID repas : " + str(self.idRepas) + ", ID consommateur : " + str(self.idC)
+        return "ID repas : " + str(self.idRepas) + ", ID consommateur : " + str(self.idP)

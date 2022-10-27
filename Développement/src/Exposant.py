@@ -5,13 +5,13 @@ Base = declarative_base()
 
 class Exposant(Base):
     __tablename__ = "EXPOSANT"
-    idE = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
     numStand = Column(Integer)
 
-    def __init__(self, idE, numStand) -> None:
-        self.idE = idE
+    def __init__(self, idP, numStand) -> None:
+        self.idP = idP
         self.numStand = numStand
 
     def __repr__(self) -> str:
-        return "ID exposant : " + str(self.idE) + ", numéro stand : " + str(self.numStand)
+        return "ID exposant : " + str(self.idP) + ", numéro stand : " + str(self.numStand)
         

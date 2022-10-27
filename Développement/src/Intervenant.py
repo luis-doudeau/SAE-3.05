@@ -6,18 +6,18 @@ Base = declarative_base()
 
 class Intervenant(Base):
     __tablename__ = "INTERVENANT"
-    idIntervenant = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
     dateArrive = Column(DATETIME)
     dateDepart = Column(DATETIME)
     transport = Column(Text)
     intervention = Column(Text)
 
-    def __init__(self, idIntervenant, dateArrive, dateDepart, transport, intervention) -> None:
-        self.idIntervenant = idIntervenant
+    def __init__(self, idP, dateArrive, dateDepart, transport, intervention) -> None:
+        self.idP = idP
         self.dateArrive = dateArrive
         self.dateDepart = dateDepart
         self.transport = transport
         self.intervention = intervention
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idIntervenant) + ", arrive le " + str(self.dateArrive) + ", part le : " + str(self.dateDepart) + ", prend comme transport : " + str(self.transport) + ", intervient : " + str(self.intervention)
+        return "ID intervenant : " + str(self.idP) + ", arrive le " + str(self.dateArrive) + ", part le : " + str(self.dateDepart) + ", prend comme transport : " + str(self.transport) + ", intervient : " + str(self.intervention)

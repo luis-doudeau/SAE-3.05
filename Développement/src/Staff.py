@@ -5,10 +5,10 @@ Base = declarative_base()
 
 class Staff(Base):
     __tablename__ = "STAFF"
-    idS = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
 
-    def __init__(self, idS) -> None:
-        self.idS = idS
+    def __init__(self, idP) -> None:
+        self.idP = idP
 
     def __repr__(self) -> str:
-        return "ID staff : " + str(self.idS)
+        return "ID staff : " + str(self.idP)

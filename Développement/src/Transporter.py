@@ -5,13 +5,13 @@ Base = declarative_base()
 
 class Transporter(Base):
     __tablename__ = "TRANSPORTER"
-    idIntervenant = Column(Integer, primary_key = True)
+    idP = Column(Integer, primary_key = True)
     idVoy = Column(Integer, primary_key = True)
 
-    def __init__(self, idIntervenant, idVoy) -> None:
-        self.idIntervenant = idIntervenant
+    def __init__(self, idP, idVoy) -> None:
+        self.idP = idP
         self.idVoy = idVoy
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idIntervenant) + ", id voyage : " + str(self.idVoy)
+        return "ID intervenant : " + str(self.idP) + ", id voyage : " + str(self.idVoy)
         
