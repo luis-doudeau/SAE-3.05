@@ -12,8 +12,12 @@ body header ul{
     flex-wrap: nowrap;
     list-style-type: none;
     align-items: center;
+}
 
-
+body>header li{
+    font-size: 1.3em;
+    letter-spacing: 2px;
+    font-family: 'Libre Franklin';
 }
 
 
@@ -24,11 +28,13 @@ body header li:last-child{
 }
 
 body>header li:first-child{
-    border-right: solid white;
-    border-collapse: separate;
-    border-spacing: 100rem 0;
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
 }
 
+body>header li:first-child span{
+    font-weight: bold;
+}
 
 body header a:link, body header a:visited {
     color: white;

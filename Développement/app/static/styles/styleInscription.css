@@ -36,7 +36,7 @@ body header a:link, body header a:visited {
 }
 
 body header ul li{
-    margin-right: 3rem;
+    margin-right: 2rem;
 
 }
 
@@ -72,13 +72,13 @@ main header li{
 }
 
 #imgLogoMaison{
-    width: 8rem;
-    height: 8rem;
+    width: 4.5rem;
+    height: 4.5rem;
 }
 
 #imgheader39festival{
-    width: 33rem;
-    height: 6rem;
+    width: 20rem;
+    height: 4rem;
 }
 
 #p39e{
