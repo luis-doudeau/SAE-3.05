@@ -44,34 +44,30 @@
                 </li>
             </ul>
         </header>
-        <section class="box-info">
+        <section id="box-info">
             <header>
                 <h2>BIENVENUE !</h2>
             </header>
-            <ul>
-                <form action=""></form>
-                    <li>
+            <form action=""></form>
+                    <div class="user-box">
                         <p>Connectez-vous pour accéder</p>
                         <p id="p2">à votre espace</p>
-                    </li>
-                    <li>
-                        <input type="text" placeholder="Email">
-                        <label for=""></label>
-                    </li>
-                    <li>
-                        <input type="password" placeholder="Mot de passe">
-                    </li>
-                    <li>
-                        <div>
-                            <input type="checkbox" id = CbSouvenir>
-                            <label for="CbSouvenir">Se souvenir de moi</label>
-                        </div>
-                    </li>
-                    <li>
-                        <input id="boutonConnecter" type="submit" value="SE CONNECTER">
-                    </li>
-                </form>
-            </ul>
+                    </div>
+                    <div class="user-box">
+                        <input class="input-user-box" type="text" placeholder="Email">
+                    </div>
+                    <div class="user-box">
+                        <input class="input-user-box" type="password" placeholder="Mot de passe">
+                    </div>
+                    <div class="user-box" id="div-cbSouvenir">
+                        <input type="checkbox" id = "CbSouvenir">
+                        <label for="CbSouvenir">Se souvenir de moi</label>
+                    </div>
+                    <div class="user-box">
+                        <input class="input-user-box" id="boutonConnecter" type="submit" value="SE CONNECTER">
+                    </div>
+ 
+        </form>
         </section>
     </main>
 </body>

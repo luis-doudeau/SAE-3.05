@@ -1,3 +1,7 @@
+body {
+    background-color: #7eafe5;
+}
+
 body > header{
     background-color: #0c0a60;
     color: #ffffff;
@@ -11,6 +15,8 @@ body header ul{
 
 
 }
+
+
 
 body header li:last-child{
     right: 0;
@@ -55,6 +61,7 @@ body header{
 
 main{
     background-color: #7eafe5;
+    background-attachment: fixed; /*edit*/
 }
 
 main > header{
@@ -75,46 +82,52 @@ section ul{
 }
 
 
-.box-info {
+#box-info {
     margin-left: auto;
     margin-right: auto;
     margin-top: 3rem;
     width: 30%;
-    padding: 40px;
     background: #6e8eff;
     box-sizing: border-box;
     border-radius: 8px;
     border: solid #d9e1f6;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
-
-
-  
 }
 
-.box-info div{
-    display: flex;
-    flex-direction:row;
-    justify-content: center;
+
+#box-info h2{
+    font-family: 'Londrina Shadow';
 }
 
-.box-info h2{
-    font-family: 'Londrina Shadow', arial;
-}
-
-section li p{
+#p2{
     text-align: center;
 }
 
-.box-info input{
+
+#div-cbSouvenir{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+}
+#CbSouvenir{
+    width:1rem;
+    height:1rem;
+    outline: 1px solid black;
+    accent-color: pink;
+}
+
+.input-user-box{
     width: 15rem;
     height: 2rem;
     border-radius: 10px;
     border:solid #17557b;
     margin-bottom: 2rem;
 }
+
 
 #boutonConnecter{
     color: white;
