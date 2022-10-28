@@ -1,17 +1,33 @@
-insert into PARTICIPANT values  ("Madison", "Michael",STR_TO_DATE(1, "1962-47-13", '%Y-%m-%d'),"05 51 77 77 22","at.nisi.cum@icloud.ca"),
-                                ("Desirae Kent",STR_TO_DATE(2, "1933-18-23", '%Y-%m-%d'),"09 47 69 99 06","vivamus.nibh@protonmail.net"),
-                                ("Tashya Hopkins",STR_TO_DATE(3, "1961-11-29", '%Y-%m-%d'),"03 98 52 93 29","eu.tempor@google.net"),
-                                ("Sebastian Meadows",STR_TO_DATE(4, "1966-22-10", '%Y-%m-%d'),"04 99 79 35 12","tempor@google.org"),
-                                ("Rudyard Blevins",STR_TO_DATE(5, "1974-58-20", '%Y-%m-%d'),"02 62 25 13 41","etiam.ligula@outlook.ca");
+INSERT INTO PARTICIPANT (idP,nomp,prenomp,ddnp,telp,emailp,mdpp,remarques,moyenlocomotion) VALUES
+  (1,"Latifah","Jordan","2002-03-21","08 67 39 26 10","in@protonmail.edu","M1L13dP-2Wh9qN","dolor dapibus gravida. Aliquam tincidunt,","Train"),
+  (2,"Caldwell","Delacruz","1970-12-09","05 63 39 56 78","non.quam.pellentesque@icloud.couk","I3X56xM-0Vs5tC","ac risus. Morbi metus. Vivamus","Train"),
+  (3,"Oprah","Hill","1965-12-24","08 61 67 34 17","facilisi.sed@icloud.com","I4M96jI-3Yo8iG","egestas lacinia. Sed congue, elit","Voiture"),
+  (4,"Patrick","Gates","1974-12-12","06 68 30 13 99","fringilla.purus.mauris@outlook.couk","Q0W07vU-4Fg4yO","fermentum risus, at fringilla purus","Voiture"),
+  (5,"Phelan","Fitzpatrick","1939-05-28","03 35 25 73 24","auctor.vitae.aliquet@protonmail.ca","U1T38nY-4Qy4hX","eget, dictum placerat, augue. Sed","Avion"),
+  (100,"Zelda","Sykes","2003-12-18","04 34 77 21 07","quam.elementum@icloud.ca","C1M54dJ-4Iu8kI","eu, eleifend nec, malesuada ut,","Avion"),
+  (101,"Arsenio","Hewitt","1988-07-25","07 83 66 55 56","ultrices.mauris@google.edu","W5F50dE-9Lc2dU","nulla. Integer urna. Vivamus molestie","Covoiturage"),
+  (102,"Lamar","Tran","1943-10-10","06 74 87 36 08","magna.a.tortor@yahoo.com","L3F52yO-5Md5zH","lorem, luctus ut, pellentesque eget,","Covoiturage"),
+  (200,"Sonya","Petersen","1942-02-25","09 50 14 76 18","cras@aol.net","G0A15aX-6Jf1wI","mattis. Cras eget nisi dictum","Autre"),
+  (201,"Leilani","Hanson","2004-12-25","07 61 57 35 59","dis.parturient@aol.org","V8H93dQ-4Lm7eC","sociis natoque penatibus et magnis","Autre"),
+  (202,"Aspen","Murray","1972-03-30","07 57 52 42 28","morbi.non.sapien@aol.com","Z6O13tU-6Kj7eM","imperdiet nec, leo. Morbi neque","Train"),
+  (203,"Eric","Villarreal","1969-10-31","03 05 72 13 53","bibendum.donec.felis@yahoo.couk","X2E57mS-3Hp6pY","Ut tincidunt vehicula risus. Nulla","Train"),
+  (300,"Gail","Valentine","1998-07-10","06 47 57 66 67","ac@icloud.ca","J6R53sZ-7By3jO","sociis natoque penatibus et magnis","Voiture"),
+  (301,"Plato","Lewis","1982-05-20","02 46 85 60 15","eleifend.egestas@google.net","H5S66hD-5Sr8wE","erat eget ipsum. Suspendisse sagittis.","Voiture"),
+  (302,"Finn","Rowland","1982-11-28","03 82 74 68 45","libero.donec.consectetuer@aol.edu","M6C75mN-2Zt8xX","odio semper cursus. Integer mollis.","Avion"),
+  (303,"Dahlia","Barton","1977-08-28","04 26 43 96 59","volutpat.nulla.dignissim@hotmail.ca","S4G35cJ-3Rh9dG","sagittis felis. Donec tempor, est","Avion"),
+  (304,"Igor","Leach","1989-07-28","07 10 46 22 94","enim@outlook.org","A6U48kF-8Dx3eE","metus vitae velit egestas lacinia.","Covoiturage"),
+  (400,"Malcolm","Stout","1979-05-01","03 28 24 38 33","cubilia.curae.donec@outlook.com","O2W64lW-9Bs2gA","velit justo nec ante. Maecenas","Covoiturage"),
+  (401,"Rashad","Rivas","1943-10-20","06 13 35 77 29","mauris.sit@protonmail.org","E9U74kP-5Il3mY","faucibus leo, in lobortis tellus","Autre"),
+  (500,"Gil","King","1994-07-04","03 48 48 38 28","eget.metus@hotmail.couk","Q8F62mP-2Cf2bY","vitae, erat. Vivamus nisi. Mauris","Autre");
 
 
-INSERT INTO EXPOSANT (idE,numstand) VALUES  (1,1),
-                                            (2,2),
-                                            (3,3),
-                                            (4,4),
-                                            (5,5);
+INSERT INTO EXPOSANT (idE,numstand) VALUES  (1,5),
+                                            (2,7),
+                                            (3,10),
+                                            (4,16),
+                                            (5,18);
 
-INSERT INTO CONSOMMATEUR (idE) VALUES   (100),
+INSERT INTO CONSOMMATEUR (idConso) VALUES   (100),
                                         (101),
                                         (102),
                                         (200),
@@ -28,7 +44,7 @@ INSERT INTO CONSOMMATEUR (idE) VALUES   (100),
                                         (500);
 
 
-INSERT INTO RESTAURANT (idE,nomRest) VALUES (1,"Erat Eget Tincidunt Incorporated"),
+INSERT INTO RESTAURANT (idRest,nomRest) VALUES (1,"Erat Eget Tincidunt Incorporated"),
                                                 (2,"A Facilisis Institute"),
                                                 (3,"Donec Est Mauris LLP"),
                                                 (4,"Cursus Inc."),
@@ -51,25 +67,25 @@ INSERT INTO CRENEAU (idCreneau,dateHeureDebut,dateHeureFin) VALUES (1, STR_TO_DA
                                                                             (12, STR_TO_DATE("20-11-2022 20:00", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 22:00", "%d-%m-%Y %H:%i"));
 
 INSERT INTO REPAS (idRepas,estmidi,idRest,idCreneau) VALUES   (1,true,1,2),
-                                                                        (2,true,1,3),
-                                                                        (3,true,1,5),
-                                                                        (4,false,2,1),
-                                                                        (5,true,2,6),
-                                                                        (6,false,2,8),
-                                                                        (7,true,3,2),
-                                                                        (8,false,3,8),
-                                                                        (9,true,3,5),
-                                                                        (10,true,4,6),
-                                                                        (11,true,4,9),
-                                                                        (12,false,4,8),
-                                                                        (13,false,5,12),
-                                                                        (14,true,5,3),
-                                                                        (15,true,5,5),
-                                                                        (16,true,5,6),
-                                                                        (17,true,6,11),
-                                                                        (18,false,6,12),
-                                                                        (19,true,7,11),
-                                                                        (20,false,7,8);
+                                                                (2,true,1,3),
+                                                                (3,true,1,5),
+                                                                (4,false,2,1),
+                                                                (5,true,2,6),
+                                                                (6,false,2,8),
+                                                                (7,true,3,2),
+                                                                (8,false,3,8),
+                                                                (9,true,3,5),
+                                                                (10,true,4,6),
+                                                                (11,true,4,9),
+                                                                (12,false,4,8),
+                                                                (13,false,5,12),
+                                                                (14,true,5,3),
+                                                                (15,true,5,5),
+                                                                (16,true,5,6),
+                                                                (17,true,6,11),
+                                                                (18,false,6,12),
+                                                                (19,true,7,11),
+                                                                (20,false,7,8);
                 
 INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
                                                     (2,"Pesco-végétarisme"),
@@ -94,7 +110,7 @@ INSERT INTO HOTEL (idHotel,nomhotel,adressehotel,telhotel,mailhotel,capaciteHote
                                                                                             (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
 
 
-INSERT INTO `INTERVENANT` (`idInter`,`arrive`,`depart`) VALUES (300,STR_TO_DATE("19-11-2022 10:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
+INSERT INTO INTERVENANT (idInter,arrive,depart) VALUES (300,STR_TO_DATE("19-11-2022 10:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
                                                                 (301,STR_TO_DATE("19-11-2022 09:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
                                                                 (302,STR_TO_DATE("17-11-2022 18:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
                                                                 (303,STR_TO_DATE("20-11-2022 10:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
@@ -102,5 +118,49 @@ INSERT INTO `INTERVENANT` (`idInter`,`arrive`,`depart`) VALUES (300,STR_TO_DATE(
                                                                 (400,STR_TO_DATE("20-11-2022 11:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
                                                                 (401,STR_TO_DATE("18-11-2022 16:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
                                                                 (500,STR_TO_DATE("18-11-2022 08:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
+
+
+INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
+                                                          (2, "Dupuis", 5),
+                                                          (3, "Glénat", 8),
+                                                          (4, "Delcourt", 9),
+                                                          (5, "Grand Angle", 10),
+                                                          (6, "Soleil", 17),
+                                                          (7, "Casterman", 18),
+                                                          (8, "Drakoo", 21),
+                                                          (9, "Petit à petit", 26);
+
+
+INSERT INTO AUTEUR (idAuteur) values (300),
+                                    (301),
+                                    (302),
+                                    (303),
+                                    (304);
+
+
+INSERT INTO PRESSE (idPresse) values (400),
+                                    (401);
+
+
+INSERT INTO INVITE (idInvite) values (500);
+
+
+INSERT INTO VOYAGE (idVoy,heureDepart,duree) VALUES
+  (1,"2022-11-18 11:51:37","00:24", true);
+
+
+INSERT INTO NAVETTE (idNav,nomNav,capaciteNav) VALUES
+  (1,"Navette 1",48),
+  (2,"Navette 2",48),
+  (3,"Navette 3",25),
+  (4,"Navette 4",25),
+  (5,"Navette 5",8),
+  (6,"Navette 6",8);
+
+
+
+
+
+
 
 
