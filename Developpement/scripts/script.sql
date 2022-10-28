@@ -40,13 +40,6 @@ CREATE TABLE CRENEAU (
   PRIMARY KEY (idCreneau)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
-CREATE TABLE CRENEAU_REPAS (
-  idCreneauRepas int,
-  dateDeb datetime,
-  dateFin datetime,
-  PRIMARY KEY (idCreneauRepas)
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
-
 CREATE TABLE HOTEL (
   idHotel int,
   nomHotel VARCHAR(42),
@@ -122,10 +115,10 @@ CREATE TABLE REPAS (
   idRepas int,
   estMidi boolean,
   idRest int,
-  idCreneauRepas int,
+  idCreneau int,
   PRIMARY KEY (idRepas),
   FOREIGN KEY(idRest) REFERENCES RESTAURANT(idRest),
-  FOREIGN KEY(idCreneauRepas) REFERENCES CRENEAU_REPAS(idCreneauRepas)
+  FOREIGN KEY(idCreneau) REFERENCES CRENEAU(idCreneau)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE INTERVENANT (
@@ -150,11 +143,10 @@ CREATE TABLE LOGER(
   idP int,
   idHotel int,
   dateDeb datetime,
-  dateFin datetime
+  dateFin datetime,
   PRIMARY KEY (idP, idHotel, dateDeb),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
   FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel)
-
 );
 
 CREATE TABLE STAFF (
