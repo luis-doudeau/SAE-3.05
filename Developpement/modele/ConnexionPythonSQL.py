@@ -8,14 +8,14 @@ from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from Exposant import Exposant
-from Consommateur import Consommateur
-from Personne import Personne
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
+from .Exposant import Exposant
+from .Consommateur import Consommateur
+from .Personne import Personne
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
