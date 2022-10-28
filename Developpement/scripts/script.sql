@@ -2,6 +2,7 @@
 -- USE BDBOUM;
 
 drop table INTERVENIR;
+drop table LIEU;
 drop table TRAVAILLER;
 drop table AVOIR;
 drop table AUTEUR;
@@ -22,7 +23,6 @@ drop table VOYAGE;
 drop table NAVETTE;
 drop table MAISON_EDITION;
 drop table HOTEL;
-drop table CRENEAU_REPAS;
 drop table CRENEAU;
 drop table RESTAURANT;
 
@@ -199,13 +199,22 @@ CREATE TABLE TRAVAILLER (
   FOREIGN KEY (idP) REFERENCES STAFF(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
+CREATE TABLE LIEU (
+  idLieu int,
+  nomLieu VARCHAR(50),
+  PRIMARY KEY(idLieu)
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
 CREATE TABLE INTERVENIR (
   idP int,
   idCreneau int,
+  idLieu int,
   nomIntervention VARCHAR(50),
+  descIntervention VARCHAR(500),
   PRIMARY KEY (idP, idCreneau),
   FOREIGN KEY(idP) REFERENCES AUTEUR(idP),
-  FOREIGN KEY(idCreneau) REFERENCES CRENEAU(idCreneau)
+  FOREIGN KEY(idCreneau) REFERENCES CRENEAU(idCreneau),
+  FOREIGN KEY(idLieu) REFERENCES LIEU(idLieu)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 
