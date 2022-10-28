@@ -186,7 +186,7 @@ def ajoute_invite(session, invite):
     else:
         print("Un invité a déjà cet identifiant dans la base de donnée")
         
-def ajoute_participant(session, participant, role):
+def ajoute_participant_role(session, participant, role):
     if role in ROLE:
         ajoute_particpant(session, participant)
         if role == "Exposant":
@@ -226,7 +226,7 @@ def get_info_personne(session, email, mdp):
 # ajoute_auteur(session, Auteur(1, 1))
 # ajoute_presse(session, Presse(1))
 # ajoute_invite(session, Invite(1))
-# ajoute_participant(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"), "a")
+#joute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"), "Auteur")
 
 #print(get_info_personne(session, "lenny@gmail.com", "le"))
 
