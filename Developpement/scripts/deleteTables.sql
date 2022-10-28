@@ -18,9 +18,7 @@ drop table PERSONNE;
 drop table VOYAGE;
 drop table NAVETTE;
 drop table MAISON_EDITION;
-drop table INTERVENTION;
 drop table HOTEL;
-drop table CRENEAU_REPAS;
 drop table CRENEAU;
 drop table RESTAURANT;
     
