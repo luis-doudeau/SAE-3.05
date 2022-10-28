@@ -42,7 +42,7 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -186,6 +186,14 @@ def ajoute_participant(session, participant, role):
             else:
                 ajoute_invite(session, participant)
     
+def get_info_personne(session, email, mdp):
+    personne = session.query(Personne).filter(Personne.emailP == email).filter(Personne.mdpP == mdp).first()
+    if personne is None:
+        return False
+    else:
+        return (True, personne)
+
+    
                 
 
 #ajoute_personne(session, Personne(get_max_id_Personne(session)+1, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"))
@@ -196,4 +204,9 @@ def ajoute_participant(session, participant, role):
 #ajoute_auteur(session, Auteur(2, 1))
 #ajoute_presse(session, Presse(2))
 #ajoute_invite(session, Invite(2))
-ajoute_participant(session, Exposant(8, 1), "Exposant")
+#ajoute_participant(session, Exposant(8, 1), "Exposant")
+
+print(get_info_personne(session, "lenny@gmail.com", "le"))
+
+
+
