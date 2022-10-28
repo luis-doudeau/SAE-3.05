@@ -10,13 +10,13 @@ class Repas(Base):
     idRepas = Column(Integer, primary_key = True)
     estMidi = Column(BOOLEAN)
     idRest = Column(int)
-    idCreneauRepas = Column(int)
+    idCreneau = Column(int)
 
-    def __init__(self, idRepas, estMidi, idRest, idCreneauRepas) -> None:
+    def __init__(self, idRepas, estMidi, idRest, idCreneau) -> None:
         self.idRepas = idRepas
         self.estMidi = estMidi
         self.idRest = idRest
-        self.idCreneauRepas = idCreneauRepas
+        self.idCreneau = idCreneau
 
     def __repr__(self) -> str:
-        return "ID repas : " + str(self.idRepas) + ", il est midi : " + str(self.estMidi) + ", au restaurant d'id : " + str(self.idRest) + ", du créneauRepas d'id : " + str(self.idCreneauRepas)
+        return "ID repas : " + str(self.idRepas) + ", il est midi : " + str(self.estMidi) + ", au restaurant d'id : " + str(self.idRest) + ", du créneau d'id : " + str(self.idCreneau)
