@@ -1,5 +1,9 @@
-from crypt import methods
 from flask import Flask, render_template, request
+
+from modele.ConnexionPythonSQL import get_info_personne,session
+
+
+
 
 
 
@@ -13,7 +17,14 @@ def hello():
 
 @app.route('/', methods = ["POST"])
 def suite():
-    print(request.form)
+    email = request.form["email"]
+    mdp = request.form["mdp"]
+    personne = get_info_personne(session, email, mdp)
+    if personne[0] is True:
+        return render_template('pageInscription.html', prenom = personne[1].prenomP)
 
-    return render_template('pageInscription.html')
+
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0")
 
