@@ -33,6 +33,7 @@ create trigger ajouteTransport after insert on DEPLACER for each row
       elsif idVoyage != -1 and 8 <= HOUR(new.arrive) <= 20 : 
         
         
+        
 
       else 
         set msg = concat("Les navettes ne circulent qu'entre 8 heure et 20 heure");
