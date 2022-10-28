@@ -1,30 +1,32 @@
 -- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8_general_ci;
 -- USE BDBOUM;
 
-drop table INTERVENIR;
-drop table LIEU;
-drop table TRAVAILLER;
-drop table AVOIR;
-drop table AUTEUR;
-drop table INVITE;
-drop table PRESSE;
-drop table MANGER;
-drop table STAFF;
-drop table LOGER;
-drop table TRANSPORTER;
-drop table INTERVENANT;
-drop table REPAS;
-drop table CONSOMMATEUR;
-drop table REGIME;
-drop table EXPOSANT;
-drop table MOBILISER;
-drop table PARTICIPANT;
-drop table VOYAGE;
-drop table NAVETTE;
-drop table MAISON_EDITION;
-drop table HOTEL;
-drop table CRENEAU;
-drop table RESTAURANT;
+drop table if exists INTERVENIR;
+drop table if exists LIEU;
+drop table if exists TRAVAILLER;
+drop table if exists AVOIR;
+drop table if exists AUTEUR;
+drop table if exists INVITE;
+drop table if exists PRESSE;
+drop table if exists MANGER;
+drop table if exists STAFF;
+drop table if exists LOGER;
+drop table if exists TRANSPORTER;
+drop table if exists DEPLACER;
+drop table if exists INTERVENANT;
+drop table if exists REPAS;
+drop table if exists CONSOMMATEUR;
+drop table if exists REGIME;
+drop table if exists EXPOSANT;
+drop table if exists MOBILISER;
+drop table if exists MOYEN_TRANSPORT;
+drop table if exists PARTICIPANT;
+drop table if exists VOYAGE;
+drop table if exists NAVETTE;
+drop table if exists MAISON_EDITION;
+drop table if exists HOTEL;
+drop table if exists CRENEAU;
+drop table if exists RESTAURANT;
 
 
 CREATE TABLE RESTAURANT (
@@ -59,22 +61,22 @@ CREATE TABLE MAISON_EDITION (
 
 CREATE TABLE NAVETTE (
   idNavette int,
-  capaciteNavette int(42),
+  nomNavette VARCHAR(42),
+  capaciteNavette int,
   PRIMARY KEY (idNavette)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE PARTICIPANT (
   idP int,
-  nomP VARCHAR(42),
   prenomP VARCHAR(42),
+  nomP VARCHAR(42),
   ddnP DATE,
   telP VARCHAR(42),
   emailP VARCHAR(42),
   mdpP VARCHAR(42),
   invite boolean,
   emailEnvoye boolean,
-  remarques VARCHAR(42),
-  moyenLocomotion VARCHAR(42),
+  remarques VARCHAR(300),
   PRIMARY KEY (idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -87,7 +89,8 @@ CREATE TABLE REGIME (
 CREATE TABLE VOYAGE (
   idVoy int,
   heureDebVoy datetime,
-  DureeVoy datetime,
+  dureeVoy datetime,
+  directionGare boolean,
   PRIMARY KEY (idVoy)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -127,10 +130,25 @@ CREATE TABLE INTERVENANT (
   idP int,
   dateArrive datetime,
   dateDepart datetime,
-  transport VARCHAR(42),
-  intervention VARCHAR(42),
+  moyenLocomotion VARCHAR(42),
   PRIMARY KEY (idP),
   FOREIGN KEY (idP) REFERENCES CONSOMMATEUR(idP)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE MOYEN_TRANSPORT (
+  idTransport int,
+  nomTransport VARCHAR(42),
+  PRIMARY KEY (idTransport)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE DEPLACER (
+  idP int,
+  idTransport int,
+  lieuDepart VARCHAR(42),
+  lieuArrive VARCHAR(42),
+  PRIMARY KEY (idP, idTransport),
+  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
+  FOREIGN KEY (idTransport) REFERENCES MOYEN_TRANSPORT(idTransport)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE TRANSPORTER (
