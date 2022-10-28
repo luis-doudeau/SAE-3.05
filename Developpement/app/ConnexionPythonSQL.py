@@ -1,3 +1,4 @@
+from logging import exception
 from sqlite3 import DatabaseError
 from statistics import quantiles
 import sqlalchemy
@@ -20,6 +21,7 @@ from Invite import Invite
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
 # pip3 install mysql-connector-python
+ROLE = ["Auteur", "Exposant", "Staff", "Presse", "Invite"]
 
 def ouvrir_connexion(user,passwd,host,database):
     """
@@ -42,7 +44,7 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnardi")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -61,9 +63,17 @@ def get_max_id_Personne(session):
     else:
         return max_id._data[0]
 
+def get_max_num_stand(session):
+    max_num = session.query(func.max(Exposant.numStand)).first()
+    if (max_num._data[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
+
 def ajoute_personne(session, personne):
     personneP = session.query(Personne).filter(Personne.idP == personne.idP).first()
     if personneP is None:
+        personne.idP = get_max_id_Personne(session) + 1
         session.add(personne)
         try:
             session.commit()
@@ -78,7 +88,8 @@ def ajoute_Consommateur(session, consommateur):
     consommateurC = session.query(Consommateur).filter(Consommateur.idP == consommateur.idP).first()
     if consommateurC is None:
         personne = session.query(Personne).filter(Personne.idP == consommateur.idP).first()
-        session.add(consommateur)
+        new_consommateur = Consommateur(consommateur.idP)
+        session.add(new_consommateur)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) consommateur")
@@ -92,7 +103,8 @@ def ajoute_exposant(session, exposant):
     exposantE = session.query(Exposant).filter(Exposant.idP == exposant.idP).first()
     if exposantE is None:
         personne = session.query(Personne).filter(Personne.idP == exposant.idP).first()
-        session.add(exposant)
+        new_exposant = Exposant(exposant.idP, get_max_num_stand(session) + 1)
+        session.add(new_exposant)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) exposant(e)")
@@ -106,10 +118,9 @@ def ajoute_staff(session, staff):
     staffS = session.query(Staff).filter(Staff.idP == staff.idP).first()
     if staffS is None:
         personne = session.query(Personne).filter(Personne.idP == staff.idP).first()
-        session.add(staff)
+        new_staff = Staff(staff.idP)
+        session.add(new_staff)
         try:
-            print(staff)
-            print(personne)
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) staff")
         except:
@@ -121,7 +132,8 @@ def ajoute_intervenant(session, intervenant):
     intervenantI = session.query(Intervenant).filter(Intervenant.idP == intervenant.idP).first()
     if intervenantI is None:
         personne = session.query(Personne).filter(Personne.idP == intervenant.idP).first()
-        session.add(intervenant)
+        new_intervenant = Intervenant(intervenant.idP, None, None, None, None)
+        session.add(new_intervenant)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) intervenant(e)")
@@ -134,7 +146,8 @@ def ajoute_auteur(session, auteur):
     auteurA = session.query(Auteur).filter(Auteur.idP == auteur.idP).first()
     if auteurA is None:
         personne = session.query(Personne).filter(Personne.idP == auteur.idP).first()
-        session.add(auteur)
+        new_auteur = Auteur(auteur.idP, None)
+        session.add(new_auteur)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) auteur / autrice")
@@ -147,7 +160,8 @@ def ajoute_presse(session, presse):
     presseP = session.query(Presse).filter(Presse.idP == presse.idP).first()
     if presseP is None:
         personne = session.query(Personne).filter(Personne.idP == presse.idP).first()
-        session.add(presse)
+        new_presse = Presse(presse.idP)
+        session.add(new_presse)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu membre de la presse")
@@ -160,40 +174,45 @@ def ajoute_invite(session, invite):
     inviteI = session.query(Invite).filter(Invite.idP == invite.idP).first()
     if inviteI is None:
         personne = session.query(Personne).filter(Personne.idP == invite.idP).first()
-        session.add(invite)
+        new_invite = Invite(invite.idP)
+        session.add(new_invite)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) invité(e)")
         except:
             print("Erreur")
+            session.rollback()
     else:
         print("Un invité a déjà cet identifiant dans la base de donnée")
         
 def ajoute_participant(session, participant, role):
-    ajoute_personne(session, participant)
-    if role == "Exposant":
-        ajoute_exposant(session, participant)
-    else:
-        ajoute_Consommateur(session, participant)
-        if role == "Staff":
-            ajoute_staff(session, participant)
+    if role in ROLE:
+        ajoute_personne(session, participant)
+        if role == "Exposant":
+            ajoute_exposant(session, participant)
         else:
-            ajoute_intervenant(session, participant)
-            if role == "Auteur":
-                ajoute_auteur(session, participant)
-            elif role == "Presse":
-                ajoute_presse(session, participant)
+            ajoute_Consommateur(session, participant)
+            if role == "Staff":
+                ajoute_staff(session, participant)
             else:
-                ajoute_invite(session, participant)
-    
+                ajoute_intervenant(session, participant)
+                if role == "Auteur":
+                    ajoute_auteur(session, participant)
+                elif role == "Presse":
+                    ajoute_presse(session, participant)
+                else:
+                    ajoute_invite(session, participant)
+    else:
+        print("Le rôle n'est pas reconnu")
+        
                 
 
-#ajoute_personne(session, Personne(get_max_id_Personne(session)+1, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"))
-#ajoute_Consommateur(session, Consommateur(2))
+# ajoute_personne(session, Personne(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"))
+# ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
-#ajoute_staff(session, Staff(2))
-#ajoute_intervenant(session, Intervenant(2, "2020-03-03 12:00:00", "2020-03-03 13:00:00", "voiture", "aucune"))
-#ajoute_auteur(session, Auteur(2, 1))
-#ajoute_presse(session, Presse(2))
-#ajoute_invite(session, Invite(2))
-ajoute_participant(session, Exposant(8, 1), "Exposant")
+# ajoute_staff(session, Staff(1))
+# ajoute_intervenant(session, Intervenant(1, "2020-03-03 12:00:00", "2020-03-03 13:00:00", "voiture", "aucune"))
+# ajoute_auteur(session, Auteur(1, 1))
+# ajoute_presse(session, Presse(1))
+# ajoute_invite(session, Invite(1))
+# ajoute_participant(session, Personne(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"), "a")
