@@ -218,7 +218,7 @@ def get_info_personne(session, email, mdp):
         
                 
 
-# ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"))
+# ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
 # ajoute_staff(session, Staff(1))
@@ -226,7 +226,7 @@ def get_info_personne(session, email, mdp):
 # ajoute_auteur(session, Auteur(1, 1))
 # ajoute_presse(session, Presse(1))
 # ajoute_invite(session, Invite(1))
-#joute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture"), "Auteur")
+ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture", emailEnvoye = True), "Auteur")
 
 #print(get_info_personne(session, "lenny@gmail.com", "le"))
 
