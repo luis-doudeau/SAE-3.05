@@ -4,8 +4,8 @@ from sqlalchemy . ext . declarative import declarative_base
 
 Base = declarative_base()
 
-class Personne(Base):
-    __tablename__ = "PERSONNE"
+class Participant(Base):
+    __tablename__ = "PARTICIPANT"
     idP = Column(Integer, primary_key = True)
     nomP = Column(Text)
     prenomP = Column(Text)
