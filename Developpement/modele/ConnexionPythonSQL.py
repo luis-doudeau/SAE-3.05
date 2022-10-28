@@ -8,16 +8,6 @@ from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-<<<<<<< HEAD:Developpement/modele/ConnexionPythonSQL.py
-from .Exposant import Exposant
-from .Consommateur import Consommateur
-from .Personne import Personne
-from .Staff import Staff
-from .Intervenant import Intervenant
-from .Auteur import Auteur
-from .Presse import Presse
-from .Invite import Invite
-=======
 from Exposant import Exposant
 from Consommateur import Consommateur
 from Staff import Staff
@@ -26,7 +16,6 @@ from Auteur import Auteur
 from Presse import Presse
 from Invite import Invite
 from Participant import Participant
->>>>>>> modif:Developpement/app/ConnexionPythonSQL.py
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
