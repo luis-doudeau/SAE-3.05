@@ -30,8 +30,7 @@ create trigger ajouteTransport after insert on DEPLACER for each row
         insert into TRANSPORTER values(new.idP, idMax+1);
         insert into MOBILISER values(idMax+1, 1);
       
-      elsif idVoyage != -1 and 8 <= HOUR(new.arrive) <= 20 : 
-        
+      elsif idVoyage != -1 and 8 <= HOUR(new.arrive) <= 20 :
         
         
 

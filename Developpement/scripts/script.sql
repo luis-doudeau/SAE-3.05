@@ -1,29 +1,29 @@
--- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8_general_ci;
--- USE BDBOUM;
+CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE BDBOUM;
 
 drop table if exists INTERVENIR;
-drop table if exists LIEU;
 drop table if exists TRAVAILLER;
+drop table if exists MOBILISER; 
+drop table if exists DEPLACER;
+drop table if exists LOGER;
+drop table if exists TRANSPORTER;
 drop table if exists AVOIR;
 drop table if exists AUTEUR;
 drop table if exists INVITE;
 drop table if exists PRESSE;
 drop table if exists MANGER;
 drop table if exists STAFF;
-drop table if exists LOGER;
-drop table if exists TRANSPORTER;
-drop table if exists DEPLACER;
 drop table if exists INTERVENANT;
 drop table if exists REPAS;
 drop table if exists CONSOMMATEUR;
+drop table if exists TRANSPORT;
 drop table if exists REGIME;
 drop table if exists EXPOSANT;
-drop table if exists MOBILISER;
-drop table if exists MOYEN_TRANSPORT;
 drop table if exists PARTICIPANT;
 drop table if exists VOYAGE;
 drop table if exists NAVETTE;
 drop table if exists MAISON_EDITION;
+drop table if exists LIEU;
 drop table if exists HOTEL;
 drop table if exists CRENEAU;
 drop table if exists RESTAURANT;
@@ -130,12 +130,11 @@ CREATE TABLE INTERVENANT (
   idP int,
   dateArrive datetime,
   dateDepart datetime,
-  moyenLocomotion VARCHAR(42),
   PRIMARY KEY (idP),
   FOREIGN KEY (idP) REFERENCES CONSOMMATEUR(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
-CREATE TABLE MOYEN_TRANSPORT (
+CREATE TABLE TRANSPORT (
   idTransport int,
   nomTransport VARCHAR(42),
   PRIMARY KEY (idTransport)
@@ -148,7 +147,7 @@ CREATE TABLE DEPLACER (
   lieuArrive VARCHAR(42),
   PRIMARY KEY (idP, idTransport),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
-  FOREIGN KEY (idTransport) REFERENCES MOYEN_TRANSPORT(idTransport)
+  FOREIGN KEY (idTransport) REFERENCES TRANSPORT(idTransport)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE TRANSPORTER (
