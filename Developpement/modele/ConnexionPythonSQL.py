@@ -1,6 +1,7 @@
 from logging import exception
 from sqlite3 import DatabaseError
 from statistics import quantiles
+from wsgiref.validate import PartialIteratorWrapper
 import sqlalchemy
 from sqlalchemy import func
 from sqlalchemy import create_engine
@@ -76,6 +77,19 @@ def ajoute_particpant(session, participant):
     personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
     if personneP is None:
         participant.idP = get_max_id_participant(session) + 1
+        session.add(participant)
+        try:
+            session.commit()
+            print("La Participant "+ str(participant) +" a bien été inséré dans la base de donnée")
+        except:
+            print("Erreur")
+    else:
+        print("Une personne a déjà cet identifiant dans la base de donnée")
+        
+def ajoute_participant_id(session, participant):
+    personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
+    if personneP is None:
+        participant.idP = participant.idP
         session.add(participant)
         try:
             session.commit()
@@ -211,7 +225,26 @@ def ajoute_participant_role(session, participant, role):
                     ajoute_invite(session, participant)
     else:
         print("Le rôle n'est pas reconnu")
-        
+
+def ajoute_participant_role_id(session, participant, role):
+    if role in ROLE:
+        ajoute_participant_id(session, participant)
+        if role == "Exposant":
+            ajoute_exposant(session, participant)
+        else:
+            ajoute_Consommateur(session, participant)
+            if role == "Staff":
+                ajoute_staff(session, participant)
+            else:
+                ajoute_intervenant(session, participant)
+                if role == "Auteur":
+                    ajoute_auteur(session, participant)
+                elif role == "Presse":
+                    ajoute_presse(session, participant)
+                else:
+                    ajoute_invite(session, participant)
+    else:
+        print("Le rôle n'est pas reconnu")    
         
 def supprimer_participant(session, id_participant):
     session.query(Participant).filter(Participant.idP == id_participant).delete()
@@ -288,7 +321,11 @@ def modifier_participant(session, participant):
     session.commit()
     print("Le participant a bien été modifié")        
 
-    
+def modifier_participant_role(session, participant, metier):
+    ancien_participant = Participant(participant.idP, participant.prenomP, participant.nomP, participant.ddnP, participant.telP, participant.emailP, participant.mdpP, participant.remarques, participant.invite, participant.emailEnvoye)
+    supprimer_participant_role(session, participant.idP)
+    ajoute_participant_role_id(session, ancien_participant, metier)
+
 def get_info_personne(session, email, mdp):
     personne = session.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
     if personne is None:
@@ -296,7 +333,8 @@ def get_info_personne(session, email, mdp):
     else:
         return (True, personne)
 
-    
+def get_participant(session, id_participant):
+    return session.query(Participant).filter(Participant.idP == id_participant).first()
 
         
                 
@@ -309,18 +347,19 @@ def get_info_personne(session, email, mdp):
 # ajoute_auteur(session, Auteur(1, 1))
 # ajoute_presse(session, Presse(1))
 # ajoute_invite(session, Invite(1))
-#ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture", emailEnvoye = True), "Auteur")
+#ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
 
 #print(get_info_personne(session, "lenny@gmail.com", "le"))
 
 
 
+#print(get_participant(session, 14))
 
 
-
-    
+# ajoute_participant_role_id(session, Participant(14, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
+modifier_participant_role(session, get_participant(session, 14), "Exposant")
     
     
 #ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
 # supprimer_participant_role(session, 8)
-modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
+#modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
