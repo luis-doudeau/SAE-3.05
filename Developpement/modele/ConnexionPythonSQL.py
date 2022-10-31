@@ -45,7 +45,7 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -59,14 +59,15 @@ session = Session()
 
 def get_max_id_participant(session):
     max_id = session.query(func.max(Participant.idP)).first()
-    if (max_id._data[0]) is None:
+    
+    if (max_id[0]) is None:
         return 0
     else:
-        return max_id._data[0]
+        return max_id[0]
 
 def get_max_num_stand(session):
     max_num = session.query(func.max(Exposant.numStand)).first()
-    if (max_num._data[0]) is None:
+    if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
@@ -81,7 +82,6 @@ def ajoute_particpant(session, participant):
             print("La Participant "+ str(participant) +" a bien été inséré dans la base de donnée")
         except:
             print("Erreur")
-            session.rollback()
     else:
         print("Une personne a déjà cet identifiant dans la base de donnée")
     
@@ -126,6 +126,7 @@ def ajoute_staff(session, staff):
             print("La personne " + str(personne) + " est devenu un(e) staff")
         except:
             print("Erreur")
+            session.rollback()
     else:
         print("Un staff a déjà cet identifiant dans la base de donnée")
         
@@ -133,13 +134,14 @@ def ajoute_intervenant(session, intervenant):
     intervenantI = session.query(Intervenant).filter(Intervenant.idP == intervenant.idP).first()
     if intervenantI is None:
         personne = session.query(Participant).filter(Participant.idP == intervenant.idP).first()
-        new_intervenant = Intervenant(intervenant.idP, None, None, None, None)
+        new_intervenant = Intervenant(intervenant.idP, None, None)
         session.add(new_intervenant)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) intervenant(e)")
         except:
             print("Erreur")
+            session.rollback()
     else:
         print("Un intervenant a déjà cet identifiant dans la base de donnée")
     
@@ -154,6 +156,7 @@ def ajoute_auteur(session, auteur):
             print("La personne " + str(personne) + " est devenu un(e) auteur / autrice")
         except:
             print("Erreur")
+            session.rollback()
     else:
         print("Un auteur a déjà cet identifiant dans la base de donnée")
 
@@ -168,6 +171,7 @@ def ajoute_presse(session, presse):
             print("La personne " + str(personne) + " est devenu membre de la presse")
         except:
             print("Erreur")
+            session.rollback()
     else:
         print("Une personne de la presse a déjà cet identifiant dans la base de donnée")
 
@@ -185,6 +189,8 @@ def ajoute_invite(session, invite):
             session.rollback()
     else:
         print("Un invité a déjà cet identifiant dans la base de donnée")
+        
+
         
 def ajoute_participant_role(session, participant, role):
     if role in ROLE:
@@ -205,6 +211,83 @@ def ajoute_participant_role(session, participant, role):
                     ajoute_invite(session, participant)
     else:
         print("Le rôle n'est pas reconnu")
+        
+        
+def supprimer_participant(session, id_participant):
+    session.query(Participant).filter(Participant.idP == id_participant).delete()
+    session.commit()
+    print("Le participant a été supprimé")
+
+def supprimer_consommateur(session, id_consommateur):
+    session.query(Consommateur).filter(Consommateur.idP == id_consommateur).delete()
+    session.commit()
+    print("Le consommateur a été supprimé")
+
+def supprimer_intervenant(session, id_intervenant):
+    session.query(Intervenant).filter(Intervenant.idP == id_intervenant).delete()
+    session.commit()
+    print("L'intervenant a été supprimé")
+
+def supprimer_exposant(session, id_exposant):
+    session.query(Exposant).filter(Exposant.idP == id_exposant).delete()
+    session.commit()
+    print("L'exposant a été supprimé")
+  
+def supprimer_staff(session, id_staff):
+    session.query(Staff).filter(Staff.idP == id_staff).delete()
+    session.commit()
+    print("Le staff a été supprimé")
+
+def supprimer_auteur(session, id_auteur):
+    session.query(Auteur).filter(Auteur.idP == id_auteur).delete()
+    session.commit()
+    print("L'auteur a été supprimé")
+
+def supprimer_presse(session, id_presse):
+    session.query(Presse).filter(Presse.idP == id_presse).delete()
+    session.commit()
+    print("Le membre de la presse a été supprimé")
+
+def supprimer_invite(session, id_invite):
+    session.query(Invite).filter(Invite.idP == id_invite).delete()
+    session.commit()        
+    print("L'invité a été supprimé")
+     
+def supprimer_participant_role(session, id_participant):
+    participant_existe = session.query(Participant).filter(Participant.idP == id_participant).first()
+    if participant_existe is not None:
+        exposant = session.query(Exposant).filter(Exposant.idP == id_participant).first()
+        staff = session.query(Staff).filter(Staff.idP == id_participant).first()
+        auteur = session.query(Auteur).filter(Auteur.idP == id_participant).first()
+        presse = session.query(Presse).filter(Presse.idP == id_participant).first()
+        invite = session.query(Invite).filter(Invite.idP == id_participant).first()
+        if exposant is not None:
+            supprimer_exposant(session, id_participant)
+        else:
+            if staff is not None:
+                supprimer_staff(session, id_participant)
+            else:
+                if auteur is not None:
+                    supprimer_auteur(session, id_participant)
+                elif presse is not None:
+                    supprimer_presse(session, id_participant)
+                elif invite is not None:
+                    supprimer_invite(session, id_participant)
+                supprimer_intervenant(session, id_participant)
+            supprimer_consommateur(session, id_participant)
+        supprimer_participant(session, id_participant)
+    else:
+        print("La personne que vous voulez supprimer n'existe pas")
+
+     
+def modifier_participant(session, participant):
+    session.query(Participant).filter(Participant.idP == participant.idP).update(
+        {Participant.prenomP : participant.prenomP, Participant.nomP : participant.nomP, Participant.ddnP : participant.ddnP, 
+         Participant.telP : participant.telP, Participant.emailP : participant.emailP, Participant.mdpP : participant.mdpP,
+         Participant.invite : participant.invite, Participant.emailEnvoye : participant.emailEnvoye, Participant.remarques : participant.remarques})
+    session.commit()
+    print("Le participant a bien été modifié")        
+
     
 def get_info_personne(session, email, mdp):
     personne = session.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
@@ -226,9 +309,18 @@ def get_info_personne(session, email, mdp):
 # ajoute_auteur(session, Auteur(1, 1))
 # ajoute_presse(session, Presse(1))
 # ajoute_invite(session, Invite(1))
-ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture", emailEnvoye = True), "Auteur")
+#ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", "Voiture", emailEnvoye = True), "Auteur")
 
 #print(get_info_personne(session, "lenny@gmail.com", "le"))
 
 
 
+
+
+
+    
+    
+    
+#ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
+# supprimer_participant_role(session, 8)
+modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
