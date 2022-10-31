@@ -17,6 +17,8 @@ from Auteur import Auteur
 from Presse import Presse
 from Invite import Invite
 from Participant import Participant
+from Loger import Loger
+from Hotel import Hotel
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -325,6 +327,14 @@ def modifier_participant_role(session, participant, metier):
     ancien_participant = Participant(participant.idP, participant.prenomP, participant.nomP, participant.ddnP, participant.telP, participant.emailP, participant.mdpP, participant.remarques, participant.invite, participant.emailEnvoye)
     supprimer_participant_role(session, participant.idP)
     ajoute_participant_role_id(session, ancien_participant, metier)
+    print("Le role du participant a bien été modifié")
+
+def modif_loger(session, ancien_loger, nouveau_loger):
+    session.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDeb == ancien_loger.dateDeb).update({
+        Loger.idHotel : nouveau_loger.idHotel, Loger.dateDeb : nouveau_loger.dateDeb, Loger.dateFin : nouveau_loger.dateFin})
+    session.commit()
+    print("Le logement de cette personne a bien été modifié")        
+
 
 def get_info_personne(session, email, mdp):
     personne = session.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
@@ -336,9 +346,9 @@ def get_info_personne(session, email, mdp):
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
-        
+def get_id_hotel(session, nom_hotel):
+    return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
                 
-
 # ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
@@ -357,7 +367,7 @@ def get_participant(session, id_participant):
 
 
 # ajoute_participant_role_id(session, Participant(14, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
-modifier_participant_role(session, get_participant(session, 14), "Exposant")
+# modifier_participant_role(session, get_participant(session, 14), "Exposant")
     
     
 #ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
