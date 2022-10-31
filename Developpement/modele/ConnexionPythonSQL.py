@@ -19,6 +19,7 @@ from Invite import Invite
 from Participant import Participant
 from Loger import Loger
 from Hotel import Hotel
+from Manger import Manger
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -335,6 +336,12 @@ def modif_loger(session, ancien_loger, nouveau_loger):
     session.commit()
     print("Le logement de cette personne a bien été modifié")        
 
+def modif_repas(session, ancien_repas, nouveau_repas):
+    session.query(Manger).filter(Manger.idP == ancien_repas.idP).filter(Manger.idRepas == ancien_repas.idRepas).update(
+        {Manger.idRepas : nouveau_repas.idRepas}
+    )
+    session.commit()
+    print("Le repas du participant a bien été modifié")     
 
 def get_info_personne(session, email, mdp):
     personne = session.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
