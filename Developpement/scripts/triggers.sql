@@ -1,4 +1,4 @@
-drop trigger if exists ajouteTransport;
+drop trigger if exists ajouteNavette;
 
 
 
@@ -23,61 +23,69 @@ delimiter ;
 delimiter |
 
 
-create trigger ajouteTransport after insert on DEPLACER for each row 
-  begin 
-    declare heureArriveIntervenant DATETIME;
-    declare idVoyage int DEFAULT -1;
+create trigger ajouteNavette after insert on DEPLACER for each row  
+  begin
+    declare idVoyage int default -1;
     declare nbVoyageur int;
-    declare idMax int;
-    declare nouveauDepart DATETIME;
+    declare idMaxVoy int default 0;
+    declare idMaxNav int default 0;
+    declare idNav int;
     declare msg varchar(300);
-    declare idNavetteDispo int;
-
+    declare dateArriveP VARCHAR(50);
+    declare capaciteVoyage int default -1;
     
-    if EXISTS(select heureArriveIntervenant into moyenloc from DEPLACER natural join MOYEN_TRANSPORT natural join INTERVENANT 
-              where idP = new.idP and idTransport = new.idTransport and nomTransport = "Train" and lieuArrive = "Gare Blois") then
-      
-      select ifnull(count(idVoy),0) as nbV, idVoy into nbVoyageur, idVoyage 
-      from TRANSPORTER
-      where not directionGare and TIME("-00:15:00") <= TIMEDIFF(heureDebVoy, new.dateArrive) <= TIME("00:15:00");
-      
-      if idVoyage = -1 and 8 <= HOUR(new.arrive) <= 20 then
+    if new.idTransport = 2 and new.lieuArrive = "Gare Blois" then
 
-        -- Voyage aller
-        select IFNULL(max(idVoy)) into idMax from VOYAGE;
-        insert into VOYAGE values(idMax+1, new.dateArrive, "00:10", false);
-        insert into TRANSPORTER values(new.idP, idMax+1);
-        insert into MOBILISER values(idMax+1, 1);
+      select dateArrive into dateArriveP from INTERVENANT where new.idP = idP;
+    
+
+      select count(idVoy) as nbVoyageur into nbVoyageur
+      from TRANSPORTER natural join VOYAGE
+      where not directionGare and TIME("-00:10:00") <= TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) and TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) <= TIME("00:10:00")
+      order by nbVoyageur asc
+      limit 1;
+
+
+      select idVoy as idVoyage into idVoyage
+      from TRANSPORTER natural join VOYAGE natural join MOBILISER natural join NAVETTE
+      where not directionGare and TIME("-00:10:00") <= TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) and TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) <= TIME("00:10:00")
+      order by idVoyage desc
+      limit 1;
+
+
+      select sum(capaciteNavette) as capaciteVoyage into capaciteVoyage
+      from VOYAGE natural join MOBILISER natural join NAVETTE
+      where not directionGare and TIME("-00:10:00") <= TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) and TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(dateArriveP,""), "%Y-%m-%d %H:%i:%s")) <= TIME("00:10:00")
+      limit 1;
+
+
+      if idVoyage = -1 and 8 <= HOUR(dateArriveP) and HOUR(dateArriveP) <= 20 then   
+
+        select max(idVoy) as idMaxVoy into idMaxVoy from VOYAGE;
+        select max(idMaxNav) as idMaxNav into idMaxNav from VOYAGE;
+        insert into VOYAGE values(idMaxVoy+1, dateArriveP, TIME("00:10"), false);
+        insert into TRANSPORTER values(new.idP, idMaxVoy+1);
+        insert into MOBILISER values(idMaxVoy+1, 1);
+
+      elseif capaciteVoyage <= nbVoyageur then  -- vérifier si la navette n'est pas plaine
+        select max(idNavette) as idMaxNav into idMaxNav from NAVETTE natural join MOBILISER where idVoy = idVoyage;
+        insert into TRANSPORTER values(new.idP, idVoyage);
+        insert into MOBILISER values(idVoyage, idMaxNav+1);
       
-      elsif idVoyage != -1 and 8 <= HOUR(new.arrive) <= 20 :
-        
-        
+      elseif idVoyage <> -1 and 8 <= HOUR(dateArriveP) and HOUR(dateArriveP) <= 20 then
+          insert into TRANSPORTER values(new.idP, idVoyage); 
 
       else 
         set msg = concat("Les navettes ne circulent qu'entre 8 heure et 20 heure");
           signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+      
       end if;
-
     end if;
-
   end |
 
+delimiter ;
 
 
-    
-
--- -- Voyage retour
---         select IFNULL(max(idVoy)) into idMax from VOYAGE;
---         declare heureDepartNouveauVoyageRetour TIME;
---         set heureDepartNouveauVoyageRetour = TIME(new.arrive + TIME("00:15");
---         set nouveauDepartRetour = STR_TO_DATE(concat(DATE(STR_TO_DATE(new.arrive, "%d-%m-%Y %H:%i"))," ",  heureDepartNouveauVoyageRetour), "%Y-%m-%d %H:%i:%s");
---         insert into VOYAGE values(idMax+2, nouveauDepartRetour, "00:10", false);
-
--- select idNav into idNavetteDispo from MOBILISER 
---         where idNav not in (select idNav from MOBILISER natural join VOYAGE 
---                             where DATEDIFF(heureDepart, ) < TIME("00:00") and DATEDIFF() and directionGare = False;
-
--- declare heureDepartNouveauVoyageAller TIME;
---         set heureDepartNouveauVoyageAller = TIME(new.arrive - TIME("00:10");
---         set nouveauDepartAller = STR_TO_DATE(concat(DATE(STR_TO_DATE(new.arrive, "%d-%m-%Y %H:%i"))," ",  heureDepartNouveauVoyageAller), "%Y-%m-%d %H:%i:%s");
---         insert into VOYAGE values(idMax+1, nouveauDepartAller, "00:10", true);
+-- select count(*) as nbNavetteRecquise from MOBILISER natural join VOYAGE 
+-- where not directionGare and TIME("-00:10:00") <= TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),""), "%Y-%m-%d %H:%i:%s")) and TIMEDIFF(heureDebVoy,
+-- STR_TO_DATE(concat(STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),""), "%Y-%m-%d %H:%i:%s")) <= TIME("00:10:00");
