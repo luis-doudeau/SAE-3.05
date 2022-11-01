@@ -355,6 +355,29 @@ def get_participant(session, id_participant):
 
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
+   
+def affiche_participants(session):
+    liste_participant = []
+    participants = session.query(Participant)
+    for part in participants:
+        liste_participant.append(part)
+    return liste_participant
+   
+#print(affiche_participants(session))
+   
+def affiche_participant_date(session):
+    pass
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
                 
 # ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
