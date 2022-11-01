@@ -1,6 +1,25 @@
 drop trigger if exists ajouteTransport;
 
 
+
+delimiter |
+create trigger verifCapaciteHotel before insert on LOGER for each row
+  begin
+    declare msg varchar(300);
+    declare capacite int;
+    declare capaciteMax int;
+
+    select IFNULL(count(*),0) into capacite from LOGER where idHotel = new.idHotel and dateFin >= new.dateDeb;
+    select capaciteHotel into capaciteMax from HOTEL where idHotel = new.idHotel;
+
+
+    if capacite >= capaciteMax then
+      set msg = concat("L'Hotel n'a plus de place disponible");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+end |
+delimiter ;
+
 delimiter |
 
 
