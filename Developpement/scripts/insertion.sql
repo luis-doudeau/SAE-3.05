@@ -110,14 +110,14 @@ INSERT INTO HOTEL (idHotel,nomHotel,adresseHotel,telHotel,mailHotel,capaciteHote
                                                                                             (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
 
 
-INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,STR_TO_DATE("19-11-2022 10:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
-                                                                (301,STR_TO_DATE("19-11-2022 09:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                                (302,STR_TO_DATE("17-11-2022 18:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
-                                                                (303,STR_TO_DATE("20-11-2022 10:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
-                                                                (304,STR_TO_DATE("19-11-2022 09:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
-                                                                (400,STR_TO_DATE("20-11-2022 11:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
-                                                                (401,STR_TO_DATE("18-11-2022 16:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
-                                                                (500,STR_TO_DATE("18-11-2022 08:30", "%d-%m-%Y %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
+INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
+                                                                (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                                (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
+                                                                (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
+                                                                (304,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
+                                                                (400,STR_TO_DATE("2022-11-20 11:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
+                                                                (401,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
+                                                                (500,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
 
 
 INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
@@ -146,18 +146,30 @@ INSERT INTO INVITE (idP) values (500);
 
 
 INSERT INTO VOYAGE (idVoy,heureDebVoy, dureeVoy, directionGare) VALUES
-  (1,STR_TO_DATE("17-11-202 11:51", "%d-%m-%Y %H:%i"),TIME("10:24"), true);
+  (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true);
 
 
 INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES
-  (1,"Navette 1",48),
-  (2,"Navette 2",48),
-  (3,"Navette 3",25),
-  (4,"Navette 4",25),
+  (1,"Navette 1",2),
+  (2,"Navette 2",2),
+  (3,"Navette 3",8), 
+  (4,"Navette 4",8),
   (5,"Navette 5",8),
   (6,"Navette 6",8);
 
 
+INSERT INTO TRANSPORT (idTransport, nomTransport) values 
+  (1, "Avion"),
+  (2, "Train"),
+  (3, "Voiture"),
+  (4, "Covoiturage");
+
+
+
+-- INSERT INTO DEPLACER VALUES (301, 2, "Paris Gare du Nord", "Gare Blois"),
+--                             (302, 2, "Paris Gare du Nord", "Gare Blois"),
+--                             (303, 2, "Paris Gare du Nord", "Gare Blois"),
+--                             (300, 2, "Paris Gare du Nord", "Gare Blois");
 
 
 

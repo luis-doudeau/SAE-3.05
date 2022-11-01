@@ -1,5 +1,5 @@
--- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
--- USE BDBOUM;
+CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE BDBOUM;
 
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
@@ -89,7 +89,7 @@ CREATE TABLE REGIME (
 CREATE TABLE VOYAGE (
   idVoy int,
   heureDebVoy datetime,
-  dureeVoy datetime,
+  dureeVoy time,
   directionGare boolean,
   PRIMARY KEY (idVoy)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
