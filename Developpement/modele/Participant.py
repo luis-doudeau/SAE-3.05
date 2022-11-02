@@ -31,4 +31,4 @@ class Participant(Base):
         self.remarques = remarques
 
     def __repr__(self) -> str:
-        return self.nomP + " " + self.prenomP + ", id : " + str(self.idP)
+        return str(self.idP) + " " + self.prenomP + " " + self.nomP + " " + self.remarques + " " + self.emailP

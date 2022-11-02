@@ -16,5 +16,5 @@ class Creneau(Base):
         self.dateFin = dateFin
 
     def __repr__(self) -> str:
-        return "ID créneau : " + str(self.idCreneau) + ", date début : " + str(self.dateDebut)+ ", date fin : " + str(self.dateFin)
+        return "ID créneau : " + str(self.idCreneau) + " date début : " + str(self.dateDebut)+ " date fin : " + str(self.dateFin)
         
