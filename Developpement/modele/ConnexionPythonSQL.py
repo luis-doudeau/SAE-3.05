@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from email.headerregistry import DateHeader
 from logging import exception
 from sqlite3 import DatabaseError
 from statistics import quantiles
@@ -8,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-
+import datetime
 from Exposant import Exposant
 from Consommateur import Consommateur
 from Staff import Staff
@@ -20,6 +22,9 @@ from Participant import Participant
 from Loger import Loger
 from Hotel import Hotel
 from Manger import Manger
+from Repas import Repas
+from Creneau import Creneau
+from Restaurant import Restaurant
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -357,27 +362,51 @@ def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
    
 def affiche_participants(session):
-    liste_participant = []
+    liste_participants = []
     participants = session.query(Participant)
     for part in participants:
-        liste_participant.append(part)
-    return liste_participant
+        liste_participants.append(part)
+    return liste_participants
    
 #print(affiche_participants(session))
    
-def affiche_participant_date(session):
-    pass
+def affiche_participant_date(session, date, restaurant, midi):
+    liste_consommateurs = []
+    creneau = session.query(Creneau).filter(Creneau.dateDebut[:10] == date)
+    restaurant = session.query(Restaurant).filter(Restaurant.nomRest == restaurant).first()
+    repas, consommateurs = None, None
+    
+    for line in creneau:
+        repas += session.query(Repas).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).filter(Repas.idCreneau == line.idCreneau)
+    for ligne in repas:
+        consommateurs += session.query(Manger).filter(Manger.idRepas == ligne.idRepas)
+    
+    for consomm in consommateurs:
+        liste_consommateurs.append(consomm)
+    return liste_consommateurs
    
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
+# def affiche_participant_date2(session, date, restaurant, midi):
+#     liste_consommateurs = []
+#     liste_creneau = []
+#     creneau = session.query(Creneau.dateDebut).all()
+#     for cren in creneau:
+#         if cren[0].date() == date:
+#             liste_creneau.append(cren)
+        
+#     print(liste_creneau[0])
+#     creneau2 = session.query(Creneau).filter(Creneau.dateDebut == liste_creneau[0]).all()
+#     print(creneau2)
+#     restaurant = session.query(Restaurant).filter(Restaurant.nomRest == restaurant).first()
+    
+#     repas = session.query(Repas, creneau).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).join(Creneau).filter(Repas.idCreneau == creneau.idCreneau).all()
+#     consommateurs = session.query(Manger, repas).filter(Manger.idRepas == repas.idRepas)
+
+#     for consomm in consommateurs:
+#         liste_consommateurs.append(consomm)
+#     return liste_consommateurs
+
+# print(affiche_participant_date2(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
                 
 # ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
@@ -391,10 +420,11 @@ def affiche_participant_date(session):
 
 #print(get_info_personne(session, "lenny@gmail.com", "le"))
 
-
+#print(datetime.datetime.now().date())
 
 #print(get_participant(session, 14))
 
+#print(datetime.datetime(2022,11,18))
 
 # ajoute_participant_role_id(session, Participant(14, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
 # modifier_participant_role(session, get_participant(session, 14), "Exposant")

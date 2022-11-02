@@ -9,8 +9,8 @@ class Repas(Base):
     __tablename__ = "REPAS"
     idRepas = Column(Integer, primary_key = True)
     estMidi = Column(BOOLEAN)
-    idRest = Column(int)
-    idCreneau = Column(int)
+    idRest = Column(Integer)
+    idCreneau = Column(Integer)
 
     def __init__(self, idRepas, estMidi, idRest, idCreneau) -> None:
         self.idRepas = idRepas
