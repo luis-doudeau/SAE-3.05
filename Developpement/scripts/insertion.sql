@@ -61,9 +61,9 @@ INSERT INTO CRENEAU (idCreneau,dateDebut,dateFin) VALUES (1, STR_TO_DATE("17-11-
                                                                             (6, STR_TO_DATE("19-11-2022 12:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("19-11-2022 13:30", "%d-%m-%Y %H:%i")),
                                                                             (7, STR_TO_DATE("19-11-2022 14:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("19-11-2022 15:30", "%d-%m-%Y %H:%i")),
                                                                             (8, STR_TO_DATE("19-11-2022 20:00", "%d-%m-%Y %H:%i"), STR_TO_DATE("19-11-2022 22:00", "%d-%m-%Y %H:%i")),
-                                                                            (9, STR_TO_DATE("20-11-2022 11:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 11:30", "%d-%m-%Y %H:%i")),
+                                                                            (9, STR_TO_DATE("20-11-2022 11:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 12:30", "%d-%m-%Y %H:%i")),
                                                                             (10, STR_TO_DATE("20-11-2022 09:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 10:30", "%d-%m-%Y %H:%i")),
-                                                                            (11, STR_TO_DATE("20-11-2022 12:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 13:30", "%d-%m-%Y %H:%i")),
+                                                                            (11, STR_TO_DATE("20-11-2022 12:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 12:31", "%d-%m-%Y %H:%i")),
                                                                             (12, STR_TO_DATE("20-11-2022 20:00", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 22:00", "%d-%m-%Y %H:%i"));
 
 INSERT INTO REPAS (idRepas,estMidi,idRest,idCreneau) VALUES   (1,true,1,2),

@@ -1,5 +1,6 @@
 drop trigger if exists ajouteNavette;
-
+drop trigger if exists verifCapaciteHotel;
+drop trigger if exists verifCreneauRepasStaff;
 
 
 delimiter |
@@ -18,9 +19,29 @@ create trigger verifCapaciteHotel before insert on LOGER for each row
       signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
     end if;
 end |
-delimiter ;
 
-delimiter |
+
+create trigger verifCreneauRepasStaff before insert on MANGER for each row 
+  begin
+    declare msg VARCHAR(300);
+    if EXISTS(select * from REPAS inner join CRENEAU inner join STAFF
+    where new.idP = STAFF.idP and REPAS.idCreneau = CRENEAU.idCreneau and
+    TIME("00:00") > TIMEDIFF(TIME(dateDebut), TIME("11:30")) or TIMEDIFF(TIME(dateDebut), TIME("13:30")) > TIME("00:00") or
+    TIME("00:00") > TIMEDIFF(TIME(dateFin), TIME("11:30"))  or TIMEDIFF(TIME(dateFin), TIME("14:00")) > TIME("00:00")) then
+      set msg = concat("Les membres du staff ne peuvent manger qu'entre 11H30 et 14H00");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+  end |
+
+
+create trigger verifCreneau before insert on CRENEAU for each row 
+  begin
+    declare msg VARCHAR(300); 
+    if TIMESTAMPDIFF(MINUTE, new.dateDebut, new.dateFin) <= 0 then 
+      set msg = concat("Le créneaux n'est pas cohérents");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+  end |
 
 
 create trigger ajouteNavette after insert on DEPLACER for each row  
