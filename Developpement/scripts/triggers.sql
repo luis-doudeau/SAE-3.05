@@ -1,6 +1,9 @@
 drop trigger if exists ajouteNavette;
 drop trigger if exists verifCapaciteHotel;
 drop trigger if exists verifCreneauRepasStaff;
+drop trigger if exists verifCreneau;
+drop trigger if exists verifCreneauRepas;
+drop trigger if exists verifCreneauRepasExposant;
 
 
 delimiter |
@@ -34,12 +37,64 @@ create trigger verifCreneauRepasStaff before insert on MANGER for each row
   end |
 
 
+create trigger verifCreneauRepasExposant before insert on MANGER for each row 
+  begin
+    declare msg VARCHAR(300);
+    if EXISTS(select * from REPAS inner join EXPOSANT
+    where new.idP = EXPOSANT.idP) then
+      set msg = concat("Les exposants ne sont pas invité à manger");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+  end |
+
+
 create trigger verifCreneau before insert on CRENEAU for each row 
   begin
     declare msg VARCHAR(300); 
     if TIMESTAMPDIFF(MINUTE, new.dateDebut, new.dateFin) <= 0 then 
-      set msg = concat("Le créneaux n'est pas cohérents");
+      set msg = concat("Le créneau n'est pas cohérent");
       signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+  end |
+
+
+create trigger verifEstMidiRepas before insert on REPAS for each row
+  begin 
+    declare msg VARCHAR(300);
+    declare debut DATETIME;
+    declare fin DATETIME;
+
+    select dateDebut, dateFin into debut, fin from CRENEAU
+    where new.idCreneau = CRENEAU.idCreneau;
+
+    if new.estMidi and (TIME(debut) < TIME("11:30") or TIME(debut) > TIME("13:30")) then 
+      set msg = concat("Si c'est un repas du midi, il doit avoir lieu entre 11H30 et 14H00");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+
+     if (not new.estMidi) and (TIME(debut) < TIME("19:30") or TIME(debut) > TIME("22:00")) then 
+      set msg = concat("Si c'est un repas du soir, il doit avoir lieu entre 19H30 et 22H00");
+      signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    end if;
+  end |
+
+
+create trigger verifCreneauRepas before insert on REPAS for each row 
+  begin
+    declare msg VARCHAR(300);
+    declare debut DATETIME;
+    declare fin DATETIME;
+
+    select dateDebut, dateFin into debut, fin from CRENEAU
+    where new.idCreneau = CRENEAU.idCreneau;
+
+    if new.estMidi and (TIME(debut) < TIME("11:30") or TIME(debut) > TIME("13:30") or
+        TIME(fin) < TIME("12:00") or TIME(fin) > TIME("14:00"))
+      or not new.estMidi and (TIME(debut) < TIME("19:30") or TIME(debut) > TIME("21:30") or
+        TIME(fin) < TIME("20:00") or TIME(fin) > TIME("22:00")) or DATE(debut) <> DATE(fin) then
+
+          set msg = concat("Les repas n'ont lieu qu'entre 11H30 et 14H00 puis entre 19H30 et 22H00");
+          signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
     end if;
   end |
 
@@ -96,6 +151,8 @@ create trigger ajouteNavette after insert on DEPLACER for each row
       elseif idVoyage <> -1 and 8 <= HOUR(dateArriveP) and HOUR(dateArriveP) <= 20 then
           insert into TRANSPORTER values(new.idP, idVoyage); 
 
+
+      -- continuer avec les voyages retours
       else 
         set msg = concat("Les navettes ne circulent qu'entre 8 heure et 20 heure");
           signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
