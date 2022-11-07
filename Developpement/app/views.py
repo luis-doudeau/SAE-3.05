@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Flask, render_template, request
 
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant
@@ -29,7 +30,9 @@ def conso():
         return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant())
 
     if request.method == 'POST':
-        print(request.form["jours"])
+        la_date = request.form["jours"].split(",")
+        jour = date(int(la_date[0]),int(la_date[1]),int(la_date[2]))
+        print(jour)
         print(request.form["nomR"])
         print(request.form["heureR"])
         return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant())

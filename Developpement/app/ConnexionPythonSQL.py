@@ -12,20 +12,21 @@ from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
-from .Exposant import Exposant
-from .Consommateur import Consommateur
-from .Staff import Staff
-from .Intervenant import Intervenant
-from .Auteur import Auteur
-from .Presse import Presse
-from .Invite import Invite
-from .Participant import Participant
-from .Loger import Loger
-from .Hotel import Hotel
-from .Manger import Manger
-from .Repas import Repas
-from .Creneau import Creneau
-from .Restaurant import Restaurant
+from datetime import date
+from Exposant import Exposant
+from Consommateur import Consommateur
+from Staff import Staff
+from Intervenant import Intervenant
+from Auteur import Auteur
+from Presse import Presse
+from Invite import Invite
+from Participant import Participant
+from Loger import Loger
+from Hotel import Hotel
+from Manger import Manger
+from Repas import Repas
+from Creneau import Creneau
+from Restaurant import Restaurant
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -608,3 +609,23 @@ def affiche_participant_date_journeeOnly(session, midi):
 # supprimer_participant_role(session, 8)
 #modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
 #get_nom_restaurant()
+
+def get_dormeur(session, date, hotel):
+    liste_dormeur_date = []
+    liste_dormeur_date_hotel = []
+    dormeurs = session.query(Loger).all()
+    for un_dormeur in dormeurs:
+        print("d")
+        if date == "Date" or (un_dormeur.dateDeb < date and un_dormeur.dateFin > date):
+            liste_dormeur_date.append(un_dormeur)
+
+    for un_dormeur in liste_dormeur_date:
+        if hotel is None or un_dormeur.idHotel == hotel:
+            liste_dormeur_date_hotel.append(un_dormeur)
+    return liste_dormeur_date_hotel
+
+#print(get_dormeur(session, date(2022, 11, 18), None))
+
+
+
+
