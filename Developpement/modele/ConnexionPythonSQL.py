@@ -384,6 +384,14 @@ def affiche_participant_date(session, date, restaurant, midi):
     for consomm in consommateurs:
         liste_consommateurs.append(consomm)
     return liste_consommateurs
+
+
+def affiche_participant_trier(auteur, consommateur, exposant, intervenant, invite, presse, staff):
+    pass
+
+
+def affiche_participant_trier_(auteur, consommateur, exposant, intervenant, invite, presse, staff):
+    pass
    
    
 # def affiche_participant_date2(session, date, restaurant, midi):

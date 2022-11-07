@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE BDBOUM;
+-- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- USE BDBOUM;
 
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
@@ -73,6 +73,7 @@ CREATE TABLE PARTICIPANT (
   ddnP DATE,
   telP VARCHAR(42),
   emailP VARCHAR(42),
+  adresseP VARCHAR(120),
   mdpP VARCHAR(42),
   invite boolean,
   emailEnvoye boolean,
