@@ -88,7 +88,11 @@ INSERT INTO REPAS (idRepas,estMidi,idRest,idCreneau) VALUES   (1,true,1,2),
                                                                 (20,false,7,8);
                                                                 
                 
-INSERT INTO MANGER(idP, idRepas) VALUES(100, 1);
+INSERT INTO MANGER(idP, idRepas) VALUES(100, 3);
+INSERT INTO MANGER(idP, idRepas) VALUES(101, 5);
+INSERT INTO MANGER(idP, idRepas) VALUES(102, 6);
+INSERT INTO MANGER(idP, idRepas) VALUES(200, 1);
+
 
 INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
                                                     (2,"Pesco-végétarisme"),

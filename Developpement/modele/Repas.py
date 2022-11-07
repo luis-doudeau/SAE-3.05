@@ -1,5 +1,5 @@
 from xmlrpc.client import Boolean
-from sqlalchemy import Date, BOOLEAN
+from sqlalchemy import Date, BOOLEAN, ForeignKey
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -19,4 +19,4 @@ class Repas(Base):
         self.idCreneau = idCreneau
 
     def __repr__(self) -> str:
-        return "ID repas : " + str(self.idRepas) + ", il est midi : " + str(self.estMidi) + ", au restaurant d'id : " + str(self.idRest) + ", du créneau d'id : " + str(self.idCreneau)
+        return "ID repas : " + str(self.idRepas) + " il est midi : " + str(self.estMidi) + " au restaurant d'id : " + str(self.idRest) + " du créneau d'id : " + str(self.idCreneau)

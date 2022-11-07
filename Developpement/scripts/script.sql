@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE BDBOUM;
+-- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- USE BDBOUM;
 
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
@@ -27,6 +27,8 @@ drop table if exists LIEU;
 drop table if exists HOTEL;
 drop table if exists CRENEAU;
 drop table if exists RESTAURANT;
+
+
 
 
 CREATE TABLE RESTAURANT (

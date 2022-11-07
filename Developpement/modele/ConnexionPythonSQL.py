@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from email.headerregistry import DateHeader
 from logging import exception
+from shutil import register_unpack_format
 from sqlite3 import DatabaseError
 from statistics import quantiles
 from wsgiref.validate import PartialIteratorWrapper
@@ -54,7 +55,7 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnardi")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -370,44 +371,188 @@ def affiche_participants(session):
    
 #print(affiche_participants(session))
    
+   
 def affiche_participant_date(session, date, restaurant, midi):
     liste_consommateurs = []
-    creneau = session.query(Creneau).filter(Creneau.dateDebut[:10] == date)
-    restaurant = session.query(Restaurant).filter(Restaurant.nomRest == restaurant).first()
-    repas, consommateurs = None, None
-    
-    for line in creneau:
-        repas += session.query(Repas).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).filter(Repas.idCreneau == line.idCreneau)
-    for ligne in repas:
-        consommateurs += session.query(Manger).filter(Manger.idRepas == ligne.idRepas)
-    
+    liste_creneau = []
+    liste_repas = []
+    liste_mangeur = []
+    creneau = session.query(Creneau.dateDebut, Creneau.idCreneau).join(Repas, Creneau.idCreneau == Repas.idCreneau).all()
+
+    for cren in creneau:
+        if cren[0].date() == date:
+            liste_creneau.append(cren[1])
+    repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).filter(Repas.estMidi == midi).all()
+    for rep in repas:
+        if rep[1] in liste_creneau:
+            liste_repas.append(rep[2])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
     for consomm in consommateurs:
-        liste_consommateurs.append(consomm)
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
     return liste_consommateurs
-   
-   
-# def affiche_participant_date2(session, date, restaurant, midi):
-#     liste_consommateurs = []
-#     liste_creneau = []
-#     creneau = session.query(Creneau.dateDebut).all()
-#     for cren in creneau:
-#         if cren[0].date() == date:
-#             liste_creneau.append(cren)
-        
-#     print(liste_creneau[0])
-#     creneau2 = session.query(Creneau).filter(Creneau.dateDebut == liste_creneau[0]).all()
-#     print(creneau2)
-#     restaurant = session.query(Restaurant).filter(Restaurant.nomRest == restaurant).first()
-    
-#     repas = session.query(Repas, creneau).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).join(Creneau).filter(Repas.idCreneau == creneau.idCreneau).all()
-#     consommateurs = session.query(Manger, repas).filter(Manger.idRepas == repas.idRepas)
 
-#     for consomm in consommateurs:
-#         liste_consommateurs.append(consomm)
-#     return liste_consommateurs
 
-# print(affiche_participant_date2(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
-                
+
+def affiche_participant_date_dateFalse(session, restaurant, midi):
+    liste_consommateurs = []
+    liste_repas = []
+    liste_mangeur = []
+
+    repas = session.query(Repas, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).filter(Repas.estMidi == midi).all()
+    for rep in repas:
+        liste_repas.append(rep[1])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+
+def affiche_participant_date_resaurantFalse(session, date, midi):
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_repas = []
+    liste_mangeur = []
+    creneau = session.query(Creneau.dateDebut, Creneau.idCreneau).join(Repas, Creneau.idCreneau == Repas.idCreneau).all()
+
+    for cren in creneau:
+        if cren[0].date() == date:
+            liste_creneau.append(cren[1])
+    repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).filter(Repas.estMidi == midi).all()
+    for rep in repas:
+        if rep[1] in liste_creneau:
+            liste_repas.append(rep[2])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+def affiche_participant_date_journee(session, date, restaurant):
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_repas = []
+    liste_mangeur = []
+    creneau = session.query(Creneau.dateDebut, Creneau.idCreneau).join(Repas, Creneau.idCreneau == Repas.idCreneau).all()
+
+    for cren in creneau:
+        if cren[0].date() == date:
+            liste_creneau.append(cren[1])
+    repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).all()
+    for rep in repas:
+        if rep[1] in liste_creneau:
+            liste_repas.append(rep[2])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+def affiche_participant_date_dateOnly(session, date):
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_repas = []
+    liste_mangeur = []
+    creneau = session.query(Creneau.dateDebut, Creneau.idCreneau).join(Repas, Creneau.idCreneau == Repas.idCreneau).all()
+
+    for cren in creneau:
+        if cren[0].date() == date:
+            liste_creneau.append(cren[1])
+    repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).all()
+    for rep in repas:
+        if rep[1] in liste_creneau:
+            liste_repas.append(rep[2])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+def affiche_participant_date_restaurantOnly(session, restaurant):
+    liste_consommateurs = []
+    liste_repas = []
+    liste_mangeur = []
+
+    repas = session.query(Repas, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).all()
+    for rep in repas:
+        liste_repas.append(rep[1])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+def affiche_participant_date_journeeOnly(session, midi):
+    liste_consommateurs = []
+    liste_repas = []
+    liste_mangeur = []
+
+    repas = session.query(Repas, Repas.idRepas).filter(Repas.estMidi == midi).all()
+    for rep in repas:
+        liste_repas.append(rep[1])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
+
+#print(affiche_participant_date(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
+#print(affiche_participant_date_dateFalse(session,"Donec Est Mauris LLP", True))
+#print(affiche_participant_date_resaurantFalse(session, datetime.datetime(2022,11,19,12,30).date(), True))
+#print(affiche_participant_date_dateOnly(session, datetime.datetime(2022,11,19,12,30).date()))
+#print(affiche_participant_date_restaurantOnly(session, "Erat Eget Tincidunt Incorporated"))
+#print(affiche_participant_date_journeeOnly(session, False))
+
 # ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
