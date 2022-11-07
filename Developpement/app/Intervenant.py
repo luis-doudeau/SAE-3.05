@@ -8,7 +8,7 @@ class Intervenant(Base):
     __tablename__ = "INTERVENANT"
     idP = Column(Integer, primary_key = True)
     dateArrive = Column(DATETIME, primary_key = True)
-    dateDepart = Column(DATETIME, primary_key = True)
+    dateDepart = Column(DATETIME)
 
     def __init__(self, idP, dateArrive, dateDepart) -> None:
         self.idP = idP
