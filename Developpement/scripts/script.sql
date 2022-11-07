@@ -75,6 +75,7 @@ CREATE TABLE PARTICIPANT (
   ddnP DATE,
   telP VARCHAR(42),
   emailP VARCHAR(42),
+  adresseP VARCHAR(120),
   mdpP VARCHAR(42),
   invite boolean,
   emailEnvoye boolean,

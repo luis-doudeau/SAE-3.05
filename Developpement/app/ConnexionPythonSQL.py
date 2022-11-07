@@ -398,6 +398,14 @@ def affiche_participant_date(session, date, restaurant, midi):
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
     return liste_consommateurs
+
+
+def affiche_participant_trier(auteur, consommateur, exposant, intervenant, invite, presse, staff):
+    pass
+
+
+def affiche_participant_trier_(auteur, consommateur, exposant, intervenant, invite, presse, staff):
+    pass
    
 def get_nom_restaurant():
     liste_nom_resteau = []
