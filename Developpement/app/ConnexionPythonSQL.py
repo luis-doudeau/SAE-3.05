@@ -599,4 +599,4 @@ def affiche_participant_date_journeeOnly(session, midi):
 #ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
 # supprimer_participant_role(session, 8)
 #modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
-get_nom_restaurant()
+#get_nom_restaurant()
