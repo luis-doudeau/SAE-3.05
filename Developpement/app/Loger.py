@@ -9,8 +9,8 @@ class Loger(Base):
     __tablename__ = "LOGER"
     idP = Column(Integer, primary_key = True)
     idHotel = Column(Integer, primary_key = True)
-    dateArrive = Column(DATETIME, primary_key = True)
-    dateDepart = Column(DATETIME, primary_key = True)
+    dateDeb = Column(DATETIME, primary_key = True)
+    dateFin = Column(DATETIME)
 
     def __init__(self, idP, idHotel, dateDeb, dateFin) -> None:
         self.idP = idP
