@@ -351,9 +351,9 @@ def modif_repas(session, ancien_repas, nouveau_repas):
 def get_info_personne(session, email, mdp):
     personne = session.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
     if personne is None:
-        return False
+        return None
     else:
-        return (True, personne)
+        return personne
 
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()

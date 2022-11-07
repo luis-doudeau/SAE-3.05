@@ -66,16 +66,16 @@
                             </li>
                             <li>
                                 <label for="">Mail</label>
-                                <input type="mail">
+                                <input type="mail" value= {{nom}}>
                             </li>
                             <li>
                                 <label for="">Adresse</label>
-                                <input type="text">
+                                <input type="text" value= {{adresse}}>
                             </li>
                             <li>
                                 <label for="">Tel / DDN</label>
-                                <input type="tel">
-                                <input type="date">
+                                <input type="tel" pattern="[0-9]{10}" value= {{tel}}>
+                                <input type="date" value= {{ddn}}>
                             </li>
                             <li>
                                 <input id="boutonContinuer" type="submit" value="Continuer">

@@ -20,8 +20,8 @@ def suite():
     email = request.form["email"]
     mdp = request.form["mdp"]
     personne = get_info_personne(session, email, mdp)
-    if personne[0] is True:
-        return render_template('pageInscription.html', prenom = personne[1].prenomP)
+    if personne is not None:
+        return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
 
 
 
