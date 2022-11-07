@@ -385,7 +385,11 @@ def affiche_participant_date(session, date, restaurant, midi):
         liste_consommateurs.append(consomm)
     return liste_consommateurs
    
-   
+def get_nom_restaurant():
+    liste_nom_resteau = []
+    for nom in session.query(Restaurant):
+        liste_nom_resteau.append(nom.nomRest)
+    return liste_nom_resteau
 # def affiche_participant_date2(session, date, restaurant, midi):
 #     liste_consommateurs = []
 #     liste_creneau = []
@@ -433,3 +437,4 @@ def affiche_participant_date(session, date, restaurant, midi):
 #ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
 # supprimer_participant_role(session, 8)
 #modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
+get_nom_restaurant()
