@@ -398,7 +398,6 @@ def affiche_participant_date(session, date, restaurant, midi):
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
     return liste_consommateurs
-<<<<<<< HEAD:Developpement/app/ConnexionPythonSQL.py
    
 def get_nom_restaurant():
     liste_nom_resteau = []
@@ -420,8 +419,6 @@ def get_nom_restaurant():
     
 #     repas = session.query(Repas, creneau).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).join(Creneau).filter(Repas.idCreneau == creneau.idCreneau).all()
 #     consommateurs = session.query(Manger, repas).filter(Manger.idRepas == repas.idRepas)
-=======
->>>>>>> bug:Developpement/modele/ConnexionPythonSQL.py
 
 
 
