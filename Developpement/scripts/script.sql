@@ -133,7 +133,7 @@ CREATE TABLE INTERVENANT (
   idP int,
   dateArrive datetime,
   dateDepart datetime,
-  PRIMARY KEY (idP),
+  PRIMARY KEY (idP, dateArrive, dateDepart),
   FOREIGN KEY (idP) REFERENCES CONSOMMATEUR(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -164,10 +164,12 @@ CREATE TABLE TRANSPORTER (
 CREATE TABLE LOGER(
   idP int,
   idHotel int,
-  dateDeb datetime,
-  dateFin datetime,
-  PRIMARY KEY (idP, idHotel, dateDeb),
+  dateArrive datetime,
+  dateDepart datetime,
+  PRIMARY KEY (idP, idHotel, dateArrive, dateDepart),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
+  FOREIGN KEY (dateArrive) REFERENCES INTERVENANT(dateArrive),
+  FOREIGN KEY (dateDepart) REFERENCES INTERVENANT(dateDepart),
   FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel)
 );
 

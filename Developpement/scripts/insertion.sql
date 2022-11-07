@@ -116,6 +116,10 @@ INSERT INTO HOTEL (idHotel,nomHotel,adresseHotel,telHotel,mailHotel,capaciteHote
                                                                                             (6,"Hitlon","Ap #107-2870 Proin Rd.","04 22 68 85 27","nullam.scelerisque.neque@icloud.edu",87),
                                                                                             (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
 
+INSERT INTO LOGER (idP, idHotel, dateArrive, dateDepart) VALUES(300, 1, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
+                                                                (500, 2, STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i")),
+                                                                (301, 2, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                                (303, 3, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i"));
 
 INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
                                                                 (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
