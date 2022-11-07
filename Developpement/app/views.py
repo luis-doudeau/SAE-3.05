@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from modele.ConnexionPythonSQL import get_info_personne,session
+from .ConnexionPythonSQL import get_info_personne,session
 
 
 
