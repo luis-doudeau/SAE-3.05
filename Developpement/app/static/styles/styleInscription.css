@@ -1,0 +1,98 @@
+body > header{
+    background-color: #0c0a60;
+    color: #ffffff;
+}
+
+body header ul{
+    display: flex; /* or inline-flex */
+    flex-wrap: nowrap;
+    list-style-type: none;
+    align-items: center;
+
+}
+
+body header li{
+    font-size: 1.3em;
+    letter-spacing: 2px;
+    font-family: 'Libre Franklin';
+}
+
+body header li:last-child{
+    right: 0;
+    position: absolute;
+}
+
+body>header li:first-child{
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
+}
+
+body header li:first-child span{
+    font-weight: bold;
+}
+
+body header a:link, body header a:visited {
+    color: white;
+}
+
+body header ul li{
+    margin-right: 2rem;
+
+}
+
+body header{
+    display: flex; /* or inline-flex */
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+#imginsta{
+    width: 2rem;
+    height: 2rem;
+}
+#imgface{
+    width: 1.2rem;
+    height: 2rem;
+}
+#imgyout{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+main header{
+    background-color:#5774d8;
+}
+
+body{
+    background-color: #7eafe5;
+}
+
+main header li{
+    font-size: 1.5rem;
+}
+
+#imgLogoMaison{
+    width: 4.5rem;
+    height: 4.5rem;
+}
+
+#imgheader39festival{
+    width: 20rem;
+    height: 4rem;
+}
+
+#p39e{
+    white-space:nowrap;
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
+    color: #fcba42;
+    font-size: 2.2rem;
+    font-family: 'Miltonian Tattoo';
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+#infoprat{
+    font-size: 2rem;
+    color: white;
+
+}
