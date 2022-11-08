@@ -370,9 +370,7 @@ def affiche_participants(session):
     for part in participants:
         liste_participants.append(part)
     return liste_participants
-   
-#print(affiche_participants(session))
-   
+      
    
 def affiche_participant_date(session, date, restaurant, midi):
     liste_consommateurs = []
@@ -399,7 +397,9 @@ def affiche_participant_date(session, date, restaurant, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
+
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_trier(session, trie):
      
@@ -430,11 +430,7 @@ def affiche_participant_trier(session, trie):
     
 def affiche_participant_trier_consommateur(session):
     participant = session.query(Participant).all()
-    print(participant)
     return participant
-
-
-    #select idP,prenomP,nomP,ddnP,telP,emailP,adresseP from PARTICIPANT NATURAL JOIN STAFF union select idP,prenomP,nomP,ddnP,telP,emailP,adresseP from PARTICIPANT NATURAL JOIN  AUTEUR;
 
 
 def get_nom_restaurant():
@@ -442,24 +438,6 @@ def get_nom_restaurant():
     for nom in session.query(Restaurant):
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
-
-
-# def affiche_participant_date2(session, date, restaurant, midi):
-#     liste_consommateurs = []
-#     liste_creneau = []
-#     creneau = session.query(Creneau.dateDebut).all()
-#     for cren in creneau:
-#         if cren[0].date() == date:
-#             liste_creneau.append(cren)
-        
-#     print(liste_creneau[0])
-#     creneau2 = session.query(Creneau).filter(Creneau.dateDebut == liste_creneau[0]).all()
-#     print(creneau2)
-#     restaurant = session.query(Restaurant).filter(Restaurant.nomRest == restaurant).first()
-    
-#     repas = session.query(Repas, creneau).filter(Repas.idRest == restaurant.idRest).filter(Repas.estMidi == midi).join(Creneau).filter(Repas.idCreneau == creneau.idCreneau).all()
-#     consommateurs = session.query(Manger, repas).filter(Manger.idRepas == repas.idRepas)
-
 
 
 def affiche_participant_date_dateFalse(session, restaurant, midi):
@@ -480,8 +458,9 @@ def affiche_participant_date_dateFalse(session, restaurant, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
 
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_date_resaurantFalse(session, date, midi):
     liste_consommateurs = []
@@ -508,7 +487,9 @@ def affiche_participant_date_resaurantFalse(session, date, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
+
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_date_journee(session, date, restaurant):
     liste_consommateurs = []
@@ -535,7 +516,9 @@ def affiche_participant_date_journee(session, date, restaurant):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
+
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_date_dateOnly(session, date):
     liste_consommateurs = []
@@ -562,7 +545,9 @@ def affiche_participant_date_dateOnly(session, date):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
+
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_date_restaurantOnly(session, restaurant):
     liste_consommateurs = []
@@ -583,7 +568,9 @@ def affiche_participant_date_restaurantOnly(session, restaurant):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
-    return liste_consommateurs
+
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
 def affiche_participant_date_journeeOnly(session, midi):
     liste_consommateurs = []
@@ -603,9 +590,18 @@ def affiche_participant_date_journeeOnly(session, midi):
 
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
-            liste_consommateurs.append(consomm)
-    return liste_consommateurs
+            liste_consommateurs.append(consomm[1])
+    
+    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    return liste_participants
 
+def get_liste_participant_id_consommateur(session, liste_id):
+    liste_participants = []
+    participants = session.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
+    for une_personne in participants:
+        if une_personne.idP in liste_id:
+            liste_participants.append(une_personne)
+    return liste_participants
 
 #print(affiche_participant_date(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
 #print(affiche_participant_date_dateFalse(session,"Donec Est Mauris LLP", True))
@@ -613,6 +609,8 @@ def affiche_participant_date_journeeOnly(session, midi):
 #print(affiche_participant_date_dateOnly(session, datetime.datetime(2022,11,19,12,30).date()))
 #print(affiche_participant_date_restaurantOnly(session, "Erat Eget Tincidunt Incorporated"))
 #print(affiche_participant_date_journeeOnly(session, False))
+
+#print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
 
 # ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
 # ajoute_Consommateur(session, Consommateur(1))
@@ -658,7 +656,7 @@ def get_dormeur(session, date, hotel):
             liste_dormeur_date_hotel.append(un_dormeur2)
     return liste_dormeur_date_hotel
 
-# print(get_dormeur(session, "2022-11-19", 2))
+#print(get_dormeur(session, "2022-11-19", 2))
 
 
 
