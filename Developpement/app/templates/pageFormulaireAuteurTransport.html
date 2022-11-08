@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleConnexion.css') }}">
+    <link href="https://fr.allfont.net/allfont.css?fonts=londrina-shadow" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <ul>
+            <li>
+                <p>Rejoignez la communauté <span>#BDBoum</span></p>
+            </li>
+            <li>
+                <a href="https://www.instagram.com/bdboum/?hl=fr"> <img id="imginsta" src="{{url_for('static', filename='img/logoInsta.png')}}" alt=""> </a>
+            </li>
+            <li>
+                <a href="https://www.facebook.com/bdboum?fref=ts"> <img id="imgface" src="{{url_for('static', filename='img/logoFacebook.png')}}" alt=""> </a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/channel/UCZzbuXSrKg_De4i7H9BaW1Q"> <img id="imgyout" src="{{url_for('static', filename='img/logoYoutube.png')}}" alt=""> </a>
+            </li>
+            <li id="last-li-header">
+                <a href="https://www.maisondelabd.com/">Site Officiel bdBoum</a>
+            </li>
+        </ul>
+        
+    </header>
+    <main>
+        <header>
+            <ul>
+                <li>
+                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
+                </li>
+                <li>
+                    <p> 18 → 20 Novembre 2022</p>
+                </li>
+                <li>
+                    <p>Infos pratiques</p>
+                </li>
+                <li>
+                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
+                </li>
+            </ul>
+        </header>
+        <section>
+            <form method="POST">
+            <h2>Transport</h2>
+            <div>
+                <input type="checkbox" name="avion" id="av" > <label for="av">Avion</label>
+                <input type="checkbox" name="train" id="train" > <label for="fr">Train </label>
+                <input type="checkbox" name="voit" id="voit" > <label for="esp">Voiture</label>
+                <input type="checkbox" name="covoi" id="covoit" > <label for="all">Covoiturage</label>
+                <input type="checkbox" name="autre" id="autre" > <label for="russ">Autre</label>
+            </div>
+            
+            <div>
+                <h2>Arrivé à Blois**</h2>
+                <label for="ddn">LE</label>
+                <input id="ddn" type="date" name="ddn"  value="2002-10-18" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                <label for="appt">A</label>
+                <input type="time" id="appt" name="appt" min="09:00" max="18:00" required>
+                
+
+
+                
+            </div>
+            <div>
+                <h2>Départ de Blois**</h2>
+                <label for="ddn">LE</label>
+                <input id="ddn" type="date" name="ddn"  value="2002-10-18" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                <label for="appt">A</label>
+                <input type="time" id="appt" name="appt" min="09:00" max="18:00" required>
+                
+                
+            </div>
+
+            <div class="user-box">
+                <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
+            </div>
+        </form>
+        </section>
+        
+    </main>
+</body>
+</html>
