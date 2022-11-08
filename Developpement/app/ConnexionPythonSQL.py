@@ -167,7 +167,7 @@ def ajoute_intervenant(session, idP):
     intervenantI = session.query(Intervenant).filter(Intervenant.idP == intervenant.idP).first()
     if intervenantI is None:
         personne = session.query(Participant).filter(Participant.idP == intervenant.idP).first()
-        session.add(new_intervenant)
+        session.add(intervenant)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) intervenant(e)")
