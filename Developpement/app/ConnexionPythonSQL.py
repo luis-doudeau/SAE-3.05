@@ -162,11 +162,11 @@ def ajoute_staff(session, idP):
     else:
         print("Un staff a déjà cet identifiant dans la base de donnée")
         
-def ajoute_intervenant(session, intervenant):
+def ajoute_intervenant(session, idP):
+    intervenant = Intervenant(idP)
     intervenantI = session.query(Intervenant).filter(Intervenant.idP == intervenant.idP).first()
     if intervenantI is None:
         personne = session.query(Participant).filter(Participant.idP == intervenant.idP).first()
-        new_intervenant = Intervenant(intervenant.idP, None, None)
         session.add(new_intervenant)
         try:
             session.commit()
