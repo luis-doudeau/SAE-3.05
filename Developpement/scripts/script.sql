@@ -131,10 +131,16 @@ CREATE TABLE REPAS (
 
 CREATE TABLE INTERVENANT (
   idP int,
-  dateArrive datetime,
-  dateDepart datetime,
-  PRIMARY KEY (idP, dateArrive),
+  PRIMARY KEY (idP),
   FOREIGN KEY (idP) REFERENCES CONSOMMATEUR(idP)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE ASSISTER (
+  idP int,
+  dateArrive int,
+  dateDepart VARCHAR(42),
+  PRIMARY KEY (idP, dateArrive),
+  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE TRANSPORT (
@@ -162,11 +168,11 @@ CREATE TABLE TRANSPORTER (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE LOGER(
-  idHotel int,
   idP int,
   dateDebut datetime,
+  idHotel int,
   dateFin datetime,
-  PRIMARY KEY (idHotel, idP, dateDebut),
+  PRIMARY KEY (idP, dateDebut),
   FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

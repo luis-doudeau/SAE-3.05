@@ -13,20 +13,21 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from .Exposant import Exposant
-from .Consommateur import Consommateur
-from .Staff import Staff
-from .Intervenant import Intervenant
-from .Auteur import Auteur
-from .Presse import Presse
-from .Invite import Invite
-from .Participant import Participant
-from .Loger import Loger
-from .Hotel import Hotel
-from .Manger import Manger
-from .Repas import Repas
-from .Creneau import Creneau
-from .Restaurant import Restaurant
+from Exposant import Exposant
+from Intervenir import Intervenir
+from Consommateur import Consommateur
+from Staff import Staff
+from Intervenant import Intervenant
+from Auteur import Auteur
+from Presse import Presse
+from Invite import Invite
+from Participant import Participant
+from Loger import Loger
+from Hotel import Hotel
+from Manger import Manger
+from Repas import Repas
+from Creneau import Creneau
+from Restaurant import Restaurant
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -254,7 +255,25 @@ def ajoute_participant_role_id(session, participant, role):
                 else:
                     ajoute_invite(session, participant)
     else:
-        print("Le rôle n'est pas reconnu")    
+        print("Le rôle n'est pas reconnu")
+
+
+def ajoute_intervention(session, idP, idCreneau, idLieu, nomIntervention, descIntervention):
+    intervenir = Intervenir(idP, idCreneau, idLieu, nomIntervention, descIntervention)
+    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).first()
+    if intervention is None:
+        session.add(intervenir)
+        try:
+            session.commit()
+            print("L'intervention " + str(intervenir) + " est maintenant créée !")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Une intervention a déjà lieu à ce créneau pour cette personne")
+
+# ajoute_intervention(session, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
+        
         
 def supprimer_participant(session, id_participant):
     session.query(Participant).filter(Participant.idP == id_participant).delete()

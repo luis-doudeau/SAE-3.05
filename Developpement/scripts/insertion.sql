@@ -117,7 +117,7 @@ INSERT INTO HOTEL (idHotel,nomHotel,adresseHotel,telHotel,mailHotel,capaciteHote
                                                                                             (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
 
 
-INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
+INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,),
                                                                 (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
                                                                 (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
                                                                 (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
@@ -132,6 +132,7 @@ INSERT INTO LOGER (idP, idHotel, dateDebut, dateFin) VALUES(300, 1, STR_TO_DATE(
                                                                 (301, 2, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
                                                                 (303, 3, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i"));
 
+INSERT INTO ASS
 
 INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
                                                           (2, "Dupuis", 5),
