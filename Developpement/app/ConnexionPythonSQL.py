@@ -83,10 +83,8 @@ def get_max_num_stand(session):
     else:
         return max_num._data[0]
 
-def creer_participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
-    return Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
-
-def ajoute_particpant(session, participant):
+def ajoute_particpant(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
     personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
     if personneP is None:
         participant.idP = get_max_id_participant(session) + 1
@@ -99,7 +97,8 @@ def ajoute_particpant(session, participant):
     else:
         print("Une personne a déjà cet identifiant dans la base de donnée")
         
-def ajoute_participant_id(session, participant):
+def ajoute_participant_id(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
     personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
     if personneP is None:
         participant.idP = participant.idP
@@ -112,7 +111,8 @@ def ajoute_participant_id(session, participant):
     else:
         print("Une personne a déjà cet identifiant dans la base de donnée")
     
-def ajoute_Consommateur(session, consommateur):
+def ajoute_Consommateur(session, idP):
+    consommateur = Consommateur(idP)
     consommateurC = session.query(Consommateur).filter(Consommateur.idP == consommateur.idP).first()
     if consommateurC is None:
         personne = session.query(Participant).filter(Participant.idP == consommateur.idP).first()
@@ -127,7 +127,8 @@ def ajoute_Consommateur(session, consommateur):
     else:
         print("Un consommateur a déjà cet identifiant dans la base de donnée")
 
-def ajoute_exposant(session, exposant):
+def ajoute_exposant(session, idP, numStand):
+    exposant = Exposant(idP, numStand)
     exposantE = session.query(Exposant).filter(Exposant.idP == exposant.idP).first()
     if exposantE is None:
         personne = session.query(Participant).filter(Participant.idP == exposant.idP).first()
@@ -142,7 +143,8 @@ def ajoute_exposant(session, exposant):
     else:
         print("Un exposant a déjà cet identifiant dans la base de donnée")
 
-def ajoute_staff(session, staff):
+def ajoute_staff(session, idP):
+    staff = Staff(idP)
     staffS = session.query(Staff).filter(Staff.idP == staff.idP).first()
     if staffS is None:
         personne = session.query(Participant).filter(Participant.idP == staff.idP).first()
@@ -172,7 +174,8 @@ def ajoute_intervenant(session, intervenant):
     else:
         print("Un intervenant a déjà cet identifiant dans la base de donnée")
     
-def ajoute_auteur(session, auteur):
+def ajoute_auteur(session, idP):
+    auteur = Auteur(idP)
     auteurA = session.query(Auteur).filter(Auteur.idP == auteur.idP).first()
     if auteurA is None:
         personne = session.query(Participant).filter(Participant.idP == auteur.idP).first()
@@ -187,7 +190,8 @@ def ajoute_auteur(session, auteur):
     else:
         print("Un auteur a déjà cet identifiant dans la base de donnée")
 
-def ajoute_presse(session, presse):
+def ajoute_presse(session, idP):
+    presse = Presse(idP)
     presseP = session.query(Presse).filter(Presse.idP == presse.idP).first()
     if presseP is None:
         personne = session.query(Participant).filter(Participant.idP == presse.idP).first()
@@ -202,7 +206,8 @@ def ajoute_presse(session, presse):
     else:
         print("Une personne de la presse a déjà cet identifiant dans la base de donnée")
 
-def ajoute_invite(session, invite):
+def ajoute_invite(session, idP):
+    invite = Invite(idP)
     inviteI = session.query(Invite).filter(Invite.idP == invite.idP).first()
     if inviteI is None:
         personne = session.query(Participant).filter(Participant.idP == invite.idP).first()
@@ -477,7 +482,7 @@ def get_liste_participant_id_consommateur(session, liste_id):
 
 #print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
 
-#ajoute_particpant(session,creer_participant(None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False))
+#ajoute_particpant(session, None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False)
 # ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
 # ajoute_staff(session, Staff(1))
