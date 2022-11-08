@@ -13,20 +13,20 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
+from .Exposant import Exposant
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -439,6 +439,12 @@ def get_nom_restaurant():
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
 
+def get_nom_hotel():
+    liste_nom_hotel = []
+    for nom in session.query(Hotel):
+        liste_nom_hotel.append((nom.nomHotel, nom.idHotel))
+    return liste_nom_hotel
+
 
 def affiche_participant_date_dateFalse(session, restaurant, midi):
     liste_consommateurs = []
@@ -647,10 +653,13 @@ def get_dormeur(session, date, hotel):
         date_deb = str(str(un_dormeur[2])[:10])
         date_fin = str(str(un_dormeur[3])[:10])
         if date == "Date" or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
-            liste_dormeur_date_hotel.append(un_dormeur)
-    return liste_dormeur_date_hotel
+            liste_dormeur_date_hotel.append(un_dormeur[0])
 
-#print(get_dormeur(session, "2022-11-19", 2))
+    liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
+
+    return liste_participants
+
+print(get_dormeur(session, "2022-11-19", 1))
 
 
 
