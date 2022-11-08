@@ -8,7 +8,7 @@ class Maison_Edition(Base):
     __tablename__ = "MAISON_EDITION"
     idMe = Column(Integer, primary_key = True)
     nomMe = Column(Text)
-    numStand = Column(Integer)
+    numStand = Column(Text)
 
     def __init__(self, idMe, nomMe, numStand) -> None:
         self.idMe = idMe
@@ -16,5 +16,5 @@ class Maison_Edition(Base):
         self.numStand = numStand
 
     def __repr__(self) -> str:
-        return "ID maison edition : " + str(self.idMe) + ", nom : " + self.nomMe + ", numStand" + str(self.numStand)
+        return "ID maison edition : " + str(self.idMe) + ", nom : " + self.nomMe + ", numStand" + self.numStand
         

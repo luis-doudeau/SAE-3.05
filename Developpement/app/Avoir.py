@@ -6,11 +6,11 @@ Base = declarative_base()
 class Avoir(Base):
     __tablename__ = "AVOIR"
     idP = Column(Integer, primary_key = True)
-    idregime = Column(Integer, primary_key = True)
+    idRegime = Column(Integer, primary_key = True)
 
-    def __init__(self, idP, idregime) -> None:
+    def __init__(self, idP, idRegime) -> None:
         self.idP = idP
-        self.idregime = idregime
+        self.idRegime = idRegime
 
     def __repr__(self) -> str:
-        return "ID consommateur : " + str(self.idP) + ", ID regime : " + str(self.idregime)
+        return "ID consommateur : " + str(self.idP) + ", ID regime : " + str(self.idRegime)
