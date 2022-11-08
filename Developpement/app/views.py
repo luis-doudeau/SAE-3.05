@@ -49,6 +49,10 @@ def dormeur_secretaire():
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
+
+@app.route('/pageFormulaireAuteurTransport/')
+def formulaire_auteur_transport():
+    return render_template("pageFormulaireAuteurTransport.html")
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
 
