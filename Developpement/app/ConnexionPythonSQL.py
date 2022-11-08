@@ -331,7 +331,8 @@ def supprimer_participant_role(session, id_participant):
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(session, participant):
+def modifier_participant(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
     session.query(Participant).filter(Participant.idP == participant.idP).update(
         {Participant.prenomP : participant.prenomP, Participant.nomP : participant.nomP, Participant.ddnP : participant.ddnP, 
          Participant.telP : participant.telP, Participant.emailP : participant.emailP, Participant.mdpP : participant.mdpP,
@@ -339,7 +340,8 @@ def modifier_participant(session, participant):
     session.commit()
     print("Le participant a bien été modifié")        
 
-def modifier_participant_role(session, participant, metier):
+def modifier_participant_role(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques, metier):
+    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
     ancien_participant = Participant(participant.idP, participant.prenomP, participant.nomP, participant.ddnP, participant.telP, participant.emailP, participant.mdpP, participant.remarques, participant.invite, participant.emailEnvoye)
     supprimer_participant_role(session, participant.idP)
     ajoute_participant_role_id(session, ancien_participant, metier)
@@ -473,43 +475,6 @@ def get_liste_participant_id_consommateur(session, liste_id):
             liste_participants.append(une_personne)
     return liste_participants
 
-#print(affiche_participant_date(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
-#print(affiche_participant_date_dateFalse(session,"Donec Est Mauris LLP", True))
-#print(affiche_participant_date_resaurantFalse(session, datetime.datetime(2022,11,19,12,30).date(), True))
-#print(affiche_participant_date_dateOnly(session, datetime.datetime(2022,11,19,12,30).date()))
-#print(affiche_participant_date_restaurantOnly(session, "Erat Eget Tincidunt Incorporated"))
-#print(affiche_participant_date_journeeOnly(session, False))
-
-#print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
-
-#ajoute_particpant(session, None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False)
-# ajoute_Consommateur(session, Consommateur(1))
-# ajoute_exposant(session, Exposant(1, 1))
-# ajoute_staff(session, Staff(1))
-# ajoute_intervenant(session, Intervenant(1, "2020-03-03 12:00:00", "2020-03-03 13:00:00", "voiture", "aucune"))
-# ajoute_auteur(session, Auteur(1, 1))
-# ajoute_presse(session, Presse(1))
-# ajoute_invite(session, Invite(1))
-#ajoute_participant_role(session, Participant(None, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
-
-#print(get_info_personne(session, "lenny@gmail.com", "le"))
-
-#print(datetime.datetime.now().date())
-
-#print(get_participant(session, 14))
-
-#print(datetime.datetime(2022,11,18))
-
-# ajoute_participant_role_id(session, Participant(14, "Mathieu", "Alpha", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune", emailEnvoye = True), "Auteur")
-# modifier_participant_role(session, get_participant(session, 14), "Exposant")
-    
-    
-#ajoute_participant_role(session, Participant(None, "TEST PRENOM", "TEST NOM", "2003-08-18", "0606060666", "maxym.charpentier@gmail.com", "A", "aucune"), "Staff")
-# supprimer_participant_role(session, 8)
-#modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
-#get_nom_restaurant()
-
-
 def get_dormeur(session, date, hotel):
     liste_dormeur_date_hotel = []
     dormeurs = session.query(Loger.idP, Loger.idHotel, Loger.dateDebut, Loger.dateFin).all()
@@ -523,10 +488,16 @@ def get_dormeur(session, date, hotel):
 
     return liste_participants
 
+#print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
+
+#ajoute_particpant(session, None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False)
+
+#print(get_info_personne(session, "lenny@gmail.com", "le"))
+
+#modifier_participant_role(session, get_participant(session, 14), "Exposant")
+    
+modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
+
 #print(get_dormeur(session, "2022-11-19", 1))
 
-
-
-
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
-#print(afficher_consommateur(session, "Date", "Donec Est Mauris LLP", True))
