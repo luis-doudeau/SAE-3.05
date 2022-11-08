@@ -1,7 +1,7 @@
 from datetime import date
 from flask import Flask, render_template, request
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur
 
 
 
@@ -28,11 +28,11 @@ def suite():
 def conso():        
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
-        jour = date(int(la_date[0]),int(la_date[1]),int(la_date[2]))
-        print(jour)
+        print(la_date)
         print(request.form["nomR"])
         print(request.form["heureR"])
-        return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant())
+        liste_consommateur = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
+        return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant())
     
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
