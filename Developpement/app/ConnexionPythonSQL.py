@@ -643,22 +643,16 @@ def affiche_participant_date_journeeOnly(session, midi):
 
 
 def get_dormeur(session, date, hotel):
-    liste_dormeur_date = []
     liste_dormeur_date_hotel = []
     dormeurs = session.query(Loger.idP, Loger.idHotel, Loger.dateDebut, Loger.dateFin).all()
     for un_dormeur in dormeurs:
         date_deb = str(str(un_dormeur[2])[:10])
         date_fin = str(str(un_dormeur[3])[:10])
-        
-        if date == "Date" or date_deb <= date and date_fin >= date:
-            liste_dormeur_date.append(un_dormeur)
-
-    for un_dormeur2 in liste_dormeur_date:
-        if hotel is None or un_dormeur2.idHotel == hotel:
-            liste_dormeur_date_hotel.append(un_dormeur2)
+        if date == "Date" or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
+            liste_dormeur_date_hotel.append(un_dormeur)
     return liste_dormeur_date_hotel
 
-# print(get_dormeur(session, "2022-11-19", 2))
+print(get_dormeur(session, "2022-11-19", 2))
 
 
 
