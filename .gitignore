@@ -1,2 +1,2 @@
-Developpement/app/__pycache__/
-*.pyc
+__pycache__/
+*.py[cod]
