@@ -13,20 +13,20 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
+from .Exposant import Exposant
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -605,6 +605,42 @@ def affiche_participant_date_journeeOnly(session, midi):
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm)
     return liste_consommateurs
+
+def afficher_consommateur(session, date, restaurant, midi):
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_repas = []
+    liste_mangeur = []
+    if restaurant != "Restaurant" and midi != "Journee":
+        repas = session.query(Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).filter(Repas.estMidi == midi).all()
+    elif restaurant != "Restaurant":
+        repas = session.query(Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idRepas).join(Restaurant, Repas.idRest == Restaurant.idRest).filter(Restaurant.nomRest == restaurant).all()
+    elif midi != "Journee":
+        repas = session.query(Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idRepas).filter(Repas.estMidi == midi).all()
+    if date != "Date":
+        for cren in repas:
+            if cren[0].date() == date:
+                liste_creneau.append(cren[1])
+        repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).all()
+        for rep in repas:
+            if rep[1] in liste_creneau:
+                liste_repas.append(rep[2])
+    else:
+        for rep in repas:
+            liste_repas.append(rep[2])
+
+    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    for mangeur in manger:
+        if mangeur[1] in liste_repas:
+            liste_mangeur.append(mangeur[2])
+
+    consommateurs = session.query(Consommateur, Consommateur.idP).all()
+
+    for consomm in consommateurs:
+        if consomm[1] in liste_mangeur:
+            liste_consommateurs.append(consomm)
+    return liste_consommateurs
+
 
 
 #print(affiche_participant_date(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
