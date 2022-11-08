@@ -1,5 +1,5 @@
--- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
--- USE BDBOUM;
+CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE BDBOUM;
 
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
@@ -13,6 +13,7 @@ drop table if exists INVITE;
 drop table if exists PRESSE;
 drop table if exists MANGER;
 drop table if exists STAFF;
+drop table if exists ASSISTER;
 drop table if exists INTERVENANT;
 drop table if exists REPAS;
 drop table if exists CONSOMMATEUR;
@@ -27,8 +28,6 @@ drop table if exists LIEU;
 drop table if exists HOTEL;
 drop table if exists CRENEAU;
 drop table if exists RESTAURANT;
-
-
 
 
 CREATE TABLE RESTAURANT (
@@ -49,7 +48,7 @@ CREATE TABLE HOTEL (
   nomHotel VARCHAR(42),
   adresseHotel VARCHAR(42),
   telHotel VARCHAR(42),
-  mailHotel VARCHAR(42),
+  mailHotel VARCHAR(80),
   capaciteHotel int,
   PRIMARY KEY (idHotel)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
@@ -57,7 +56,7 @@ CREATE TABLE HOTEL (
 CREATE TABLE MAISON_EDITION (
   idMe int,
   nomMe VARCHAR(42),
-  numStand int,
+  numStand VARCHAR(4),
   PRIMARY KEY (idMe)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -74,7 +73,7 @@ CREATE TABLE PARTICIPANT (
   nomP VARCHAR(42),
   ddnP DATE,
   telP VARCHAR(42),
-  emailP VARCHAR(42),
+  emailP VARCHAR(80),
   adresseP VARCHAR(120),
   mdpP VARCHAR(42),
   invite boolean,
@@ -107,11 +106,10 @@ CREATE TABLE MOBILISER(
 
 CREATE TABLE EXPOSANT (
   idP int,
-  numStand int,
+  numStand VARCHAR(4),
   PRIMARY KEY (idP),
   FOREIGN KEY EXPOSANT(idP) REFERENCES PARTICIPANT(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
-
 
 CREATE TABLE CONSOMMATEUR (
   idP int,
@@ -137,10 +135,10 @@ CREATE TABLE INTERVENANT (
 
 CREATE TABLE ASSISTER (
   idP int,
-  dateArrive int,
-  dateDepart VARCHAR(42),
+  dateArrive datetime,
+  dateDepart datetime,
   PRIMARY KEY (idP, dateArrive, dateDepart),
-  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
+  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE TRANSPORT (
@@ -152,8 +150,8 @@ CREATE TABLE TRANSPORT (
 CREATE TABLE DEPLACER (
   idP int,
   idTransport int,
-  lieuDepart VARCHAR(42),
-  lieuArrive VARCHAR(42),
+  lieuDepart VARCHAR(70),
+  lieuArrive VARCHAR(70),
   PRIMARY KEY (idP, idTransport),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
   FOREIGN KEY (idTransport) REFERENCES TRANSPORT(idTransport)
@@ -173,8 +171,8 @@ CREATE TABLE LOGER(
   dateFin datetime,
   idHotel int,
   PRIMARY KEY (idP, dateDebut, dateFin),
-  FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel),
-  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP)
+  FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
+  FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE STAFF (
@@ -214,9 +212,10 @@ CREATE TABLE AUTEUR (
 
 CREATE TABLE AVOIR (
   idP int,
-  idregime int,
-  PRIMARY KEY (idP, idregime),
-  FOREIGN KEY(idP) REFERENCES CONSOMMATEUR(idP)
+  idRegime int,
+  PRIMARY KEY (idP, idRegime),
+  FOREIGN KEY(idP) REFERENCES CONSOMMATEUR(idP),
+  FOREIGN KEY(idRegime) REFERENCES REGIME(idRegime)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE TRAVAILLER (
@@ -244,10 +243,3 @@ CREATE TABLE INTERVENIR (
   FOREIGN KEY(idCreneau) REFERENCES CRENEAU(idCreneau),
   FOREIGN KEY(idLieu) REFERENCES LIEU(idLieu)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
-
-
-
-
-
-
-

@@ -27,6 +27,7 @@ INSERT INTO EXPOSANT (idP,numStand) VALUES  (1,5),
                                             (4,16),
                                             (5,18);
 
+
 INSERT INTO CONSOMMATEUR (idP) VALUES   (100),
                                         (101),
                                         (102),
@@ -66,6 +67,7 @@ INSERT INTO CRENEAU (idCreneau,dateDebut,dateFin) VALUES (1, STR_TO_DATE("17-11-
                                                                             (11, STR_TO_DATE("20-11-2022 12:30", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 12:31", "%d-%m-%Y %H:%i")),
                                                                             (12, STR_TO_DATE("20-11-2022 20:00", "%d-%m-%Y %H:%i"), STR_TO_DATE("20-11-2022 22:00", "%d-%m-%Y %H:%i"));
 
+
 INSERT INTO REPAS (idRepas,estMidi,idRest,idCreneau) VALUES   (1,true,1,2),
                                                                 (2,true,1,3),
                                                                 (3,true,1,5),
@@ -88,51 +90,62 @@ INSERT INTO REPAS (idRepas,estMidi,idRest,idCreneau) VALUES   (1,true,1,2),
                                                                 (20,false,7,8);
                                                                 
                 
-INSERT INTO MANGER(idP, idRepas) VALUES(100, 3);
-INSERT INTO MANGER(idP, idRepas) VALUES(101, 5);
-INSERT INTO MANGER(idP, idRepas) VALUES(102, 6);
-INSERT INTO MANGER(idP, idRepas) VALUES(200, 1);
+INSERT INTO MANGER(idP, idRepas) VALUES (100, 3),
+                                        (101, 5),
+                                        (102, 6),
+                                        (200, 1);
 
 
 INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
-                                                    (2,"Pesco-végétarisme"),
-                                                    (3,"Flexitarisme"),
-                                                    (4,"Véganisme"),
-                                                    (5,"Sans gluten"),
-                                                    (6,"Sans lactose"),
-                                                    (7,"Cétogène");
+                                                (2,"Pesco-végétarisme"),
+                                                (3,"Flexitarisme"),
+                                                (4,"Véganisme"),
+                                                (5,"Sans gluten"),
+                                                (6,"Sans lactose"),
+                                                (7,"Cétogène");
                                                     
                                                                                                                      
 INSERT INTO STAFF (idP) VALUES (200),
-                                    (201),
-                                    (202),
-                                    (203);
+                                (201),
+                                (202),
+                                (203);
+
 
 INSERT INTO HOTEL (idHotel,nomHotel,adresseHotel,telHotel,mailHotel,capaciteHotel) VALUES (1,"Ibis","3722 Nisl. Road","07 69 24 88 55","lorem@yahoo.org",128),
-                                                                                            (2,"Abba","Ap #258-5002 Eget, St.","06 21 59 29 48","ornare.libero@yahoo.com",55),
-                                                                                            (3,"Airotel","693-6863 Ornare Avenue","03 90 57 11 32","curae.phasellus@google.net",64),
-                                                                                            (4,"B&B Hotels","440-9129 Rutrum, St.","03 55 26 65 06","feugiat.tellus.lorem@aol.com",127),
-                                                                                            (5,"Confort Hotel","P.O. Box 105, 5613 Lacinia Avenue","01 22 50 41 25","mus.aenean@yahoo.couk",181),
-                                                                                            (6,"Hitlon","Ap #107-2870 Proin Rd.","04 22 68 85 27","nullam.scelerisque.neque@icloud.edu",87),
-                                                                                            (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
+                                                                                          (2,"Abba","Ap #258-5002 Eget, St.","06 21 59 29 48","ornare.libero@yahoo.com",55),
+                                                                                          (3,"Airotel","693-6863 Ornare Avenue","03 90 57 11 32","curae.phasellus@google.net",64),
+                                                                                          (4,"B&B Hotels","440-9129 Rutrum, St.","03 55 26 65 06","feugiat.tellus.lorem@aol.com",127),
+                                                                                          (5,"Confort Hotel","P.O. Box 105, 5613 Lacinia Avenue","01 22 50 41 25","mus.aenean@yahoo.couk",181),
+                                                                                          (6,"Hitlon","Ap #107-2870 Proin Rd.","04 22 68 85 27","nullam.scelerisque.neque@icloud.edu",87),
+                                                                                          (7,"Novotel","Ap #448-6699 Arcu Street","03 88 57 81 57","turpis.egestas.aliquam@outlook.net",153);
 
 
-INSERT INTO INTERVENANT (idP,dateArrive,dateDepart) VALUES (300,),
-                                                                (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                                (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
-                                                                (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
-                                                                (304,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
-                                                                (400,STR_TO_DATE("2022-11-20 11:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
-                                                                (401,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
-                                                                (500,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
+INSERT INTO INTERVENANT (idP) VALUES  (300),
+                                      (301),
+                                      (302),
+                                      (303),
+                                      (304),
+                                      (400),
+                                      (401),
+                                      (500);
 
 
-INSERT INTO LOGER (idP, idHotel, dateDebut, dateFin) VALUES(300, 1, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
-                                                                (500, 2, STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i")),
-                                                                (301, 2, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                                (303, 3, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i"));
+INSERT INTO LOGER (idP, idHotel, dateDebut, dateFin) VALUES  (300, 1, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("19-11-2022 19:00", "%d-%m-%Y %H:%i")),
+                                                             (500, 2, STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i")),
+                                                            (301, 2, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                            (303, 3, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i"));
 
-INSERT INTO ASS
+
+
+INSERT INTO ASSISTER(idP, dateArrive, dateDepart) VALUES  (300,STR_TO_DATE("2022-11-17 17:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                          (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                          (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
+                                                          (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
+                                                          (304,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
+                                                          (400,STR_TO_DATE("2022-11-20 11:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
+                                                          (401,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
+                                                          (500,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
+
 
 INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
                                                           (2, "Dupuis", 5),
@@ -145,11 +158,11 @@ INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
                                                           (9, "Petit à petit", 26);
 
 
-INSERT INTO AUTEUR (idP) values (300),
-                                (301),
-                                (302),
-                                (303),
-                                (304);
+INSERT INTO AUTEUR (idP, idMe) values (300, 1),
+                                      (301, 1),
+                                      (302, 2),
+                                      (303, 3),
+                                      (304, 4);
 
 
 INSERT INTO PRESSE (idP) values (400),
@@ -163,30 +176,23 @@ INSERT INTO VOYAGE (idVoy,heureDebVoy, dureeVoy, directionGare) VALUES
   (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true);
 
 
-INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES
-  (1,"Navette 1",2),
-  (2,"Navette 2",2),
-  (3,"Navette 3",8), 
-  (4,"Navette 4",8),
-  (5,"Navette 5",8),
-  (6,"Navette 6",8);
+INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1",2),
+                                                                  (2,"Navette 2",2),
+                                                                  (3,"Navette 3",8), 
+                                                                  (4,"Navette 4",8),
+                                                                  (5,"Navette 5",8),
+                                                                  (6,"Navette 6",8);
 
 
-INSERT INTO TRANSPORT (idTransport, nomTransport) values 
-  (1, "Avion"),
-  (2, "Train"),
-  (3, "Voiture"),
-  (4, "Covoiturage");
+INSERT INTO TRANSPORT (idTransport, nomTransport) values (1, "Avion"),
+                                                          (2, "Train"),
+                                                          (3, "Voiture"),
+                                                          (4, "Covoiturage");
 
 
-
--- INSERT INTO DEPLACER VALUES (301, 2, "Paris Gare du Nord", "Gare Blois"),
---                             (302, 2, "Paris Gare du Nord", "Gare Blois"),
---                             (303, 2, "Paris Gare du Nord", "Gare Blois"),
---                             (300, 2, "Paris Gare du Nord", "Gare Blois");
-
-
-
-
+INSERT INTO DEPLACER VALUES (301, 2, "Paris Gare du Nord", "Gare Blois"),
+                            (302, 2, "Gare de Tours", "Gare Blois"),
+                            (303, 2, "Gare Orléans", "Gare Blois"),
+                            (300, 2, "Aéroport Marseille Provence", "Aéroport d'Orly");
 
 
