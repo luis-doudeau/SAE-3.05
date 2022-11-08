@@ -28,6 +28,8 @@ from Manger import Manger
 from Repas import Repas
 from Creneau import Creneau
 from Restaurant import Restaurant
+from Avoir import Avoir
+from Regime import Regime
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -399,7 +401,25 @@ def affiche_participants(session):
     for part in participants:
         liste_participants.append(part)
     return liste_participants
-      
+
+
+def ajoute_mangeur(session, idRepas, idP):
+    mangeur = Manger(idRepas, idP)
+    manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
+    if manger is None : 
+        session.add(mangeur)
+        try : 
+            session.commit()
+            print("La consommateur à bien été associé à un repas")  
+    
+        except : 
+            print("Erreur !")
+            session.rollback()
+    else : 
+        print("Un consommateur mange déjà ce repas")  
+        
+ajoute_mangeur(session, 1, 102) 
+    
 
 def affiche_participant_trier(session, trie):
      
