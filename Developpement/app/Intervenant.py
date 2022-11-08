@@ -7,13 +7,9 @@ Base = declarative_base()
 class Intervenant(Base):
     __tablename__ = "INTERVENANT"
     idP = Column(Integer, primary_key = True)
-    dateArrive = Column(DATETIME, primary_key = True)
-    dateDepart = Column(DATETIME)
 
-    def __init__(self, idP, dateArrive, dateDepart) -> None:
+    def __init__(self, idP) -> None:
         self.idP = idP
-        self.dateArrive = dateArrive
-        self.dateDepart = dateDepart
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idP) + ", arrive le " + str(self.dateArrive) + ", part le : " + str(self.dateDepart)
+        return "ID intervenant : " + str(self.idP)

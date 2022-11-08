@@ -9,15 +9,15 @@ class Loger(Base):
     __tablename__ = "LOGER"
     idP = Column(Integer, primary_key = True)
     idHotel = Column(Integer, primary_key = True)
-    dateDebut = Column(DATETIME, primary_key = True)
+    dateArrive = Column(DATETIME)
     dateFin = Column(DATETIME)
 
-    def __init__(self, idP, idHotel, dateDebut, dateFin) -> None:
+    def __init__(self, idP, idHotel, dateArrive, dateFin) -> None:
         self.idP = idP
         self.idHotel = idHotel
-        self.dateDebut = dateDebut
+        self.dateArrive = dateArrive
         self.dateFin = dateFin
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idP) + ", ID hotel : " + str(self.idHotel) + ", date début : " + str(self.dateDebut) + ", date fin : " + str(self.dateFin)
+        return "ID intervenant : " + str(self.idP) + "- ID hotel : " + str(self.idHotel) + "- date arrivé : " + str(self.dateDebut) + "- date fin : " + str(self.dateFin)
         
