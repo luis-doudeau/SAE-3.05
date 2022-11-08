@@ -13,20 +13,22 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
+from .Exposant import Exposant
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
+from .Regime import Regime
+from .Avoir import Avoir
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -415,7 +417,7 @@ def affiche_participant_trier_consommateur(session):
 def get_nom_restaurant():
     liste_nom_resteau = []
     for nom in session.query(Restaurant):
-        liste_nom_resteau.append(nom.nomRest)
+        liste_nom_resteau.append((nom.nomRest, nom.idRest))
     return liste_nom_resteau
 
 def get_nom_hotel():
@@ -426,23 +428,31 @@ def get_nom_hotel():
 
 
 
-def afficher_consommateur(session, date, restaurant, midi):
+def afficher_consommateur(session, date_jour, restaurant, midi):
+
+    if restaurant != "Restaurant":
+        restaurant = int(restaurant)
+    if midi == "true":
+        midi = True
+    elif midi == "false":
+        midi = False
     liste_consommateurs = []
     liste_creneau = []
     liste_repas = []
     liste_mangeur = []
     if restaurant != "Restaurant" and midi != "Journee":
-        repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Restaurant.nomRest == restaurant).filter(Repas.estMidi == midi).all()
+        repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.idRest == restaurant).filter(Repas.estMidi == midi).all()
     elif restaurant == "Restaurant" and midi == "Journee":
         repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau)
     elif restaurant != "Restaurant":
-        repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Restaurant.nomRest == restaurant).all()
+        repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.idRest == restaurant).all()
     elif midi != "Journee":
         repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.estMidi == midi).all()
     
-    if date != "Date":
+    if date_jour[0] != "Date":
+        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
         for cren in repas:
-            if cren[1].date() == date:
+            if cren[1].date() == date_jour:
                 liste_creneau.append(cren[2])
         repas = session.query(Repas, Repas.idCreneau, Repas.idRepas).all()
         for rep in repas:
@@ -462,7 +472,16 @@ def afficher_consommateur(session, date, restaurant, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm[1])
-    liste_participants = get_liste_participant_id_consommateur(session, liste_consommateurs)
+    liste_participants = get_liste_participant_idp_regime(session, liste_consommateurs)
+    return liste_participants
+
+
+def get_liste_participant_idp_regime(session, liste_id):
+    liste_participants = []
+    participants = session.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
+    for une_personne in participants:
+        if une_personne.idP in liste_id:
+            liste_participants.append((une_personne, get_regime(session, une_personne.idP)))
     return liste_participants
 
 def get_liste_participant_id_consommateur(session, liste_id):
@@ -473,6 +492,16 @@ def get_liste_participant_id_consommateur(session, liste_id):
             liste_participants.append(une_personne)
     return liste_participants
 
+def get_regime(session, id_p):
+    str_regime = ""
+    liste_regime = session.query(Regime.nomRegime).join(Avoir, Avoir.idregime == Regime.idRegime).filter(Avoir.idP == id_p).all()
+    if len(liste_regime) == 0:
+        str_regime = "Pas de regime"
+    else:
+        for un_regime in liste_regime:
+            str_regime += str(un_regime[0]) + ", "
+        str_regime = str_regime[:-2]
+    return str_regime
 #print(affiche_participant_date(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
 #print(affiche_participant_date_dateFalse(session,"Donec Est Mauris LLP", True))
 #print(affiche_participant_date_resaurantFalse(session, datetime.datetime(2022,11,19,12,30).date(), True))
