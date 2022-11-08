@@ -7,7 +7,7 @@ from statistics import quantiles
 from wsgiref.validate import PartialIteratorWrapper
 import sqlalchemy
 from sqlalchemy import func
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, cast
 from sqlalchemy import Column , Integer, Text , Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -338,10 +338,11 @@ def modifier_participant_role(session, participant, metier):
     print("Le role du participant a bien été modifié")
 
 def modif_loger(session, ancien_loger, nouveau_loger):
-    session.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDeb == ancien_loger.dateDeb).update({
-        Loger.idHotel : nouveau_loger.idHotel, Loger.dateDeb : nouveau_loger.dateDeb, Loger.dateFin : nouveau_loger.dateFin})
+    session.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDebut == ancien_loger.dateDebut).update({
+        Loger.idHotel : nouveau_loger.idHotel, Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin})
     session.commit()
-    print("Le logement de cette personne a bien été modifié")        
+    print("Le logement de cette personne a bien été modifié")  
+          
 
 def modif_repas(session, ancien_repas, nouveau_repas):
     session.query(Manger).filter(Manger.idP == ancien_repas.idP).filter(Manger.idRepas == ancien_repas.idRepas).update(
@@ -400,19 +401,49 @@ def affiche_participant_date(session, date, restaurant, midi):
             liste_consommateurs.append(consomm)
     return liste_consommateurs
 
+def affiche_participant_trier(session, trie):
+     
+        if trie == "Auteur" :
+            return session.query(Participant).join(Auteur, Participant.idP==Auteur.idP).all()
 
-def affiche_participant_trier(auteur, consommateur, exposant, intervenant, invite, presse, staff):
-    pass
+        elif trie == "Consommateur":
+            return session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all() 
+
+        elif trie == "Exposant": 
+            return session.query(Participant).join(Exposant, Participant.idP==Exposant.idP).all() 
+        
+        elif trie == "Intervenant":
+            return session.query(Participant).join(Exposant, Participant.idP==Intervenant.idP).all() 
+        
+        elif trie == "Invite":
+            return session.query(Participant).join(Exposant, Participant.idP==Invite.idP).all() 
+        
+        elif trie == "Presse":
+            return session.query(Participant).join(Presse, Participant.idP==Presse.idP).all() 
+        
+        elif trie == "Staff": 
+            return session.query(Participant).join(Staff, Participant.idP==Staff.idP).all()
+        
+        else: 
+            return session.query(Participant).order_by(Participant.nomP.asc()).all()
+
+    
+def affiche_participant_trier_consommateur(session):
+    participant = session.query(Participant).all()
+    print(participant)
+    return participant
 
 
-def affiche_participant_trier_(auteur, consommateur, exposant, intervenant, invite, presse, staff):
-    pass
-   
+    #select idP,prenomP,nomP,ddnP,telP,emailP,adresseP from PARTICIPANT NATURAL JOIN STAFF union select idP,prenomP,nomP,ddnP,telP,emailP,adresseP from PARTICIPANT NATURAL JOIN  AUTEUR;
+
+
 def get_nom_restaurant():
     liste_nom_resteau = []
     for nom in session.query(Restaurant):
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
+
+
 # def affiche_participant_date2(session, date, restaurant, midi):
 #     liste_consommateurs = []
 #     liste_creneau = []
@@ -610,21 +641,24 @@ def affiche_participant_date_journeeOnly(session, midi):
 #modifier_participant(session, Participant(7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True))
 #get_nom_restaurant()
 
+
 def get_dormeur(session, date, hotel):
     liste_dormeur_date = []
     liste_dormeur_date_hotel = []
-    dormeurs = session.query(Loger).all()
+    dormeurs = session.query(Loger.idP, Loger.idHotel, Loger.dateDebut, Loger.dateFin).all()
     for un_dormeur in dormeurs:
-        print("d")
-        if date == "Date" or (un_dormeur.dateDeb < date and un_dormeur.dateFin > date):
+        date_deb = str(str(un_dormeur[2])[:10])
+        date_fin = str(str(un_dormeur[3])[:10])
+        
+        if date == "Date" or date_deb <= date and date_fin >= date:
             liste_dormeur_date.append(un_dormeur)
 
-    for un_dormeur in liste_dormeur_date:
-        if hotel is None or un_dormeur.idHotel == hotel:
-            liste_dormeur_date_hotel.append(un_dormeur)
+    for un_dormeur2 in liste_dormeur_date:
+        if hotel is None or un_dormeur2.idHotel == hotel:
+            liste_dormeur_date_hotel.append(un_dormeur2)
     return liste_dormeur_date_hotel
 
-#print(get_dormeur(session, date(2022, 11, 18), None))
+# print(get_dormeur(session, "2022-11-19", 2))
 
 
 
