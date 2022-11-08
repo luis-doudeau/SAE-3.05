@@ -150,7 +150,7 @@ create trigger ajouteNavette after insert on DEPLACER for each row
         insert into MOBILISER values(idVoyage, idMaxNav+1);
       
       elseif idVoyage <> -1 and 8 <= HOUR(dateArriveP) and HOUR(dateArriveP) <= 20 then
-          insert into TRANSPORTER values(new.idP, idVoyage); 
+          insert into TRANSPORTER values(new.idP, idVoyage);
 
 
       -- continuer avec les voyages retours
