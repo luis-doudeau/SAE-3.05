@@ -139,7 +139,7 @@ CREATE TABLE ASSISTER (
   idP int,
   dateArrive int,
   dateDepart VARCHAR(42),
-  PRIMARY KEY (idP, dateArrive),
+  PRIMARY KEY (idP, dateArrive, dateDepart),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -170,9 +170,9 @@ CREATE TABLE TRANSPORTER (
 CREATE TABLE LOGER(
   idP int,
   dateDebut datetime,
-  idHotel int,
   dateFin datetime,
-  PRIMARY KEY (idP, dateDebut),
+  idHotel int,
+  PRIMARY KEY (idP, dateDebut, dateFin),
   FOREIGN KEY (idHotel) REFERENCES HOTEL(idHotel),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
