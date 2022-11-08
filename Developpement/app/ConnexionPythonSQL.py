@@ -83,6 +83,9 @@ def get_max_num_stand(session):
     else:
         return max_num._data[0]
 
+def creer_participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+    return Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
+
 def ajoute_particpant(session, participant):
     personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
     if personneP is None:
@@ -474,7 +477,7 @@ def get_liste_participant_id_consommateur(session, liste_id):
 
 #print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
 
-# ajoute_personne(session, Participant(None, "a", "a", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "A", False, False,"aucune", "Voiture"))
+#ajoute_particpant(session,creer_participant(None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False))
 # ajoute_Consommateur(session, Consommateur(1))
 # ajoute_exposant(session, Exposant(1, 1))
 # ajoute_staff(session, Staff(1))
@@ -515,7 +518,7 @@ def get_dormeur(session, date, hotel):
 
     return liste_participants
 
-print(get_dormeur(session, "2022-11-19", 1))
+#print(get_dormeur(session, "2022-11-19", 1))
 
 
 
