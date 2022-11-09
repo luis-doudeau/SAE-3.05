@@ -522,16 +522,20 @@ def get_regime(session, id_p):
 
 def get_dormeur(session, date, hotel):
     liste_dormeur_date_hotel = []
+    if hotel == "Hôtel":
+        hotel = None
+    else:
+        hotel = int(hotel)
     dormeurs = session.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
     for un_dormeur in dormeurs:
-        date_deb = str(str(un_dormeur[2])[:10])
-        date_fin = str(str(un_dormeur[3])[:10])
-        if date == "Date" or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
+        date_deb = str(str(un_dormeur[1])[:10])
+        date_fin = str(str(un_dormeur[2])[:10])
+        if date == "Date" or ((date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel)):
             liste_dormeur_date_hotel.append(un_dormeur[0])
-
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
+print(get_dormeur(session, "2022-11-19", 2))
 
 
 def ajoute_mangeur(session, idP, idRepas):
@@ -590,6 +594,5 @@ def est_intervenant(session, idP):
     
 #modifier_participant(session, 7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True)
 
-#print(get_dormeur(session, "2022-11-19", 1))
 
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))

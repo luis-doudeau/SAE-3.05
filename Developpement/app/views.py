@@ -51,10 +51,9 @@ def dormeur_secretaire():
         la_date = request.form["jours"].replace(",","-")
         print(la_date)
         print(request.form["nomH"])
-        liste_dormeur = get_dormeur(session, la_date, int(request.form["nomH"]))
+        liste_dormeur = get_dormeur(session, la_date, request.form["nomH"])
         print(liste_dormeur)
-        return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
-
+        return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel(), liste_dormeur = liste_dormeur)
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
