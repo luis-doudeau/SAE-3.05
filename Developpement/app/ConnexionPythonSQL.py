@@ -429,6 +429,11 @@ def get_nom_hotel():
     return liste_nom_hotel
 
 
+def afficher_dormeur(session, date_jour, hotel):
+    if hotel != "Hôtel":
+        hotel = int(hotel)
+        
+
 
 def afficher_consommateur(session, date_jour, restaurant, midi):
 
