@@ -13,30 +13,30 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Intervenir import Intervenir
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Deplacer import Deplacer
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
-from Avoir import Avoir
-from Regime import Regime
-from Assister import Assister
-from Secretaire import Secretaire
-from Navette import Navette
-from Transporter import Transporter
-from Voyage import Voyage
-from Mobiliser import Mobiliser
+from .Exposant import Exposant
+from .Intervenir import Intervenir
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Deplacer import Deplacer
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
+from .Avoir import Avoir
+from .Regime import Regime
+from .Assister import Assister
+from .Secretaire import Secretaire
+from .Navette import Navette
+from .Transporter import Transporter
+from .Voyage import Voyage
+from .Mobiliser import Mobiliser
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -559,7 +559,9 @@ def get_regime(session, id_p):
         str_regime = str_regime[:-2]
     return str_regime
 
-def get_dormeur(session, date, hotel):
+def get_dormeur(session, date_jour, hotel):
+    if date_jour[0] != "Date":
+        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     liste_dormeur_date_hotel = []
     if hotel == "Hôtel":
         hotel = None
@@ -569,12 +571,12 @@ def get_dormeur(session, date, hotel):
     for un_dormeur in dormeurs:
         date_deb = un_dormeur[2].date()
         date_fin = un_dormeur[3].date()
-        if (date == "Date" and hotel is None) or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
+        if (date_jour == "Date" and hotel is None) or (date_deb <= date_jour and date_fin >= date_jour) and (hotel is None or un_dormeur.idHotel == hotel):
             liste_dormeur_date_hotel.append(un_dormeur[0])
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
-print(get_dormeur(session, "2022-11-19", 2))
+#print(get_dormeur(session, "2022-11-19", 2))
 
 def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive) : 
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive)
