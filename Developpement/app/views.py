@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur
 
@@ -18,13 +18,18 @@ def connexion():
         mdp = request.form["mdp"]
         personne = get_info_personne(session, email, mdp)
         if personne is not None:
-            return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
-    return render_template('pageConnexion.html')
+            #return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
+            return redirect(url_for('pageInscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP))
+            #eturn redirect("http://www.example.com", code=302)
+        render_template('pageConnexion.html', mail = request.form["email"])
+    return render_template('pageConnexion.html', mail = "in@protonmail.edu")
 
 
-@app.route('/', methods = ["POST"])
-def inscription():
-    pass
+@app.route('/pageInscription/', methods = ["GET", "POST"])
+def pageInscription():
+    if request.method == "GET":
+        return render_template('pageInscription.html', prenom = request.args.get('prenom'), nom = request.args.get('nom'),
+                                ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'))
 
     
 
