@@ -31,6 +31,7 @@ from Restaurant import Restaurant
 from Avoir import Avoir
 from Regime import Regime
 from Secretaire import Secretaire
+from Navette import Navette
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -281,6 +282,20 @@ def ajoute_intervention(session, idP, idCreneau, idLieu, nomIntervention, descIn
             session.rollback()
     else:
         print("Une intervention a déjà lieu à ce créneau pour cette personne")
+
+def ajouter_navette(session, idNavette, nomNavette, capaciteNavette):
+    navette = Navette(idNavette, nomNavette, capaciteNavette)
+    navette_existe = session.query(Navette).filter(Navette.idNavette == idNavette).first()
+    if navette_existe is None:
+        session.add(navette)
+        try:
+            session.commit()
+            print("Une nouvelle navette " + nomNavette + " a été créée")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Une navette à déjà cet id")
 
 # ajoute_intervention(session, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
         
