@@ -63,7 +63,6 @@ def dormeur_secretaire():
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():
-
     if request.method == "POST":
         print(request.form["trier"])
         liste_personne = affiche_participant_trier(session, request.form["trier"])
