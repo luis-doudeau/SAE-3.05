@@ -571,6 +571,11 @@ def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
     except : 
         print("Erreur !")
         session.rollback()
+    
+def est_intervenant(session, idP):
+    intervenant = session.query(Intervenant).filter(Intervenant.idP == idP).first()
+    return intervenant is not None
+            
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
 
