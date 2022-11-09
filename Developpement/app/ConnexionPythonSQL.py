@@ -617,7 +617,23 @@ def requete_transport_annee(session, idP, annee) :
         annee_req = transport[1].year
         if annee_req == annee: 
             liste_deplacement.append(transport)
-    return liste_deplacement        
+    return liste_deplacement       
+
+
+def ajoute_assister(session, idP, dateArrive, dateDepart):
+    assisteur = Assister(idP, dateArrive, dateDepart)
+    assister = session.query(Assister).filter(Assister.dateArrive == dateArrive).filter(Assister.dateDepart == dateDepart).first()
+    if assister is None :
+        session.add(assisteur)
+        try : 
+            session.commit()
+            print("L'intervenant à bien été ajouté à ces dates") 
+        except : 
+            print("Erreur !")
+            session.rollback()
+            
+    else :
+        print("Cet intervenant assiste déjà au festival à ces dates")
     
 
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
