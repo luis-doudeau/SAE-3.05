@@ -1,7 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire,modifier_participant
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire,modifier_participant, ajoute_assister
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -20,11 +20,12 @@ def connexion():
         if est_secretaire(session, email, mdp):
             return redirect(url_for("page_secretaire_accueil"))
         personne = get_info_personne(session, email, mdp)
+        print(personne)
         if personne is not None:
             print(personne)
             return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
         render_template('pageConnexion.html', mail = request.form["email"])
-    return render_template('pageConnexion.html', mail = "in@protonmail.edu")
+    return render_template('pageConnexion.html', mail = "ac@icloud.ca")
 
 
 @app.route('/pageInscription/', methods = ["GET", "POST"])
@@ -33,7 +34,7 @@ def page_inscription():
         print(request.form)
         modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
         if est_intervenant(session, int(request.args.get('idp'))):
-            return redirect(url_for('formulaire_auteur_transport'))
+            return redirect(url_for('formulaire_auteur_transport', idp = request.args.get('idp')))
         else:
             return redirect(url_for('page_fin'))
     print(request.args.get("adresse"))
@@ -74,7 +75,16 @@ def participant_secretaire():
 @app.route('/pageFormulaireAuteurTransport/', methods = ["POST", "GET"] )
 def formulaire_auteur_transport():
     if request.method == "POST":
-        print(request.form)
+        dateArr = request.form["dateArr"].replace("-",",").split(",")
+        heureArr = request.form["hArrive"].replace(":",",").split(",")
+        date_arr = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
+
+        dateDep = request.form["dateDep"].replace("-",",").split(",")
+        heureDep = request.form["hDep"].replace(":",",").split(",")
+        date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
+
+        ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
+        return render_template("pageFormulaireAuteurTransport.html")
 
     return render_template("pageFormulaireAuteurTransport.html")
 

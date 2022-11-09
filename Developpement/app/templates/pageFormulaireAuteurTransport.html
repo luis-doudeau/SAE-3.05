@@ -46,7 +46,8 @@
         </header>
         <section>
             <form method="POST">
-            <h2>Transport</h2>
+            <h2>Transport*</h2>
+            <p>Si vous utilisés plusieurs d'entre-eux, chochez plusieurs cases.</p>
             <div>
                 <input type="checkbox" name="avion" id="av" > <label for="av">Avion</label>
                 <input type="checkbox" name="train" id="train" > <label for="fr">Train </label>
@@ -54,27 +55,34 @@
                 <input type="checkbox" name="covoi" id="covoit" > <label for="all">Covoiturage</label>
                 <input type="checkbox" name="autre" id="autre" > <label for="russ">Autre</label>
             </div>
+
+            <div>
+                <input type="text" name="aeroport" id="aeroport" placeholder="Aéroport">
+                <input type="text" name="gare" id="gare" placeholder="Gare">
+            </div>
+            
+            <div>
+                <input type="text" name="justificatif" id="justificatif" placeholder="Charger justificatif">
+                <input type="text" name="precision" id="precision" placeholder="Précisez">
+            </div>
             
             <div>
                 <h2>Arrivé à Blois**</h2>
                 <label for="dateArr">LE</label>
-                <input id="dateArr" type="date" name="dateArr"  value="2022-11-18" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                <input id="dateArr" type="date" name="dateArr"  value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
                 <label for="hArrive">A</label>
                 <input type="time" id="hArrive" name="hArrive" required>
-                
-
-
                 
             </div>
             <div>
                 <h2>Départ de Blois**</h2>
                 <label for="dateDep">LE</label>
-                <input id="dateDep" type="date" name="dateDep"  value="2002-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                <input id="dateDep" type="date" name="dateDep"  value="2022-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
                 <label for="hDep">A</label>
-                <input type="time" id="hDep" name="hDep" required>
-                
-                
+                <input type="time" id="hDep" name="hDep" required>    
             </div>
+            
+            <p>**Si vous prenez le train, vueillez préciser l'heure d'arrivé/départ précise à la gare de Blois.</p>
 
             <div class="user-box">
                 <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">

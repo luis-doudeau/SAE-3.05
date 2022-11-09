@@ -65,7 +65,7 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -593,7 +593,7 @@ def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive) :
     else:
         print("Un même déplacement existe déjà pour cette personne")
   
-ajoute_deplacer(session, 300, 1, "Paris", "Blois")
+#ajoute_deplacer(session, 300, 1, "Paris", "Blois")
 
 def ajoute_mangeur(session, idP, idRepas):
     mangeur = Manger(idP, idRepas)
