@@ -429,7 +429,7 @@ def affiche_participant_trier(session, trie):
             return session.query(Participant).join(Staff, Participant.idP==Staff.idP).all()
         
         else: 
-            return session.query(Participant).order_by(Participant.nomP.asc()).all()
+            return session.query(Participant).order_by(Participant.idP.asc()).all()
 
 def affiche_participant_trier_consommateur(session):
     participant = session.query(Participant).all()
