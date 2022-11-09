@@ -1,7 +1,7 @@
 from datetime import date
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant
 
 
 
@@ -18,18 +18,22 @@ def connexion():
         mdp = request.form["mdp"]
         personne = get_info_personne(session, email, mdp)
         if personne is not None:
-            #return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
-            return redirect(url_for('pageInscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP))
-            #eturn redirect("http://www.example.com", code=302)
+            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
         render_template('pageConnexion.html', mail = request.form["email"])
     return render_template('pageConnexion.html', mail = "in@protonmail.edu")
 
 
 @app.route('/pageInscription/', methods = ["GET", "POST"])
-def pageInscription():
-    if request.method == "GET":
-        return render_template('pageInscription.html', prenom = request.args.get('prenom'), nom = request.args.get('nom'),
-                                ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'))
+def page_inscription():
+    if request.method == "POST":
+        if est_intervenant(session, int(request.args.get('idp'))):
+            return redirect(url_for('formulaire_auteur_transport'))
+        else:
+            return redirect(url_for('page_fin'))
+
+
+    return render_template('pageInscription.html', prenom = request.args.get('prenom'), nom = request.args.get('nom'),
+                            ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'))
 
     
 
@@ -60,11 +64,15 @@ def dormeur_secretaire():
 
 @app.route('/pageFormulaireAuteurTransport/', methods = ["POST", "GET"] )
 def formulaire_auteur_transport():
-    
     if request.method == "POST":
         print(request.form)
 
     return render_template("pageFormulaireAuteurTransport.html")
+
+@app.route('/pageFin/', methods = ["GET"])
+def page_fin():
+    return render_template("pageFin.html")
+    
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
 

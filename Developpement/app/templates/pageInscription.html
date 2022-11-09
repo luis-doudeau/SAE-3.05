@@ -58,6 +58,7 @@
                 </li>
                 <li>
                     <section>
+                        <form method="POST">
                         <ul>
                             <li>
                                 <label for="">Identité</label>
@@ -77,10 +78,11 @@
                                 <input type="tel" pattern="[0-9]{10}" value= {{tel}}>
                                 <input type="date" value= {{ddn}}>
                             </li>
-                            <li>
-                                <input id="boutonContinuer" type="submit" value="Continuer">
-                            </li>
+                            <div class="user-box">
+                                <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
+                            </div>
                         </ul>
+                        </form>
                     </section>
                 </li>
             </ul>
