@@ -196,3 +196,4 @@ INSERT INTO DEPLACER VALUES (301, 2, "Paris Gare du Nord", "Gare Blois"),
                             (300, 2, "Aéroport Marseille Provence", "Aéroport d'Orly");
 
 
+INSERT INTO SECRETAIRE VALUES (1, "Lenina", "Dadina", "lenina@gmail.com","mdp_secretaire");

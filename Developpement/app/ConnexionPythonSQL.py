@@ -13,24 +13,24 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Intervenir import Intervenir
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
-from Avoir import Avoir
-from Regime import Regime
-from Secretaire import Secretaire
+from .Exposant import Exposant
+from .Intervenir import Intervenir
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
+from .Avoir import Avoir
+from .Regime import Regime
+from .Secretaire import Secretaire
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
