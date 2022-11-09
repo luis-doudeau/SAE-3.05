@@ -481,14 +481,15 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
 
     manger = session.query(Manger, Manger.idP, Manger.idRepas).all()
     for mangeur in manger:
-        if mangeur[1] in liste_repas:
-            liste_mangeur.append(mangeur[2])
+        if mangeur[2] in liste_repas:
+            liste_mangeur.append(mangeur[1])
 
     consommateurs = session.query(Consommateur, Consommateur.idP).all()
 
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm[1])
+    print(liste_consommateurs)
     liste_participants = get_liste_participant_idp_regime(session, liste_consommateurs)
     return liste_participants
 
@@ -511,7 +512,7 @@ def get_liste_participant_id_consommateur(session, liste_id):
 
 def get_regime(session, id_p):
     str_regime = ""
-    liste_regime = session.query(Regime.nomRegime).join(Avoir, Avoir.idregime == Regime.idRegime).filter(Avoir.idP == id_p).all()
+    liste_regime = session.query(Regime.nomRegime).join(Avoir, Avoir.idRegime == Regime.idRegime).filter(Avoir.idP == id_p).all()
     if len(liste_regime) == 0:
         str_regime = "Pas de regime"
     else:

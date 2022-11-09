@@ -37,16 +37,13 @@ def page_inscription():
 
     
 
-@app.route('/secretaireConsommateur/', methods = ["POST", "GET"])
-def conso():        
+@app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
+def secretaire_consommateur():        
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
-        print(la_date)
-        print(request.form["nomR"])
-        print(request.form["heureR"])
         liste_consommateur = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
-    return render_template('secretaireConsommateur.html', nomsRestau = get_nom_restaurant())
+        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
+    return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 def dormeur_secretaire():
@@ -73,6 +70,12 @@ def formulaire_auteur_transport():
 def page_fin():
     return render_template("pageFin.html")
     
+
+@app.route('/secretaire/', methods = ["GET"])
+def page_secretaire_accueil():
+    return render_template("secretaire.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
 
