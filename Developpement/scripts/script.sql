@@ -28,7 +28,18 @@ drop table if exists LIEU;
 drop table if exists HOTEL;
 drop table if exists CRENEAU;
 drop table if exists RESTAURANT;
+drop table if exists SECRETAIRE;
 
+
+
+CREATE TABLE SECRETAIRE (
+  idSecretaire int,
+  prenomS VARCHAR(42),
+  nomS VARCHAR(42),
+  emailS VARCHAR(42),
+  mdpS VARCHAR(42),
+  PRIMARY KEY (idSecretaire)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE RESTAURANT (
   idRest int,
