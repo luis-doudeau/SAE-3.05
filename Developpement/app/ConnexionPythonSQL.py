@@ -13,23 +13,23 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from Exposant import Exposant
-from Intervenir import Intervenir
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
-from Avoir import Avoir
-from Regime import Regime
+from .Exposant import Exposant
+from .Intervenir import Intervenir
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
+from .Avoir import Avoir
+from .Regime import Regime
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -58,8 +58,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")

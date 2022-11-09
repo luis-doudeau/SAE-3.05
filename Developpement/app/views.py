@@ -11,13 +11,13 @@ from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, ge
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lenny'
 
-@app.route('/')
-def hello():
+@app.route('/', methods = ["GET", "POST"])
+def connexion():
     return render_template('pageConnexion.html')
 
 
 @app.route('/', methods = ["POST"])
-def suite():
+def inscription():
     email = request.form["email"]
     mdp = request.form["mdp"]
     personne = get_info_personne(session, email, mdp)
@@ -50,8 +50,12 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
 
-@app.route('/pageFormulaireAuteurTransport/')
+@app.route('/pageFormulaireAuteurTransport/', methods = ["POST", "GET"] )
 def formulaire_auteur_transport():
+    
+    if request.method == "POST":
+        print(request.form)
+
     return render_template("pageFormulaireAuteurTransport.html")
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
