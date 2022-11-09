@@ -1,7 +1,7 @@
 from datetime import date
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -17,6 +17,8 @@ def connexion():
     if request.method == "POST":
         email = request.form["email"]
         mdp = request.form["mdp"]
+        if est_secretaire(session, email, mdp):
+            return redirect(url_for("page_secretaire_accueil"))
         personne = get_info_personne(session, email, mdp)
         if personne is not None:
             return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
