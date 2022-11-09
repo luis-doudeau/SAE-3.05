@@ -13,16 +13,20 @@ app.config['SECRET_KEY'] = 'lenny'
 
 @app.route('/', methods = ["GET", "POST"])
 def connexion():
+    if request.method == "POST":
+        email = request.form["email"]
+        mdp = request.form["mdp"]
+        personne = get_info_personne(session, email, mdp)
+        if personne is not None:
+            return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
     return render_template('pageConnexion.html')
 
 
 @app.route('/', methods = ["POST"])
 def inscription():
-    email = request.form["email"]
-    mdp = request.form["mdp"]
-    personne = get_info_personne(session, email, mdp)
-    if personne is not None:
-        return render_template('pageInscription.html', prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP)
+    pass
+
+    
 
 @app.route('/secretaireConsommateur/', methods = ["POST", "GET"])
 def conso():        
