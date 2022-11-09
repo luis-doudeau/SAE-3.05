@@ -388,12 +388,10 @@ def supprimer_participant_role(session, id_participant):
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
-    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
-    session.query(Participant).filter(Participant.idP == participant.idP).update(
-        {Participant.prenomP : participant.prenomP, Participant.nomP : participant.nomP, Participant.ddnP : participant.ddnP, 
-         Participant.telP : participant.telP, Participant.emailP : participant.emailP, Participant.mdpP : participant.mdpP,
-         Participant.invite : participant.invite, Participant.emailEnvoye : participant.emailEnvoye, Participant.remarques : participant.remarques})
+def modifier_participant(session, idP, prenomP, nomP, ddnP, telP, emailP):
+    session.query(Participant).filter(Participant.idP == idP).update(
+        {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
+         Participant.telP : telP, Participant.emailP : emailP})
     session.commit()
     print("Le participant a bien été modifié")        
 

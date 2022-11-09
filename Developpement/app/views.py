@@ -1,7 +1,7 @@
 from datetime import date
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire,modifier_participant
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -21,7 +21,8 @@ def connexion():
             return redirect(url_for("page_secretaire_accueil"))
         personne = get_info_personne(session, email, mdp)
         if personne is not None:
-            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
+            print(personne)
+            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
         render_template('pageConnexion.html', mail = request.form["email"])
     return render_template('pageConnexion.html', mail = "in@protonmail.edu")
 
@@ -29,14 +30,16 @@ def connexion():
 @app.route('/pageInscription/', methods = ["GET", "POST"])
 def page_inscription():
     if request.method == "POST":
+        print(request.form)
+        modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
         if est_intervenant(session, int(request.args.get('idp'))):
             return redirect(url_for('formulaire_auteur_transport'))
         else:
             return redirect(url_for('page_fin'))
-
-
+    print(request.args.get("adresse"))
+    print(type(request.args.get("adresse")))
     return render_template('pageInscription.html', prenom = request.args.get('prenom'), nom = request.args.get('nom'),
-                            ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'))
+                            ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'), adresse = request.args.get("adresse"))
 
     
 
