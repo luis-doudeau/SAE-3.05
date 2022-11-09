@@ -14,6 +14,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
 from Exposant import Exposant
+from Intervenir import Intervenir
 from Consommateur import Consommateur
 from Staff import Staff
 from Intervenant import Intervenant
@@ -27,8 +28,8 @@ from Manger import Manger
 from Repas import Repas
 from Creneau import Creneau
 from Restaurant import Restaurant
-from Regime import Regime
 from Avoir import Avoir
+from Regime import Regime
 from Secretaire import Secretaire
 
 # pour avoir sqlalchemy :
@@ -58,8 +59,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -162,12 +163,12 @@ def ajoute_staff(session, idP):
     else:
         print("Un staff a déjà cet identifiant dans la base de donnée")
         
-def ajoute_intervenant(session, intervenant):
+def ajoute_intervenant(session, idP):
+    intervenant = Intervenant(idP)
     intervenantI = session.query(Intervenant).filter(Intervenant.idP == intervenant.idP).first()
     if intervenantI is None:
         personne = session.query(Participant).filter(Participant.idP == intervenant.idP).first()
-        new_intervenant = Intervenant(intervenant.idP, None, None)
-        session.add(new_intervenant)
+        session.add(intervenant)
         try:
             session.commit()
             print("La personne " + str(personne) + " est devenu un(e) intervenant(e)")
@@ -226,7 +227,6 @@ def ajoute_invite(session, idP):
         print("Un invité a déjà cet identifiant dans la base de donnée")
         
 
-        
 def ajoute_participant_role(session, participant, role):
     if role in ROLE:
         ajoute_particpant(session, participant)
@@ -265,7 +265,25 @@ def ajoute_participant_role_id(session, participant, role):
                 else:
                     ajoute_invite(session, participant)
     else:
-        print("Le rôle n'est pas reconnu")    
+        print("Le rôle n'est pas reconnu")
+
+
+def ajoute_intervention(session, idP, idCreneau, idLieu, nomIntervention, descIntervention):
+    intervenir = Intervenir(idP, idCreneau, idLieu, nomIntervention, descIntervention)
+    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).first()
+    if intervention is None:
+        session.add(intervenir)
+        try:
+            session.commit()
+            print("L'intervention " + str(intervenir) + " est maintenant créée !")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Une intervention a déjà lieu à ce créneau pour cette personne")
+
+# ajoute_intervention(session, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
+        
         
 def supprimer_participant(session, id_participant):
     session.query(Participant).filter(Participant.idP == id_participant).delete()
@@ -352,7 +370,7 @@ def modifier_participant_role(session, idP, prenomP, nomP, ddnP, telP, emailP, a
 
 def modif_loger(session, ancien_loger, nouveau_loger):
     session.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDebut == ancien_loger.dateDebut).update({
-        Loger.idHotel : nouveau_loger.idHotel, Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin})
+        Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin, Loger.idHotel : nouveau_loger.idHotel})
     session.commit()
     print("Le logement de cette personne a bien été modifié")  
           
@@ -383,7 +401,7 @@ def affiche_participants(session):
     for part in participants:
         liste_participants.append(part)
     return liste_participants
-      
+   
 
 def affiche_participant_trier(session, trie):
      
@@ -397,10 +415,10 @@ def affiche_participant_trier(session, trie):
             return session.query(Participant).join(Exposant, Participant.idP==Exposant.idP).all() 
         
         elif trie == "Intervenant":
-            return session.query(Participant).join(Exposant, Participant.idP==Intervenant.idP).all() 
+            return session.query(Participant).join(Intervenant, Participant.idP==Intervenant.idP).all() 
         
         elif trie == "Invite":
-            return session.query(Participant).join(Exposant, Participant.idP==Invite.idP).all() 
+            return session.query(Participant).join(Invite, Participant.idP==Invite.idP).all() 
         
         elif trie == "Presse":
             return session.query(Participant).join(Presse, Participant.idP==Presse.idP).all() 
@@ -411,7 +429,6 @@ def affiche_participant_trier(session, trie):
         else: 
             return session.query(Participant).order_by(Participant.nomP.asc()).all()
 
-    
 def affiche_participant_trier_consommateur(session):
     participant = session.query(Participant).all()
     return participant
@@ -429,15 +446,9 @@ def get_nom_hotel():
         liste_nom_hotel.append((nom.nomHotel, nom.idHotel))
     return liste_nom_hotel
 
-
-def afficher_dormeur(session, date_jour, hotel):
-    if hotel != "Hôtel":
-        hotel = int(hotel)
-        logeurs = session.query()
-
-
+    
+        
 def afficher_consommateur(session, date_jour, restaurant, midi):
-
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
     if midi == "true":
@@ -470,7 +481,7 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
         for rep in repas:
             liste_repas.append(rep[3])
 
-    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    manger = session.query(Manger, Manger.idP, Manger.idRepas).all()
     for mangeur in manger:
         if mangeur[2] in liste_repas:
             liste_mangeur.append(mangeur[1])
@@ -514,20 +525,70 @@ def get_regime(session, id_p):
 
 def get_dormeur(session, date, hotel):
     liste_dormeur_date_hotel = []
-    dormeurs = session.query(Loger.idP, Loger.idHotel, Loger.dateDebut, Loger.dateFin).all()
+    if hotel == "Hôtel":
+        hotel = None
+    else:
+        hotel = int(hotel)
+    dormeurs = session.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
     for un_dormeur in dormeurs:
-        date_deb = str(str(un_dormeur[2])[:10])
-        date_fin = str(str(un_dormeur[3])[:10])
-        if date == "Date" or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
+        date_deb = str(str(un_dormeur[1])[:10])
+        date_fin = str(str(un_dormeur[2])[:10])
+        if date == "Date" or ((date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel)):
             liste_dormeur_date_hotel.append(un_dormeur[0])
-
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
+print(get_dormeur(session, "2022-11-19", 2))
 
+
+def ajoute_mangeur(session, idP, idRepas):
+    mangeur = Manger(idP, idRepas)
+    manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
+    if manger is None :
+        session.add(mangeur)
+        try : 
+            session.commit()
+            print("Le consommateur à bien été associé à un repas")  
+    
+        except : 
+            print("Erreur !")
+            session.rollback()
+    else : 
+        print("Un consommateur mange déjà ce repas")
+
+
+def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
+    logeur = Loger(idP, dateDebut, dateFin, idHotel)
+    loger = session.query(Loger.dateDebut, Loger.dateFin).filter(Loger.idP == idP).all()
+    
+    for log in loger : 
+        date_deb = str(log[0])[:10]
+        date_fin = str(log[1])[:10]
+        dateDeb = str(dateDebut)[:10]
+        dateFin = str(dateFin)[:10]
+        print(dateFin)
+        if (dateDeb <= date_deb <= dateFin) or (date_deb <= dateDeb <= date_fin) : 
+            print("Cette intervenant est déjà logé dans un hôtel à ces dates")
+            return
+    session.add(logeur)
+    try : 
+        session.commit()
+        print("Le loger à bien été associé à un hôtel")  
+
+    except : 
+        print("Erreur !")
+        session.rollback()
+    
+def est_intervenant(session, idP):
+    intervenant = session.query(Intervenant).filter(Intervenant.idP == idP).first()
+    return intervenant is not None
+            
 def est_secretaire(session, idSecretaire):
     secretaire = session.query(Secretaire).filter(Secretaire.idSecretaire == idSecretaire).first()
     return secretaire is not None
+
+# ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
+
 
 #print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
 
@@ -539,6 +600,5 @@ def est_secretaire(session, idSecretaire):
     
 #modifier_participant(session, 7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True)
 
-#print(get_dormeur(session, "2022-11-19", 1))
 
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
