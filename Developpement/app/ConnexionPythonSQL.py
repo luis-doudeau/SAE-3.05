@@ -445,8 +445,7 @@ def get_nom_hotel():
     for nom in session.query(Hotel):
         liste_nom_hotel.append((nom.nomHotel, nom.idHotel))
     return liste_nom_hotel
-
-
+        
 def afficher_consommateur(session, date_jour, restaurant, midi):
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
