@@ -13,23 +13,23 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from .Exposant import Exposant
-from .Intervenir import Intervenir
-from .Consommateur import Consommateur
-from .Staff import Staff
-from .Intervenant import Intervenant
-from .Auteur import Auteur
-from .Presse import Presse
-from .Invite import Invite
-from .Participant import Participant
-from .Loger import Loger
-from .Hotel import Hotel
-from .Manger import Manger
-from .Repas import Repas
-from .Creneau import Creneau
-from .Restaurant import Restaurant
-from .Avoir import Avoir
-from .Regime import Regime
+from Exposant import Exposant
+from Intervenir import Intervenir
+from Consommateur import Consommateur
+from Staff import Staff
+from Intervenant import Intervenant
+from Auteur import Auteur
+from Presse import Presse
+from Invite import Invite
+from Participant import Participant
+from Loger import Loger
+from Hotel import Hotel
+from Manger import Manger
+from Repas import Repas
+from Creneau import Creneau
+from Restaurant import Restaurant
+from Avoir import Avoir
+from Regime import Regime
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -414,10 +414,10 @@ def affiche_participant_trier(session, trie):
             return session.query(Participant).join(Exposant, Participant.idP==Exposant.idP).all() 
         
         elif trie == "Intervenant":
-            return session.query(Participant).join(Exposant, Participant.idP==Intervenant.idP).all() 
+            return session.query(Participant).join(Intervenant, Participant.idP==Intervenant.idP).all() 
         
         elif trie == "Invite":
-            return session.query(Participant).join(Exposant, Participant.idP==Invite.idP).all() 
+            return session.query(Participant).join(Invite, Participant.idP==Invite.idP).all() 
         
         elif trie == "Presse":
             return session.query(Participant).join(Presse, Participant.idP==Presse.idP).all() 
@@ -428,7 +428,6 @@ def affiche_participant_trier(session, trie):
         else: 
             return session.query(Participant).order_by(Participant.nomP.asc()).all()
 
-    
 def affiche_participant_trier_consommateur(session):
     participant = session.query(Participant).all()
     return participant
@@ -445,6 +444,8 @@ def get_nom_hotel():
     for nom in session.query(Hotel):
         liste_nom_hotel.append((nom.nomHotel, nom.idHotel))
     return liste_nom_hotel
+
+    
         
 def afficher_consommateur(session, date_jour, restaurant, midi):
     if restaurant != "Restaurant":

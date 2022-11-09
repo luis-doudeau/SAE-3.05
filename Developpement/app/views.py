@@ -1,9 +1,10 @@
 from datetime import date
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier
 
 
+TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
 
 
 
@@ -57,6 +58,16 @@ def dormeur_secretaire():
         return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel(), liste_dormeur = liste_dormeur)
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
+
+@app.route('/participantSecretaire/', methods = ["POST", "GET"])
+def participant_secretaire():
+
+    if request.method == "POST":
+        print(request.form["trier"])
+        liste_personne = affiche_participant_trier(session, request.form["trier"])
+        return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
+        
+    return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
 
 
 @app.route('/pageFormulaireAuteurTransport/', methods = ["POST", "GET"] )
