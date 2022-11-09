@@ -562,6 +562,8 @@ def get_regime(session, id_p):
 def get_dormeur(session, date_jour, hotel):
     if date_jour[0] != "Date":
         date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
+    else:
+        date_jour = date_jour[0]
     liste_dormeur_date_hotel = []
     if hotel == "Hôtel":
         hotel = None
@@ -569,8 +571,8 @@ def get_dormeur(session, date_jour, hotel):
         hotel = int(hotel)
     dormeurs = session.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
     for un_dormeur in dormeurs:
-        date_deb = un_dormeur[2].date()
-        date_fin = un_dormeur[3].date()
+        date_deb = un_dormeur[1].date()
+        date_fin = un_dormeur[2].date()
         if (date_jour == "Date" and hotel is None) or (date_deb <= date_jour and date_fin >= date_jour) and (hotel is None or un_dormeur.idHotel == hotel):
             liste_dormeur_date_hotel.append(un_dormeur[0])
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
