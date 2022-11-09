@@ -113,7 +113,7 @@ create trigger ajouteNavette after insert on DEPLACER for each row
     
     if new.idTransport = 2 and new.lieuArrive = "Gare Blois" then
 
-      select dateArrive into dateArriveP from INTERVENANT where new.idP = idP;
+      select dateArrive into dateArriveP from INTERVENANT natural join ASSISTER where new.idP = idP;
     
 
       select count(idVoy) as nbVoyageur into nbVoyageur
@@ -155,7 +155,7 @@ create trigger ajouteNavette after insert on DEPLACER for each row
 
       -- continuer avec les voyages retours
       else 
-        set msg = concat("Les navettes ne circulent qu'entre 8 heure et 20 heure");
+        set msg = concat("Les navettes ne circulent que du festival à la gare de Blois entre 8 heure et 20 heure");
           signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
       
       end if;

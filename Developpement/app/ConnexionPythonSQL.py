@@ -59,7 +59,7 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("nardi","nardi","servinfo-mariadb", "DBnardi")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -226,7 +226,6 @@ def ajoute_invite(session, idP):
         print("Un invité a déjà cet identifiant dans la base de donnée")
         
 
-        
 def ajoute_participant_role(session, participant, role):
     if role in ROLE:
         ajoute_particpant(session, participant)
@@ -370,7 +369,7 @@ def modifier_participant_role(session, idP, prenomP, nomP, ddnP, telP, emailP, a
 
 def modif_loger(session, ancien_loger, nouveau_loger):
     session.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDebut == ancien_loger.dateDebut).update({
-        Loger.idHotel : nouveau_loger.idHotel, Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin})
+        Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin, Loger.idHotel : nouveau_loger.idHotel})
     session.commit()
     print("Le logement de cette personne a bien été modifié")  
           
@@ -401,25 +400,7 @@ def affiche_participants(session):
     for part in participants:
         liste_participants.append(part)
     return liste_participants
-
-
-def ajoute_mangeur(session, idRepas, idP):
-    mangeur = Manger(idRepas, idP)
-    manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
-    if manger is None : 
-        session.add(mangeur)
-        try : 
-            session.commit()
-            print("La consommateur à bien été associé à un repas")  
-    
-        except : 
-            print("Erreur !")
-            session.rollback()
-    else : 
-        print("Un consommateur mange déjà ce repas")  
-        
-ajoute_mangeur(session, 1, 102) 
-    
+   
 
 def affiche_participant_trier(session, trie):
      
@@ -466,9 +447,7 @@ def get_nom_hotel():
     return liste_nom_hotel
 
 
-
 def afficher_consommateur(session, date_jour, restaurant, midi):
-
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
     if midi == "true":
@@ -501,7 +480,7 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
         for rep in repas:
             liste_repas.append(rep[3])
 
-    manger = session.query(Manger, Manger.idRepas, Manger.idP).all()
+    manger = session.query(Manger, Manger.idP, Manger.idRepas).all()
     for mangeur in manger:
         if mangeur[1] in liste_repas:
             liste_mangeur.append(mangeur[2])
@@ -544,7 +523,7 @@ def get_regime(session, id_p):
 
 def get_dormeur(session, date, hotel):
     liste_dormeur_date_hotel = []
-    dormeurs = session.query(Loger.idP, Loger.idHotel, Loger.dateDebut, Loger.dateFin).all()
+    dormeurs = session.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
     for un_dormeur in dormeurs:
         date_deb = str(str(un_dormeur[2])[:10])
         date_fin = str(str(un_dormeur[3])[:10])
@@ -554,6 +533,48 @@ def get_dormeur(session, date, hotel):
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
+
+
+def ajoute_mangeur(session, idP, idRepas):
+    mangeur = Manger(idP, idRepas)
+    manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
+    if manger is None :
+        session.add(mangeur)
+        try : 
+            session.commit()
+            print("Le consommateur à bien été associé à un repas")  
+    
+        except : 
+            print("Erreur !")
+            session.rollback()
+    else : 
+        print("Un consommateur mange déjà ce repas")
+
+
+def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
+    logeur = Loger(idP, dateDebut, dateFin, idHotel)
+    loger = session.query(Loger.dateDebut, Loger.dateFin).filter(Loger.idP == idP).all()
+    
+    for log in loger : 
+        date_deb = str(log[0])[:10]
+        date_fin = str(log[1])[:10]
+        dateDeb = str(dateDebut)[:10]
+        dateFin = str(dateFin)[:10]
+        print(dateFin)
+        if (dateDeb <= date_deb <= dateFin) or (date_deb <= dateDeb <= date_fin) : 
+            print("Cette intervenant est déjà logé dans un hôtel à ces dates")
+            return
+    session.add(logeur)
+    try : 
+        session.commit()
+        print("Le loger à bien été associé à un hôtel")  
+
+    except : 
+        print("Erreur !")
+        session.rollback()
+        
+# ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
+
 
 #print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
 

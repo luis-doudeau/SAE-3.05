@@ -8,16 +8,17 @@ Base = declarative_base()
 class Loger(Base):
     __tablename__ = "LOGER"
     idP = Column(Integer, primary_key = True)
-    idHotel = Column(Integer, primary_key = True)
-    dateArrive = Column(DATETIME)
-    dateFin = Column(DATETIME)
+    dateDebut = Column(DATETIME, primary_key = True)
+    dateFin = Column(DATETIME, primary_key = True)
+    idHotel = Column(Integer)
+    
 
-    def __init__(self, idP, idHotel, dateArrive, dateFin) -> None:
+    def __init__(self, idP, dateDebut, dateFin, idHotel) -> None:
         self.idP = idP
-        self.idHotel = idHotel
-        self.dateArrive = dateArrive
+        self.dateDebut = dateDebut
         self.dateFin = dateFin
+        self.idHotel = idHotel
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idP) + "- ID hotel : " + str(self.idHotel) + "- date arrivé : " + str(self.dateDebut) + "- date fin : " + str(self.dateFin)
+        return "ID intervenant : " + str(self.idP) + "- ID hotel : " + str(self.idHotel) + "- date début : " + str(self.dateDebut) + "- date fin : " + str(self.dateFin)
         
