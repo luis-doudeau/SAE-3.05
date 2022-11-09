@@ -33,6 +33,10 @@ from Avoir import Avoir
 from Regime import Regime
 from Assister import Assister
 from Secretaire import Secretaire
+from Navette import Navette
+from Transporter import Transporter
+from Voyage import Voyage
+from Mobiliser import Mobiliser
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -283,6 +287,36 @@ def ajoute_intervention(session, idP, idCreneau, idLieu, nomIntervention, descIn
             session.rollback()
     else:
         print("Une intervention a déjà lieu à ce créneau pour cette personne")
+
+def ajouter_navette(session, idNavette, nomNavette, capaciteNavette):
+    navette = Navette(idNavette, nomNavette, capaciteNavette)
+    navette_existe = session.query(Navette).filter(Navette.idNavette == idNavette).first()
+    if navette_existe is None:
+        session.add(navette)
+        try:
+            session.commit()
+            print("Une nouvelle navette " + nomNavette + " a été créée")
+        except:
+            print("Erreur")
+            session.rollback()
+    else:
+        print("Une navette à déjà cet id")
+
+
+#FONCTION A TESTER AVEC DES INSERTIONS
+def supprimer_personne_transporter(session, idP, idVoyage):
+    liste_personne = session.query(Transporter.idP).filter(Transporter.idVoy == idVoyage).all()
+    if len(liste_personne) == 1:
+        session.query(Transporter).filter(Transporter.idP == idP).filter(Transporter.idVoy == idVoyage).delete()
+        session.query(Voyage).filter(Voyage.idVoy == idVoyage).delete()
+        session.query(Mobiliser).filter(Mobiliser.idVoy == idVoyage).delete()
+        session.commit()
+        print("Le transport a été supprimé car cette personne était seul dans ce voyage")
+    else:
+        session.query(Transporter).filter(Transporter.idP == idP).filter(Transporter.idVoy == idVoyage).delete()
+        session.commit()
+        print("Cette personne a bien été supprimé du voyage")
+
 
 # ajoute_intervention(session, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
         
