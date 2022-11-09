@@ -583,8 +583,8 @@ def est_intervenant(session, idP):
     intervenant = session.query(Intervenant).filter(Intervenant.idP == idP).first()
     return intervenant is not None
             
-def est_secretaire(session, idSecretaire):
-    secretaire = session.query(Secretaire).filter(Secretaire.idSecretaire == idSecretaire).first()
+def est_secretaire(session, email, mdp):
+    secretaire = session.query(Secretaire).filter(Secretaire.emailS == email).filter(Secretaire.mdpS == mdp).first()
     return secretaire is not None
 
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
