@@ -62,21 +62,21 @@
                         <ul>
                             <li>
                                 <label for="">Identité</label>
-                                <input type="text" value= {{prenom}}>
-                                <input type="text" value = {{nom}}>
+                                <input name="prenom" type="text" value= "{{prenom}}">
+                                <input name="nom" type="text" value = "{{nom}}">
                             </li>
                             <li>
                                 <label for="">Mail</label>
-                                <input type="mail" value= {{email}}>
+                                <input name="email" type="mail" value= {{email}}>
                             </li>
                             <li>
                                 <label for="">Adresse</label>
-                                <input type="text" value= {{adresse}}>
+                                <input name="adresse" type="text" value= "{{adresse}}">
                             </li>
                             <li>
                                 <label for="">Tel / DDN</label>
-                                <input type="tel" pattern="[0-9]{10}" value= {{tel}}>
-                                <input type="date" value= {{ddn}}>
+                                <input name="tel" type="tel" pattern="[0-9]{10}" value= {{tel}}>
+                                <input name="ddn" type="date" value= {{ddn}}>
                             </li>
                             <div class="user-box">
                                 <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
