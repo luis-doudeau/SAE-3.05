@@ -24,12 +24,14 @@ from Invite import Invite
 from Participant import Participant
 from Loger import Loger
 from Hotel import Hotel
+from Deplacer import Deplacer
 from Manger import Manger
 from Repas import Repas
 from Creneau import Creneau
 from Restaurant import Restaurant
 from Avoir import Avoir
 from Regime import Regime
+from Assister import Assister
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -59,7 +61,7 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","servinfo-mariadb", "DBdoudeau")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -524,29 +526,45 @@ def get_dormeur(session, date, hotel):
     liste_dormeur_date_hotel = []
     dormeurs = session.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
     for un_dormeur in dormeurs:
-        date_deb = str(str(un_dormeur[2])[:10])
-        date_fin = str(str(un_dormeur[3])[:10])
-        if date == "Date" or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
+        date_deb = un_dormeur[2].date()
+        date_fin = un_dormeur[3].date()
+        if (date == "Date" and hotel is None) or (date_deb <= date and date_fin >= date) and (hotel is None or un_dormeur.idHotel == hotel):
             liste_dormeur_date_hotel.append(un_dormeur[0])
 
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
 
+def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive) : 
+    deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive)
+    deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).first()
+    if deplacer is None:
+        session.add(deplacement)
+        try: 
+            session.commit()
+            print("Le deplacement à bien été inséré")
+        except:
+            print("Erreur !")
+            session.rollback()
+ 
+    else:
+        print("Un même déplacement existe déjà pour cette personne")
+  
+ajoute_deplacer(session, 300, 1, "Paris", "Blois")
 
 def ajoute_mangeur(session, idP, idRepas):
     mangeur = Manger(idP, idRepas)
     manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
-    if manger is None :
+    if manger is None:
         session.add(mangeur)
-        try : 
+        try: 
             session.commit()
             print("Le consommateur à bien été associé à un repas")  
-    
-        except : 
+
+        except: 
             print("Erreur !")
             session.rollback()
-    else : 
+    else: 
         print("Un consommateur mange déjà ce repas")
 
 
@@ -554,23 +572,39 @@ def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
     logeur = Loger(idP, dateDebut, dateFin, idHotel)
     loger = session.query(Loger.dateDebut, Loger.dateFin).filter(Loger.idP == idP).all()
     
-    for log in loger : 
-        date_deb = str(log[0])[:10]
-        date_fin = str(log[1])[:10]
-        dateDeb = str(dateDebut)[:10]
-        dateFin = str(dateFin)[:10]
+    for log in loger: 
+        date_deb = log[0].date()
+        date_fin = log[1].date()
+        dateDeb = dateDebut.date()
+        dateFin = dateFin.date()
         print(dateFin)
-        if (dateDeb <= date_deb <= dateFin) or (date_deb <= dateDeb <= date_fin) : 
+        if (dateDeb <= date_deb <= dateFin) or (date_deb <= dateDeb <= date_fin):
             print("Cette intervenant est déjà logé dans un hôtel à ces dates")
             return
     session.add(logeur)
-    try : 
+    try:
         session.commit()
         print("Le loger à bien été associé à un hôtel")  
 
-    except : 
+    except: 
         print("Erreur !")
         session.rollback()
+        
+ajoute_loger(session, 400, datetime.datetime(2022, 11, 19), datetime.datetime(2022, 11, 19), 1)
+        
+        
+def requete_transport_annee(session, idP, annee) : 
+    liste_transport = session.query(Deplacer, Assister.dateDepart).join(Assister, Deplacer.idP == Assister.idP).filter(Deplacer.idP == idP).all()
+    liste_deplacement = list()
+    annee = annee.year
+    for transport in liste_transport: 
+        annee_req = transport[1].year
+        if annee_req == annee: 
+            liste_deplacement.append(transport)
+    return liste_deplacement        
+    
+
+# print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
 
