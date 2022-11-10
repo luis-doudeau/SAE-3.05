@@ -65,6 +65,30 @@ body header{
     height: 2.5rem;
 }
 
+#imgLogoMaison{
+    width: 108px;
+    height: 102px;
+    left: 48px;
+    top: 93px;
+}
+
+#imgheader39festival{
+    width: 511px;
+    height: 93px;
+    left: 194px;
+    top: 98px;
+}
+
+#p39e{
+    white-space:nowrap;
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
+    color: #fcba42;
+    font-size: 2.2rem;
+    font-family: 'Miltonian Tattoo';
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
 main{
     background-color: #7eafe5;
     background-attachment: fixed; /*edit*/
@@ -73,16 +97,15 @@ main{
 main > header{
     background-color: #5774d8;
     color: white;
+    height: 133px;
+    left: -8px;
+    top: 78px;
 }
 
 main header li{
     font-size: 1.5rem;
 }
 
-main header img{
-    width: 5rem;
-    height: 5rem;
-}
 section ul{
     list-style-type: none;
 }
@@ -91,7 +114,6 @@ section ul{
 #box-info {
     margin-left: auto;
     margin-right: auto;
-    filter:drop-shadow(0px 10px 10px rgba(0,0,0,0.45));
     margin-top: 3rem;
     width: 30%;
     background: #6e8eff;
@@ -128,6 +150,7 @@ section ul{
 }
 
 .input-user-box{
+    display: flex;
     width: 15rem;
     height: 2rem;
     border-radius: 10px;
@@ -137,14 +160,80 @@ section ul{
 
 
 #boutonConnecter{
+    display : flex;
     color: white;
     background-color: #0c0a60;
     border:0 none;
     border-radius: 10px;
     font-family: Kreon;
-    width: 15rem;
-    height: 2rem;
+    width: 10rem;
+    height: 2.5rem;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 600;
     font-size: 100%;
+    margin:auto;
+    margin-bottom: 3%;
+}
+
+#transport{
+    display : flex;
+    flex-direction: column;
+    margin-top: 5%;
+}
+
+
+#rectangle_principale{
+    display: flex;
+    background-color:#5576f1;
+    justify-content: space-around;
+    width: 70%;
+    height:100%;
+    filter:drop-shadow(0px 7px 7px rgba(0,0,0,0.25));
+    border-radius:7px;
+    padding:0px;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid #d9e1f6;
+    border-width: 2px;
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+section label{
+    color : white;
+    font-size: 120%;
+    font-weight: bold;
+    font-family: "Gill Sans", sans-serif;
+} 
+
+#formulaire{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    
+}
+
+#avion, #train, #voiture, #covoiturage, #autre{
+    height: 30%;
+    transform: scale(1.4);
+    margin-bottom: 5%;
+}
+
+#av{
+    justify-content: space-between;
+}
+
+#justificatif{
+    display : none;
+}
+
+#texte_justificatif{
+    font-size: 90%;
+    text-decoration: underline;
+    
+}
+
+#date{
+    margin-bottom : 5%;
+
 }

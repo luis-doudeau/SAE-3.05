@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleConnexion.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleTransport.css') }}">
     <link href="https://fr.allfont.net/allfont.css?fonts=londrina-shadow" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -31,58 +31,82 @@
         <header>
             <ul>
                 <li>
-                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
+                    <img id ="imgLogoMaison" src="{{url_for('static', filename='img/logo_maison_de_la_bd-removebg-preview.png')}}" alt="">
                 </li>
                 <li>
-                    <p> 18 → 20 Novembre 2022</p>
+                    <img id ="imgheader39festival" src="{{url_for('static', filename='img/header_39efestival.png')}}" alt="">
                 </li>
                 <li>
-                    <p>Infos pratiques</p>
+                    <p id = "p39e">39ème <br>édition</br></p>
                 </li>
                 <li>
-                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
+                    <p id="infoprat">Infos pratiques</p>
+                </li>
+                <li>
+                    <img id ="imgLogoMaison" src="{{url_for('static', filename='img/logo_maison_de_la_bd-removebg-preview.png')}}" alt="">
                 </li>
             </ul>
         </header>
-        <section>
-            <form method="POST">
-            <h2>Transport*</h2>
-            <p>Si vous utilisés plusieurs d'entre-eux, chochez plusieurs cases.</p>
-            <div>
-                <input type="checkbox" name="avion" id="av" > <label for="av">Avion</label>
-                <input type="checkbox" name="train" id="train" > <label for="fr">Train </label>
-                <input type="checkbox" name="voit" id="voit" > <label for="esp">Voiture</label>
-                <input type="checkbox" name="covoi" id="covoit" > <label for="all">Covoiturage</label>
-                <input type="checkbox" name="autre" id="autre" > <label for="russ">Autre</label>
-            </div>
+        <section id="rectangle_principale">
+            <form method="POST" id="formulaire">
+              <section>
+                <h2>Transport*</h2>
+                <p>Si vous utilisés plusieurs d'entre-eux, cochez plusieurs cases.</p>
 
-            <div>
-                <input type="text" name="aeroport" id="aeroport" placeholder="Aéroport">
-                <input type="text" name="gare" id="gare" placeholder="Gare">
-            </div>
-            
-            <div>
-                <input type="text" name="justificatif" id="justificatif" placeholder="Charger justificatif">
-                <input type="text" name="precision" id="precision" placeholder="Précisez">
-            </div>
-            
-            <div>
+                <div id="transport">
+                    <label id="av">
+                        <input type="checkbox" name="avion" id="avion">
+                        Avion
+                        <input type="text" name="aeroport" id="aeroport" placeholder="Aéroport">
+                    </label>
+
+                    <label for="train">
+                        <input type="checkbox" name="train" id="train">
+                        Train
+                        <input type="text" name="gare" id="gare" placeholder="Gare">
+                    </label>
+
+                    <label for="voiture">
+                        <input type="checkbox" name="voiture" id="voiture">
+                        Voiture
+                    </label>
+
+                    <label for="covoiturage">
+                        <input type="checkbox" name="covoiturage" id="covoiturage">
+                        Covoiturage
+                        <input type="file" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
+                        <label id="texte_justificatif" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
+                    </label>
+
+                    <label for="autre">
+                        <input type="checkbox" name="autre" id="autre">
+                        Autre
+                        <input type="text" name="precision" id="precision" placeholder="Précisez">
+                    </label>
+                </div>
+
+            </section>
+
+
+            <section id="date">
+                <div>
                 <h2>Arrivé à Blois**</h2>
-                <label for="dateArr">LE</label>
+                <label for="dateArr">Le</label>
                 <input id="dateArr" type="date" name="dateArr"  value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
-                <label for="hArrive">A</label>
+                <label for="hArrive">à</label>
                 <input type="time" id="hArrive" name="hArrive" required>
                 
-            </div>
-            <div>
-                <h2>Départ de Blois**</h2>
-                <label for="dateDep">LE</label>
-                <input id="dateDep" type="date" name="dateDep"  value="2022-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
-                <label for="hDep">A</label>
-                <input type="time" id="hDep" name="hDep" required>    
-            </div>
+                </div>
+                <div>
+                    <h2>Départ de Blois**</h2>
+                    <label for="dateDep">LE</label>
+                    <input id="dateDep" type="date" name="dateDep"  value="2022-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                    <label for="hDep">A</label>
+                    <input type="time" id="hDep" name="hDep" required>    
+                </div>
             
-            <p>**Si vous prenez le train, vueillez préciser l'heure d'arrivé/départ précise à la gare de Blois.</p>
+                <p>**Si vous prenez le train, veuillez préciser l'heure d'arrivé/départ précise à la gare de Blois.</p>
+            </section>
 
             <div class="user-box">
                 <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
