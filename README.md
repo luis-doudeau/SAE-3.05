@@ -6,6 +6,6 @@ DE NARDI Lenny : Scrum Master\
 CHARPENTIER Maxym
 
 ## Use
-install python
-pip install flask
+install python\
+pip install flask\
 pip3 install mysql-connector-python
