@@ -199,6 +199,11 @@ section ul{
     margin-bottom: 1%;
 }
 
+
+#rectangle_principale h2{
+    color : white;
+}
+
 section label{
     color : white;
     font-size: 120%;
@@ -217,10 +222,14 @@ section label{
     height: 30%;
     transform: scale(1.4);
     margin-bottom: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
-#av{
-    justify-content: space-between;
+#av, #tr, #au{
+    display: flex;
+
+    flex-direction: row;
 }
 
 #justificatif{
@@ -235,5 +244,22 @@ section label{
 
 #date{
     margin-bottom : 5%;
+}
 
+#aeroportWarning, #gareWarning, #precisionWarning{
+    display: None;
+    margin-top : 0.5%;
+    margin-left : 0.5%;
+    color : rgb(216, 4, 4);
+    font-size : 80%;
+}
+
+
+
+
+#aeroport, #gare, #precision{
+    height: 50%;
+    width: auto;
+    margin-left : 2%;
+    margin-right : 2%;
 }

@@ -37,6 +37,7 @@ from .Navette import Navette
 from .Transporter import Transporter
 from .Voyage import Voyage
 from .Mobiliser import Mobiliser
+from .Transport import Transport
 
 # pour avoir sqlalchemy :
 # sudo apt-get update 
@@ -65,7 +66,7 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("charpentier","charpentier",'servinfo-mariadb', "DBcharpentier")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'localhost', "BDBOUM")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -393,7 +394,17 @@ def modifier_participant(session, idP, prenomP, nomP, ddnP, telP, emailP):
         {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
          Participant.telP : telP, Participant.emailP : emailP})
     session.commit()
-    print("Le participant a bien été modifié")        
+    print("Le participant a bien été modifié")
+    
+
+def modifier_participant_tout(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+    session.query(Participant).filter(Participant.idP == idP).update(
+        {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
+         Participant.telP : telP, Participant.emailP : emailP, Participant.adresseP : adresseP, Participant.mdpP : mdpP,
+         Participant.invite : invite, Participant.emailEnvoye : emailEnvoye, Participant.remarques : remarques})
+    session.commit()
+    print("Le participant a bien été modifié")
+   
 
 def modifier_participant_role(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques, metier):
     participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
@@ -485,6 +496,7 @@ def get_nom_hotel():
 def afficher_consommateur(session, date_jour, restaurant, midi):
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
+        print(restaurant)
     if midi == "true":
         midi = True
     elif midi == "false":
@@ -538,6 +550,46 @@ def get_liste_participant_idp_regime(session, liste_id):
             liste_participants.append((une_personne, get_regime(session, une_personne.idP)))
     return liste_participants
 
+def affiche_navette(session, date, navette, directionGare):
+    if navette != "Navette" :
+        navette = int(navette)
+    if directionGare == "true" : 
+        directionGare = True
+    elif directionGare == "false" : 
+        directionGare = False
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_transport = []
+    liste_mangeur = []
+    if navette != "Navette" and directionGare != "Direction":
+        transport = session.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).filter(Voyage.directionGare == directionGare).distinct().all()
+    elif navette == "Navette" and directionGare == "Direction":
+        transport = session.query(Voyage.idVoy, Participant.idP, Participant.prenomP, Participant.nomP, Voyage.directionGare, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).distinct().all()
+    elif navette != "Restaurant":
+        transport = session.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).distinct().all()
+    elif directionGare != "Direction":
+        transport = session.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Voyage.directionGare == directionGare).distinct().all()
+    
+    print(transport)
+    
+    if date[0] != "Date":
+        date = date(int(date[0]), int(date[1]), int(date[2])) # modifier ça et modifier le HTML
+        for cren in transport:
+            if cren[1].date() == date:
+                liste_creneau.append(cren[2])
+        transport = session.query(Repas, Repas.idCreneau, Repas.idRepas).all()
+        for rep in transport:
+            if rep[1] in liste_creneau:
+                liste_transport.append(rep[2])
+    else:
+        for tran in transport:
+            liste_transport.append(tran[3])
+
+    return liste_transport
+
+# affiche_navette(session, "Date", "Navette", "Direction")
+         
+
 def get_liste_participant_id_consommateur(session, liste_id):
     liste_participants = []
     participants = session.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
@@ -562,6 +614,7 @@ def get_dormeur(session, date_jour, hotel):
         date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     else:
         date_jour = date_jour[0]
+        print(date_jour)
     liste_dormeur_date_hotel = []
     if hotel == "Hôtel":
         hotel = None
@@ -571,8 +624,13 @@ def get_dormeur(session, date_jour, hotel):
     for un_dormeur in dormeurs:
         date_deb = un_dormeur[1].date()
         date_fin = un_dormeur[2].date()
-        if (date_jour == "Date" and hotel is None) or (date_deb <= date_jour and date_fin >= date_jour) and (hotel is None or un_dormeur.idHotel == hotel):
+        if date_jour == "Date" :
+            if hotel is None or un_dormeur.idHotel == hotel:
+                liste_dormeur_date_hotel.append(un_dormeur[0])
+
+        elif date_deb <= date_jour and date_fin >= date_jour and hotel is None or un_dormeur.idHotel == hotel : 
             liste_dormeur_date_hotel.append(un_dormeur[0])
+                
     liste_participants = get_liste_participant_id_consommateur(session, liste_dormeur_date_hotel)
 
     return liste_participants
@@ -670,6 +728,23 @@ def ajoute_assister(session, idP, dateArrive, dateDepart):
             
     else :
         print("Cet intervenant assiste déjà au festival à ces dates")
+        
+def cherche_transport(session, nom_transport) : 
+    liste_transport = session.query(Transport.idTransport, Transport.nomTransport).all()
+    res = list()
+    for transport in liste_transport : 
+        if nom_transport in transport : 
+            res.append(transport)
+    return res
+
+
+def modif_participant_que_id(session, idP, remarques) : 
+    participant = session.query(Participant.idP, Participant.prenomP, Participant.nomP, Participant.ddnP, Participant.telP,\
+    Participant.emailP, Participant.adresseP, Participant.mdpP, Participant.invite, Participant.emailEnvoye,\
+    Participant.remarques).filter(Participant.idP == idP).first()
+    
+    modifier_participant_tout(session, participant[0], participant[1], participant[2], participant[3], participant[4], participant[5],\
+    participant[6], participant[7], participant[8], participant[9], participant[10]+str(remarques))
     
 
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
@@ -689,3 +764,11 @@ def ajoute_assister(session, idP, dateArrive, dateDepart):
 
 
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
+
+
+[(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+ (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+ (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+ (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
+ (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
+ (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleInscription.css') }}">
     <link href='https://fonts.googleapis.com/css?family=Miltonian Tattoo' rel='stylesheet'>
     <link href="http://fonts.cdnfonts.com/css/libre-franklin" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
     <header>
@@ -62,24 +63,24 @@
                         <ul>
                             <li>
                                 <label for="">Identité</label>
-                                <input name="prenom" type="text" value= "{{prenom}}">
-                                <input name="nom" type="text" value = "{{nom}}">
+                                <input name="prenom" type="text" value= "{{prenom}}" required>
+                                <input name="nom" type="text" value = "{{nom}}" required>
                             </li>
                             <li>
                                 <label for="">Mail</label>
-                                <input name="email" type="mail" value= {{email}}>
+                                <input name="email" type="mail" value= {{email}} required>
                             </li>
                             <li>
                                 <label for="">Adresse</label>
-                                <input name="adresse" type="text" value= "{{adresse}}">
+                                <input name="adresse" type="text" value= "{{adresse}}" required>
                             </li>
                             <li>
                                 <label for="">Tel / DDN</label>
-                                <input name="tel" type="tel" pattern="[0-9]{10}" value= {{tel}}>
-                                <input name="ddn" type="date" value= {{ddn}}>
+                                <input name="tel" type="tel" pattern="[0-9]{10}" value= {{tel}} required>
+                                <input name="ddn" type="date" value= {{ddn}} required>
                             </li>
                             <div class="user-box">
-                                <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
+                                <input class="input-user-box" id="boutonConnecter" onclick="return verif_champs_rempli()" type="submit" value="CONTINUER">
                             </div>
                         </ul>
                         </form>
@@ -90,3 +91,21 @@
     </main>
 </body>
 </html>
+
+
+<script>
+
+    let verif_champs_rempli = function(){
+        var requiredTextFields = $(':text');
+        // mail, tel, date
+        console.log(requiredTextFields);
+        for(let i=0; i<requiredTextFields.length; i++){
+            if(requiredTextFields[i].value == ""){
+                window.alert("Vous devez remplir tout les champs")
+                return false;
+            }
+        }
+    }
+    
+
+</script>

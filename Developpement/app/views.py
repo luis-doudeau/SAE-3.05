@@ -1,11 +1,13 @@
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for
 
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant, get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier, est_secretaire,modifier_participant, ajoute_assister
+from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
+get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
+est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_que_id
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
-
+DATE_FESTIVAL = ["2022-11-17", "2022-11-20"]
 
 
 
@@ -75,6 +77,24 @@ def participant_secretaire():
 @app.route('/pageFormulaireAuteurTransport/', methods = ["POST", "GET"] )
 def formulaire_auteur_transport():
     if request.method == "POST":
+        liste_id_box = ["avion", "train", "autre", "voiture", "covoiturage"]
+        liste_id_champs = ["aeroport", "gare", "precision"]
+        for i in range(len(liste_id_box)-1):
+            if request.form.get(liste_id_box[i]) == "on":
+                if i<= 2 :
+                    depart = request.form[liste_id_champs[i]]
+                if liste_id_box[i] == "avion":
+                    ajoute_deplacer(session, request.args.get('idp'), 1, depart, "Blois")
+                elif liste_id_box[i] == "train": 
+                    depart = request.form[liste_id_champs[i]]
+                    ajoute_deplacer(session, request.args.get('idp'), 2, depart, "Blois")
+                elif liste_id_box[i] == "voiture": 
+                    ajoute_deplacer(session, request.args.get('idp'), 3, str(request.args.get('adresse')), "Blois")
+                elif liste_id_box[i] == "covoiturage": 
+                    ajoute_deplacer(session, request.args.get('idp'), 4, request.args.get('adresse'), "Blois")
+                else :
+                    modif_participant_que_id(session, request.args.get('idp'), " / Moyen de déplacement : "+depart)    
+        
         dateArr = request.form["dateArr"].replace("-",",").split(",")
         heureArr = request.form["hArrive"].replace(":",",").split(",")
         date_arr = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
@@ -82,16 +102,24 @@ def formulaire_auteur_transport():
         dateDep = request.form["dateDep"].replace("-",",").split(",")
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-
+        
         ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
-        return render_template("pageFormulaireAuteurTransport.html")
 
     return render_template("pageFormulaireAuteurTransport.html")
+    
+
+@app.route('/secretaireNavette/', methods = ["POST","GET"])
+def page_secretaire_navette():
+    if request.method == 'POST':
+        la_date = request.form["jours"].split(",")
+        liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
+        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
+    return render_template('secretaireNavette.html', nomsRestau = get_nom_restaurant())
+
 
 @app.route('/pageFin/', methods = ["GET"])
 def page_fin():
     return render_template("pageFin.html")
-    
 
 @app.route('/secretaire/', methods = ["GET"])
 def page_secretaire_accueil():

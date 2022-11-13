@@ -5,6 +5,7 @@
     <title>Connexion</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleTransport.css') }}">
     <link href="https://fr.allfont.net/allfont.css?fonts=londrina-shadow" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
     <header>
@@ -58,12 +59,14 @@
                         <input type="checkbox" name="avion" id="avion">
                         Avion
                         <input type="text" name="aeroport" id="aeroport" placeholder="Aéroport">
+                        <p id="aeroportWarning">Veuillez remplir ce champ</p>
                     </label>
 
-                    <label for="train">
+                    <label id ="tr" for="train">
                         <input type="checkbox" name="train" id="train">
                         Train
                         <input type="text" name="gare" id="gare" placeholder="Gare">
+                        <p id="gareWarning">Veuillez remplir ce champ</p>
                     </label>
 
                     <label for="voiture">
@@ -78,10 +81,11 @@
                         <label id="texte_justificatif" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
                     </label>
 
-                    <label for="autre">
+                    <label id="au" for="autre">
                         <input type="checkbox" name="autre" id="autre">
                         Autre
                         <input type="text" name="precision" id="precision" placeholder="Précisez">
+                        <p id="precisionWarning">Veuillez remplir ce champ</p>
                     </label>
                 </div>
 
@@ -92,16 +96,16 @@
                 <div>
                 <h2>Arrivé à Blois**</h2>
                 <label for="dateArr">Le</label>
-                <input id="dateArr" type="date" name="dateArr"  value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
+                <input id="dateArr" type="date" name="dateArr" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
                 <label for="hArrive">à</label>
                 <input type="time" id="hArrive" name="hArrive" required>
                 
                 </div>
                 <div>
                     <h2>Départ de Blois**</h2>
-                    <label for="dateDep">LE</label>
-                    <input id="dateDep" type="date" name="dateDep"  value="2022-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa ">
-                    <label for="hDep">A</label>
+                    <label for="dateDep">Le</label>
+                    <input id="dateDep" type="date" name="dateDep"  value="2022-11-20" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                    <label for="hDep">à</label>
                     <input type="time" id="hDep" name="hDep" required>    
                 </div>
             
@@ -109,7 +113,7 @@
             </section>
 
             <div class="user-box">
-                <input class="input-user-box" id="boutonConnecter" type="submit" value="CONTINUER">
+                <input class="input-user-box" id="boutonConnecter" type="submit" onclick="return verif_champ_transport()" value="CONTINUER">
             </div>
         </form>
         </section>
@@ -117,3 +121,53 @@
     </main>
 </body>
 </html>
+
+
+<script>
+
+    let verif_champ_transport = function(){
+        var liste_valeur_box = [];
+        liste_valeur_box.push("avion");
+        liste_valeur_box.push("train");
+        liste_valeur_box.push("autre");
+
+        var liste_valeur_champs = []
+        liste_valeur_champs.push("aeroport");
+        liste_valeur_champs.push("gare");
+        liste_valeur_champs.push("precision");
+
+        var champPasRempli = true;
+
+        for(let i =0; i<liste_valeur_box.length; i++){
+            if(document.getElementById(liste_valeur_box[i]).checked && document.getElementById(liste_valeur_champs[i]).value == ""){
+                var idElement = liste_valeur_champs[i]+"Warning";
+                document.getElementById(idElement).style.display = "block";
+                champPasRempli = false;
+            }
+            else if(!document.getElementById(liste_valeur_box[i].checked)){
+                var idElement = liste_valeur_champs[i]+"Warning";
+                document.getElementById(idElement).style.display = "none";
+            }
+        }
+
+        if(!champPasRempli){
+            return false;
+        }
+
+        var requiredCheckboxes = $(':checkbox');
+        var requiredCheck = false;
+            
+        for(let i = 0; i<requiredCheckboxes.length; i++){
+            if(requiredCheckboxes[i].checked) {
+                requiredCheck = true;
+            }
+        }
+        if(!requiredCheck){
+            window.alert("Vous devez sélectionner un moyen de transport");
+            return false;
+        }
+        return true;
+    }
+
+
+</script>

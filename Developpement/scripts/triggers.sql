@@ -165,6 +165,11 @@ create trigger ajouteNavette after insert on DEPLACER for each row
 delimiter ;
 
 
+-- trigger creneau ASSISTER
+
+-- trigger LOGER
+
+
 -- select count(*) as nbNavetteRecquise from MOBILISER natural join VOYAGE 
 -- where not directionGare and TIME("-00:10:00") <= TIMEDIFF(heureDebVoy, STR_TO_DATE(concat(STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),""), "%Y-%m-%d %H:%i:%s")) and TIMEDIFF(heureDebVoy,
 -- STR_TO_DATE(concat(STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),""), "%Y-%m-%d %H:%i:%s")) <= TIME("00:10:00");
