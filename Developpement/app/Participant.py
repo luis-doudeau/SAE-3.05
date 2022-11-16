@@ -1,3 +1,4 @@
+import datetime
 from operator import inv
 from sqlalchemy import DATE, BOOLEAN
 from sqlalchemy import Column , Integer, Text
@@ -34,3 +35,12 @@ class Participant(Base):
 
     def __repr__(self) -> str:
         return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + self.telP + " - " + self.emailP
+
+    def to_dict(self):
+        print(self.ddnP)
+        return {
+            "prenomP" : self.prenomP,
+            "nomP" : self.nomP,
+            "ddnP" : self.ddnP,
+            "emailP" : self.emailP
+        }

@@ -13,3 +13,8 @@ class Intervenant(Base):
 
     def __repr__(self) -> str:
         return "ID intervenant : " + str(self.idP)
+
+    def to_dict(self):
+        return {
+            'id': self.idP
+        }

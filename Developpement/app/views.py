@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for
 
+from .Participant import Participant
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_que_id
@@ -54,15 +55,19 @@ def secretaire_consommateur():
         return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
-@app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
+@app.route('/secretaire/dormeur', methods = ["POST", "GET"])
 def dormeur_secretaire():
     if request.method == "POST":
         la_date = request.form["jours"].split(",")
         print(la_date)
-        liste_dormeur = get_dormeur(session, la_date, request.form["nomH"])
-        return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel(), liste_dormeur = liste_dormeur)
+        #liste_dormeur = get_dormeur(session, la_date, request.form["nomH"])
+        return render_template("dormeurSecretaire.html",title="TEST")
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
+
+@app.route('/api/dataParticipant')
+def data():
+    return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():
@@ -70,7 +75,6 @@ def participant_secretaire():
         print(request.form["trier"])
         liste_personne = affiche_participant_trier(session, request.form["trier"])
         return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
-        
     return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
 
 
