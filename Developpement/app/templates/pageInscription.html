@@ -1,55 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Inscription</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleInscription.css') }}">
-    <link href='https://fonts.googleapis.com/css?family=Miltonian Tattoo' rel='stylesheet'>
-    <link href="http://fonts.cdnfonts.com/css/libre-franklin" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-</head>
+{% include 'banner.html' %}
 <body>
-    <header>
-        <ul>
-            <li>
-                <p>Rejoignez la communauté <span>#BDBoum</span></p>
-            </li>
-            <li>
-                <a href="https://www.instagram.com/bdboum/?hl=fr"> <img id="imginsta" src="{{url_for('static', filename='img/logoInsta.png')}}" alt=""> </a>
-            </li>
-            <li>
-                <a href="https://www.facebook.com/bdboum?fref=ts"> <img id="imgface" src="{{url_for('static', filename='img/logoFacebook.png')}}" alt=""> </a>
-            </li>
-            <li>
-                <a href="https://www.youtube.com/channel/UCZzbuXSrKg_De4i7H9BaW1Q"> <img id="imgyout" src="{{url_for('static', filename='img/logoYoutube.png')}}" alt=""> </a>
-            </li>
-            <li id="last-li-header">
-                <a href="https://www.maisondelabd.com/">Site Officiel bdBoum</a>
-            </li>
-        </ul>
-        
-    </header>
     <main>
-        <header>
-            <ul>
-                <li>
-                    <img id ="imgLogoMaison" src="{{url_for('static', filename='img/logo_maison_de_la_bd-removebg-preview.png')}}" alt="">
-                </li>
-                <li>
-                    <img id ="imgheader39festival" src="{{url_for('static', filename='img/header_39efestival.png')}}" alt="">
-                </li>
-                <li>
-                    <p id = "p39e">39ème <br>édition</br></p>
-                </li>
-                <li>
-                    <p id="infoprat">Infos pratiques</p>
-                </li>
-                <li>
-                    <img id ="imgLogoMaison" src="{{url_for('static', filename='img/logo_maison_de_la_bd-removebg-preview.png')}}" alt="">
-                </li>
-            </ul>
-        </header>
-        <section>
+        <section class="ftco-section row justify-content-center wrap">
             <ul>
                 <li>
                     <h1>Formulaire des coordonnées</h1>
@@ -63,7 +15,7 @@
                         <ul>
                             <li>
                                 <label for="">Identité</label>
-                                <input name="prenom" type="text" value= "{{prenom}}" required>
+                                <input name="prenom" type="text" id="PrenomPersonne" value= "{{prenom}}" required>
                                 <input name="nom" type="text" value = "{{nom}}" required>
                             </li>
                             <li>

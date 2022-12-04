@@ -1,0 +1,120 @@
+{% include 'banner.html' %}
+<body>
+    <main style="background-color : #ebf3fc;">
+        <section class="ftco-section row justify-content-center shadow-lg"> 
+                         
+          <form method="POST" id="formCoo" class="container flex w-100 wrap p-4">
+            <label for="transport" class="col-sm-2 col-form-label mb-3" id="voyage">Transport</label>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <input class=" form-controls justify-content-center" type="checkbox" id="inlineCheckbox1" value="option1">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Avion</label>
+                  <input type="text" class=" col-sm-5 col-form-label" id="exampleInputNom" aria-describedby="emailHelp" placeholder="Aéroport" name="prenom" id="PrenomPersonne" value= "{{prenom}}" required>
+                </div>
+            </div>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <input class=" form-controls justify-content-center" type="checkbox" id="inlineCheckbox1" value="option1">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Train</label>
+                  <input type="text" class=" col-sm-5 col-form-label" id="exampleInputNom" aria-describedby="emailHelp" placeholder="Gare" name="prenom" id="PrenomPersonne" value= "{{prenom}}" required>
+                </div>
+            </div>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <input class=" form-controls justify-content-center" type="checkbox" id="inlineCheckbox1" value="option1">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Voiture</label>
+                </div>
+            </div>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <input class=" form-controls justify-content-center" type="checkbox" id="inlineCheckbox1" value="option1">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Covoiturage</label>
+                  <label id="texte_justificatif" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
+                  <input type="file" class=" col-sm-5 col-form-label" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
+                </div>
+            </div>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <input class=" form-controls justify-content-center" type="checkbox" id="inlineCheckbox1" value="option1">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Autre</label>
+                  <input type="text" class=" col-sm-5 col-form-label" id="exampleInputNom" aria-describedby="emailHelp" placeholder="Précisez" name="prenom" id="PrenomPersonne" value= "{{prenom}}" required>
+                </div>
+            </div>
+            <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Arrivé à Blois</label>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Le</label>
+                  <input id="dateArr" class="col-sm-2 col-form-label" type="date" name="dateArr" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">à</label>
+                  <input type="time" class=" form-controls col-sm-2 col-form-label" id="hArrive" name="hArrive" required>
+                </div>
+            </div>
+            <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Départ de Blois</label>
+            <div class="form-group row ml-5">
+                <div class="col-sm-10">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">Le</label>
+                  <input id="dateArr" class="col-sm-2 col-form-label" type="date" name="dateArr" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">à</label>
+                  <input type="time" class=" form-controls col-sm-2 col-form-label" id="hArrive" name="hArrive" required>
+                </div>
+            </div>
+            <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted">**Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary mr-2" style="background : #eb441e !important;">Retour</button>
+                <button type="submit" class="btn btn-primary ">Suivant</button>
+            </div>        
+        </form>
+        </section>
+    </main>
+</body>
+</html>
+
+
+<script>
+
+    let verif_champ_transport = function(){
+        var liste_valeur_box = [];
+        liste_valeur_box.push("avion");
+        liste_valeur_box.push("train");
+        liste_valeur_box.push("autre");
+
+        var liste_valeur_champs = []
+        liste_valeur_champs.push("aeroport");
+        liste_valeur_champs.push("gare");
+        liste_valeur_champs.push("precision");
+
+        var champPasRempli = true;
+
+        for(let i =0; i<liste_valeur_box.length; i++){
+            if(document.getElementById(liste_valeur_box[i]).checked && document.getElementById(liste_valeur_champs[i]).value == ""){
+                var idElement = liste_valeur_champs[i]+"Warning";
+                document.getElementById(idElement).style.display = "block";
+                champPasRempli = false;
+            }
+            else if(!document.getElementById(liste_valeur_box[i].checked)){
+                var idElement = liste_valeur_champs[i]+"Warning";
+                document.getElementById(idElement).style.display = "none";
+            }
+        }
+
+        if(!champPasRempli){
+            return false;
+        }
+
+        var requiredCheckboxes = $(':checkbox');
+        var requiredCheck = false;
+            
+        for(let i = 0; i<requiredCheckboxes.length; i++){
+            if(requiredCheckboxes[i].checked) {
+                requiredCheck = true;
+            }
+        }
+        if(!requiredCheck){
+            window.alert("Vous devez sélectionner un moyen de transport");
+            return false;
+        }
+        return true;
+    }
+
+
+</script>
