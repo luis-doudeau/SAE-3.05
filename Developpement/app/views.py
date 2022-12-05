@@ -68,7 +68,6 @@ def data():
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():
     if request.method == "POST":
-        print(request.form["trier"])
         liste_personne = affiche_participant_trier(session, request.form["trier"])
         return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
     return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
@@ -80,8 +79,8 @@ def formulaire_auteur_transport():
         liste_id_box = ["avion", "train", "autre", "voiture", "covoiturage"]
         liste_id_champs = ["aeroport", "gare", "precision"]
         for i in range(len(liste_id_box)-1):
-            if request.form.get(liste_id_box[i]) == "on":
-                if i<= 2 :
+            if request.form.get(liste_id_box[i]) == "option1":
+                if i<= 2 : 
                     depart = request.form[liste_id_champs[i]]
                 if liste_id_box[i] == "avion":
                     ajoute_deplacer(session, request.args.get('idp'), 1, depart, "Blois")
@@ -104,7 +103,7 @@ def formulaire_auteur_transport():
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         
         ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
-
+        
     return render_template("transportForms.html")
     
 
