@@ -107,6 +107,11 @@ def formulaire_auteur_transport():
 
     return render_template("transportForms.html")
     
+@app.route('/FormulaireReservation/', methods = ["POST", "GET"] )
+def formulaire_reservation():
+    if request.method == "POST":
+        pass
+    return render_template("formulaireReservation.html")
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 def page_secretaire_navette():
