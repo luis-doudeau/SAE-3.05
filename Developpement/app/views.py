@@ -8,7 +8,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
-DATE_FESTIVAL = ["2022-11-17", "2022-11-20"]
+DATE_FESTIVAL = ["2022-11-17", "2022-11-18", "2022-11-19", "2022-11-20"]
 
 
 
@@ -73,7 +73,7 @@ def participant_secretaire():
     return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
 
 
-@app.route('/transportForms/', methods = ["POST", "GET"] )
+@app.route('/transportForms/', methods = ["POST", "GET"])
 def formulaire_auteur_transport():
     if request.method == "POST":
         liste_id_box = ["avion", "train", "autre", "voiture", "covoiturage"]
@@ -84,7 +84,7 @@ def formulaire_auteur_transport():
                     depart = request.form[liste_id_champs[i]]
                 if liste_id_box[i] == "avion":
                     ajoute_deplacer(session, request.args.get('idp'), 1, depart, "Blois")
-                elif liste_id_box[i] == "train": 
+                elif liste_id_box[i] == "train":
                     depart = request.form[liste_id_champs[i]]
                     ajoute_deplacer(session, request.args.get('idp'), 2, depart, "Blois")
                 elif liste_id_box[i] == "voiture": 
