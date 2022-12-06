@@ -103,6 +103,7 @@ def formulaire_auteur_transport():
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         
         ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
+        return redirect(url_for('formulaire_reservation'))
         
     return render_template("transportForms.html")
     
