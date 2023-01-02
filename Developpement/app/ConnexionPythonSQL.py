@@ -66,8 +66,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
 #     passwd=getpass.getpass("mot de passe MySQL ")
@@ -690,6 +690,34 @@ def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
     except: 
         print("Erreur !")
         session.rollback()
+        
+def get_max_id_regime(session): 
+    regime= session.query(func.max(Regime.idRegime)).first()
+    if (regime[0]) is None:
+        return 0
+    else:
+        return regime._data[0]
+        
+def ajoute_regime(session, regime) : 
+    id_regime = get_max_id_regime(session)+1
+    regime = Regime(id_regime, regime)
+    session.add(regime)
+    try :
+        session.commit()
+        return id_regime
+    except : 
+        print("erreur")
+        session.rollback() 
+        
+def ajoute_avoir_regime(session, id_consommateur, id_regime) :
+    avoir_regime = Avoir(id_consommateur, id_regime)
+    session.add(avoir_regime)
+    try :
+        session.commit()
+        print("L'association regime-consommateur à bien été ajoutée !")
+    except : 
+        print("erreur")
+        session.rollback() 
     
 def est_intervenant(session, idP):
     intervenant = session.query(Intervenant).filter(Intervenant.idP == idP).first()
@@ -738,13 +766,13 @@ def cherche_transport(session, nom_transport) :
     return res
 
 
-def modif_participant_que_id(session, idP, remarques) : 
+def modif_participant_remarque(session, idP, remarques) : 
     participant = session.query(Participant.idP, Participant.prenomP, Participant.nomP, Participant.ddnP, Participant.telP,\
     Participant.emailP, Participant.adresseP, Participant.mdpP, Participant.invite, Participant.emailEnvoye,\
     Participant.remarques).filter(Participant.idP == idP).first()
     
     modifier_participant_tout(session, participant[0], participant[1], participant[2], participant[3], participant[4], participant[5],\
-    participant[6], participant[7], participant[8], participant[9], participant[10]+str(remarques))
+    participant[6], participant[7], participant[8], participant[9], participant[10]+ " | "+ str(remarques))
     
 
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))

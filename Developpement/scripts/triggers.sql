@@ -154,9 +154,7 @@ create trigger ajouteNavette after insert on DEPLACER for each row
 
 
       -- continuer avec les voyages retours
-      else 
-        set msg = concat("Les navettes ne circulent que du festival à la gare de Blois entre 8 heure et 20 heure");
-          signal SQLSTATE '45000' set MESSAGE_TEXT = msg;
+    
       
       end if;
     end if;

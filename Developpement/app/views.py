@@ -1,21 +1,33 @@
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_required, login_user, LoginManager
+from secrets import token_urlsafe
 
 from .Participant import Participant
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
-est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_que_id
+est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
+ajoute_regime, get_max_id_regime
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
 DATE_FESTIVAL = ["2022-11-17", "2022-11-18", "2022-11-19", "2022-11-20"]
+DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30-14:00", "vendredi_soir":"19:30-22:00", "samedi_midi" : "11:30-14:00", "samedi_soir":"19:30-22:00", "dimanche_midi":"11:30-14:00", "dimanche_soir":"19:30-22:00"}
 
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'lenny'
+app.config['SECRET_KEY'] = token_urlsafe(16)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+app.app_context().push()
+
+@login_manager.user_loader
 
 @app.route('/', methods = ["GET", "POST"])
+
 def connexion():
     if request.method == "POST":
         email = request.form["email"]
@@ -92,7 +104,7 @@ def formulaire_auteur_transport():
                 elif liste_id_box[i] == "covoiturage": 
                     ajoute_deplacer(session, request.args.get('idp'), 4, request.args.get('adresse'), "Blois")
                 else :
-                    modif_participant_que_id(session, request.args.get('idp'), " / Moyen de déplacement : "+depart)    
+                    modif_participant_remarque(session, request.args.get('idp'), " / Moyen de déplacement : "+depart)    
         
         dateArr = request.form["dateArr"].replace("-",",").split(",")
         heureArr = request.form["hArrive"].replace(":",",").split(",")
@@ -101,17 +113,28 @@ def formulaire_auteur_transport():
         dateDep = request.form["dateDep"].replace("-",",").split(",")
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-        
+        print(request.form["hDep"])
         ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
-        return redirect(url_for('formulaire_reservation'))
+        return redirect(url_for('formulaire_reservation', idp=request.args.get('idp')))
         
-    return render_template("transportForms.html")
+    return render_template("transportForms.html", idp=request.args.get('idp'))
     
 @app.route('/FormulaireReservation/', methods = ["POST", "GET"] )
 def formulaire_reservation():
     if request.method == "POST":
-        pass
-    return render_template("formulaireReservation.html")
+        regime = request.form["regime"]
+        if regime.isalpha():
+            id_regime = ajoute_regime(session, regime)
+            ajoute_avoir_regime(session, request.args.get('idp'), id_regime)
+        remarques = request.form["remarques"]
+        modif_participant_remarque(session, request.args.get('idp'), remarques)
+        a = request.form['jeudi_soir']
+        for creneau in DICO_HORAIRE_RESTAURANT.keys():
+            pass
+            #print(request.form["jeud"])  
+                
+        
+    return render_template("formulaireReservation.html", idp=request.args.get('idp'))
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 def page_secretaire_navette():
