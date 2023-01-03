@@ -8496,3 +8496,8 @@ h1, h2, h3, h4, h5,
 #formCoo{
   background-color : white;
 }
+
+.card-img-{
+  width:20%;
+  height:auto;
+}
