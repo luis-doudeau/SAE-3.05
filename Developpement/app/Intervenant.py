@@ -2,7 +2,7 @@ from sqlalchemy import DATETIME
 from sqlalchemy import Column , Integer, Text, ForeignKey
 from sqlalchemy . ext . declarative import declarative_base
 
-from Consommateur import Consommateur
+from .Consommateur import Consommateur
 
 
 from flask_login import UserMixin

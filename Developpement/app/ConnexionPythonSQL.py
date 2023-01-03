@@ -14,33 +14,33 @@ from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
 
-from Exposant import Exposant
-from Intervenir import Intervenir
-from Consommateur import Consommateur
-from Staff import Staff
-from Intervenant import Intervenant
-from Auteur import Auteur
-from Presse import Presse
-from Invite import Invite
-from Participant import Participant
-from Loger import Loger
-from Hotel import Hotel
-from Deplacer import Deplacer
-from Manger import Manger
-from Repas import Repas
-from Creneau import Creneau
-from Restaurant import Restaurant
-from Avoir import Avoir
-from Regime import Regime
-from Assister import Assister
-from Secretaire import Secretaire
-from Navette import Navette
-from Transporter import Transporter
-from Voyage import Voyage
-from Mobiliser import Mobiliser
-from Transport import Transport
+from .Exposant import Exposant
+from .Intervenir import Intervenir
+from .Consommateur import Consommateur
+from .Staff import Staff
+from .Intervenant import Intervenant
+from .Auteur import Auteur
+from .Presse import Presse
+from .Invite import Invite
+from .Participant import Participant
+from .Loger import Loger
+from .Hotel import Hotel
+from .Deplacer import Deplacer
+from .Manger import Manger
+from .Repas import Repas
+from .Creneau import Creneau
+from .Restaurant import Restaurant
+from .Avoir import Avoir
+from .Regime import Regime
+from .Assister import Assister
+from .Secretaire import Secretaire
+from .Navette import Navette
+from .Transporter import Transporter
+from .Voyage import Voyage
+from .Mobiliser import Mobiliser
+from .Transport import Transport
 
-from app import login_manager
+from .app import login_manager
 # pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
@@ -68,8 +68,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -816,6 +816,3 @@ def load_user(intervenant_id):
  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
 
 
-inter = session.query(Intervenant).filter(Intervenant.idP == 300).first()
-print(inter)
-print(inter.prenomP)

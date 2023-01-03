@@ -1,7 +1,7 @@
 from sqlalchemy import Date, ForeignKey
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy.ext.declarative import declarative_base
-from Participant import Participant
+from .Participant import Participant
 
 Base = declarative_base()
 
