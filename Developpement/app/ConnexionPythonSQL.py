@@ -541,7 +541,6 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
     liste_participants = get_liste_participant_idp_regime(session, liste_consommateurs)
     return liste_participants
 
-
 def get_liste_participant_idp_regime(session, liste_id):
     liste_participants = []
     participants = session.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
@@ -794,9 +793,9 @@ def modif_participant_remarque(session, idP, remarques) :
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
 
 
-[(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
- (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
+# [(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
+#  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]

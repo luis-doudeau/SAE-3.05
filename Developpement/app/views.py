@@ -3,8 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, LoginManager
 from secrets import token_urlsafe
 
+from .Consommateur import Consommateur
 from .Participant import Participant
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
+
+from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime
@@ -74,8 +76,17 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
 @app.route('/api/dataParticipant')
-def data():
+def dataParticipant():
     return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
+
+@app.route('/api/dataConsommateurs')
+def dataConsommateurs():
+    liste_consommateur = []
+    for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
+        consommateur_dico = consommateur.to_dict()
+        consommateur_dico["regime"] = get_regime(session, consommateur.idP)
+        liste_consommateur.append(consommateur_dico)
+    return {'data': liste_consommateur}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():

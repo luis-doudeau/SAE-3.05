@@ -37,7 +37,6 @@ class Participant(Base):
         return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + self.telP + " - " + self.emailP
 
     def to_dict(self):
-        print(self.ddnP)
         return {
             "prenomP" : self.prenomP,
             "nomP" : self.nomP,
