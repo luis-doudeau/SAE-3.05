@@ -2,11 +2,14 @@ import datetime
 from operator import inv
 from sqlalchemy import DATE, BOOLEAN
 from sqlalchemy import Column , Integer, Text
-from sqlalchemy . ext . declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+
+from flask_login import UserMixin
+
 
 Base = declarative_base()
 
-class Participant(Base):
+class Participant(Base, UserMixin):
     __tablename__ = "PARTICIPANT"
     idP = Column(Integer, primary_key = True)
     prenomP = Column(Text)
@@ -44,3 +47,5 @@ class Participant(Base):
             "ddnP" : self.ddnP,
             "emailP" : self.emailP
         }
+    def get_id(self):
+        return self.idP

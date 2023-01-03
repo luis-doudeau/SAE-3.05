@@ -61,6 +61,19 @@
               </ul>
             </li>
           </ul>
+          <ul class="nav navbar-nav navbar-right autentifie">
+            {% if current_user.is_authenticated %} <!--is_authenticated()-->
+            <li><a>{{ current_user.prenomP }}</a></li>
+            <li><a href="{{ url_for("logout") }}"> Logout
+            <span class="glyphicon glyphicon-log-out" title ="Logout"
+            ></span></a></li>
+            {% endif %}
+            {% if not current_user.is_authenticated %} <!--is_authenticated()-->
+            <li><a href="{{ url_for("connexion") }}"> Login
+            <span class="glyphicon glyphicon-log-out" title ="Login"
+            ></span></a></li>
+            {% endif %}
+        </ul>
           <div class="form-inline my-2 my-lg-0">
             <img id="maisonbd" class="my-2 my-sm-0" src="{{url_for('static', filename='img/maisonbd.svg')}}" alt="">
           </div>

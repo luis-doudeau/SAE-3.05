@@ -1,12 +1,19 @@
 from sqlalchemy import DATETIME
-from sqlalchemy import Column , Integer, Text
+from sqlalchemy import Column , Integer, Text, ForeignKey
 from sqlalchemy . ext . declarative import declarative_base
+
+from Consommateur import Consommateur
+
+
+from flask_login import UserMixin
+
 
 Base = declarative_base()
 
-class Intervenant(Base):
+class Intervenant(Consommateur, Base):
     __tablename__ = "INTERVENANT"
-    idP = Column(Integer, primary_key = True)
+    #idP = Column(Integer, primary_key = True)
+    idP = Column(Integer, ForeignKey('CONSOMMATEUR.idP'), primary_key=True)
 
     def __init__(self, idP) -> None:
         self.idP = idP
@@ -18,3 +25,5 @@ class Intervenant(Base):
         return {
             'id': self.idP
         }
+    def get_id(self):
+        return self.idP

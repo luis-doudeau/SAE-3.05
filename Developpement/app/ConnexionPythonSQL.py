@@ -13,32 +13,34 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
-from .Exposant import Exposant
-from .Intervenir import Intervenir
-from .Consommateur import Consommateur
-from .Staff import Staff
-from .Intervenant import Intervenant
-from .Auteur import Auteur
-from .Presse import Presse
-from .Invite import Invite
-from .Participant import Participant
-from .Loger import Loger
-from .Hotel import Hotel
-from .Deplacer import Deplacer
-from .Manger import Manger
-from .Repas import Repas
-from .Creneau import Creneau
-from .Restaurant import Restaurant
-from .Avoir import Avoir
-from .Regime import Regime
-from .Assister import Assister
-from .Secretaire import Secretaire
-from .Navette import Navette
-from .Transporter import Transporter
-from .Voyage import Voyage
-from .Mobiliser import Mobiliser
-from .Transport import Transport
 
+from Exposant import Exposant
+from Intervenir import Intervenir
+from Consommateur import Consommateur
+from Staff import Staff
+from Intervenant import Intervenant
+from Auteur import Auteur
+from Presse import Presse
+from Invite import Invite
+from Participant import Participant
+from Loger import Loger
+from Hotel import Hotel
+from Deplacer import Deplacer
+from Manger import Manger
+from Repas import Repas
+from Creneau import Creneau
+from Restaurant import Restaurant
+from Avoir import Avoir
+from Regime import Regime
+from Assister import Assister
+from Secretaire import Secretaire
+from Navette import Navette
+from Transporter import Transporter
+from Voyage import Voyage
+from Mobiliser import Mobiliser
+from Transport import Transport
+
+from app import login_manager
 # pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
@@ -776,6 +778,17 @@ def modif_participant_remarque(session, idP, remarques) :
     participant[6], participant[7], participant[8], participant[9], participant[10]+ " | "+ str(remarques))
     
 
+
+def load_intervenant(session, mail, mdp):
+    intervenant = session.query(Participant).join(Intervenant, Participant.idP == Intervenant.idP).filter(Participant.emailP == mail).filter(Participant.mdpP == mdp).first()
+    if intervenant is not None and est_intervenant(session, intervenant.idP):
+        return intervenant
+
+
+@login_manager.user_loader
+def load_user(intervenant_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return session.query(Intervenant).filter(Intervenant.idP == intervenant_id).first()
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
@@ -801,3 +814,8 @@ def modif_participant_remarque(session, idP, remarques) :
  (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
+
+
+inter = session.query(Intervenant).filter(Intervenant.idP == 300).first()
+print(inter)
+print(inter.prenomP)
