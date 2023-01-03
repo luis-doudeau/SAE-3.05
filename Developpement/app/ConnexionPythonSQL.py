@@ -79,6 +79,16 @@ connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnard
 Session = sessionmaker(bind=engine)
 session = Session()
 
+
+def get_deb_voyage(session, idVoyage):
+    return session.query(Voyage.heureDebVoy).filter(Voyage.idVoy == idVoyage).first()
+
+def get_lieu_depart_voyage(session, idVoyage):
+    if session.query(Voyage.directionGare).filter(Voyage.idVoy == idVoyage).first():
+        return "Festival ---> Gare Blois"
+    else:
+        return "Gare Blois ---> Festival"
+
 def get_max_id_participant(session):
     max_id = session.query(func.max(Participant.idP)).first()
     
@@ -436,6 +446,12 @@ def get_info_personne(session, email, mdp):
 
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
+
+def get_prenom(session, id_participant):
+    return session.query(Participant.prenomP).filter(Participant.idP == id_participant).first()
+
+def get_nom(session, id_participant):
+    return session.query(Participant.nomP).filter(Participant.idP == id_participant).first()
 
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel

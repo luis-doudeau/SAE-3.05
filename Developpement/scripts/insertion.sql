@@ -178,7 +178,10 @@ INSERT INTO INVITE (idP) values (500);
 
 
 INSERT INTO VOYAGE (idVoy,heureDebVoy, dureeVoy, directionGare) VALUES
-  (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true);
+  (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true),
+  (2,STR_TO_DATE("17-11-2022 13:51", "%d-%m-%Y %H:%i"), TIME("00:10"), false),
+  (3,STR_TO_DATE("18-11-2022 15:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true),
+  (4,STR_TO_DATE("18-11-2022 18:51", "%d-%m-%Y %H:%i"), TIME("00:10"), false);
 
 
 INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1",2),
