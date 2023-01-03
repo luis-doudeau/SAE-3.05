@@ -29,6 +29,8 @@ DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30
 
 @app.route('/', methods = ["GET", "POST"])
 def connexion():
+    if current_user.is_authenticated:
+        return redirect(url_for('page_inscription', idp = current_user.idP, prenom = current_user.prenomP, nom = current_user.nomP,adresse = current_user.adresseP, ddn = current_user.ddnP, tel = current_user.telP, email = current_user.emailP))
     if request.method == "POST":
         email = request.form["email"]
         mdp = request.form["mdp"]
@@ -167,8 +169,8 @@ def page_secretaire_accueil():
 def logout():
     logout_user()
     return redirect(url_for("connexion"))
-"""
-def login_required(role="ANY"):
+
+"""def login_required(role="ANY"):
     def wrapper(fn):
         @wraps(fn)
         def decorated_view(*args, **kwargs):
