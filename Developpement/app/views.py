@@ -15,7 +15,7 @@ from .Participant import Participant
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, load_intervenant
+ajoute_regime, get_max_id_regime, load_participant, get_participant
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -37,16 +37,13 @@ def connexion():
         if est_secretaire(session, email, mdp):
             return redirect(url_for("page_secretaire_accueil"))
         personne = get_info_personne(session, email, mdp)
-        intervenant = load_intervenant(session, email, mdp)
-        if intervenant is not None:
+        participant = get_participant(session, email, mdp)
+        if participant is not None:
             print("ok")
-            print(intervenant)
-            login_user(intervenant)
+            print(participant)
+            login_user(participant)
             return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
-        if personne is not None:
-            print(personne)
-            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
-        render_template('login.html', mail = request.form["email"])
+        return render_template('login.html', mail = request.form["email"])
     return render_template('login.html', mail = "ac@icloud.ca")
 
 

@@ -779,16 +779,16 @@ def modif_participant_remarque(session, idP, remarques) :
     
 
 
-def load_intervenant(session, mail, mdp):
-    intervenant = session.query(Participant).join(Intervenant, Participant.idP == Intervenant.idP).filter(Participant.emailP == mail).filter(Participant.mdpP == mdp).first()
-    if intervenant is not None and est_intervenant(session, intervenant.idP):
-        return intervenant
+def get_participant(session, mail, mdp):
+    participant = session.query(Participant).filter(Participant.emailP == mail).filter(Participant.mdpP == mdp).first()
+    if participant is not None :
+        return participant
 
 
 @login_manager.user_loader
-def load_user(intervenant_id):
+def load_participant(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
-    return session.query(Intervenant).filter(Intervenant.idP == intervenant_id).first()
+    return session.query(Participant).filter(Participant.idP == participant_id).first()
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
