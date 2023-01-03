@@ -43,7 +43,6 @@ def connexion():
 
 
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
-@login_required
 def page_inscription():
     if request.method == "POST":
         modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
