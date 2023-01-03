@@ -11,6 +11,7 @@ pip install flask
 pip3 install mysql-connector-python
 pip install flask-wtf
 pip install flask-login
+pip install flask-principal
 
 ## Link GitHub
 
