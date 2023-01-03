@@ -9,8 +9,8 @@ CHARPENTIER Maxym
 install python\
 pip install flask
 pip3 install mysql-connector-python
-pip install flask_login
-
+pip install flask-wtf
+pip install flask-login
 
 ## Link GitHub
 

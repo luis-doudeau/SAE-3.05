@@ -39,6 +39,7 @@ from .Voyage import Voyage
 from .Mobiliser import Mobiliser
 from .Transport import Transport
 
+from .app import login_manager
 # pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
@@ -775,6 +776,17 @@ def modif_participant_remarque(session, idP, remarques) :
     participant[6], participant[7], participant[8], participant[9], participant[10]+ " | "+ str(remarques))
     
 
+
+def load_intervenant(session, mail, mdp):
+    intervenant = session.query(Participant).join(Intervenant, Participant.idP == Intervenant.idP).filter(Participant.emailP == mail).filter(Participant.mdpP == mdp).first()
+    if intervenant is not None and est_intervenant(session, intervenant.idP):
+        return intervenant
+
+
+@login_manager.user_loader
+def load_user(intervenant_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return session.query(Intervenant).filter(Intervenant.idP == intervenant_id).first()
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)

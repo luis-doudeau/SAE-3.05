@@ -1,13 +1,21 @@
+from .app import app
+
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import login_required, login_user, LoginManager
+from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
+
+from flask_wtf import FlaskForm
+from wtforms import StringField , HiddenField, PasswordField
+
+from functools import wraps
+
 
 from .Participant import Participant
 from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime
+ajoute_regime, get_max_id_regime, load_intervenant
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -16,18 +24,10 @@ DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30
 
 
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = token_urlsafe(16)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-app.app_context().push()
 
-@login_manager.user_loader
 
 @app.route('/', methods = ["GET", "POST"])
-
 def connexion():
     if request.method == "POST":
         email = request.form["email"]
@@ -35,6 +35,12 @@ def connexion():
         if est_secretaire(session, email, mdp):
             return redirect(url_for("page_secretaire_accueil"))
         personne = get_info_personne(session, email, mdp)
+        intervenant = load_intervenant(session, email, mdp)
+        if intervenant is not None:
+            print("ok")
+            print(intervenant)
+            login_user(intervenant)
+            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
         if personne is not None:
             print(personne)
             return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
@@ -43,7 +49,9 @@ def connexion():
 
 
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
+@login_required
 def page_inscription():
+    print(current_user)
     if request.method == "POST":
         modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
         if est_intervenant(session, int(request.args.get('idp'))):
@@ -154,6 +162,21 @@ def page_secretaire_accueil():
     return render_template("secretaire.html")
 
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
 
+@app.route("/logout/")
+def logout():
+    logout_user()
+    return redirect(url_for("connexion"))
+"""
+def login_required(role="ANY"):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            if not current_user.is_authenticated():
+               return current_app.login_manager.unauthorized()
+            urole = current_app.login_manager.reload_user().get_urole()
+            if ( (urole != role) and (role != "ANY")):
+                return current_app.login_manager.unauthorized()      
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper"""
