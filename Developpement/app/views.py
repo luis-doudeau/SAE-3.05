@@ -83,10 +83,19 @@ def dataParticipant():
 def dataConsommateurs():
     liste_consommateur = []
     for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
-        consommateur_dico = consommateur.to_dict()
+        consommateur_dico = consommateur.to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
+
+# @app.route('/api/dataNavettes')
+# def dataConsommateurs():
+#     liste_navettes = []
+#     for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
+#         consommateur_dico = consommateur.to_dict_sans_ddn()
+#         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
+#         liste_consommateur.append(consommateur_dico)
+#     return {'data': liste_consommateur}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():

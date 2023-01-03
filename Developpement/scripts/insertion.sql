@@ -103,6 +103,11 @@ INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
                                                 (5,"Sans gluten"),
                                                 (6,"Sans lactose"),
                                                 (7,"Cétogène");
+                                            
+INSERT INTO AVOIR (idP, idRegime) VALUES (100, 1),
+                                         (100, 2),
+                                         (100, 3),
+                                         (102, 5);
                                                     
                                                                                                                      
 INSERT INTO STAFF (idP) VALUES (200),

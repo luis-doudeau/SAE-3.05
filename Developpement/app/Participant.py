@@ -43,3 +43,10 @@ class Participant(Base):
             "ddnP" : self.ddnP,
             "emailP" : self.emailP
         }
+    
+    def to_dict_sans_ddn(self):
+        return {
+            "prenomP" : self.prenomP,
+            "nomP" : self.nomP,
+            "emailP" : self.emailP
+        }
