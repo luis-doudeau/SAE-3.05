@@ -69,8 +69,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
@@ -405,13 +405,18 @@ def supprimer_participant_role(session, id_participant):
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(session, idP, prenomP, nomP, ddnP, telP, emailP):
+def modifier_participant(session, idP, ddnP, telP):
     session.query(Participant).filter(Participant.idP == idP).update(
-        {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
-         Participant.telP : telP, Participant.emailP : emailP})
+        {Participant.ddnP : ddnP, Participant.telP : telP})
     session.commit()
     print("Le participant a bien été modifié")
     
+    
+def modifier_utilisateur(session, idP, prenomP, nomP, emailP):
+    session.query(Utilisateur).filter(Utilisateur.idP == idP).update(
+        {Utilisateur.prenomP : prenomP, Utilisateur.nomP : nomP, Utilisateur.emailP : emailP})
+    session.commit()
+    print("L'utilisateur a bien été modifié")
 
 def modifier_participant_tout(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
     session.query(Participant).filter(Participant.idP == idP).update(
@@ -788,13 +793,10 @@ def cherche_transport(session, nom_transport) :
 
 
 def modif_participant_remarque(session, idP, remarques) : 
-    participant = session.query(Participant.idP, Participant.prenomP, Participant.nomP, Participant.ddnP, Participant.telP,\
-    Participant.emailP, Participant.adresseP, Participant.mdpP, Participant.invite, Participant.emailEnvoye,\
-    Participant.remarques).filter(Participant.idP == idP).first()
-    
-    modifier_participant_tout(session, participant[0], participant[1], participant[2], participant[3], participant[4], participant[5],\
-    participant[6], participant[7], participant[8], participant[9], participant[10]+ " | "+ str(remarques))
-    
+    nouvelles_remarques = remarques + " / "+str((session.query(Participant).filter(Participant.idP == idP).first()).remarques)
+    print(nouvelles_remarques)
+    session.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
+    session.commit()  
 
 
 def get_participant(session, mail, mdp):

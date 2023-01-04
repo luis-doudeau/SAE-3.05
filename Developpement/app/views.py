@@ -16,7 +16,8 @@ from .Avoir import Avoir
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_participant, get_participant
+ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_participant, get_participant,\
+modifier_utilisateur
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -53,7 +54,8 @@ def connexion():
 def page_inscription():
     print(current_user)
     if request.method == "POST":
-        modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
+        modifier_participant(session, request.args.get('idp'),request.form["ddn"],request.form["tel"])
+        modifier_utilisateur(session, request.args.get('idp'), request.form["prenom"], request.form["nom"], request.form["email"])
         if est_intervenant(session, int(request.args.get('idp'))):
             return redirect(url_for('formulaire_auteur_transport', idp = request.args.get('idp')))
         else:
@@ -136,7 +138,7 @@ def formulaire_auteur_transport():
                 elif liste_id_box[i] == "covoiturage": 
                     ajoute_deplacer(session, request.args.get('idp'), 4, request.args.get('adresse'), "Blois")
                 else :
-                    modif_participant_remarque(session, request.args.get('idp'), " / Moyen de déplacement : "+depart)    
+                    modif_participant_remarque(session, request.args.get('idp'), "Moyen de déplacement : "+depart)    
         
         dateArr = request.form["dateArr"].replace("-",",").split(",")
         heureArr = request.form["hArrive"].replace(":",",").split(",")
@@ -201,6 +203,6 @@ def logout():
 
 @app.route('/inviterSecretaire/', methods = ["GET"])
 def page_secretaire_inviter():
-    return render_template("inviterSecretaire.html")
+    return render_template("inviterSecretaire.html", liste_roles=TYPE_PARTICIPANT)
 
 
