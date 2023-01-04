@@ -102,7 +102,7 @@ def dataNavettes():
         for elements in session.query(Transporter).filter(Transporter.idVoy == voyages.idVoy).all():
             voyages_dico["prenom"] = get_prenom(session, elements.idP)
             voyages_dico["nom"] = get_nom(session, elements.idP)
-        liste_voyages.append(voyages_dico)
+            liste_voyages.append(voyages_dico)
     return {'data': liste_voyages}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
@@ -169,8 +169,16 @@ def page_secretaire_navette():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
+        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
     return render_template('secretaireNavette.html', nomsRestau = get_nom_restaurant())
+
+
+
+@app.route('/secretaireGererParticipants/', methods = ["POST","GET"])
+def page_secretaire_gerer_participants():
+    if request.method == 'POST':
+        return render_template('secretaireGererParticipants.html')
+    return render_template('secretaireGererParticipants.html')
 
 
 @app.route('/pageFin/', methods = ["GET"])

@@ -85,10 +85,10 @@ def get_deb_voyage(session, idVoyage):
     return row[0]
 
 def get_lieu_depart_voyage(session, idVoyage):
-    if session.query(Voyage.directionGare).filter(Voyage.idVoy == idVoyage).first():
-        return "Festival ---> Gare Blois"
+    if (session.query(Voyage).filter(Voyage.idVoy == idVoyage).first()).directionGare:
+        return "Festival → Gare Blois"
     else:
-        return "Gare Blois ---> Festival"
+        return "Gare Blois → Festival"
 
 def get_max_id_participant(session):
     max_id = session.query(func.max(Participant.idP)).first()
