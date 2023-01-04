@@ -8496,3 +8496,24 @@ h1, h2, h3, h4, h5,
 #formCoo{
   background-color : white;
 }
+
+.card-img-{
+  width:12%;
+  height:auto;
+  background-color: #17a2b8;
+  position: relative;
+  top : -25px;
+  padding : 7px;
+  border-radius: 15px;
+}
+
+
+
+.div_img{
+  width:20%;
+  height: max-content;
+}
+
+.bouton_menu{
+  background-color: #005cbf;
+}

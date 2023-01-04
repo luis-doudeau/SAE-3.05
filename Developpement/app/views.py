@@ -190,10 +190,13 @@ def page_fin():
 def page_secretaire_accueil():
     return render_template("secretaire.html")
 
-
-
 @app.route("/logout/")
 def logout():
     logout_user()
     return redirect(url_for("connexion"))
+
+@app.route('/inviterSecretaire/', methods = ["GET"])
+def page_secretaire_inviter():
+    return render_template("inviterSecretaire.html")
+
 
