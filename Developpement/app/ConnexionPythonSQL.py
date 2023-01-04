@@ -81,7 +81,8 @@ session = Session()
 
 
 def get_deb_voyage(session, idVoyage):
-    return session.query(Voyage.heureDebVoy).filter(Voyage.idVoy == idVoyage).first()
+    row = session.query(Voyage.heureDebVoy).filter(Voyage.idVoy == idVoyage).first()
+    return row[0]
 
 def get_lieu_depart_voyage(session, idVoyage):
     if session.query(Voyage.directionGare).filter(Voyage.idVoy == idVoyage).first():
@@ -448,10 +449,10 @@ def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
 def get_prenom(session, id_participant):
-    return session.query(Participant.prenomP).filter(Participant.idP == id_participant).first()
+    return (session.query(Participant).filter(Participant.idP == id_participant).first()).prenomP
 
 def get_nom(session, id_participant):
-    return session.query(Participant.nomP).filter(Participant.idP == id_participant).first()
+    return (session.query(Participant).filter(Participant.idP == id_participant).first()).nomP
 
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel

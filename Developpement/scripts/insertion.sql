@@ -183,6 +183,11 @@ INSERT INTO VOYAGE (idVoy,heureDebVoy, dureeVoy, directionGare) VALUES
   (3,STR_TO_DATE("18-11-2022 15:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true),
   (4,STR_TO_DATE("18-11-2022 18:51", "%d-%m-%Y %H:%i"), TIME("00:10"), false);
 
+INSERT INTO TRANSPORTER(idP, idVoy) VALUES (300, 1),
+                                           (300, 4),
+                                           (301, 1),
+                                           (301, 3);
+
 
 INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1",2),
                                                                   (2,"Navette 2",2),
@@ -190,6 +195,11 @@ INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1"
                                                                   (4,"Navette 4",8),
                                                                   (5,"Navette 5",8),
                                                                   (6,"Navette 6",8);
+                                                            
+INSERT INTO MOBILISER(idVoy, idNavette) VALUES (1, 1),
+                                              (2, 2),
+                                              (3, 2),
+                                              (4, 3);
 
 
 INSERT INTO TRANSPORT (idTransport, nomTransport) values (1, "Avion"),

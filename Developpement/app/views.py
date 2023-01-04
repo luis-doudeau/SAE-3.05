@@ -95,7 +95,6 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes')
 def dataNavettes():
     liste_voyages = []
-    print(session.query(Mobiliser).all())
     for voyages in session.query(Mobiliser).all():
         voyages_dico = voyages.to_dict()
         voyages_dico["heureDeb"] = get_deb_voyage(session, voyages.idVoy)
