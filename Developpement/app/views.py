@@ -154,6 +154,11 @@ def page_secretaire_accueil():
     return render_template("secretaire.html")
 
 
+@app.route('/inviterSecretaire/', methods = ["GET"])
+def page_secretaire_inviter():
+    return render_template("inviterSecretaire.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
 
