@@ -16,7 +16,8 @@ from .Avoir import Avoir
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_participant, get_secretaire
+ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
+get_participant, modifier_utilisateur
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -55,13 +56,13 @@ def page_inscription():
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
-        modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
-        if est_intervenant(session, int(request.args.get('idp'))):
-            return redirect(url_for('formulaire_auteur_transport', idp = request.args.get('idp')))
+        modifier_participant(session, current_user.idP,request.form["ddn"],request.form["tel"])
+        modifier_utilisateur(session, current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
+        if est_intervenant(session, current_user.idP):
+            return redirect(url_for('formulaire_auteur_transport', idp = current_user.idP))
         else:
             return redirect(url_for('page_fin'))
-    return render_template('coordonneeForms.html', prenom = request.args.get('prenom'), nom = request.args.get('nom'),
-                            ddn = request.args.get('ddn'), tel = request.args.get('tel'), email = request.args.get('email'), adresse = request.args.get("adresse"))
+    return render_template('coordonneeForms.html')
 
     
 
@@ -150,16 +151,16 @@ def formulaire_auteur_transport():
                 if i<= 2 : 
                     depart = request.form[liste_id_champs[i]]
                 if liste_id_box[i] == "avion":
-                    ajoute_deplacer(session, request.args.get('idp'), 1, depart, "Blois")
+                    ajoute_deplacer(session, current_user.idP, 1, depart, "Blois")
                 elif liste_id_box[i] == "train":
                     depart = request.form[liste_id_champs[i]]
-                    ajoute_deplacer(session, request.args.get('idp'), 2, depart, "Blois")
+                    ajoute_deplacer(session, current_user.idP, 2, depart, "Blois")
                 elif liste_id_box[i] == "voiture": 
-                    ajoute_deplacer(session, request.args.get('idp'), 3, str(request.args.get('adresse')), "Blois")
-                elif liste_id_box[i] == "covoiturage": 
-                    ajoute_deplacer(session, request.args.get('idp'), 4, request.args.get('adresse'), "Blois")
+                    ajoute_deplacer(session, current_user.idP, 3, current_user.adresseP, "Blois")
+                elif liste_id_box[i] == "covoiturage":
+                    ajoute_deplacer(session, current_user.idP, 4, current_user.adresseP, "Blois")
                 else :
-                    modif_participant_remarque(session, request.args.get('idp'), " / Moyen de déplacement : "+depart)    
+                    modif_participant_remarque(session, current_user.idP, "Moyen de déplacement : "+depart)    
         
         dateArr = request.form["dateArr"].replace("-",",").split(",")
         heureArr = request.form["hArrive"].replace(":",",").split(",")
@@ -169,10 +170,10 @@ def formulaire_auteur_transport():
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         print(request.form["hDep"])
-        ajoute_assister(session, request.args.get('idp'), date_arr, date_dep)
-        return redirect(url_for('formulaire_reservation', idp=request.args.get('idp')))
+        ajoute_assister(session, current_user.idP, date_arr, date_dep)
+        return redirect(url_for('formulaire_reservation', idp = current_user.idP))
         
-    return render_template("transportForms.html", idp=request.args.get('idp'))
+    return render_template("transportForms.html")
     
 @app.route('/FormulaireReservation/', methods = ["POST", "GET"])
 @login_required
@@ -183,16 +184,16 @@ def formulaire_reservation():
         regime = request.form["regime"]
         if regime.isalpha():
             id_regime = ajoute_regime(session, regime)
-            ajoute_avoir_regime(session, request.args.get('idp'), id_regime)
+            ajoute_avoir_regime(session, current_user.idP, id_regime)
         remarques = request.form["remarques"]
-        modif_participant_remarque(session, request.args.get('idp'), remarques)
+        modif_participant_remarque(session, current_user.idP, remarques)
         a = request.form['jeudi_soir']
         for creneau in DICO_HORAIRE_RESTAURANT.keys():
             pass
             #print(request.form["jeud"])  
                 
         
-    return render_template("formulaireReservation.html", idp=request.args.get('idp'))
+    return render_template("formulaireReservation.html", idp=current_user.idP)
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
@@ -242,8 +243,8 @@ def logout():
 @login_required
 def page_secretaire_inviter():
     if not current_user.est_secretaire():
-        return redirect(url_for('logout'))   
-    return render_template("inviterSecretaire.html")
+        return redirect(url_for('logout'))
+    return render_template("inviterSecretaire.html", liste_roles=TYPE_PARTICIPANT)
 
 #Ne pas effacer test
 """@app.before_request

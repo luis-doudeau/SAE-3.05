@@ -8517,3 +8517,28 @@ h1, h2, h3, h4, h5,
 .bouton_menu{
   background-color: #005cbf;
 }
+
+
+.selectpicker{
+  width: 200px;
+  height: 30px;
+  background-color: #128ecc !important;
+  border-style: solid;
+  border-left-width: 3px;
+  border-left-color: #128ecc;
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+  color: white;
+  font-weight: bold;
+  font-family :'Times New Roman', Times, serif;
+  font-size: 18px;
+  font-weight: 200;
+  padding-left: 6px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+select::-ms-expand { /* for IE 11 */
+  display: none;
+}
