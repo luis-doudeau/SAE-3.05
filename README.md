@@ -12,6 +12,8 @@ pip3 install mysql-connector-python
 pip install flask-wtf
 pip install flask-login
 pip install flask-principal
+pip install Flask-User==1.0.2.2 
+pip install email_validator
 
 ## Link GitHub
 
