@@ -21,6 +21,7 @@ get_participant, modifier_utilisateur
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
+TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secrétaire"]
 DATE_FESTIVAL = ["2022-11-17", "2022-11-18", "2022-11-19", "2022-11-20"]
 DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30-14:00", "vendredi_soir":"19:30-22:00", "samedi_midi" : "11:30-14:00", "samedi_soir":"19:30-22:00", "dimanche_midi":"11:30-14:00", "dimanche_soir":"19:30-22:00"}
 
@@ -239,12 +240,12 @@ def logout():
     logout_user()
     return redirect(url_for("connexion"))
 
-@app.route('/inviterSecretaire/', methods = ["GET"])
+@app.route('/inscrireSecretaire/', methods = ["GET"])
 @login_required
-def page_secretaire_inviter():
+def page_secretaire_inscrire():
     if not current_user.est_secretaire():
         return redirect(url_for('logout'))
-    return render_template("inviterSecretaire.html", liste_roles=TYPE_PARTICIPANT)
+    return render_template("inscrireSecretaire.html", liste_roles=TYPE_PARTICIPANT_FINALE)
 
 #Ne pas effacer test
 """@app.before_request
@@ -255,3 +256,8 @@ def before_request():
         print("request ",request)
         print("referrer ",request.referrer)
         print("Ref2:", request.values.get("url"))"""
+        
+
+# @app.route('/Participant/<idP>',methods=['POST',"GET"])
+# def Participant(id):
+#     return render_template("index.html",id=id)#TODO

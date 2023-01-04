@@ -8498,47 +8498,55 @@ h1, h2, h3, h4, h5,
 }
 
 .card-img-{
-  width:12%;
+  width:15%;
   height:auto;
   background-color: #17a2b8;
   position: relative;
   top : -25px;
-  padding : 7px;
+  padding : 12px;
   border-radius: 15px;
+
 }
 
 
 
-.div_img{
-  width:20%;
-  height: max-content;
+.div_menu_sec{
+  margin-left : 0.20em;
 }
 
 .bouton_menu{
   background-color: #005cbf;
 }
 
+.img_nav{
+  height: 20px;
+}
+
 
 .selectpicker{
   width: 200px;
-  height: 30px;
-  background-color: #128ecc !important;
+  height: 45px;
+  background-color: #FFFFFF !important;
   border-style: solid;
-  border-left-width: 3px;
-  border-left-color: #128ecc;
-  border-top: none;
-  border-bottom: none;
-  border-right: none;
-  color: white;
-  font-weight: bold;
-  font-family :'Times New Roman', Times, serif;
+  border-color: black;
+  font-family: inherit;
   font-size: 18px;
   font-weight: 200;
-  padding-left: 6px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  padding-left: 15px;
+  line-height: 1.5;
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 select::-ms-expand { /* for IE 11 */
   display: none;
 }
+
