@@ -11,6 +11,7 @@ from .Transporter import Transporter
 
 from .Consommateur import Consommateur
 from .Participant import Participant
+from .Avoir import Avoir
 
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
@@ -87,7 +88,7 @@ def dataParticipant():
 @app.route('/api/dataConsommateurs')
 def dataConsommateurs():
     liste_consommateur = []
-    for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
+    for consommateur in session.query(Consommateur).all():
         consommateur_dico = consommateur.to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
         liste_consommateur.append(consommateur_dico)
@@ -96,7 +97,9 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes')
 def dataNavettes():
     liste_voyages = []
+    print(session.query(Mobiliser).all())
     for voyages in session.query(Mobiliser).all():
+        print(voyages)
         voyages_dico = voyages.to_dict()
         voyages_dico["heureDeb"] = get_deb_voyage(session, voyages.idVoy)
         voyages_dico["depart"] = get_lieu_depart_voyage(session, voyages.idVoy)

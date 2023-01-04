@@ -39,6 +39,7 @@ from .Transporter import Transporter
 from .Voyage import Voyage
 from .Mobiliser import Mobiliser
 from .Transport import Transport
+from .Utilisateur import Utilisateur
 
 from .app import login_manager
 # pour avoir sqlalchemy :
@@ -68,8 +69,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
@@ -453,10 +454,10 @@ def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
 def get_prenom(session, id_participant):
-    return (session.query(Participant).filter(Participant.idP == id_participant).first()).prenomP
+    return (session.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).prenomP
 
 def get_nom(session, id_participant):
-    return (session.query(Participant).filter(Participant.idP == id_participant).first()).nomP
+    return (session.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).nomP
 
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
@@ -831,3 +832,5 @@ def load_participant(participant_id):
 #  (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
 #  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
 #  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
+
+

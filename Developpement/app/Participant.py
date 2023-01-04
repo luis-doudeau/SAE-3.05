@@ -20,15 +20,11 @@ class Participant(Utilisateur, Base):
     emailEnvoye = Column(BOOLEAN)
     remarques = Column(Text)
 
-    def __init__(self, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, remarques, invite = False, emailEnvoye = False) -> None:
+    def __init__(self, idP, ddnP, telP, adresseP, remarques, invite = False, emailEnvoye = False) -> None:
         self.idP = idP
-        self.prenomP = prenomP
-        self.nomP = nomP
         self.ddnP = ddnP
         self.telP = telP
-        self.emailP = emailP
         self.adresseP = adresseP
-        self.mdpP = mdpP
         self.invite = invite
         self.emailEnvoye = emailEnvoye
         self.remarques = remarques

@@ -15,3 +15,10 @@ class Consommateur(Participant, Base):
 
     def __repr__(self) -> str:
         return "ID consommateur : " + str(self.idP)
+
+    def to_dict_sans_ddn(self):
+        return {
+            "prenomP" : self.prenomP,
+            "nomP" : self.nomP,
+            "emailP" : self.emailP
+        }
