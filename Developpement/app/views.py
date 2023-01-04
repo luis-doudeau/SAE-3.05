@@ -25,12 +25,12 @@ DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30
 
 
 
-
+LISTE_ROUTE = ["connexion", "page_inscription", "page_secretaire_accueil"]
 
 @app.route('/', methods = ["GET", "POST"])
 def connexion():
     if current_user.is_authenticated:
-        return redirect(url_for('page_inscription', idp = current_user.idP, prenom = current_user.prenomP, nom = current_user.nomP,adresse = current_user.adresseP, ddn = current_user.ddnP, tel = current_user.telP, email = current_user.emailP))
+        return redirect(url_for('logout'))
     if request.method == "POST":
         email = request.form["email"]
         mdp = request.form["mdp"]
@@ -38,13 +38,12 @@ def connexion():
         if utilisateur is not None:
             if est_secretaire(session, utilisateur.idP):
                 secretaire = get_secretaire(session, utilisateur.idP)
-                print("test ",secretaire.est_secretaire())
                 login_user(secretaire)
                 return redirect(url_for("page_secretaire_accueil"))
             else:
                 participant = get_participant(session, utilisateur.idP)
-                login_user(utilisateur)
-                return redirect(url_for('page_inscription', idp = participant.idP, prenom = participant.prenomP, nom = participant.nomP,adresse = participant.adresseP, ddn = participant.ddnP, tel = participant.telP, email = participant.emailP),code = 302)
+                login_user(participant)
+                return redirect(url_for('page_inscription'))
         return render_template('login.html', mail = request.form["email"])
     return render_template('login.html', mail = "ac@icloud.ca")
 
@@ -52,7 +51,8 @@ def connexion():
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
 @login_required
 def page_inscription():
-    print(current_user)
+    if current_user.est_secretaire():
+        return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
         modifier_participant(session, request.args.get('idp'), request.form["prenom"], request.form["nom"],request.form["ddn"],request.form["tel"],request.form["email"])
         if est_intervenant(session, int(request.args.get('idp'))):
@@ -65,7 +65,10 @@ def page_inscription():
     
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
-def secretaire_consommateur():        
+@login_required
+def secretaire_consommateur():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))       
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_consommateur = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
@@ -73,7 +76,10 @@ def secretaire_consommateur():
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
 @app.route('/secretaire/dormeur', methods = ["POST", "GET"])
+@login_required
 def dormeur_secretaire():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     if request.method == "POST":
         la_date = request.form["jours"].split(",")
         print(la_date)
@@ -83,11 +89,17 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
 @app.route('/api/dataParticipant')
+@login_required
 def dataParticipant():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
     return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
 
 @app.route('/api/dataConsommateurs')
+@login_required
 def dataConsommateurs():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
     liste_consommateur = []
     for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
         consommateur_dico = consommateur.to_dict_sans_ddn()
@@ -96,7 +108,10 @@ def dataConsommateurs():
     return {'data': liste_consommateur}
 
 @app.route('/api/dataNavettes')
+@login_required
 def dataNavettes():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
     liste_voyages = []
     for voyages in session.query(Mobiliser).all():
         voyages_dico = voyages.to_dict()
@@ -109,7 +124,10 @@ def dataNavettes():
     return {'data': liste_voyages}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
+@login_required
 def participant_secretaire():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     if request.method == "POST":
         liste_personne = affiche_participant_trier(session, request.form["trier"])
         return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
@@ -117,7 +135,10 @@ def participant_secretaire():
 
 
 @app.route('/transportForms/', methods = ["POST", "GET"])
+@login_required
 def formulaire_auteur_transport():
+    if current_user.est_secretaire():
+        return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
         liste_id_box = ["avion", "train", "autre", "voiture", "covoiturage"]
         liste_id_champs = ["aeroport", "gare", "precision"]
@@ -150,8 +171,11 @@ def formulaire_auteur_transport():
         
     return render_template("transportForms.html", idp=request.args.get('idp'))
     
-@app.route('/FormulaireReservation/', methods = ["POST", "GET"] )
+@app.route('/FormulaireReservation/', methods = ["POST", "GET"])
+@login_required
 def formulaire_reservation():
+    if current_user.est_secretaire():
+        return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
         regime = request.form["regime"]
         if regime.isalpha():
@@ -168,7 +192,10 @@ def formulaire_reservation():
     return render_template("formulaireReservation.html", idp=request.args.get('idp'))
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
+@login_required
 def page_secretaire_navette():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
@@ -178,28 +205,49 @@ def page_secretaire_navette():
 
 
 @app.route('/secretaireGererParticipants/', methods = ["POST","GET"])
+@login_required
 def page_secretaire_gerer_participants():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     if request.method == 'POST':
         return render_template('secretaireGererParticipants.html')
     return render_template('secretaireGererParticipants.html')
 
 
 @app.route('/pageFin/', methods = ["GET"])
+@login_required
 def page_fin():
+    if current_user.est_secretaire():
+        return redirect(url_for("page_secretaire_accueil"))
     return render_template("pageFin.html")
 
 @app.route('/secretaire/', methods = ["GET"])
 @login_required
 def page_secretaire_accueil():
-    return render_template("secretaire.html")
+    if current_user.est_secretaire():
+        return render_template("secretaire.html")
+    else:
+        return redirect(url_for('logout'))
 
 @app.route("/logout/")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("connexion"))
 
 @app.route('/inviterSecretaire/', methods = ["GET"])
+@login_required
 def page_secretaire_inviter():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     return render_template("inviterSecretaire.html")
 
-
+#Ne pas effacer test
+"""@app.before_request
+def before_request():
+    if request.endpoint in LISTE_ROUTE:
+        print("JE change de page")
+        print("path ",request.path)
+        print("request ",request)
+        print("referrer ",request.referrer)
+        print("Ref2:", request.values.get("url"))"""

@@ -9,28 +9,28 @@
             </div>    
             <div class="form-group">
                 <label for="exampleInputNom">Prénom</label>
-                <input type="text" class="form-control" id="exampleInputNom" aria-describedby="emailHelp" placeholder="Entrer votre prénom" name="prenom" id="PrenomPersonne" value= "{{prenom}}" required>
+                <input type="text" class="form-control" id="exampleInputNom" aria-describedby="emailHelp" placeholder="Entrer votre prénom" name="prenom" id="PrenomPersonne" value= "{{ current_user.prenomP }}" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputNom">Nom</label>
-                <input type="text" class="form-control" id="exampleInputNom" placeholder="Entrer votre nom" name="nom" value = "{{nom}}" required>
+                <input type="text" class="form-control" id="exampleInputNom" placeholder="Entrer votre nom" name="nom" value = "{{ current_user.nomP }}" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Adresse Mail</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrer votre Email" name="email" value= {{email}} required>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrer votre Email" name="email" value= "{{ current_user.emailP }}"" required>
                 <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre adresse mail à quiconque.</small>
             </div>
             <div class="form-group">
                 <label for="adressePostal">Adresse Postal</label>
-                <input type="text" class="form-control" id="adressePostal" placeholder="Entrer votre adresse postal" name="adresse" value= "{{adresse}}" required>
+                <input type="text" class="form-control" id="adressePostal" placeholder="Entrer votre adresse postal" name="adresse" value= "{{ current_user.adresseP }}" required>
             </div>
             <div class="form-group">
                 <label for="numTel">Téléphone</label>
-                <input type="tel" class="form-control" id="numTel" placeholder="Entrer votre téléphone" name="tel" pattern="[0-9]{10}" value= {{tel}} required>
+                <input type="tel" class="form-control" id="numTel" placeholder="Entrer votre téléphone" name="tel" pattern="[0-9]{10}" value= "{{ current_user.telP }}" required>
             </div>
             <div class="form-group">
                 <label for="ddn">Date de naissance</label>
-                <input type="date" class="form-control" id="ddn" placeholder="Entrer votre date de naissance" name="ddn" value= {{ddn}} required>
+                <input type="date" class="form-control" id="ddn" placeholder="Entrer votre date de naissance" name="ddn" value= "{{ current_user.ddnP }}" required>
             </div>
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary mr-2" style="background : #eb441e !important;">Retour</button>
