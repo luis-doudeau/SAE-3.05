@@ -17,3 +17,5 @@ class Secretaire(Utilisateur, Base):
     def __repr__(self) -> str:
         return "ID secrétaire : " + str(self.idSecretaire) + " - prenom : " + self.prenomS + " - nom : " + self.nomS + " - email : " + self.emailS +  " - mdp : " + self.mdpS
         
+    def est_secretaire(self):
+        return True

@@ -15,7 +15,7 @@ from .Participant import Participant
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_participant, get_participant
+ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_participant, get_secretaire
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -34,15 +34,17 @@ def connexion():
     if request.method == "POST":
         email = request.form["email"]
         mdp = request.form["mdp"]
-        if est_secretaire(session, email, mdp):
-            return redirect(url_for("page_secretaire_accueil"))
-        personne = get_info_personne(session, email, mdp)
-        participant = get_participant(session, email, mdp)
-        if participant is not None:
-            print("ok")
-            print(participant)
-            login_user(participant)
-            return redirect(url_for('page_inscription', idp = personne.idP, prenom = personne.prenomP, nom = personne.nomP,adresse = personne.adresseP, ddn = personne.ddnP, tel = personne.telP, email = personne.emailP),code = 302)
+        utilisateur = get_utilisateur_email_mdp(session, email, mdp)
+        if utilisateur is not None:
+            if est_secretaire(session, utilisateur.idP):
+                secretaire = get_secretaire(session, utilisateur.idP)
+                print("test ",secretaire.est_secretaire())
+                login_user(secretaire)
+                return redirect(url_for("page_secretaire_accueil"))
+            else:
+                participant = get_participant(session, utilisateur.idP)
+                login_user(utilisateur)
+                return redirect(url_for('page_inscription', idp = participant.idP, prenom = participant.prenomP, nom = participant.nomP,adresse = participant.adresseP, ddn = participant.ddnP, tel = participant.telP, email = participant.emailP),code = 302)
         return render_template('login.html', mail = request.form["email"])
     return render_template('login.html', mail = "ac@icloud.ca")
 

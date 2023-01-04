@@ -39,6 +39,7 @@ from .Transporter import Transporter
 from .Voyage import Voyage
 from .Mobiliser import Mobiliser
 from .Transport import Transport
+from .Utilisateur import Utilisateur
 
 from .app import login_manager
 # pour avoir sqlalchemy :
@@ -452,6 +453,9 @@ def get_info_personne(session, email, mdp):
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
+def get_secretaire(session, id_secretaire):
+    return session.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
+
 def get_prenom(session, id_participant):
     return (session.query(Participant).filter(Participant.idP == id_participant).first()).prenomP
 
@@ -461,6 +465,10 @@ def get_nom(session, id_participant):
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
    
+
+def get_utilisateur(session, id_utilisateur):
+    return session.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).first()
+
 def affiche_participants(session):
     liste_participants = []
     participants = session.query(Participant)
@@ -743,8 +751,8 @@ def est_intervenant(session, idP):
     intervenant = session.query(Intervenant).filter(Intervenant.idP == idP).first()
     return intervenant is not None
             
-def est_secretaire(session, email, mdp):
-    secretaire = session.query(Secretaire).filter(Secretaire.emailP == email).filter(Secretaire.mdpP == mdp).first()
+def est_secretaire(session, idP):
+    secretaire = session.query(Secretaire).filter(Secretaire.idP == idP).first()
     return secretaire is not None
 
         
@@ -796,16 +804,19 @@ def modif_participant_remarque(session, idP, remarques) :
     
 
 
-def get_participant(session, mail, mdp):
-    participant = session.query(Participant).filter(Participant.emailP == mail).filter(Participant.mdpP == mdp).first()
-    if participant is not None :
-        return participant
+def get_utilisateur_email_mdp(session, mail, mdp):
+    utilisateur = session.query(Utilisateur).filter(Utilisateur.emailP == mail).filter(Utilisateur.mdpP == mdp).first()
+    if utilisateur is not None :
+        return utilisateur
 
 
 @login_manager.user_loader
-def load_participant(participant_id):
+def load_user(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
-    return session.query(Participant).filter(Participant.idP == participant_id).first()
+    if est_secretaire(session, participant_id):
+        return get_secretaire(session, participant_id)
+    else:
+        return get_participant(session, participant_id)
 # print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
         
 # ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)

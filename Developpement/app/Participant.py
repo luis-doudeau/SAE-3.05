@@ -1,5 +1,4 @@
 import datetime
-from operator import inv
 from sqlalchemy import DATE, BOOLEAN, ForeignKey
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy.ext.declarative import declarative_base
@@ -43,3 +42,6 @@ class Participant(Utilisateur, Base):
             "ddnP" : self.ddnP,
             "emailP" : self.emailP
         }
+
+    def est_secretaire(self):
+        return False
