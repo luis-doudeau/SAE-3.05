@@ -727,7 +727,7 @@ def est_intervenant(session, idP):
     return intervenant is not None
             
 def est_secretaire(session, email, mdp):
-    secretaire = session.query(Secretaire).filter(Secretaire.emailS == email).filter(Secretaire.mdpS == mdp).first()
+    secretaire = session.query(Secretaire).filter(Secretaire.emailP == email).filter(Secretaire.mdpP == mdp).first()
     return secretaire is not None
 
         

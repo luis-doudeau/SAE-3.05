@@ -1,23 +1,17 @@
-from sqlalchemy import Column , Integer, Text
+from sqlalchemy import Column , Integer, Text, ForeignKey
 from sqlalchemy . ext . declarative import declarative_base
+from .Utilisateur import Utilisateur
 
 Base = declarative_base()
 
-class Secretaire(Base):
+class Secretaire(Utilisateur, Base):
     __tablename__ = "SECRETAIRE"
-    idSecretaire = Column(Integer, primary_key = True)
-    prenomS = Column(Text)
-    nomS = Column(Text)
-    emailS = Column(Text)
-    mdpS = Column(Text)
+    idP = Column(Integer, ForeignKey('UTILISATEUR.idP'), primary_key=True)
 
 
-    def __init__(self, idSecretaire, prenomS, nomS, emailS, mdpS) -> None:
-        self.idSecretaire = idSecretaire
-        self.prenomS = prenomS
-        self.nomS = nomS
-        self.emailS = emailS
-        self.mdpS = mdpS
+
+    def __init__(self, idP) -> None:
+        self.idP = idP
 
 
     def __repr__(self) -> str:

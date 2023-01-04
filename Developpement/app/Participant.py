@@ -1,24 +1,21 @@
 import datetime
 from operator import inv
-from sqlalchemy import DATE, BOOLEAN
+from sqlalchemy import DATE, BOOLEAN, ForeignKey
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 from flask_login import UserMixin
 
+from .Utilisateur import Utilisateur
 
 Base = declarative_base()
 
-class Participant(Base, UserMixin):
+class Participant(Utilisateur, Base):
     __tablename__ = "PARTICIPANT"
-    idP = Column(Integer, primary_key = True)
-    prenomP = Column(Text)
-    nomP = Column(Text)
+    idP = Column(Integer, ForeignKey('UTILISATEUR.idP'), primary_key=True)
     ddnP = Column(DATE)
     telP = Column(Text)
-    emailP = Column(Text)
     adresseP = Column(Text)
-    mdpP = Column(Text)
     invite = Column(BOOLEAN)
     emailEnvoye = Column(BOOLEAN)
     remarques = Column(Text)
@@ -47,5 +44,3 @@ class Participant(Base, UserMixin):
             "ddnP" : self.ddnP,
             "emailP" : self.emailP
         }
-    def get_id(self):
-        return self.idP

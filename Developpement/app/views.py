@@ -159,6 +159,7 @@ def page_fin():
     return render_template("pageFin.html")
 
 @app.route('/secretaire/', methods = ["GET"])
+@login_required
 def page_secretaire_accueil():
     return render_template("secretaire.html")
 
