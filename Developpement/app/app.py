@@ -7,10 +7,7 @@ from flask_login import LoginManager
 
 
 
-user = "doudeau"
-passwd = "doudeau"
-host = "servinfo-mariadb"
-database = "DBdoudeau"
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = token_urlsafe(16)
 
