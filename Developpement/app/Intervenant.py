@@ -5,7 +5,6 @@ from sqlalchemy . ext . declarative import declarative_base
 from .Consommateur import Consommateur
 
 
-from flask_login import UserMixin
 
 
 Base = declarative_base()

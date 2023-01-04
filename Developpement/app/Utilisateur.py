@@ -1,7 +1,8 @@
-from sqlalchemy import Column , Integer, Text
+from sqlalchemy import Column , Integer, Text, MetaData, Table
 from sqlalchemy.ext.declarative import declarative_base
 
 from flask_login import UserMixin
+import abc
 
 
 Base = declarative_base()
@@ -13,7 +14,7 @@ class Utilisateur(Base, UserMixin):
     nomP = Column(Text)
     emailP = Column(Text)
     mdpP = Column(Text)
-
+    
     def __init__(self, idP, prenomP, nomP, emailP, mdpP) -> None:
         self.idP = idP
         self.prenomP = prenomP
@@ -22,7 +23,11 @@ class Utilisateur(Base, UserMixin):
         self.mdpP = mdpP
 
     def __repr__(self) -> str:
-        return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + self.telP + " - " + self.emailP
+        return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + " - " + self.emailP
 
     def get_id(self):
         return self.idP
+
+    @abc.abstractmethod
+    def est_secretaire(self):
+        pass
