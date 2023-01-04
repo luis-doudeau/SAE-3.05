@@ -40,7 +40,6 @@ class Participant(Base, UserMixin):
         return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + self.telP + " - " + self.emailP
 
     def to_dict(self):
-        print(self.ddnP)
         return {
             "prenomP" : self.prenomP,
             "nomP" : self.nomP,
@@ -49,3 +48,10 @@ class Participant(Base, UserMixin):
         }
     def get_id(self):
         return self.idP
+    
+    def to_dict_sans_ddn(self):
+        return {
+            "prenomP" : self.prenomP,
+            "nomP" : self.nomP,
+            "emailP" : self.emailP
+        }

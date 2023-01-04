@@ -5,19 +5,17 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
 
-from flask_wtf import FlaskForm
-from wtforms import StringField , HiddenField, PasswordField
+from .Mobiliser import Mobiliser
+from .Navette import Navette
+from .Transporter import Transporter
 
-
-
-from functools import wraps
-
-
+from .Consommateur import Consommateur
 from .Participant import Participant
-from .ConnexionPythonSQL import get_info_personne,session,get_nom_restaurant,\
+
+from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, load_participant, get_participant
+ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_participant, get_participant
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -83,8 +81,30 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
 @app.route('/api/dataParticipant')
-def data():
+def dataParticipant():
     return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
+
+@app.route('/api/dataConsommateurs')
+def dataConsommateurs():
+    liste_consommateur = []
+    for consommateur in session.query(Participant).join(Consommateur, Participant.idP==Consommateur.idP).all():
+        consommateur_dico = consommateur.to_dict_sans_ddn()
+        consommateur_dico["regime"] = get_regime(session, consommateur.idP)
+        liste_consommateur.append(consommateur_dico)
+    return {'data': liste_consommateur}
+
+@app.route('/api/dataNavettes')
+def dataNavettes():
+    liste_voyages = []
+    for voyages in session.query(Mobiliser).all():
+        voyages_dico = voyages.to_dict()
+        voyages_dico["heureDeb"] = get_deb_voyage(session, voyages.idVoy)
+        voyages_dico["depart"] = get_lieu_depart_voyage(session, voyages.idVoy)
+        for elements in session.query(Transporter).filter(Transporter.idVoy == voyages.idVoy).all():
+            voyages_dico["prenom"] = get_prenom(session, elements.idP)
+            voyages_dico["nom"] = get_nom(session, elements.idP)
+            liste_voyages.append(voyages_dico)
+    return {'data': liste_voyages}
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 def participant_secretaire():
@@ -150,8 +170,16 @@ def page_secretaire_navette():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
+        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
     return render_template('secretaireNavette.html', nomsRestau = get_nom_restaurant())
+
+
+
+@app.route('/secretaireGererParticipants/', methods = ["POST","GET"])
+def page_secretaire_gerer_participants():
+    if request.method == 'POST':
+        return render_template('secretaireGererParticipants.html')
+    return render_template('secretaireGererParticipants.html')
 
 
 @app.route('/pageFin/', methods = ["GET"])

@@ -103,6 +103,11 @@ INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
                                                 (5,"Sans gluten"),
                                                 (6,"Sans lactose"),
                                                 (7,"Cétogène");
+                                            
+INSERT INTO AVOIR (idP, idRegime) VALUES (100, 1),
+                                         (100, 2),
+                                         (100, 3),
+                                         (102, 5);
                                                     
                                                                                                                      
 INSERT INTO STAFF (idP) VALUES (200),
@@ -173,7 +178,14 @@ INSERT INTO INVITE (idP) values (500);
 
 
 INSERT INTO VOYAGE (idVoy,heureDebVoy, dureeVoy, directionGare) VALUES
-  (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true);
+  (1,STR_TO_DATE("17-11-2022 11:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true),
+  (2,STR_TO_DATE("17-11-2022 13:51", "%d-%m-%Y %H:%i"), TIME("00:10"), false),
+  (3,STR_TO_DATE("18-11-2022 15:51", "%d-%m-%Y %H:%i"), TIME("00:10"), true);
+
+INSERT INTO TRANSPORTER(idP, idVoy) VALUES (300, 1),
+                                           (300, 2),
+                                           (301, 1),
+                                           (301, 3);
 
 
 INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1",2),
@@ -182,6 +194,10 @@ INSERT INTO NAVETTE (idNavette,nomNavette,capaciteNavette) VALUES (1,"Navette 1"
                                                                   (4,"Navette 4",8),
                                                                   (5,"Navette 5",8),
                                                                   (6,"Navette 6",8);
+                                                            
+INSERT INTO MOBILISER(idVoy, idNavette) VALUES (1, 1),
+                                              (1, 2),
+                                              (2, 1);
 
 
 INSERT INTO TRANSPORT (idTransport, nomTransport) values (1, "Avion"),

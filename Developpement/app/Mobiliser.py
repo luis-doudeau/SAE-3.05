@@ -15,3 +15,9 @@ class Mobiliser(Base):
     def __repr__(self) -> str:
         return "ID voyage : " + str(self.idVoy) + ", ID navette : " + str(self.idNavette)
         
+    def to_dict(self):
+        return {
+            "idVoyage" : self.idVoy,
+            "idNavette" : self.idNavette,
+        }
+        

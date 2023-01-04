@@ -68,7 +68,7 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
@@ -81,6 +81,17 @@ connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DB
 #     cnx.close()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+def get_deb_voyage(session, idVoyage):
+    row = session.query(Voyage.heureDebVoy).filter(Voyage.idVoy == idVoyage).first()
+    return row[0]
+
+def get_lieu_depart_voyage(session, idVoyage):
+    if (session.query(Voyage).filter(Voyage.idVoy == idVoyage).first()).directionGare:
+        return "Festival → Gare Blois"
+    else:
+        return "Gare Blois → Festival"
 
 def get_max_id_participant(session):
     max_id = session.query(func.max(Participant.idP)).first()
@@ -440,6 +451,12 @@ def get_info_personne(session, email, mdp):
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
+def get_prenom(session, id_participant):
+    return (session.query(Participant).filter(Participant.idP == id_participant).first()).prenomP
+
+def get_nom(session, id_participant):
+    return (session.query(Participant).filter(Participant.idP == id_participant).first()).nomP
+
 def get_id_hotel(session, nom_hotel):
     return (session.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
    
@@ -543,7 +560,6 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
     print(liste_consommateurs)
     liste_participants = get_liste_participant_idp_regime(session, liste_consommateurs)
     return liste_participants
-
 
 def get_liste_participant_idp_regime(session, liste_id):
     liste_participants = []
@@ -808,11 +824,9 @@ def load_participant(participant_id):
 #print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
 
 
-[(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
- (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
- (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
-
-
+# [(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
+#  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
+#  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
