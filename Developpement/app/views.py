@@ -82,10 +82,10 @@ def secretaire_consommateur():
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
 @app.route('/secretaire/dormeur', methods = ["POST", "GET"])
-# @login_required
+@login_required
 def dormeur_secretaire():
-    # if not current_user.est_secretaire():
-    #     return redirect(url_for('logout'))   
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
     if request.method == "POST":
         la_date = request.form["jours"].split(",")
         #liste_dormeur = get_dormeur(session, la_date, request.form["nomH"])
@@ -94,10 +94,10 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
 @app.route('/api/dataDormeurs')
-# @login_required
+@login_required
 def dataDormeurs():
-    # if not current_user.est_secretaire():
-    #     return redirect(url_for('logout')) 
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
     liste_dormeurs = []
     for intervenants in session.query(Intervenant).join(Loger, Intervenant.idP == Loger.idP).all():
         dormeurs_dico = intervenants.to_dict_sans_ddn()
