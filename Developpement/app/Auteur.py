@@ -1,15 +1,15 @@
 from sqlalchemy import Column , Integer, Text, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from .Intervenant import Intervenant
 
 Base = declarative_base()
-from .Intervenant import Intervenant
 
 class Auteur(Intervenant, Base):
     __tablename__ = "AUTEUR"
     idP = Column(Integer, ForeignKey('INTERVENANT.idP'), primary_key=True)
     idMe = Column(Integer)
 
-    def __init__(self,idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques, idMe, invite = False, emailEnvoye = False) -> None:
+    def __init__(self,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques="", idMe=0, invite = False, emailEnvoye = False) -> None:
         self.idP = idP
         self.prenomP = prenomP
         self.nomP = nomP

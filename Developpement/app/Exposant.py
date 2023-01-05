@@ -9,7 +9,7 @@ class Exposant(Participant, Base):
     idP = Column(Integer, ForeignKey('PARTICIPANT.idP'), primary_key=True)
     numStand = Column(Text)
 
-    def __init__(self,idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques, numStand, invite = False, emailEnvoye = False) -> None:
+    def __init__(self,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques="", numStand="0", invite = False, emailEnvoye = False) -> None:
         self.idP = idP
         self.prenomP = prenomP
         self.nomP = nomP
