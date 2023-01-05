@@ -97,8 +97,7 @@ def datetime_to_dateFrancais(date):
     date = date[:2]
     return debut_new_date + "-" + date + "-" + fin_new_date 
 
-def get_hotel(session, idP):
-    idH = (session.query(Loger).filter(Loger.idP == idP).first()).idHotel
+def get_hotel(session, idH):
     return (session.query(Hotel).filter(Hotel.idHotel == idH).first()).nomHotel
 
 def get_periode_hotel(session, idP):
@@ -111,23 +110,23 @@ def get_date_dormeur(session, idP):
     dateFin = (session.query(Loger).filter(Loger.idP == idP).first()).dateFin
     return (datetime_to_dateFrancais(dateDeb), datetime_to_dateFrancais(dateFin))
 
+def get_consommateur(session, idP):
+    return session.query(Consommateur).filter(Consommateur.idP == idP).first()
 
-def get_restaurant(session, idP):
-    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+def get_restaurant(session, idRepas):
     idRestaurant = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idRest
     return (session.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
 
-def get_creneau(session, idP):
-    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+def get_creneau(session, idRepas):
     idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
     fin = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateFin
     return format_creneau(debut, fin)
 
+def get_intervenant(session, idP):
+    return session.query(Intervenant).filter(Intervenant.idP == idP).first()
 
-
-def get_date(session, idP):
-    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+def get_date(session, idRepas):
     idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
     return datetime_to_dateFrancais(debut)

@@ -20,7 +20,7 @@ from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_re
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur
+get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -81,7 +81,7 @@ def secretaire_consommateur():
         return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
-@app.route('/secretaire/dormeur', methods = ["POST", "GET"])
+@app.route('/dormeurSecretaire', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
     if not current_user.est_secretaire():
@@ -99,11 +99,11 @@ def dataDormeurs():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
     liste_dormeurs = []
-    for intervenants in session.query(Intervenant).join(Loger, Intervenant.idP == Loger.idP).all():
-        dormeurs_dico = intervenants.to_dict_sans_ddn()
-        dormeurs_dico["hotel"] = get_hotel(session, intervenants.idP)
-        dormeurs_dico["dateDeb"] = get_date_dormeur(session, intervenants.idP)[0]
-        dormeurs_dico["dateFin"] = get_date_dormeur(session, intervenants.idP)[1]
+    for intervenants in session.query(Loger).all():
+        dormeurs_dico = get_intervenant(session, intervenants.idP).to_dict_sans_ddn()
+        dormeurs_dico["hotel"] = get_hotel(session, intervenants.idHotel)
+        dormeurs_dico["dateDeb"] = datetime_to_dateFrancais(intervenants.dateDebut)
+        dormeurs_dico["dateFin"] = datetime_to_dateFrancais(intervenants.dateFin)
         liste_dormeurs.append(dormeurs_dico)
     return {'data': liste_dormeurs}
 
@@ -120,12 +120,12 @@ def dataConsommateurs():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
     liste_consommateur = []
-    for consommateur in session.query(Consommateur).join(Manger, Consommateur.idP == Manger.idP).all():
-        consommateur_dico = consommateur.to_dict_sans_ddn()
+    for consommateur in session.query(Manger).all():
+        consommateur_dico = get_consommateur(session, consommateur.idP).to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
-        consommateur_dico["restaurant"] = get_restaurant(session, consommateur.idP)
-        consommateur_dico["date"] = get_date(session, consommateur.idP)
-        consommateur_dico["creneau"] = get_creneau(session, consommateur.idP)
+        consommateur_dico["restaurant"] = get_restaurant(session, consommateur.idRepas)
+        consommateur_dico["date"] = get_date(session, consommateur.idRepas)
+        consommateur_dico["creneau"] = get_creneau(session, consommateur.idRepas)
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
 
@@ -135,9 +135,7 @@ def dataNavettes():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
     liste_voyages = []
-    print(session.query(Mobiliser).all())
     for voyages in session.query(Mobiliser).all():
-        print(voyages)
         voyages_dico = voyages.to_dict()
         voyages_dico["heureDeb"] = get_deb_voyage(session, voyages.idVoy)
         voyages_dico["depart"] = get_lieu_depart_voyage(session, voyages.idVoy)
