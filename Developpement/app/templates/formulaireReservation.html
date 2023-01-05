@@ -13,26 +13,26 @@
             </div>
             <div class="form-group row ml-5"> 
                 <div class="col-sm-10"> 
-                  <input class=" form-controls justify-content-center" name="vendredi_midi" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="vendredi_midi" type="checkbox" id="inlineCheckbox2">
                   <label for="inputDate" class="col-sm-2 col-form-label">Vendredi midi</label> 
-                  <input class=" form-controls justify-content-center" name="vendredi_soir" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="vendredi_soir" type="checkbox" id="inlineCheckbox3">
                   <label for="inputDate" class="col-sm-2 col-form-label">Vendredi soir</label>
                 </div>
             </div>
             <div class="form-group row ml-5">
                 <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="samedi_midi" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="samedi_midi" type="checkbox" id="inlineCheckbox4">
                   <label for="inputDate" class="col-sm-2 col-form-label">Samedi midi</label>
-                  <input class=" form-controls justify-content-center" name="samedi_soir" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="samedi_soir" type="checkbox" id="inlineCheckbox5">
                   <label for="inputDate" class="col-sm-2 col-form-label">Samedi soir</label>
                 </div>
 
             </div>
             <div class="form-group row ml-5">
                 <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="dimanche_midi" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="dimanche_midi" type="checkbox" id="inlineCheckbox6">
                   <label for="inputDate" class="col-sm-2 col-form-label">Dimanche midi</label>
-                  <input class=" form-controls justify-content-center" name="dimanche_soir" type="checkbox" id="inlineCheckbox1">
+                  <input class=" form-controls justify-content-center" name="dimanche_soir" type="checkbox" id="inlineCheckbox7">
                   <label for="inputDate" class="col-sm-2 col-form-label">Dimanche soir</label>
                 </div>
             </div>
@@ -58,13 +58,13 @@
           </div>    
           <div class="form-group row ml-3">
             <label class="mt-2 mb-3 titre" for="exampleFormControlTextarea1">Autre remarques</label>
-            <input type="textarea" class="form-control mt-1 ml-4 mr-5" id="exampleFormControlTextarea1" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
+            <input type="textarea" class="form-control mt-1 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
           </div>
             <small id="prise_en_charge" class="col-form-label mb-3 ml-3 form-text text-muted"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
               <button type="submit" class="btn text-light mr-2 bg-danger">Retour</button>
-              <button type="submit" class="btn text-light mr-2 bg-warning ">Suivant</button>
+              <button  id="save" type="button" class="btn text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -82,3 +82,39 @@
       font-size: 22px;
     }
 </style>
+
+<script>
+  $("#save").on("click",function(){
+    var button1 = $("#inlineCheckbox1")[0].checked
+    var button2 = $("#inlineCheckbox2")[0].checked 
+    var button3 = $("#inlineCheckbox3")[0].checked
+    var button4 = $("#inlineCheckbox4")[0].checked 
+    var button5 = $("#inlineCheckbox5")[0].checked
+    var button6 = $("#inlineCheckbox6")[0].checked 
+    var regime = $("#regime").val() 
+    var besoinHebergement = $("#chambre1")[0].checked
+    var button7 = $("#inlineCheckbox7")[0].checked 
+    var remarque = $("#remarque").val()
+    $.ajax({
+     
+      url:"/FormulaireReservation",
+      type:'POST',
+      dataType: 'application/json',
+      data: {
+        "jeudi_soir" : button1,
+        "vendredi_midi" : button2,
+        "vendredi_soir" : button3,
+        "samedi_midi" : button4,
+        "samedi_soir" : button5,
+        "dimanche_midi" : button6,
+        "dimanche_soir" : button7,
+        "regime" : regime,
+        "besoinHebergement" : besoinHebergement,
+        "remarque" : remarque,
+      }
+      
+      
+    })
+
+  })
+</script>

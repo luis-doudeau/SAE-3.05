@@ -1,3 +1,4 @@
+import json
 from .app import app
 
 from datetime import date, datetime
@@ -217,19 +218,32 @@ def formulaire_auteur_transport():
         
     return render_template("transportForms.html")
     
-@app.route('/FormulaireReservation/', methods = ["POST", "GET"])
+@app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
+    print(type(request.method))
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
-    if request.method == "POST":
+    
+    if str(request.method) == str("POST"):
+        print("a")
+        jeudi_midi = request.form["jeudi_midi"]
+        vendredi_midi = request.form["vendredi_midi"]
+        vendredi_soir = request.form["vendredi_soir"]
+        samedi_midi = request.form["samedi_midi"]
+        samedi_soir = request.form["samedi_soir"]
+        dimanche_midi = request.form["dimanche_midi"]
+        dimanche_soir = request.form["dimanche_soir"]
         regime = request.form["regime"]
+        besoinHebergement = request.form["besoinHebergement"]
+        remarque = request.form["remarque"]
+        
         if regime.isalpha():
             id_regime = ajoute_regime(session, regime)
             ajoute_avoir_regime(session, current_user.idP, id_regime)
-        remarques = request.form["remarques"]
+        remarques = request.form["remarque"]
         modif_participant_remarque(session, current_user.idP, remarques)
-        a = request.form['jeudi_soir']
+        a = request.form['vendredi_midi']
         for creneau in DICO_HORAIRE_RESTAURANT.keys():
             pass
             #print(request.form["jeud"])  
