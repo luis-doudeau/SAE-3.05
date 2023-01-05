@@ -33,6 +33,7 @@ class Participant(Utilisateur, Base):
 
     def to_dict(self):
         return {
+            "idP" : self.idP,
             "prenomP" : self.prenomP,
             "nomP" : self.nomP,
             "ddnP" : self.ddnP,

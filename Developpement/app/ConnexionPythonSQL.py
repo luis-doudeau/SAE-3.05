@@ -36,6 +36,7 @@ from .Assister import Assister
 from .Secretaire import Secretaire
 from .Navette import Navette
 from .Transporter import Transporter
+from .Travailler import Travailler
 from .Voyage import Voyage
 from .Mobiliser import Mobiliser
 from .Transport import Transport
@@ -69,8 +70,8 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
@@ -384,18 +385,37 @@ def supprimer_personne_transporter(session, idP, idVoyage):
 
 # ajoute_intervention(session, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
         
-        
+def supprimer_utilisateur(session, id_utilisateur):
+    session.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).delete()
+    session.commit()
+    print("L'utilisateur' a été supprimé")
+
+def supprimer_secretaire(session, id_secretaire):
+    session.query(Secretaire).filter(Secretaire.idP == id_secretaire).delete()
+    session.commit()
+    print("La secretaire a été supprimé")
+
 def supprimer_participant(session, id_participant):
     session.query(Participant).filter(Participant.idP == id_participant).delete()
     session.commit()
     print("Le participant a été supprimé")
 
 def supprimer_consommateur(session, id_consommateur):
+    session.query(Manger).filter(Manger.idP == id_consommateur).delete()
+    session.query(Avoir).filter(Avoir.idP == id_consommateur).delete()
+    session.commit()
+
     session.query(Consommateur).filter(Consommateur.idP == id_consommateur).delete()
     session.commit()
     print("Le consommateur a été supprimé")
 
 def supprimer_intervenant(session, id_intervenant):
+    session.query(Transporter).filter(Transporter.idP == id_intervenant).delete()
+    session.query(Deplacer).filter(Deplacer.idP == id_intervenant).delete()
+    session.query(Assister).filter(Assister.idP == id_intervenant).delete()
+    session.query(Loger).filter(Loger.idP == id_intervenant).delete()
+    session.commit()
+
     session.query(Intervenant).filter(Intervenant.idP == id_intervenant).delete()
     session.commit()
     print("L'intervenant a été supprimé")
@@ -406,11 +426,16 @@ def supprimer_exposant(session, id_exposant):
     print("L'exposant a été supprimé")
   
 def supprimer_staff(session, id_staff):
+    session.query(Travailler).filter(Travailler.idP == id_staff).delete()
+    session.commit()
+
     session.query(Staff).filter(Staff.idP == id_staff).delete()
     session.commit()
     print("Le staff a été supprimé")
 
 def supprimer_auteur(session, id_auteur):
+    session.query(Intervenir).filter(Intervenir.idP == id_auteur).delete()
+    session.commit()
     session.query(Auteur).filter(Auteur.idP == id_auteur).delete()
     session.commit()
     print("L'auteur a été supprimé")
@@ -424,30 +449,56 @@ def supprimer_invite(session, id_invite):
     session.query(Invite).filter(Invite.idP == id_invite).delete()
     session.commit()        
     print("L'invité a été supprimé")
-     
-def supprimer_participant_role(session, id_participant):
-    participant_existe = session.query(Participant).filter(Participant.idP == id_participant).first()
-    if participant_existe is not None:
-        exposant = session.query(Exposant).filter(Exposant.idP == id_participant).first()
-        staff = session.query(Staff).filter(Staff.idP == id_participant).first()
-        auteur = session.query(Auteur).filter(Auteur.idP == id_participant).first()
-        presse = session.query(Presse).filter(Presse.idP == id_participant).first()
-        invite = session.query(Invite).filter(Invite.idP == id_participant).first()
-        if exposant is not None:
-            supprimer_exposant(session, id_participant)
+
+
+def get_role(session, id_utilisateur):
+    utilisateur_existe = get_utilisateur(session, id_utilisateur)
+    if utilisateur_existe is None:
+        return None
+    secretaire = get_secretaire(session, id_utilisateur)
+    if secretaire is not None:
+        return "Secretaire"
+    exposant = get_exposant(session, id_utilisateur)
+    if exposant is not None:
+        return "Exposant"
+    staff = get_staff(session, id_utilisateur)
+    if staff is not None:
+        return "Staff"
+    auteur = get_auteur(session, id_utilisateur)
+    if auteur is not None:
+        return "Auteur"
+    presse = get_presse(session, id_utilisateur)
+    if presse is not None:
+        return "Presse"
+    invite = get_invite(session, id_utilisateur)
+    if invite is not None:
+        return "Invite"
+    return "Pas de role"
+
+
+
+def supprimer_utilisateur_role(session, id_utilisateur):
+    role_utilisateur = get_role(session, id_utilisateur)
+    if role_utilisateur is not None:
+        if role_utilisateur == "Secretaire":
+            supprimer_secretaire(session, id_utilisateur)
         else:
-            if staff is not None:
-                supprimer_staff(session, id_participant)
+            if role_utilisateur == "Exposant":
+                supprimer_exposant(session, id_utilisateur)
             else:
-                if auteur is not None:
-                    supprimer_auteur(session, id_participant)
-                elif presse is not None:
-                    supprimer_presse(session, id_participant)
-                elif invite is not None:
-                    supprimer_invite(session, id_participant)
-                supprimer_intervenant(session, id_participant)
-            supprimer_consommateur(session, id_participant)
-        supprimer_participant(session, id_participant)
+                if role_utilisateur == "Staff":
+                    supprimer_staff(session, id_utilisateur)
+                else:
+                    if role_utilisateur == "Auteur":
+                        supprimer_auteur(session, id_utilisateur)
+                    elif role_utilisateur == "Presse":
+                        supprimer_presse(session, id_utilisateur)
+                    elif role_utilisateur == "Invite":
+                        supprimer_invite(session, id_utilisateur)
+                    supprimer_intervenant(session, id_utilisateur)
+                supprimer_consommateur(session, id_utilisateur)
+            supprimer_participant(session, id_utilisateur)
+        supprimer_utilisateur(session, id_utilisateur)
     else:
         print("La personne que vous voulez supprimer n'existe pas")
 
@@ -477,7 +528,7 @@ def modifier_participant_tout(session, idP, prenomP, nomP, ddnP, telP, emailP, a
 def modifier_participant_role(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques, metier):
     participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
     ancien_participant = Participant(participant.idP, participant.prenomP, participant.nomP, participant.ddnP, participant.telP, participant.emailP, participant.mdpP, participant.remarques, participant.invite, participant.emailEnvoye)
-    supprimer_participant_role(session, participant.idP)
+    supprimer_utilisateur_role(session, participant.idP)
     ajoute_participant_role_id(session, ancien_participant, metier)
     print("Le role du participant a bien été modifié")
 
@@ -504,6 +555,22 @@ def get_info_personne(session, email, mdp):
 
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
+
+def get_exposant(session, id_exposant):
+    return session.query(Exposant).filter(Exposant.idP == id_exposant).first()
+
+def get_invite(session, id_invite):
+    return session.query(Invite).filter(Invite.idP == id_invite).first()
+
+def get_staff(session, id_staff):
+    return session.query(Staff).filter(Staff.idP == id_staff).first()
+
+def get_auteur(session, id_auteur):
+    return session.query(Auteur).filter(Auteur.idP == id_auteur).first()
+
+def get_presse(session, id_presse):
+    return session.query(Presse).filter(Presse.idP == id_presse).first()
+
 
 def get_secretaire(session, id_secretaire):
     return session.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
