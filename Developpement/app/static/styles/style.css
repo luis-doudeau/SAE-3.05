@@ -8522,25 +8522,28 @@ h1, h2, h3, h4, h5,
   height: 20px;
 }
 
+#img_account{
+  width:30%;
+  margin-right: -150px;
+}
+
+#img_logout{
+  width:20%;
+  height:auto;
+  margin-right: -170px;
+}
 
 .selectpicker{
-  width: 200px;
   height: 45px;
   background-color: #FFFFFF !important;
-  border-style: solid;
-  border-color: black;
   font-family: inherit;
-  font-size: 18px;
-  font-weight: 200;
-  padding-left: 15px;
-  line-height: 1.5;
+  font-weight: 300;
   display: block;
   width: 100%;
   padding: .375rem .75rem;
   font-size: 1rem;
   line-height: 1.5;
   color: #495057;
-  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: .25rem;

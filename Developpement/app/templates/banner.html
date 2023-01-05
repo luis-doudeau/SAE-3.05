@@ -60,15 +60,17 @@
           </ul>
           <ul class="nav navbar-nav navbar-right autentifie">
             {% if current_user.is_authenticated %} <!--is_authenticated()-->
-            <li><a>{{ current_user.prenomP }}</a></li>
-            <li><a href="{{ url_for("logout") }}"> Logout
-            <span class="glyphicon glyphicon-log-out" title ="Logout"
-            ></span></a></li>
+            <li>
+              
+              <a class="text-white btn-info rounded submit px-3 py-2 mr-5"> <img id="img_account" src="{{url_for('static', filename='img/user.png')}}">{{ current_user.prenomP }}</a></li>
+            <li>
+              <a class="rounded submit px-3 py-2 mr-5 text-white bg-danger" href="{{ url_for("logout") }}"><img id="img_logout" src="{{url_for('static', filename='img/logout.png')}}">Déconnexion</a>
+            </li>
             {% endif %}
             {% if not current_user.is_authenticated %} <!--is_authenticated()-->
-            <li><a href="{{ url_for("connexion") }}"> Login
-            <span class="glyphicon glyphicon-log-out" title ="Login"
-            ></span></a></li>
+            <li>
+              <a class="text-white btn-info rounded submit px-3 mr-5" href="{{ url_for("connexion") }}">Connexion</a>
+            </li>
             {% endif %}
         </ul>
           <div class="form-inline my-2 my-lg-0">

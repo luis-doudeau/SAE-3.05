@@ -15,17 +15,16 @@ from .Avoir import Avoir
 from .Manger import Manger
 from .Intervenant import Intervenant
 from .Loger import Loger
+from .Deplacer import Deplacer
+from .Assister import Assister
+from .Transport import Transport
 
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-<<<<<<< HEAD
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
-supprimer_utilisateur_role
-=======
-get_participant, modifier_utilisateur, ajoute_participant_role
->>>>>>> ajoute
+supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -86,7 +85,7 @@ def secretaire_consommateur():
         return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
-@app.route('/dormeurSecretaire', methods = ["POST", "GET"])
+@app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
     if not current_user.est_secretaire():
@@ -139,7 +138,7 @@ def dataConsommateurs():
 @login_required
 def dataNavettes():
     if not current_user.est_secretaire():
-        return redirect(url_for('logout')) 
+        return redirect(url_for('logout'))
     liste_voyages = []
     for voyages in session.query(Mobiliser).all():
         voyages_dico = voyages.to_dict()
@@ -150,6 +149,24 @@ def dataNavettes():
             voyages_dico["nom"] = get_nom(session, elements.idP)
             liste_voyages.append(voyages_dico)
     return {'data': liste_voyages}
+
+
+@app.route('/api/dataTransporte')
+@login_required
+def dataTransport():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
+    liste_transport = []
+    for transport in session.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
+        print(transport)
+        voyages_dico = {}
+        voyages_dico["transport"] = transport[1].nomTransport
+        voyages_dico["lieuDepart"] = transport[0].lieuDepart
+        voyages_dico["lieuArrive"] = transport[0].lieuArrive
+        voyages_dico["prenomP"] = get_prenom(session, transport[0].idP)
+        voyages_dico["nomP"] = get_nom(session, transport[0].idP)
+        liste_transport.append(voyages_dico)
+    return {'data': liste_transport}
 
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
@@ -233,14 +250,14 @@ def page_secretaire_navette():
 
 
 
-@app.route('/secretaireGererParticipants/', methods = ["POST","GET"])
+@app.route('/secretaireGererTransport/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_gerer_participants():
     if not current_user.est_secretaire():
         return redirect(url_for('logout'))   
     if request.method == 'POST':
-        return render_template('secretaireGererParticipants.html')
-    return render_template('secretaireGererParticipants.html')
+        return render_template('secretaireGererTransport.html')
+    return render_template('secretaireGererTransport.html')
 
 
 @app.route('/pageFin/', methods = ["GET"])
