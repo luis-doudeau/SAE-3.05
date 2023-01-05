@@ -17,7 +17,7 @@ from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_re
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur
+get_participant, modifier_utilisateur, supprimer_utilisateur_role
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -246,6 +246,15 @@ def page_secretaire_inscrire():
     if not current_user.est_secretaire():
         return redirect(url_for('logout'))
     return render_template("inscrireSecretaire.html", liste_roles=TYPE_PARTICIPANT_FINALE)
+
+
+
+@app.route('/delete_utilisateur',methods=['POST'])
+def delete_utilisateur():
+    print(request.form["id"])
+    supprimer_utilisateur_role(session, request.form["id"])
+    return ""
+
 
 #Ne pas effacer test
 """@app.before_request
