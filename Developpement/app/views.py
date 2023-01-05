@@ -12,12 +12,13 @@ from .Transporter import Transporter
 from .Consommateur import Consommateur
 from .Participant import Participant
 from .Avoir import Avoir
+from .Manger import Manger
 
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur
+get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -68,10 +69,10 @@ def page_inscription():
     
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
-@login_required
+#@login_required
 def secretaire_consommateur():
-    if not current_user.est_secretaire():
-        return redirect(url_for('logout'))       
+    # if not current_user.est_secretaire():
+    #     return redirect(url_for('logout'))       
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_consommateur = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
@@ -99,14 +100,17 @@ def dataParticipant():
     return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
 
 @app.route('/api/dataConsommateurs')
-@login_required
+#@login_required
 def dataConsommateurs():
-    if not current_user.est_secretaire():
-        return redirect(url_for('logout')) 
+    # if not current_user.est_secretaire():
+    #     return redirect(url_for('logout')) 
     liste_consommateur = []
-    for consommateur in session.query(Consommateur).all():
+    for consommateur in session.query(Consommateur).join(Manger, Consommateur.idP == Manger.idP).all():
         consommateur_dico = consommateur.to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
+        consommateur_dico["restaurant"] = get_restaurant(session, consommateur.idP)
+        consommateur_dico["date"] = get_date(session, consommateur.idP)
+        consommateur_dico["creneau"] = get_creneau(session, consommateur.idP)
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
 

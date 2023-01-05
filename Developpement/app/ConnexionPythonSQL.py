@@ -69,9 +69,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -83,6 +83,35 @@ connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #     cnx.close()
 Session = sessionmaker(bind=engine)
 session = Session()
+
+
+def get_restaurant(session, idP):
+    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+    idRestaurant = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idRest
+    return (session.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
+
+def get_creneau(session, idP):
+    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+    idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
+    debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
+    fin = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateFin
+    heuredebut = str(debut)[11:]
+    heurefin = str(fin)[11:]
+    return heuredebut + " - " + heurefin
+
+def date_Y_to_date_D(date):
+    debut_new_date = date[8:]
+    fin_new_date = date[:4]
+    date = date[5:]
+    date = date[:2]
+    return debut_new_date + "-" + date + "-" + fin_new_date 
+
+def get_date(session, idP):
+    idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
+    idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
+    debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
+    date = str(debut)[:10]
+    return date_Y_to_date_D(date)
 
 
 def get_deb_voyage(session, idVoyage):
