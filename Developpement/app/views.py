@@ -17,11 +17,11 @@ from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_re
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur
+get_participant, modifier_utilisateur, ajoute_participant_role
 
 
-TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
-TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secrétaire"]
+TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
+TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
 DATE_FESTIVAL = ["2022-11-17", "2022-11-18", "2022-11-19", "2022-11-20"]
 DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "19:30-22:00", "vendredi_midi": "11:30-14:00", "vendredi_soir":"19:30-22:00", "samedi_midi" : "11:30-14:00", "samedi_soir":"19:30-22:00", "dimanche_midi":"11:30-14:00", "dimanche_soir":"19:30-22:00"}
 
@@ -110,6 +110,7 @@ def dataConsommateurs():
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
 
+
 @app.route('/api/dataNavettes')
 @login_required
 def dataNavettes():
@@ -127,6 +128,7 @@ def dataNavettes():
             voyages_dico["nom"] = get_nom(session, elements.idP)
             liste_voyages.append(voyages_dico)
     return {'data': liste_voyages}
+
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 @login_required
@@ -240,11 +242,23 @@ def logout():
     logout_user()
     return redirect(url_for("connexion"))
 
-@app.route('/inscrireSecretaire/', methods = ["GET"])
+@app.route('/inscrireSecretaire/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_inscrire():
     if not current_user.est_secretaire():
         return redirect(url_for('logout'))
+    if request.method == 'POST':
+        role = request.form["role"]
+        print(role)
+        prenom = request.form["prenom"]
+        print(prenom)
+        nom = request.form["nom"]
+        email = request.form["email"]
+        adresse = request.form["adresse"]
+        tel = request.form["tel"]
+        ddn = request.form["ddn"]
+        ajoute_participant_role(session, prenom, nom, email, adresse, tel, ddn, role)
+        return render_template("secretaire.html")
     return render_template("inscrireSecretaire.html", liste_roles=TYPE_PARTICIPANT_FINALE)
 
 #Ne pas effacer test

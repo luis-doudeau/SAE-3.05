@@ -10,8 +10,12 @@ class Secretaire(Utilisateur, Base):
 
 
 
-    def __init__(self, idP) -> None:
+    def __init__(self, idP, prenomP, nomP, emailP, mdpP) -> None:
         self.idP = idP
+        self.prenomP = prenomP
+        self.nomP = nomP
+        self.emailP = emailP
+        self.mdpP = mdpP
 
 
     def __repr__(self) -> str:

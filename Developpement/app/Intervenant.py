@@ -11,11 +11,20 @@ Base = declarative_base()
 
 class Intervenant(Consommateur, Base):
     __tablename__ = "INTERVENANT"
-    #idP = Column(Integer, primary_key = True)
     idP = Column(Integer, ForeignKey('CONSOMMATEUR.idP'), primary_key=True)
 
-    def __init__(self, idP) -> None:
+    def __init__(self,idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques, invite = False, emailEnvoye = False) -> None:
         self.idP = idP
+        self.prenomP = prenomP
+        self.nomP = nomP
+        self.emailP = emailP
+        self.mdpP = mdpP
+        self.ddnP = ddnP
+        self.telP = telP
+        self.adresseP = adresseP
+        self.invite = invite
+        self.emailEnvoye = emailEnvoye
+        self.remarques = remarques
 
     def __repr__(self) -> str:
         return "ID intervenant : " + str(self.idP)

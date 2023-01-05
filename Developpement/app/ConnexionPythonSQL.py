@@ -13,6 +13,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 from datetime import date
+import random
+import string
 
 from .Exposant import Exposant
 from .Intervenir import Intervenir
@@ -46,7 +48,7 @@ from .app import login_manager
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
 # pip3 install mysql-connector-python
-ROLE = ["Auteur", "Exposant", "Staff", "Presse", "Invite"]
+ROLE = ["Auteur", "Exposant", "Staff", "Presse", "Invite", "Secretaire", "Participant"]
 
 def ouvrir_connexion(user,passwd,host,database):
     """
@@ -70,8 +72,8 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -102,6 +104,15 @@ def get_max_id_participant(session):
         return 0
     else:
         return max_id[0]
+    
+
+def get_max_id_utilisateur(session):
+    max_id = session.query(func.max(Utilisateur.idP)).first()
+    
+    if (max_id[0]) is None:
+        return 0
+    else:
+        return max_id[0]
 
 def get_max_num_stand(session):
     max_num = session.query(func.max(Exposant.numStand)).first()
@@ -110,22 +121,43 @@ def get_max_num_stand(session):
     else:
         return max_num._data[0]
 
-def ajoute_particpant(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
-    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
-    personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
-    if personneP is None:
-        participant.idP = get_max_id_participant(session) + 1
-        session.add(participant)
-        try:
-            session.commit()
-            print("La Participant "+ str(participant) +" a bien été inséré dans la base de donnée")
-        except:
-            print("Erreur")
-    else:
-        print("Une personne a déjà cet identifiant dans la base de donnée")
+
+def ajoute_utilisateur(session, prenomP, nomP, emailP, mdpP) :
+    idP = get_max_id_utilisateur(session)+1
+    utilisateur = Utilisateur(idP, prenomP, nomP, emailP, mdpP)
+    session.add(utilisateur)
+    try : 
+        session.commit()
+        print("Utilisateur ajouté !")
+        return idP
+    except : 
+        print("erreur")
         
-def ajoute_participant_id(session, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
-    participant = Participant(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques)
+def ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP): 
+    secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)
+    session.add(secretaire)
+    try:
+        session.commit()
+        print("La secretaire "+ str(secretaire.prenomP) +" a bien été inséré dans la base de donnée")
+    except:
+        print("Erreur")
+
+
+def ajoute_participant(session,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, invite=False, emailEnvoye= False, remarques=""):
+    print(idP, ddnP, telP, adresseP, remarques, invite, emailEnvoye)
+    print(type(ddnP))
+    participant = Participant(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques, invite, emailEnvoye)
+    
+    print(participant)
+    session.add(participant)
+    try:
+        session.commit()
+        print("La Participant "+ str(participant) +" a bien été inséré dans la base de donnée")
+    except:
+            print("Erreur")
+        
+def ajoute_participant_id(session, idP, ddnP, telP, adresseP, invite, emailEnvoye, remarques):
+    participant = Participant(idP, ddnP, telP, adresseP, invite, emailEnvoye, remarques)
     personneP = session.query(Participant).filter(Participant.idP == participant.idP).first()
     if personneP is None:
         participant.idP = participant.idP
@@ -138,21 +170,15 @@ def ajoute_participant_id(session, idP, prenomP, nomP, ddnP, telP, emailP, adres
     else:
         print("Une personne a déjà cet identifiant dans la base de donnée")
     
-def ajoute_Consommateur(session, idP):
-    consommateur = Consommateur(idP)
-    consommateurC = session.query(Consommateur).filter(Consommateur.idP == consommateur.idP).first()
-    if consommateurC is None:
-        personne = session.query(Participant).filter(Participant.idP == consommateur.idP).first()
-        new_consommateur = Consommateur(consommateur.idP)
-        session.add(new_consommateur)
-        try:
-            session.commit()
-            print("La personne " + str(personne) + " est devenu un(e) consommateur")
-        except:
-            print("Erreur")
-            session.rollback()
-    else:
-        print("Un consommateur a déjà cet identifiant dans la base de donnée")
+def ajoute_Consommateur(session,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, invite=False, emailEnvoye= False, remarques=""):
+    consommateur = Consommateur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, invite=False, emailEnvoye= False, remarques="")
+    session.add(consommateur)
+    try:
+        session.commit()
+        print("La personne " + str(consommateur.prenomP) + " est devenu un(e) consommateur")
+    except:
+        print("Erreur consommateur")
+        session.rollback()
 
 def ajoute_exposant(session, idP, numStand):
     exposant = Exposant(idP, numStand)
@@ -202,20 +228,15 @@ def ajoute_intervenant(session, idP):
         print("Un intervenant a déjà cet identifiant dans la base de donnée")
     
 def ajoute_auteur(session, idP):
-    auteur = Auteur(idP)
-    auteurA = session.query(Auteur).filter(Auteur.idP == auteur.idP).first()
-    if auteurA is None:
-        personne = session.query(Participant).filter(Participant.idP == auteur.idP).first()
-        new_auteur = Auteur(auteur.idP, None)
-        session.add(new_auteur)
-        try:
-            session.commit()
-            print("La personne " + str(personne) + " est devenu un(e) auteur / autrice")
-        except:
-            print("Erreur")
-            session.rollback()
-    else:
-        print("Un auteur a déjà cet identifiant dans la base de donnée")
+    auteur = Auteur(idP, 0)
+    personne = session.query(Participant).filter(Participant.idP == auteur.idP).first()
+    session.add(auteur)
+    try:
+        session.commit()
+        print("La personne " + str(personne) + " est devenu un(e) auteur / autrice")
+    except:
+        print("Erreur")
+        session.rollback()
 
 def ajoute_presse(session, idP):
     presse = Presse(idP)
@@ -250,23 +271,29 @@ def ajoute_invite(session, idP):
         print("Un invité a déjà cet identifiant dans la base de donnée")
         
 
-def ajoute_participant_role(session, participant, role):
+def ajoute_participant_role(session, prenomP, nomP, emailP, adresseP, telP, ddnP, role):
     if role in ROLE:
-        ajoute_particpant(session, participant)
-        if role == "Exposant":
-            ajoute_exposant(session, participant)
-        else:
-            ajoute_Consommateur(session, participant)
-            if role == "Staff":
-                ajoute_staff(session, participant)
+        mdpP = generate_password()
+        #idP= ajoute_utilisateur(session, prenomP, nomP, emailP, mdpP)
+        idP = get_max_id_utilisateur(session)+1
+        if role == "Secretaire" : 
+            ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP )
+        else : 
+            #ajoute_participant(session, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+            if role == "Exposant":
+                ajoute_exposant(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
             else:
-                ajoute_intervenant(session, participant)
-                if role == "Auteur":
-                    ajoute_auteur(session, participant)
-                elif role == "Presse":
-                    ajoute_presse(session, participant)
+                ajoute_Consommateur(session, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+                if role == "Staff":
+                    ajoute_staff(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
                 else:
-                    ajoute_invite(session, participant)
+                    ajoute_intervenant(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
+                    if role == "Auteur":
+                        ajoute_auteur(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
+                    elif role == "Presse":
+                        ajoute_presse(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
+                    else:
+                        ajoute_invite(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
     else:
         print("Le rôle n'est pas reconnu")
 
@@ -845,4 +872,10 @@ def load_user(participant_id):
 #  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
 #  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
 
-
+@staticmethod
+def generate_password(length=8):
+  # Get a list of all the ASCII lowercase letters, uppercase letters, and digits
+  characters = string.ascii_letters + string.digits + string.punctuation
+  # Use the random.sample function to get a list of `length` random elements from the list of characters
+  password = ''.join(random.sample(characters, length))
+  return password

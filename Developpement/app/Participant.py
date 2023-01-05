@@ -19,8 +19,12 @@ class Participant(Utilisateur, Base):
     emailEnvoye = Column(BOOLEAN)
     remarques = Column(Text)
 
-    def __init__(self, idP, ddnP, telP, adresseP, remarques, invite = False, emailEnvoye = False) -> None:
+    def __init__(self, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques, invite = False, emailEnvoye = False) -> None:
         self.idP = idP
+        self.prenomP = prenomP
+        self.nomP = nomP
+        self.emailP = emailP
+        self.mdpP = mdpP
         self.ddnP = ddnP
         self.telP = telP
         self.adresseP = adresseP
@@ -29,7 +33,8 @@ class Participant(Utilisateur, Base):
         self.remarques = remarques
 
     def __repr__(self) -> str:
-        return str(self.idP) + " - " + self.prenomP + " - " + self.nomP + " - " + self.telP + " - " + self.emailP
+        print("id",self.idP)
+        return str(self.idP)    
 
     def to_dict(self):
         return {
