@@ -13,12 +13,14 @@ from .Consommateur import Consommateur
 from .Participant import Participant
 from .Avoir import Avoir
 from .Manger import Manger
+from .Intervenant import Intervenant
+from .Loger import Loger
 
 from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
 get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date
+get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secrétaire"]
@@ -69,10 +71,10 @@ def page_inscription():
     
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
-#@login_required
+@login_required
 def secretaire_consommateur():
-    # if not current_user.est_secretaire():
-    #     return redirect(url_for('logout'))       
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))       
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_consommateur = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
@@ -80,17 +82,30 @@ def secretaire_consommateur():
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
 @app.route('/secretaire/dormeur', methods = ["POST", "GET"])
-@login_required
+# @login_required
 def dormeur_secretaire():
-    if not current_user.est_secretaire():
-        return redirect(url_for('logout'))   
+    # if not current_user.est_secretaire():
+    #     return redirect(url_for('logout'))   
     if request.method == "POST":
         la_date = request.form["jours"].split(",")
-        print(la_date)
         #liste_dormeur = get_dormeur(session, la_date, request.form["nomH"])
-        return render_template("dormeurSecretaire.html",title="TEST")
+        return render_template("dormeurSecretaire.html")
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
+
+@app.route('/api/dataDormeurs')
+# @login_required
+def dataDormeurs():
+    # if not current_user.est_secretaire():
+    #     return redirect(url_for('logout')) 
+    liste_dormeurs = []
+    for intervenants in session.query(Intervenant).join(Loger, Intervenant.idP == Loger.idP).all():
+        dormeurs_dico = intervenants.to_dict_sans_ddn()
+        dormeurs_dico["hotel"] = get_hotel(session, intervenants.idP)
+        dormeurs_dico["dateDeb"] = get_date_dormeur(session, intervenants.idP)[0]
+        dormeurs_dico["dateFin"] = get_date_dormeur(session, intervenants.idP)[1]
+        liste_dormeurs.append(dormeurs_dico)
+    return {'data': liste_dormeurs}
 
 @app.route('/api/dataParticipant')
 @login_required
@@ -100,10 +115,10 @@ def dataParticipant():
     return {'data': [participant.to_dict() for participant in session.query(Participant).all()]}
 
 @app.route('/api/dataConsommateurs')
-#@login_required
+@login_required
 def dataConsommateurs():
-    # if not current_user.est_secretaire():
-    #     return redirect(url_for('logout')) 
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout')) 
     liste_consommateur = []
     for consommateur in session.query(Consommateur).join(Manger, Consommateur.idP == Manger.idP).all():
         consommateur_dico = consommateur.to_dict_sans_ddn()

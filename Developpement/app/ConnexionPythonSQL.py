@@ -84,6 +84,33 @@ connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnard
 Session = sessionmaker(bind=engine)
 session = Session()
 
+def format_creneau(debut, fin):
+    heuredebut = str(debut)[11:]
+    heurefin = str(fin)[11:]
+    return heuredebut + " - " + heurefin
+
+def datetime_to_dateFrancais(date):
+    date = str(date)[:10]
+    debut_new_date = date[8:]
+    fin_new_date = date[:4]
+    date = date[5:]
+    date = date[:2]
+    return debut_new_date + "-" + date + "-" + fin_new_date 
+
+def get_hotel(session, idP):
+    idH = (session.query(Loger).filter(Loger.idP == idP).first()).idHotel
+    return (session.query(Hotel).filter(Hotel.idHotel == idH).first()).nomHotel
+
+def get_periode_hotel(session, idP):
+    debut = (session.query(Loger).filter(Loger.idP == idP).first()).dateDebut
+    fin = (session.query(Loger).filter(Loger.idP == idP).first()).dateFin
+    return format_creneau(debut, fin)
+
+def get_date_dormeur(session, idP):
+    dateDeb = (session.query(Loger).filter(Loger.idP == idP).first()).dateDebut
+    dateFin = (session.query(Loger).filter(Loger.idP == idP).first()).dateFin
+    return (datetime_to_dateFrancais(dateDeb), datetime_to_dateFrancais(dateFin))
+
 
 def get_restaurant(session, idP):
     idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
@@ -95,23 +122,15 @@ def get_creneau(session, idP):
     idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
     fin = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateFin
-    heuredebut = str(debut)[11:]
-    heurefin = str(fin)[11:]
-    return heuredebut + " - " + heurefin
+    return format_creneau(debut, fin)
 
-def date_Y_to_date_D(date):
-    debut_new_date = date[8:]
-    fin_new_date = date[:4]
-    date = date[5:]
-    date = date[:2]
-    return debut_new_date + "-" + date + "-" + fin_new_date 
+
 
 def get_date(session, idP):
     idRepas = (session.query(Manger).filter(Manger.idP == idP).first()).idRepas
     idCreneau = (session.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (session.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
-    date = str(debut)[:10]
-    return date_Y_to_date_D(date)
+    return datetime_to_dateFrancais(debut)
 
 
 def get_deb_voyage(session, idVoyage):

@@ -22,7 +22,9 @@ class Intervenant(Consommateur, Base):
 
     def to_dict(self):
         return {
-            'id': self.idP
+            "prenomP" : self.prenomP,
+            "nomP" : self.nomP,
         }
+
     def get_id(self):
         return self.idP
