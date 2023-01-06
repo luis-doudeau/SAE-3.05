@@ -72,9 +72,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+# connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -248,8 +248,8 @@ def ajoute_exposant(session, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adress
     session.add(exposant)
     try:
         session.commit()
-    except:
-        print("Erreur")
+    except Exception as inst:
+        print(inst)
         session.rollback()
 
 def ajoute_staff(session,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):
@@ -278,11 +278,14 @@ def ajoute_intervenant(session, idP):
     
 def ajoute_auteur(session, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP): # NE MARCHE PAS TODO
     auteur = Auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+    print("test")
+    print(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+    print(auteur)
     session.add(auteur)
     try:
         session.commit()
-    except:
-        print("Erreur")
+    except Exception as inst:
+        print(inst)
         session.rollback()
 
 def ajoute_presse(session, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):

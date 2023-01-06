@@ -9,7 +9,7 @@ class Auteur(Intervenant, Base):
     idP = Column(Integer, ForeignKey('INTERVENANT.idP'), primary_key=True)
     idMe = Column(Integer)
 
-    def __init__(self,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques="", idMe=0, invite = False, emailEnvoye = False) -> None:
+    def __init__(self,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques="", idMe=1, invite = False, emailEnvoye = False) -> None:
         self.idP = idP
         self.prenomP = prenomP
         self.nomP = nomP
