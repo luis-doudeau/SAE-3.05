@@ -73,8 +73,8 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -210,6 +210,29 @@ def get_max_num_stand(session):
         return max_num._data[0]
 
         
+def get_max_id_repas(session):        
+    max_num = session.query(func.max(Repas.idRepas)).first()
+    if (max_num[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
+    
+
+def get_max_id_creneau(session):        
+    max_num = session.query(func.max(Creneau.idCreneau)).first()
+    if (max_num[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
+
+def get_max_id_restaurant(session):
+    max_num = session.query(func.max(Restaurant.idRest)).first()
+    if (max_num[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
+
+
 def ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP): 
     secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)
     session.add(secretaire)
@@ -470,9 +493,9 @@ def supprimer_utilisateur_role(session, id_utilisateur):
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(session, idP, ddnP, telP):
+def modifier_participant(session, idP, adresseP, ddnP, telP):
     session.query(Participant).filter(Participant.idP == idP).update(
-        {Participant.ddnP : ddnP, Participant.telP : telP})
+        {Participant.adresseP : adresseP, Participant.ddnP : ddnP, Participant.telP : telP})
     session.commit()
     print("Le participant a bien été modifié")
     
@@ -891,6 +914,70 @@ def get_utilisateur_email_mdp(session, mail, mdp):
     utilisateur = session.query(Utilisateur).filter(Utilisateur.emailP == mail).filter(Utilisateur.mdpP == mdp).first()
     if utilisateur is not None :
         return utilisateur
+    
+
+@staticmethod
+def transforme_datetime(date):
+    date = date.split("-")
+    return date
+
+def ajoute_creneau(session, dateDebut,dateFin):
+    liste_date_deb = transforme_datetime(dateDebut)
+    liste_date_fin = transforme_datetime(dateFin)
+    dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
+    dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
+    creneau_test = session.query(Creneau).filter(Creneau.dateDebut == dateDebut).filter(Creneau.dateFin == dateFin).first()
+    if creneau_test is None :
+        idCreneau = get_max_id_creneau(session)+1
+        creneau = Creneau(idCreneau, dateDebut, dateFin)
+        session.add(creneau)
+        try :
+            session.commit()
+        except : 
+            print("erreur creneau")
+            session.rollback()
+        return creneau.idCreneau
+    return creneau_test.idCreneau
+
+def ajoute_repas(session, estMidi,idRest,idCreneau) : 
+    repas_verif = session.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
+    if repas_verif is None :
+        idRepas = get_max_id_repas(session)+1
+        repas = Repas(idRepas, estMidi, idRest, idCreneau)
+        session.add(repas)
+        try : 
+            session.commit()
+        except : 
+            print("erreur repas")
+            session.rollback()
+        return repas.idRepas
+    return repas_verif.idRepas
+
+def ajoute_restaurant(session, nomRest) : 
+    restaurant_test = session.query(Restaurant).filter(Restaurant.nomRest == nomRest).first()
+    if restaurant_test is None :
+        idRestaurant = get_max_id_restaurant(session)+1
+        restaurant = Restaurant(idRestaurant, nomRest)
+        session.add(restaurant)
+        try : 
+            session.commit()
+        except : 
+            print("erreur restaurant")
+            session.rollback()
+    return restaurant_test.idRest
+
+def meilleur_restaurant(session): 
+    pass # TODO SELON LE ROLE METTRE UN CERTAIN RESTAU 
+    
+ 
+def ajoute_repas_mangeur(session, idP, liste_repas, liste_horaire_restau, dico_horaire_restau):
+    for i in range(0, len(liste_repas)):
+        if liste_repas[i] == 'true':
+            horaire = dico_horaire_restau[liste_horaire_restau[i]]
+            idCreneau = ajoute_creneau(session, horaire.split("/")[0], horaire.split("/")[1])
+            idRest = meilleur_restaurant(session) # ajouter ROLE TODO 
+            idRepas = ajoute_repas(session, False if liste_horaire_restau[i][4:] == "soir" else True, 1 if liste_horaire_restau[i][4:] == "soir" else 1 , idCreneau) #TODO
+            ajoute_mangeur(session, idP, idRepas)
 
 
 @login_manager.user_loader
@@ -900,31 +987,8 @@ def load_user(participant_id):
         return get_secretaire(session, participant_id)
     else:
         return get_participant(session, participant_id)
-# print(requete_transport_annee(session, 301,datetime.datetime(2022, 11, 18)))
-        
-# ajoute_loger(session, 300, datetime.datetime(2022,11,16, 10,30), datetime.datetime(2022, 11, 21, 13,00), 1)
 
 
-#print(get_liste_participant_id_consommateur(session, [100, 101, 200]))
-
-#ajoute_particpant(session, None, "prenom", "nom", "2003-08-18", "0607080911", "maxym.charpentier@gmail.com", "Adresse", "MDP", "aucune", False, False)
-
-#print(get_info_personne(session, "lenny@gmail.com", "le"))
-
-#modifier_participant_role(session, get_participant(session, 14), "Exposant")
-    
-#modifier_participant(session, 7, "test", "test", "2005-08-18", "0700000000", "a.a@gmail.com", "b", "jsp", invite=True, emailEnvoye=True)
-
-
-#print(afficher_consommateur(session, datetime.datetime(2022,11,18,11,30).date(), "Erat Eget Tincidunt Incorporated", True))
-
-
-# [(2, 'Plato', 'Lewis', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
-#  (2, 'Finn', 'Rowland', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
-#  (2, 'Dahlia', 'Barton', False, 'Navette 2', datetime.datetime(2022, 11, 19, 10, 30)),
-#  (2, 'Plato', 'Lewis', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)), 
-#  (2, 'Finn', 'Rowland', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30)),
-#  (2, 'Dahlia', 'Barton', False, 'Navette 1', datetime.datetime(2022, 11, 19, 10, 30))]
 
 @staticmethod
 def generate_password(length=8):
@@ -933,3 +997,6 @@ def generate_password(length=8):
   # Use the random.sample function to get a list of `length` random elements from the list of characters
   password = ''.join(random.sample(characters, length))
   return password
+
+
+

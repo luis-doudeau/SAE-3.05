@@ -1,50 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styleConnexion.css') }}">
-    <link href="https://fr.allfont.net/allfont.css?fonts=londrina-shadow" rel="stylesheet" type="text/css" />
-</head>
+{% include 'banner.html' %}
 <body>
-    <header>
-        <ul>
-            <li>
-                <p>Rejoignez la communauté <span>#BDBoum</span></p>
-            </li>
-            <li>
-                <a href="https://www.instagram.com/bdboum/?hl=fr"> <img id="imginsta" src="{{url_for('static', filename='img/logoInsta.png')}}" alt=""> </a>
-            </li>
-            <li>
-                <a href="https://www.facebook.com/bdboum?fref=ts"> <img id="imgface" src="{{url_for('static', filename='img/logoFacebook.png')}}" alt=""> </a>
-            </li>
-            <li>
-                <a href="https://www.youtube.com/channel/UCZzbuXSrKg_De4i7H9BaW1Q"> <img id="imgyout" src="{{url_for('static', filename='img/logoYoutube.png')}}" alt=""> </a>
-            </li>
-            <li id="last-li-header">
-                <a href="https://www.maisondelabd.com/">Site Officiel bdBoum</a>
-            </li>
-        </ul>
-        
-    </header>
     <main>
-        <header>
-            <ul>
-                <li>
-                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
-                </li>
-                <li>
-                    <p> 18 → 20 Novembre 2022</p>
-                </li>
-                <li>
-                    <p>Infos pratiques</p>
-                </li>
-                <li>
-                    <img src="{{url_for('static', filename='img/logo_maison_de_la_bd.jpg')}}" alt="">
-                </li>
-            </ul>
-        </header>
-        <h1>FIN DE L'INSCEIPTION</h1>
+        <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-5">
+
+            <div class="col-sm-6 col-lg-4">
+                <!-- Simple card -->
+                <div class="card d-block text-center shadow mt-5">
+                    <a> <img class="card-img-" src="{{url_for('static', filename='img/doc.png')}}" alt=""> </a>
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Fin du formulaire</h5>
+                        <p class="card-text mb-4">Télécharger votre feuille de route ici</p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div><!-- end col -->
+        </div>
     </main>
 </body>
 </html>

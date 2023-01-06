@@ -39,11 +39,11 @@
             <label for="regimeLabel" class="col-form-label mb-3 ml-3 titre" id="regimeLabel">Régime alimentaire</label>
             <div class="form-group row ml-4">
                 <div class="col-sm-10">
-                  <input type="text" class="form-controls col-sm-3 col-form-label ml-3" placeholder="Nom régime(s)" id="regime" name="regime">
+                  <input type="text" class="form-controls col-sm-5 col-form-label ml-2" placeholder="Nom régime(s)" id="regime" name="regime">
                 </div>
             </div>
             <label for="hebergement" class="col-form-label mb-3 ml-3 titre" id="hebergement">Hébergement</label>
-            <div class="form-check form-group row ml-5">
+            <div class="form-check form-group ml-5">
               <input class="form-check-input" type="radio" id="chambre1" name="chambre" checked>
               <label class="form-check-label" for="chambre">
                 Oui, je souhaite réserver une chambre d'hôtel (à la charge du festival)
@@ -56,15 +56,15 @@
               </label>
             </div>
           </div>    
-          <div class="form-group row ml-3">
+          <div class="form-group ml-3">
             <label class="mt-2 mb-3 titre" for="exampleFormControlTextarea1">Autre remarques</label>
-            <input type="textarea" class="form-control mt-1 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
+            <input type="textarea" style="width: 35%;" class="form-control mt-1 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
           </div>
             <small id="prise_en_charge" class="col-form-label mb-3 ml-3 form-text text-muted"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
               <button type="submit" class="btn text-light mr-2 bg-danger">Retour</button>
-              <button  id="save" type="button" class="btn text-light mr-2 bg-warning ">Suivant</button>
+              <button id="save" type="button" class="btn text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -111,9 +111,7 @@
         "regime" : regime,
         "besoinHebergement" : besoinHebergement,
         "remarque" : remarque,
-      }
-      
-      
+      }      
     })
 
   })
