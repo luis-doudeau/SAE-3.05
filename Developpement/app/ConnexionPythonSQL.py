@@ -101,6 +101,10 @@ def datetime_to_dateFrancais(date):
     date = date[:2]
     return debut_new_date + "-" + date + "-" + fin_new_date 
 
+def datetime_to_heure(date):
+    new_date = str(date)
+    return new_date[11:]
+
 def get_hotel(session, idH):
     return (session.query(Hotel).filter(Hotel.idHotel == idH).first()).nomHotel
 
