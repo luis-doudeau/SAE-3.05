@@ -25,7 +25,7 @@ get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_part
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
-supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur
+supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -157,11 +157,13 @@ def dataTransport():
         return redirect(url_for('logout')) 
     liste_transport = []
     for transport in session.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
-        print(transport)
+        print(transport[0].dateArrive)
         voyages_dico = {}
         voyages_dico["transport"] = transport[1].nomTransport
         voyages_dico["lieuDepart"] = transport[0].lieuDepart
+        voyages_dico["dateDepart"] = datetime_to_heure(transport[0].dateArrive)
         voyages_dico["lieuArrive"] = transport[0].lieuArrive
+        voyages_dico["dateArrive"] = datetime_to_heure(transport[0].dateDepart)
         voyages_dico["prenomP"] = get_prenom(session, transport[0].idP)
         voyages_dico["nomP"] = get_nom(session, transport[0].idP)
         liste_transport.append(voyages_dico)
