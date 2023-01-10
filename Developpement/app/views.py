@@ -157,7 +157,6 @@ def dataTransport():
         return redirect(url_for('logout')) 
     liste_transport = []
     for transport in session.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
-        print(transport[0].dateArrive)
         voyages_dico = {}
         voyages_dico["transport"] = transport[1].nomTransport
         voyages_dico["lieuDepart"] = transport[0].lieuDepart
