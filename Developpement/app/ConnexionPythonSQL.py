@@ -235,7 +235,39 @@ def get_max_id_restaurant(session):
         return 0
     else:
         return max_num._data[0]
+    
+def get_info_all_participants(session, prenomP, nomP, emailP, ddnP, role):
+    participants = session.query(Participant)
+    if(prenomP != ""):
+        participants = participants.filter(Participant.prenomP == prenomP)
+    if(nomP != ""):
+        participants = participants.filter(Participant.nomP == nomP)
+    if(emailP != ""):
+        participants = participants.filter(Participant.emailP == emailP)
+    if(ddnP!= ""):
+        jour = ddnP.split("/")[0]
+        mois = ddnP.split("/")[1]
+        annee = ddnP.split("/")[2]
+        date = datetime.date(int(annee),int(mois),int(jour))
+        participants = participants.filter(Participant.ddnP == date)
+    if(role!= ""):
+        participants = filtrer_par_role(role, participants)
+    return participants.all()
 
+def filtrer_par_role(role, participants):
+    if role == "Secretaire":
+        return participants.join(Secretaire, Participant.idP == Secretaire.idP)
+    if role == "Exposant":
+        return participants.join(Exposant, Participant.idP == Exposant.idP)
+    if role == "Staff":
+        return participants.join(Staff, Participant.idP == Staff.idP)
+    if role == "Auteur":
+        return participants.join(Auteur, Participant.idP == Auteur.idP)
+    if role == "Presse":
+        return participants.join(Presse, Participant.idP == Presse.idP)
+    if role == "Invite":
+        return participants.join(Invite, Participant.idP == Invite.idP)
+        
 
 def ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP): 
     secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)
@@ -470,7 +502,7 @@ def get_role(session, id_utilisateur):
     invite = get_invite(session, id_utilisateur)
     if invite is not None:
         return "Invite"
-    return "Pas de role"
+    return "Pas de rôle"
 
 
 
