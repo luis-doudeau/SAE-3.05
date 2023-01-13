@@ -2,49 +2,320 @@
 <body>
     <main style="background-color : #ebf3fc;">
         <section class="ftco-section row justify-content-center shadow-lg">    
-          <form method="POST" id="formCoo" class="container flex w-100 wrap p-4">
-            <label for="transport" class="col-sm-2 col-form-label mb-1" id="voyage">Transport</label>
-            <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="avion" id="avion" type="checkbox" value="option1">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Avion</label>
-                  <input type="text" class="col-sm-5 col-form-label" id="aeroport" aria-describedby="emailHelp" placeholder="Aéroport de départ" name="aeroport">
-                  <label id="aeroportWarning" style="display:None; color:red;" class="col-sm-3 col-form-label">Veuillez remplir ce champ</label>
+          <form method="POST" id="formCoo" class="container flex wrap p-4">
+            <label style="text-decoration : underline;" for="transport" class="col-sm-2 col-form-label mb-1 fs-2" id="voyage">Transport</label>
+            <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted fs-5">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
+            
+
+
+            <div class="container-fluid justify-content-center">
+
+              <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-5">
+
+                  <div class="col-sm-6 col-lg-3 btn-custom" id="cardAvion">
+                      <!-- Simple card -->
+                      <div class="card d-block text-center shadow mt-5">
+                          <div class=""> 
+                            <img class="card-img-2" src="{{url_for('static', filename='img/plane.png')}}" alt="Card image cap">
+                          </div>
+                          <div class="card-body">
+                              <h4 class="card-title mb-2">Avion</h4>
+                          </div> <!-- end card-body-->
+                      </div> <!-- end card-->
+                  </div><!-- end col -->
+
+                  
+                  <div class="col-sm-6 col-lg-3 btn-custom">
+                    <!-- Simple card -->
+                    <div class="card d-block text-center shadow mt-5">
+                        <div class=""> 
+                          <img class="card-img-2" src="{{url_for('static', filename='img/train.png')}}" alt="Card image cap">
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">Train</h4>
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div><!-- end col -->
+                  
+
+                <div class="col-sm-6 col-lg-3 btn-custom">
+                  <!-- Simple card -->
+                  <div class="card d-block text-center shadow mt-5">
+                      <div class=""> 
+                        <img class="card-img-2" src="{{url_for('static', filename='img/car.png')}}" alt="Card image cap">
+                      </div>
+                      <div class="card-body">
+                          <h4 class="card-title mb-2">Voiture</h4>
+                      </div> <!-- end card-body-->
+                  </div> <!-- end card-->
+              </div><!-- end col -->
+              </div>
+            
+              
+
+
+              <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-3">
+
+                <div class="col-sm-6 col-lg-3 btn-custom">
+                  <!-- Simple card -->
+                  <div class="card d-block text-center shadow mt-5">
+                      <div class=""> 
+                        <img class="card-img-2" src="{{url_for('static', filename='img/carpooling.png')}}" alt="Card image cap">
+                      </div>
+                      <div class="card-body">
+                          <h4 class="card-title mb-2">Covoiturage</h4>
+                      </div> <!-- end card-body-->
+                  </div> <!-- end card-->
+              </div><!-- end col -->
+
+                
+              <div class="col-sm-6 col-lg-3 btn-custom">
+                <!-- Simple card -->
+                <div class="card d-block text-center shadow mt-5">
+                    <div class=""> 
+                      <img class="card-img-2" src="{{url_for('static', filename='img/other.png')}}" alt="Card image cap">
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title mb-2">Autre</h4>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div><!-- end col -->
+            </div>
+          </div>
+            
+
+            <div class="container-fluid justify-content-center" id="divLieuDepArrive">
+              <div class="row d-flex justify-content-center" id="container_lieu_avion">
+                <div class="col-sm-6 col-lg-3">
+                  <input autocomplete="off" id="lieuDepart" placeholder="Aéroport Départ" inputmode="text" spellcheck="false" class="form-control" style="height: 110%; width: 120%;">
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
+                  <button type="button" autocomplete="off" id="boutonReverse" placeholder="À Partir De" inputmode="text" spellcheck="false" class="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-sm-6 col-lg-3" id="divLieuArrive">
+                  <input autocomplete="off" id="lieuArrive" placeholder="Aéroport Arrivé" inputmode="text" spellcheck="false" class="form-control" style="height: 110%; width: 120%;">
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                  <button type="button" autocomplete="off" id="boutonSuppr" placeholder="À Partir De" inputmode="text" spellcheck="false" class="form-control">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+
+
+
+            <div class="row ml-5 mb-2" id="divAvionEntiere">
+              <div class="col-sm-10 mt-3">
+                <div id="divAvion">
+                  <input class=" form-controls checkboxTransport justify-content-center" type="checkbox" name="avion" id="avion" value="option1">
+                  <label for="avion" id="textTrain" class="col-sm-2 col-form-label pt-2">Avion</label>
+                  <input type="text" class="form-control col-sm-3 ml-3 mb-3" style="display:inline;" placeholder="Aéroport de départ" name="avionLieuDep" id="avionLieuDep">
+                  <input type="text" class="form-control col-sm-3 ml-3 mb-3" style="display:inline;" placeholder="Aéroport d'arrivé" name="avionLieuRetour" id="avionLieuRetour">
+                </div>
+              </div>
+
+              <div class="col-sm-10 mt-5" id="divBoutonTrain">
+                <div>
+                  <label class="text-dark font-weight-bold text-center mb-4 display-7">Consulter horaires</label>
+
+                  <a href="https://www.wego.fr/" target="_blank">
+                    <button id="" type="button" class="custom-buttonWego btn-custom" style="border-radius: 10px; background-image: linear-gradient(to right, #44b50c, #297a01); color: #fff; font-weight: bold;font-family: 'Gotham', sans-serif;">WEGO</button>
+                  </a>
+                  <label id="texte_justificatif" class="label-file" for="justificatif">Charger le billet souhaité (PDF, JPG) ...</label>
+                  <input type="file" class="col-sm-5 col-form-label input-file" style="display : none;" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
+                </div>
+              </div>        
+          </div>
+          <section class="ftco-section" style="max-width : 30%; max-height : auto;  margin-left : 20%;">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                  <h2 class="heading-section">Calendar #01</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="calendar calendar-first" id="calendar_first">
+                    <div class="calendar_header">
+                        <button class="switch-month switch-left"> <i class="fa fa-chevron-left"></i></button>
+                         <h2></h2>
+                        <button class="switch-month switch-right"> <i class="fa fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar_weekdays"></div>
+                    <div class="calendar_content"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+            <div class="row ml-5 mb-2" id="divTrainEntiere">
+              <div class="form-inline mt-3 mb-3" id="divGare">
+                <div class="form-group" id="divTrain">
+                  <input type="checkbox" class="mr-3 checkboxTransport form-controls justify-content-center" name="train" id="train" value="option1">
+                  <label for="train" id="textTrain" class="col-form-label pt-2">Train</label>
+                </div>
+                <div class="mr-4">
+                  <input type="text" class="form-control" placeholder="Gare de départ" name="gareDep" id="gare" onkeyup="filterFunction()" onclick="filterFunction()">
+                  <div class="dropdown-content" style="display:none;" id="optionsGare">
+                  </div>
+                </div>
+                <div>
+                  <input type="text" class="form-control mr-4" placeholder="Gare d'arrivé" id="myInput2" name="gareRetour" onkeyup="filterFunction2()" onclick="filterFunction2()">
+                  <div class="dropdown-content col-form-label" style="display:none;" id="optionsGare2">
+                  </div>
+                </div>
+                <label id="gareWarning" style="display:None; color:red;" class="col-form-label mr-3">Veuillez remplir ces champs</label>
+                <div class="form-group">
+                  <button  type="button" id="info-button" style="position:relative;" class="btn btn-secondary">Plus d'informations</button>
+                  <div class="col-sm-5" id="info-modal" style="display:none;">
+                    <label id="" style="background-color : #111111; color :#ffffff; position : absolute; min-width : 300px;z-index:10;" class="pl-2 pr-2 pb-2 pt-2">Si vous prenez plusieurs trains à destination de Blois, sélectionner Blois-Chambord comme gare d'arrivée.</label>
+                  </div>
+                </div>                
+              </div>
+
+              
+              <div class="col-sm-10 mt-5" id="divBoutonTrain">
+                <div>
+
+                  
+
+                </div>
+              </div>
+              
+
+        </div> 
+      </div>
+        
+        
+      <div class="row ml-5 mb-2" id="divVoitureEntiere">
+        <div class="col-sm-10 mt-3">
+          <div id="divVoiture">
+                <input type="checkbox" class="mr-2 checkboxTransport form-controls justify-content-center" name="voiture" id="voiture" value="option1">
+                <label for="voiture" id="textTrain" class="col-form-label pt-2 pl-1  divVoiture">Voiture</label>
+                <input type="text" class="form-control col-sm-3 ml-3  mb-3" style="display : inline;" placeholder="Lieu de départ" name="voitureDep" id="voitureDep">
+                <input type="text" class="form-control col-sm-3 mr-5 ml-3 mb-3" style="display : inline;" value="Blois" placeholder="Lieu d'Arrivé" name="voitureRetour" id="voitureDep">
+          </div>
+        </div>
+        <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divVoiture1" style="display:none;">
+            <div class="form-group">
+                <label class="d-block mb-3 labelTrain">Date d'Arrivé à Blois</label>
+                <div class="form-row">
+                  <div class="col-sm-6">
+                    <input id="dateVoiture1" name="dateVoiture1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="time" id="heureVoiture1" name="heureVoiture1" class="form-control" required>
+                  </div>
                 </div>
             </div>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" type="checkbox" name="train" id="train" value="option1">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Train</label>
-                  <input type="text" class=" col-sm-5 col-form-label" aria-describedby="emailHelp" placeholder="Gare de départ" name="gare" id="gare">
-                  <label id="gareWarning" style="display:None; color:red;" class="col-sm-3 col-form-label">Veuillez remplir ce champ</label>
+        </div>
+        <div class="col-sm-3 mt-3" id="divVoiture2" style="display:none;">
+            <div class="form-group">
+                <label class="d-block mb-3 labelTrain">Date de Départ de Blois</label>
+                <div class="form-row">
+                  <div class="col-sm-6">
+                    <input id="dateVoiture2" name="dateVoiture2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="time" id="heureVoiture2" name="heureVoiture2" class="form-control" required>
+                  </div>
                 </div>
             </div>
-            <div class="form-group row ml-5">
+        </div>
+      </div>
+
+         
+    
+          
+            <div class="row ml-5 mb-2" id="divCovoiturageEntiere">
                 <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" type="checkbox" name="voiture" id="voiture" value="option1">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Voiture</label>
+                  <div class="mt-3">
+                    <input class=" form-controls checkboxTransport justify-content-center" type="checkbox" name="covoiturage" id="covoiturage" value="option1">
+                    <label for="covoiturage" id="textTrain" class="col-sm-2 col-form-label pt-2">Covoiturage</label>
+                    <input type="text" class="form-control col-sm-3 mr-5 ml-3 mb-3" style="display:none;" placeholder="Lieu de départ" name="covoiturageLieuDep" id="covoiturageLieuDep">
+                    <label id="texte_justificatif" class="label-file" style="display : none;" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
+                  <input type="file" class="col-sm-5 col-form-label input-file" style="display : none;" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
+                  </div>
                 </div>
-            </div>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" type="checkbox" name="covoiturage" id="covoiturage" value="option1">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Covoiturage</label>
-                  <label id="texte_justificatif" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
-                  <input type="file" class="col-sm-5 col-form-label" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
+
+                <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divCovoiturage1" style="display : none;">
+                  <div class="form-group">
+                      <label class="d-block mb-3 labelTrain">Date d'Arrivé à Blois</label>
+                      <div class="form-row">
+                        <div class="col-sm-6">
+                          <input id="dateCovoiturage1" name="dateCovoiturage1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                        </div>
+                        <div class="col-sm-6">
+                          <input type="time" id="heureCovoiturage1" name="heureCovoiturage1" class="form-control" required>
+                        </div>
+                      </div>
+                  </div>
                 </div>
+              
+                <div class="col-sm-3 mt-3" id="divCovoiturage2" style="display : none;">
+                    <div class="form-group">
+                        <label class="d-block mb-3 labelTrain">Date de Départ de Blois</label>
+                        <div class="form-row">
+                          <div class="col-sm-6">
+                            <input id="dateCovoiturage2" name="dateCovoiturage2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                          </div>
+                          <div class="col-sm-6">
+                            <input type="time" id="heureCovoiturage2" name="heureCovoiturage2" class="form-control" required>
+                          </div>
+                        </div>
+                    </div>
+                </div>          
             </div>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" type="checkbox" name="autre" id="autre" value="option1">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Autre</label>
-                  <input type="text" class=" col-sm-5 col-form-label" aria-describedby="emailHelp" placeholder="Précisez" name="precision" id="precision">
+            
+            <div class="form-group row ml-5" id="divAutreEntiere">
+                <div class="col-sm-10 mt-3 mb-3">
+                  <input class="form-controls checkboxTransport justify-content-center" type="checkbox" name="autre" id="autre" value="option1">
+                  <label for="autre" class="col-sm-2 col-form-label" id="textTrain">Autre</label>
+                  <input type="text" class=" col-sm-5 form-control" style="display:inline;" aria-describedby="emailHelp" placeholder="Précisez" name="precision" id="precision">
                   <label id="precisionWarning" style="display:None; color:red;" class="col-sm-3 col-form-label">Veuillez remplir ce champ</label>
                 </div>
-            </div>
-            <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Arrivé à Blois</label>
-            <div class="form-group row ml-5">
+                <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divAutre1" style="display : none;">
+                  <div class="form-group">
+                      <label class="d-block mb-3 labelTrain">Date d'Arrivé au festival</label>
+                      <div class="form-row">
+                        <div class="col-sm-6">
+                          <input id="dateAutre1" name="dateAutre1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                        </div>
+                        <div class="col-sm-6">
+                          <input type="time" id="heureAutre1" name="heureAutre1" class="form-control" required>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              
+                <div class="col-sm-3 mt-3" id="divAutre2" style="display : none;">
+                    <div class="form-group">
+                        <label class="d-block mb-3 labelTrain">Date de Départ du festival</label>
+                        <div class="form-row">
+                          <div class="col-sm-6">
+                            <input id="dateAutre2" name="dateAutre2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                          </div>
+                          <div class="col-sm-6">
+                            <input type="time" id="heureAutre2" name="heureAutre2" class="form-control" required>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+              <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Arrivé à Blois</label>
+            <div class="form-group row ml-5 mb-5">
                 <div class="col-sm-10">
                   <label for="inputEmail3" class="mr-3 col-form-label">Le</label>
                   <input id="dateArr" name="dateArr" class="col-sm-2 col-form-label" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
@@ -62,11 +333,12 @@
                 </div>
             </div>
             <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
-            <div class="form-group text-center">
+              <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-2 bg-danger">Retour</button>
                 <button type="submit" class="btn text-light mr-2 bg-warning" onclick="return verif_champ_transport()">Suivant</button>
             </div>
         </form>
+        
         </section>
     </main>
 </body>
@@ -75,50 +347,420 @@
 
 <script>
 
-    let verif_champ_transport = function(){
-        var liste_valeur_box = [];
-        liste_valeur_box.push("avion");
-        liste_valeur_box.push("train");
-        liste_valeur_box.push("autre");
 
-        var liste_valeur_champs = []
-        liste_valeur_champs.push("aeroport");
-        liste_valeur_champs.push("gare");
-        liste_valeur_champs.push("precision");
+function createDiv1(){
+
+    const row = document.createElement("div");
+    row.classList.add("row", "d-flex", "justify-content-center");
+    row.id = "container_lieu_avion";
+
+    const col1 = document.createElement("div");
+    col1.classList.add("col-sm-6", "col-lg-3");
+
+    const input1 = document.createElement("input");
+    input1.autocomplete = "off";
+    input1.id = "lieuDepart";
+    input1.placeholder = "À Partir De";
+    input1.setAttribute("inputmode", "text");
+    input1.spellcheck = false;
+    input1.classList.add("form-control");
+    input1.style.height = "100%";
+    input1.style.width = "120%";
+    col1.appendChild(input1);
+
+    row.appendChild(col1);
+
+    const col2 = document.createElement("div");
+    col2.classList.add("col-sm-6", "col-lg-1");
+    col2.id = "divBoutonReverse";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.autocomplete = "off";
+    button.id = "boutonReverse";
+    button.placeholder = "À Partir De";
+    button.setAttribute("inputmode", "text");
+    button.spellcheck = false;
+    button.classList.add("btn-lg", "btn-custom");
+    col2.appendChild(button);
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svg.setAttribute("width", "35");
+    svg.setAttribute("height", "35");
+    svg.setAttribute("fill", "currentColor");
+    svg.setAttribute("viewBox", "0 0 16 16");
+    svg.classList.add("bi", "bi-arrow-repeat", "rotate");
+
+    const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path1.setAttribute("d", "M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z");
+
+    const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path2.setAttribute("fill-rule", "evenodd");
+    path2.setAttribute("d", "M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z");
+
+    svg.appendChild(path1);
+    svg.appendChild(path2);
+    button.appendChild(svg);
+    row.appendChild(col2);
+
+    const col3 = document.createElement("div");
+    col3.classList.add("col-sm-6", "col-lg-3");
+    col3.id = "divLieuArrive";
+
+    const input2 = document.createElement("input");
+    input2.autocomplete = "off";
+    input2.id = "lieuArrive";
+    input2.placeholder = "À Destionation De";
+    input2.setAttribute("inputmode", "text");
+    input2.spellcheck = false;
+    input2.classList.add("form-control");
+    input2.style.height = "100%";
+    input2.style.width = "120%";
+    col3.appendChild(input2);
+
+    row.appendChild(col3);
+    document.getElementById("divLieuDepArrive").appendChild(row);
+
+    const boutonReverse = document.getElementById("boutonReverse");
+    const img_svg = document.querySelector(".rotate");
+    const lieuDepart = document.getElementById("lieuDepart");
+    const lieuArrive = document.getElementById("lieuArrive");
+
+    boutonReverse.addEventListener("click", function() {
+      if(lieuDepart.value != "" && lieuArrive.value != ""){
+        img_svg.classList.toggle("reverse");
+        const lieuDep = lieuDepart.value;
+        lieuDepart.value = lieuArrive.value;
+        lieuArrive.value = lieuDep;
+      }
+    });
+
+    // Ajoutez la div container à l'élément HTML de votre choix
+
+}
+
+const cardAvion = document.getElementById("cardAvion");
+
+cardAvion.addEventListener("click", function(){
+  const container_lieu_avion = document.getElementById("container_lieu_avion");
+  if(container_lieu_avion == null){
+    createDiv1();
+  }
+});
+
+
+
+
+
+
+
+    var xhr = new XMLHttpRequest();
+
+function loadOptions() {
+  var xhr = new XMLHttpRequest();
+  var div = document.getElementById("optionsGare");
+  xhr.open("GET", "../static/txt/gare.txt", true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = xhr.responseText.split("\n");
+      for (var i = 0; i < options.length; i++) {
+        var option = options[i];
+        var a = document.createElement("a");
+        a.setAttribute("onclick", "changeValeur(this)");
+        a.setAttribute("href", "#");
+        a.setAttribute("style", "position: absolute;"); 
+        a.setAttribute("style", "margin: -3px;"); 
+        a.style.display = "none";
+        a.textContent = option;
+
+        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
+        a.addEventListener("click", function(event) {
+          // Empêcher le comportement par défaut de l'événement "mousedown"
+          event.preventDefault();
+
+          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
+          
+          div.style.display = "none";
+        });
+        div.appendChild(a);
+      
         
-
-        var champPasRempli = true;
-
-        for(let i =0; i<liste_valeur_box.length; i++){
-            if(document.getElementById(liste_valeur_box[i]).checked && document.getElementById(liste_valeur_champs[i]).value == ""){
-                var idElement = liste_valeur_champs[i]+"Warning";
-                document.getElementById(idElement).style.display = "inline";
-                champPasRempli = false;
-            }
-            else if(!document.getElementById(liste_valeur_box[i].checked)){
-                var idElement = liste_valeur_champs[i]+"Warning";
-                document.getElementById(idElement).style.display = "none";
-            }
-        }
-
-        if(!champPasRempli){
-            return false;
-        }
-
-        var requiredCheckboxes = $(':checkbox');
-        var requiredCheck = false;
-            
-        for(let i = 0; i<requiredCheckboxes.length; i++){
-            if(requiredCheckboxes[i].checked) {
-                requiredCheck = true;
-            }
-        }
-        if(!requiredCheck){
-            window.alert("Vous devez sélectionner un moyen de transport");
-            return false;
-        }
-        return true;
+      }
+    } else {
+      // Il y a eu un problème avec la requête, traitez-le ici
     }
+  };
+  xhr.send();
+}
+
+function loadOptions2() {
+  var xhr = new XMLHttpRequest();
+  var div2 = document.getElementById("optionsGare2");
+  xhr.open("GET", "../static/txt/gare.txt", true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = xhr.responseText.split("\n");
+      for (var i = 0; i < options.length; i++) {
+        var option = options[i];
+        var a = document.createElement("a");
+        a.setAttribute("onclick", "changeValeur2(this)");
+        a.setAttribute("href", "#");
+        a.setAttribute("style", "position: absolute;"); 
+        a.setAttribute("style", "margin: -3px;"); 
+        a.style.display = "none";
+        a.textContent = option;
+
+        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
+        a.addEventListener("click", function(event) {
+          // Empêcher le comportement par défaut de l'événement "mousedown"
+          event.preventDefault();
+
+          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
+          
+          div2.style.display = "none";
+        });
+        div2.appendChild(a);
+        
+      }
+    } else {
+      // Il y a eu un problème avec la requête, traitez-le ici
+    }
+  };
+  xhr.send();
+}
+
+window.addEventListener("load", loadOptions);
+window.addEventListener("load", loadOptions2);
+
+function filterFunction() {
+  var input, filter, ul, li, a, i, existeElem, div2;
+  input = document.getElementById("gare");
+  filter = input.value.toUpperCase();
+  div2 = document.getElementById("optionsGare");
+  a = div2.getElementsByTagName("a");
+  existeElem = false;
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    for(y = 0; y < filter.length; y++) {
+        if (txtValue.toUpperCase()[y] == filter[y]) {
+            a[i].style.display = "";
+            div2.style.display = "";
+            existeElem = true;
+
+        }
+        else {
+            a[i].style.display = "none";
+            break;
+        }
+    }
+  }
+  if(!existeElem){
+    div2.style.display = "none";
+  }
+}
+
+
+
+
+
+
+function filterFunction2() {
+  var input, filter, ul, li, a, i, existeElem, div2;
+  input = document.getElementById("myInput2");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("optionsGare2");
+  a = div.getElementsByTagName("a");
+  existeElem = false;
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    for(y = 0; y < filter.length; y++) {
+        if (txtValue.toUpperCase()[y] == filter[y] || txtValue =="Blois-Chambord") {
+            a[i].style.display = "";
+            div.style.display = "";
+            existeElem = true;
+
+        }
+        else {
+            a[i].style.display = "none";
+            break;
+        }
+    }
+  }
+  if(!existeElem){
+    div.style.display = "none";
+  }
+}
+
+let today = new Date().toISOString().substr(0, 10);
+
+document.getElementById("dateDep").value = today;
+document.getElementById("dateArr").value = today;
+
+
+let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+document.getElementById("hArrive").value = currentTime;
+document.getElementById("hDep").value = currentTime;
+
+
+window.addEventListener("load", filterFunction);
+window.addEventListener("load", filterFunction2);
+
+const infoButton = document.getElementById('info-button');
+const infoModal = document.getElementById('info-modal');
+
+infoButton.addEventListener('click', function() {
+  console.log("")
+  if(infoModal.style.display == "none"){
+    infoModal.style.display = 'block';
+    infoButton.innerHTML = "Fermer";
+  }
+  else{
+    infoModal.style.display = 'none';
+    infoButton.innerHTML = "Plus d'informations";
+
+  }
+});
+
+
+const checkBoxTrain = document.getElementById("train");
+const divTrainHoraire = document.getElementById("horaireTrain");
+const divTrainHoraire2 = document.getElementById("horaireTrain2");
+const divTrainEntiere = document.getElementById("divTrainEntiere");
+
+checkBoxTrain.addEventListener('click', function() {
+  if(checkBoxTrain.checked){
+    divTrainHoraire.style.display = '';
+    divTrainHoraire2.style.display = '';
+    divTrainEntiere.style = "background-color: #e8f1fc"
+  }
+  else{
+    divTrainHoraire.style.display = 'none';
+    divTrainHoraire2.style.display = 'none';
+    divTrainEntiere.style = ""  
+  }
+});
+
+
+const checkBoxVoiture = document.getElementById("voiture");
+const divVoiture1 = document.getElementById("divVoiture1");
+const divVoiture2 = document.getElementById("divVoiture2");
+const divVoitureEntiere = document.getElementById("divVoitureEntiere");
+
+checkBoxVoiture.addEventListener('click', function() {
+  if(checkBoxVoiture.checked){
+    divVoiture1.style.display = '';
+    divVoiture2.style.display = '';
+    divVoitureEntiere.style = "background-color: #e8f1fc"
+  }
+  else{
+    divVoiture1.style.display = 'none';
+    divVoiture2.style.display = 'none';
+    divVoitureEntiere.style = ""  
+  }
+});
+
+
+const checkBoxCovoiturage = document.getElementById("covoiturage");
+const divCovoiturage1 = document.getElementById("divCovoiturage1");
+const divCovoiturage2 = document.getElementById("divCovoiturage2");
+const divCovoiturageEntiere = document.getElementById("divCovoiturageEntiere");
+const covoiturageLieuDep = document.getElementById("covoiturageLieuDep");
+const texte_justificatif = document.getElementById("texte_justificatif");
+const justificatif = document.getElementById("justificatif");
+
+
+checkBoxCovoiturage.addEventListener('click', function() {
+  if(checkBoxCovoiturage.checked){
+    divCovoiturage1.style.display = '';
+    divCovoiturage2.style.display = '';
+    covoiturageLieuDep.style.display = 'inline';
+    texte_justificatif.style.display = '';
+    justificatif.style.display = '';
+    divCovoiturageEntiere.style = "background-color: #e8f1fc"
+  }
+  else{
+    divCovoiturage1.style.display = 'none';
+    divCovoiturage2.style.display = 'none';
+    texte_justificatif.style.display = 'none';
+    covoiturageLieuDep.style.display = 'none';
+    justificatif.style.display = 'none';
+    divCovoiturageEntiere.style = ""  
+  }
+});
+
+
+const divAutreEntiere = document.getElementById('divAutreEntiere');
+const autre = document.getElementById('autre');
+const divAutre1 = document.getElementById('divAutre1');
+const divAutre2 = document.getElementById('divAutre2');
+
+
+autre.addEventListener('click', function() {
+  if(autre.checked){
+    divAutre1.style.display = '';
+    divAutre2.style.display = '';
+    divAutreEntiere.style = "background-color: #e8f1fc"
+  }
+  else{
+    divAutre1.style.display = 'none';
+    divAutre2.style.display = 'none';
+    divAutreEntiere.style = ""  
+  }
+});
+
+
+const avion = document.getElementById("avion");
+const divAvionEntiere = document.getElementById("divAvionEntiere");
+const horaireAvion = document.getElementById("horaireAvion");
+const horaireAvion2 = document.getElementById("horaireAvion2");
+
+
+avion.addEventListener('click', function() {
+  if(avion.checked){
+    horaireAvion.style.display = '';
+    horaireAvion2.style.display = '';
+    divAvionEntiere.style = "background-color: #e8f1fc"
+  }
+  else{
+    divAvionEntiere.style = ""
+    horaireAvion.style.display = 'none';
+    horaireAvion2.style.display = 'none';  
+  }
+});
+
+
+function setupDropdown(){
+  var div = document.getElementById("optionsGare");
+  var options = div.getElementsByTagName("a");
+  for (var i = 0; i < options.length; i++) {
+    options[i].style.display = "none";
+  }
+}
+
+
+function setupDropdown2(){
+  var div = document.getElementById("optionsGare2");
+  var options = div.getElementsByTagName("a");
+  for (var i = 0; i < options.length; i++) {
+    options[i].style.display = "none";
+  }
+}
+
+
+function changeValeur(valeur){
+    input = document.getElementById("gare");
+    input.value = valeur.textContent;
+    setupDropdown();
+}
+
+
+function changeValeur2(valeur){
+  input = document.getElementById("myInput2");
+  input.value = valeur.textContent;
+  setupDropdown2();
+}
 
 
 </script>
