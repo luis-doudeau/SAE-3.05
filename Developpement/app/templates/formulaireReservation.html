@@ -61,7 +61,7 @@
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
               <button type="submit" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-              <button id="save" onclick="window.location.href='{{  url_for('page_fin') }}';" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
+              <button id="save" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -82,7 +82,40 @@
 
 <script>
 
+  $(document).ready(function(){
+    $("#save").on("click",function(){
+      console.log("re")
+    var button1 = $("#jeudi_soir")[0].checked
+    var button2 = $("#vendredi_midi")[0].checked 
+    var button3 = $("#vendredi_soir")[0].checked
+    var button4 = $("#samedi_midi")[0].checked 
+    var button5 = $("#samedi_soir")[0].checked
+    var button6 = $("#dimanche_midi")[0].checked 
+    var regime = $("#regime").val() 
+    var hebergement = $("#success")[0].value
+    var button7 = $("#dimanche_soir")[0].checked 
+    var remarque = $("#remarque").val()
+    $.ajax({
+     
+      url:"{{url_for('formulaire_reservation')}}",
+      type:'POST',
+      dataType: 'application/json',
+      data: {
+        "jeudi_soir" : button1,
+        "vendredi_midi" : button2,
+        "vendredi_soir" : button3,
+        "samedi_midi" : button4,
+        "samedi_soir" : button5,
+        "dimanche_midi" : button6,
+        "dimanche_soir" : button7,
+        "regime" : regime,
+        "hebergement" : hebergement,
+        "remarque" : remarque,
+      }      
+    })
 
+  })
+})
   const infoButton = document.getElementById('info-button');
 const infoModal = document.getElementById('info-modal');
 
@@ -120,36 +153,4 @@ infoButton.addEventListener('click', function() {
     btnDanger.value = "true";
   });
 
-
-  $("#save").on("click",function(){
-    var button1 = $("#inlineCheckbox1")[0].checked
-    var button2 = $("#inlineCheckbox2")[0].checked 
-    var button3 = $("#inlineCheckbox3")[0].checked
-    var button4 = $("#inlineCheckbox4")[0].checked 
-    var button5 = $("#inlineCheckbox5")[0].checked
-    var button6 = $("#inlineCheckbox6")[0].checked 
-    var regime = $("#regime").val() 
-    var besoinHebergement = $("#chambre1")[0].checked
-    var button7 = $("#inlineCheckbox7")[0].checked 
-    var remarque = $("#remarque").val()
-    $.ajax({
-     
-      url:"/FormulaireReservation",
-      type:'POST',
-      dataType: 'application/json',
-      data: {
-        "jeudi_soir" : button1,
-        "vendredi_midi" : button2,
-        "vendredi_soir" : button3,
-        "samedi_midi" : button4,
-        "samedi_soir" : button5,
-        "dimanche_midi" : button6,
-        "dimanche_soir" : button7,
-        "regime" : regime,
-        "besoinHebergement" : besoinHebergement,
-        "remarque" : remarque,
-      }      
-    })
-
-  })
 </script>

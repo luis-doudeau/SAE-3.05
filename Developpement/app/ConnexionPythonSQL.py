@@ -15,6 +15,7 @@ import datetime
 from datetime import date
 import random
 import string
+from sqlalchemy.sql import operators, extract
 
 from .Exposant import Exposant
 from .Intervenir import Intervenir
@@ -72,9 +73,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -812,9 +813,9 @@ def get_dormeur(session, date_jour, hotel):
     return liste_participants
 #print(get_dormeur(session, "2022-11-19", 2))
 
-def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive) : 
+def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) : 
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive)
-    deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).first()
+    deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:
         session.add(deplacement)
         try: 
@@ -829,9 +830,19 @@ def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive) :
   
 #ajoute_deplacer(session, 300, 1, "Paris", "Blois")
 
+
+def supprime_mangeur(session, idP, annee):
+    manger = session.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Manger.idP == idP).filter(extract('year', Creneau.dateDebut) == annee).all()
+    for mang in manger : 
+        session.query(Manger).filter(Manger.idP == mang.idP).filter(Manger.idRepas == mang.idRepas).delete()
+        session.commit()
+
+
 def ajoute_mangeur(session, idP, idRepas):
     mangeur = Manger(idP, idRepas)
-    manger = session.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
+    annee = datetime.date.today().year
+    supprime_mangeur(session, idP, annee-1)
+    manger = session.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
     if manger is None:
         session.add(mangeur)
         try: 
@@ -920,7 +931,7 @@ def requete_transport_annee(session, idP, annee) :
 
 def ajoute_assister(session, idP, dateArrive, dateDepart):
     assisteur = Assister(idP, dateArrive, dateDepart)
-    assister = session.query(Assister).filter(Assister.dateArrive == dateArrive).filter(Assister.dateDepart == dateDepart).first()
+    assister = session.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).first()
     if assister is None :
         session.add(assisteur)
         try : 
@@ -929,9 +940,9 @@ def ajoute_assister(session, idP, dateArrive, dateDepart):
         except : 
             print("Erreur !")
             session.rollback()
-            
     else :
-        print("Cet intervenant assiste déjà au festival à ces dates")
+        session.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).update({Assister.dateArrive: dateArrive, Assister.dateDepart: dateDepart},synchronize_session='fetch')
+        session.commit()
         
 def cherche_transport(session, nom_transport) : 
     liste_transport = session.query(Transport.idTransport, Transport.nomTransport).all()
@@ -1005,7 +1016,7 @@ def ajoute_restaurant(session, nomRest) :
             session.rollback()
     return restaurant_test.idRest
 
-def meilleur_restaurant(session): 
+def choix_restaurant(session): 
     pass # TODO SELON LE ROLE METTRE UN CERTAIN RESTAU 
     
  
@@ -1014,7 +1025,7 @@ def ajoute_repas_mangeur(session, idP, liste_repas, liste_horaire_restau, dico_h
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
             idCreneau = ajoute_creneau(session, horaire.split("/")[0], horaire.split("/")[1])
-            idRest = meilleur_restaurant(session) # ajouter ROLE TODO 
+            idRest = choix_restaurant(session) # ajouter ROLE TODO 
             idRepas = ajoute_repas(session, False if liste_horaire_restau[i][4:] == "soir" else True, 1 if liste_horaire_restau[i][4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(session, idP, idRepas)
 

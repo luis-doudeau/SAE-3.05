@@ -9,15 +9,15 @@ class Deplacer(Base):
     idTransport = Column(Integer, primary_key = True)
     lieuDepart = Column(TEXT, primary_key = True)
     lieuArrive = Column(TEXT,  primary_key = True)
+    annee = Column(Integer, primary_key = True)
 
 
-    def __init__(self, idP, idTransport, lieuDepart, lieuArrive, dateArrive, dateDepart) -> None:
+    def __init__(self, idP, idTransport, lieuDepart, lieuArrive, annee) -> None:
         self.idP = idP
         self.idTransport = idTransport
         self.lieuDepart = lieuDepart
         self.lieuArrive = lieuArrive
-        self.dateArrive = dateArrive
-        self.dateDepart = dateDepart
+        self.annee = annee
 
     def __repr__(self) -> str:
         return "ID Intervenant : " + str(self.idP) + " - ID Transport : " + str(self.idTransport)+ " - Lieu Depart : " + self.lieuDepart + " - Lieu Arrive : " + self.lieuArrive

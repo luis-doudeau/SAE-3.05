@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE BDBOUM;
+-- CREATE DATABASE IF NOT EXISTS BDBOUM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- USE BDBOUM;
 
 SET foreign_key_checks = 0;
 drop table if exists INTERVENIR, TRAVAILLER, MOBILISER, DEPLACER, LOGER, TRANSPORTER, AVOIR, AUTEUR, INVITE, PRESSE,
@@ -142,7 +142,8 @@ CREATE TABLE DEPLACER (
   idTransport int,
   lieuDepart VARCHAR(70),
   lieuArrive VARCHAR(70),
-  PRIMARY KEY (idP, idTransport, lieuDepart, lieuArrive),
+  annee int,
+  PRIMARY KEY (idP, idTransport, lieuDepart, lieuArrive, annee),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
   FOREIGN KEY (idTransport) REFERENCES TRANSPORT(idTransport)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

@@ -231,10 +231,10 @@ INSERT INTO TRANSPORT (idTransport, nomTransport) values (1, "Avion"),
                                                           (4, "Covoiturage");
 
 
-INSERT INTO DEPLACER (idP, idTransport, lieuDepart, lieuArrive, dateArrive, dateDepart) VALUES (301, 2, "Paris Gare du Nord", "Gare Blois", STR_TO_DATE("2022-11-17 17:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i") ),
-                                                                      (301, 2, "Gare de Tours", "Gare Blois", STR_TO_DATE("2022-11-17 18:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                                      (303, 2, "Gare Orléans", "Gare Blois", STR_TO_DATE("2022-11-17 18:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                                      (300, 2, "Aéroport Marseille Provence", "Aéroport d'Orly", STR_TO_DATE("2022-11-17 17:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i"));
+INSERT INTO DEPLACER (idP, idTransport, lieuDepart, lieuArrive, annee) VALUES (301, 2, "Paris Gare du Nord", "Gare Blois", 2015),
+                                                                      (301, 2, "Gare de Tours", "Gare Blois",2019),
+                                                                      (303, 2, "Gare Orléans", "Gare Blois", 2022),
+                                                                      (300, 2, "Aéroport Marseille Provence", "Aéroport d'Orly", 2022);
 
 
 INSERT INTO SECRETAIRE (idP) VALUES (1000);

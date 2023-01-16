@@ -197,24 +197,20 @@ def formulaire_auteur_transport():
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
-        liste_id_box = ["avion", "train", "autre", "voiture", "covoiturage"]
-        liste_id_champs = ["aeroport", "gare", "precision"]
-        for i in range(len(liste_id_box)-1):
-            if request.form.get(liste_id_box[i]) == "option1":
-                if i<= 2 : 
-                    depart = request.form[liste_id_champs[i]]
-                if liste_id_box[i] == "avion":
-                    ajoute_deplacer(session, current_user.idP, 1, depart, "Blois")
-                elif liste_id_box[i] == "train":
-                    depart = request.form[liste_id_champs[i]]
-                    ajoute_deplacer(session, current_user.idP, 2, depart, "Blois")
-                elif liste_id_box[i] == "voiture": 
-                    ajoute_deplacer(session, current_user.idP, 3, current_user.adresseP, "Blois")
-                elif liste_id_box[i] == "covoiturage":
-                    ajoute_deplacer(session, current_user.idP, 4, current_user.adresseP, "Blois")
-                else :
-                    modif_participant_remarque(session, current_user.idP, "Moyen de déplacement : "+depart)    
+        liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
+        dico_champs_box = {"avion" : ["avionLieuDep", "avionLieuRetour", "dateAvion1", "heureAvion", "dateAvion2", "heureAvion2"],\
+                          "train": ["gareDep", "gareRetour", "dateGare1", "heureGare1", "dateGare2", "heureGare2"],\
+                          "voiture": ["voitureDep", "voitureRetour", "dateVoiture1", "heureVoiture1", "dateVoiture2", "heureVoiture2"],\
+                          "covoiturage": ["covoiturageLieuDep", "dateCovoiturage1", "heureCovoiturage1", "dateCovoiturage2", "heureCovoiturage2"],\
+                          "autre": ["precision", "dateAutre1", "heureAutre1", "dateAutre1", "heureAutre2"]}
         
+        for i in range(len(liste_id_box)):
+            if request.form.get(liste_id_box[i]) == "option1":
+                liste_val = []
+                for champ in dico_champs_box[liste_id_box[i]] :
+                    liste_val.append(request.form.get(champ))
+                    #insere_transport(session, liste_id_box[i], liste_val)
+
         dateArr = request.form["dateArr"].replace("-",",").split(",")
         heureArr = request.form["hArrive"].replace(":",",").split(",")
         date_arr = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
@@ -222,16 +218,17 @@ def formulaire_auteur_transport():
         dateDep = request.form["dateDep"].replace("-",",").split(",")
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-        print(request.form["hDep"])
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
         return redirect(url_for('formulaire_reservation', idp = current_user.idP))
         
-    return render_template("transportForms.html")
+    return render_template("transportForms.html")   
+        
+        
     
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-    print(type(request.method))
+    print(request.method)
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
 
@@ -247,8 +244,8 @@ def formulaire_reservation():
             ajoute_avoir_regime(session, current_user.idP, id_regime)
         remarques = request.form["remarque"]
         modif_participant_remarque(session, current_user.idP, remarques)
-        if request.form["besoinHebergement"] : 
-            pass #TODO AJOUTER HOTEL RECUPERER DATE ARRIVE DATE DEPART DE L'HOTEL 
+        if request.form["hebergement"] : 
+            pass #TODO AJOUTER HOTEL RECUPERER DATE ARRIVE DATE DEPART DE L'HOTEL
         return redirect(url_for('page_fin')) #TODO                 
         
     return render_template("formulaireReservation.html", idp=current_user.idP)
