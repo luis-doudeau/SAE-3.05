@@ -234,7 +234,7 @@ def formulaire_reservation():
     print(type(request.method))
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
-    
+
     if request.method == "POST":
         regime = request.form["regime"] # stocker en variable car réutilisé ensuite
         liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\

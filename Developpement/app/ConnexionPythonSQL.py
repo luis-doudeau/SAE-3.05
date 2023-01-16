@@ -351,7 +351,7 @@ def ajoute_participant_role(session, prenomP, nomP, emailP, adresseP, telP, ddnP
             ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP )
         elif role == "Exposant":
             idP = get_max_id_exposant(session)+1
-            ajoute_exposant(session, idP, prenomP, nomP, emailP, adresseP, telP, ddnP, role)
+            ajoute_exposant(session, idP, prenomP, nomP, emailP, adresseP, ddnP, telP, role)
         elif role == "Staff":
             idP = get_max_id_staff(session)+1
             ajoute_staff(session, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)

@@ -142,9 +142,7 @@ CREATE TABLE DEPLACER (
   idTransport int,
   lieuDepart VARCHAR(70),
   lieuArrive VARCHAR(70),
-  dateArrive datetime,
-  dateDepart datetime,
-  PRIMARY KEY (idP, idTransport, lieuDepart, lieuArrive, dateArrive, dateDepart),
+  PRIMARY KEY (idP, idTransport, lieuDepart, lieuArrive),
   FOREIGN KEY (idP) REFERENCES INTERVENANT(idP),
   FOREIGN KEY (idTransport) REFERENCES TRANSPORT(idTransport)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

@@ -3,68 +3,65 @@
     <main style="background-color : #ebf3fc;">
         <section class="ftco-section row justify-content-center shadow-lg"> 
                          
-          <form method="POST" id="formCoo" class="container flex w-100 wrap p-4">
-            <label for="restauration" class="col-sm-2 col-form-label mb-2 titre" id="restauration">Restauration</label>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="jeudi_soir" type="checkbox" id="inlineCheckbox1">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Jeudi soir</label>
+          <form method="POST" id="formCoo" style="min-width :65%;" class="container flex w-100 wrap p-4">
+            <label for="restauration" class="col-sm-2 col-form-label mb-2 fs-3" style="text-decoration : underline;" id="restauration">Restauration</label>
+            <div class="form-group row ml-5 mt-4">
+                <div class="col-sm-12 mb-2">
+                  <input class=" form-controls checkboxTransport justify-content-center" name="jeudi_soir" type="checkbox" id="jeudi_soir">
+                  <label for="jeudi_soir" class="col-sm-2 labelJourRestauration col-form-label">Jeudi soir</label>
                 </div>
             </div>
             <div class="form-group row ml-5"> 
-                <div class="col-sm-10"> 
-                  <input class=" form-controls justify-content-center" name="vendredi_midi" type="checkbox" id="inlineCheckbox2">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Vendredi midi</label> 
-                  <input class=" form-controls justify-content-center" name="vendredi_soir" type="checkbox" id="inlineCheckbox3">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Vendredi soir</label>
+                <div class="col-sm-12 mb-2"> 
+                  <input class=" form-controls checkboxTransport justify-content-center" name="vendredi_midi" type="checkbox" id="vendredi_midi">
+                  <label for="vendredi_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Vendredi midi</label> 
+                  <input class=" form-controls checkboxTransport justify-content-center" name="vendredi_soir" type="checkbox" id="vendredi_soir">
+                  <label for="vendredi_soir" class="col-sm-2 labelJourRestauration col-form-label">Vendredi soir</label>
                 </div>
             </div>
             <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="samedi_midi" type="checkbox" id="inlineCheckbox4">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Samedi midi</label>
-                  <input class=" form-controls justify-content-center" name="samedi_soir" type="checkbox" id="inlineCheckbox5">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Samedi soir</label>
+                <div class="col-sm-12 mb-2">
+                  <input class=" form-controls checkboxTransport justify-content-center" name="samedi_midi" type="checkbox" id="samedi_midi">
+                  <label for="samedi_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Samedi midi</label>
+                  <input class=" form-controls checkboxTransport justify-content-center" name="samedi_soir" type="checkbox" id="samedi_soir">
+                  <label for="samedi_soir" class="col-sm-2 labelJourRestauration col-form-label">Samedi soir</label>
                 </div>
 
             </div>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <input class=" form-controls justify-content-center" name="dimanche_midi" type="checkbox" id="inlineCheckbox6">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Dimanche midi</label>
-                  <input class=" form-controls justify-content-center" name="dimanche_soir" type="checkbox" id="inlineCheckbox7">
-                  <label for="inputDate" class="col-sm-2 col-form-label">Dimanche soir</label>
+            <div class="form-group row ml-5 mb-3">
+                <div class="col-sm-12">
+                  <input class=" form-controls checkboxTransport justify-content-center" name="dimanche_midi" type="checkbox" id="dimanche_midi">
+                  <label for="dimanche_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Dimanche midi</label>
+                  <input class=" form-controls checkboxTransport justify-content-center" name="dimanche_soir" type="checkbox" id="dimanche_soir">
+                  <label for="dimanche_soir" class="col-sm-2 labelJourRestauration col-form-label">Dimanche soir</label>
                 </div>
             </div>
-            <label for="regimeLabel" class="col-form-label mb-3 ml-3 titre" id="regimeLabel">Régime alimentaire</label>
+            <label for="regimeLabel" class="col-form-label mt-3 mb-3 ml-3 fs-3" style="text-decoration : underline;" id="regimeLabel">Régime alimentaire</label>
             <div class="form-group row ml-4">
                 <div class="col-sm-10">
-                  <input type="text" class="form-controls col-sm-5 col-form-label ml-2" placeholder="Nom régime(s)" id="regime" name="regime">
+                  <input type="text" class="form-control col-sm-5 col-form-label mt-3 ml-2" placeholder="Nom régime(s)" id="regime" name="regime">
                 </div>
             </div>
-            <label for="hebergement" class="col-form-label mb-3 ml-3 titre" id="hebergement">Hébergement</label>
-            <div class="form-check form-group ml-5">
-              <input class="form-check-input" type="radio" id="chambre1" name="chambre" checked>
-              <label class="form-check-label" for="chambre">
-                Oui, je souhaite réserver une chambre d'hôtel (à la charge du festival)
-              </label>
-            </div>
-            <div class="form-check form-group ml-5">
-              <input class="form-check-input" type="radio" name="chambre" id="pasChambre">
-              <label class="form-check-label" for="pasChambre">
-                Non, je ne souhaite pas réserver de chambre d'hôtel 
-              </label>
-            </div>
-          </div>    
-          <div class="form-group ml-3">
-            <label class="mt-2 mb-3 titre" for="exampleFormControlTextarea1">Autre remarques</label>
-            <input type="textarea" style="width: 35%;" class="form-control mt-1 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
+            <label for="hebergement" class="col-form-label mt-3 mb-3 ml-3 fs-3" style="text-decoration : underline;" id="hebergement">Hébergement</label>
+              <div class="d-flex">
+                <button id="success" class="btn btn-success p-3 mb-3 mt-3 ml-5 mr-3 shadow-lg d-flex justify-content-center align-items-center" type="button" style="transition: background-color 0.5s ease; width: 140px; height: 45px;font-size:120%;">OUI</button>
+                <button id="echec" class="btn btn-danger p-3 mb-3 mt-3 shadow-lg d-flex justify-content-center align-items-center" type="button" style="transition: background-color 0.5s ease; width: 140px; height: 45px;font-size:120%;">NON</button>
+                <div class="form-group">
+                  <button  type="button" id="info-button" class="btn btn-secondary p-3 mb-3 mt-3 ml-5 mr-3 shadow-lg d-flex justify-content-center align-items-center" style="transition: background-color 0.5s ease; width: 180px; height: 45px;font-size:110%;">Plus d'informations</button>
+                  <div id="info-modal" style="display:none;">
+                    <label id="" style="background-color : #111111; color :#ffffff; position : absolute; min-width : 300px;z-index:10;" class="pl-2 pr-2 pb-2 pt-2">Le coût de l'hotel est pris en charge par le festival bdBOUM / Maison d'édition. Hôtel : XXX</label>
+                  </div>
+                </div>  
+              </div>
+            <div class="form-group ml-3">
+            <label class="mt-3 mb-3 fs-3" style="text-decoration : underline;" for="exampleFormControlTextarea1">Autre remarques</label>
+            <input type="textarea" style="width: 35%;" class="form-control mt-3 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
           </div>
-            <small id="prise_en_charge" class="col-form-label mb-3 ml-3 form-text text-muted"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
+            <small id="prise_en_charge" class="col-form-label mb-3 ml-4 mt-4 form-text text-muted" style="font-size:1.2rem;"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
-              <button type="submit" class="btn text-light mr-2 bg-danger">Retour</button>
-              <button id="save" onclick="window.location.href='{{  url_for('page_fin') }}';" type="button" class="btn text-light mr-2 bg-warning ">Suivant</button>
+              <button type="submit" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
+              <button id="save" onclick="window.location.href='{{  url_for('page_fin') }}';" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -84,6 +81,46 @@
 </style>
 
 <script>
+
+
+  const infoButton = document.getElementById('info-button');
+const infoModal = document.getElementById('info-modal');
+
+infoButton.addEventListener('click', function() {
+  console.log("")
+  if(infoModal.style.display == "none"){
+    infoModal.style.display = 'block';
+    infoButton.innerHTML = "Fermer";
+  }
+  else{
+    infoModal.style.display = 'none';
+    infoButton.innerHTML = "Plus d'informations";
+
+  }
+});
+
+  var btnSuccess = document.getElementById("success");
+  var btnDanger = document.getElementById("echec");
+  
+  btnSuccess.addEventListener("click", function() {
+    if(btnDanger.style.border = "3px solid black"){
+      btnDanger.style.border = "";
+      btnSuccess.value = "false";
+    }
+    this.style.border = "3px solid black";
+    btnSuccess.value = "true";
+  });
+
+  btnDanger.addEventListener("click", function() {
+    if(btnSuccess.style.border = "3px solid black"){
+      btnSuccess.style.border = "";
+      btnSuccess.value = "false";
+    }
+    this.style.border = "3px solid black";
+    btnDanger.value = "true";
+  });
+
+
   $("#save").on("click",function(){
     var button1 = $("#inlineCheckbox1")[0].checked
     var button2 = $("#inlineCheckbox2")[0].checked 

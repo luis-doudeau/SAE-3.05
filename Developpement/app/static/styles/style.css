@@ -8497,20 +8497,16 @@ h1, h2, h3, h4, h5,
         }
         
         
-        #voyage{
-          font-size: 25px;
-        }
-        
         
         #formCoo{
           background-color : white;
-          min-width: 70%;
+          min-width: 75%;
         }
         
         .card-img-{
-          width:15%;
+          width:13%;
           height:auto;
-          background-color: #17a2b8;
+          background-color: #024ebd;
           position: relative;
           top : -25px;
           padding : 12px;
@@ -8527,6 +8523,17 @@ h1, h2, h3, h4, h5,
           padding : 15px;
           border-radius: 15px;
         
+        }
+
+        .imgTransport{
+          width:65px;
+          height:63px;
+          background-color: #024ebd;
+          position: relative;
+          top : -25px;
+          padding : 15px;
+          border-radius: 15px;
+          margin-left : 2%;
         }
         
         
@@ -8654,7 +8661,12 @@ h1, h2, h3, h4, h5,
         /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
         .show {display:block;} 
         
-        .checkboxTransport{width: 23px; height: 23px;}
+        .checkboxTransport{width: 23px; height: 23px; padding-top: 10% !important;}
+
+        .labelJourRestauration{
+          font-size : 130% !important;
+          padding-bottom: 10px !important;
+        }
         
         #textTrain{
           font-size: 110%;
@@ -8681,6 +8693,10 @@ h1, h2, h3, h4, h5,
           color: var(--primary-color); /* Couleur primaire de votre thème */
             font-size: 18px;
             font-weight: 600;
+        }
+
+        .card_hover:hover{
+          background-color: #ebeff7;
         }
         
         #divGare2{
@@ -8846,12 +8862,17 @@ h1, h2, h3, h4, h5,
           padding-right : 0.25em;
         }
 
+        .boutonSuppr:hover{
+          background-color: #fc5858 !important;
+        }
+
         #boutonSuppr{
           border-radius : 30%;
-          padding-left : 0.01em;
-          padding-top : 0.01em;
-          padding-bottom : 0.01em;
-          padding-right : 0.01em;
+          padding-left : 0.25em;
+          padding-top : 0.15em;
+          padding-bottom : 0.15em;
+          padding-right : 0.25em;
+          margin-bottom: 10%;
           background-color: #fccaca;
         }
 
@@ -8865,7 +8886,7 @@ h1, h2, h3, h4, h5,
         #divBoutonReverse{
           margin-top : 0.8%;
           margin-left : 5%;
-          margin-left: 4.5%;
+          margin-left: 6%;
           z-index : 10;
         }
 
@@ -8874,15 +8895,10 @@ h1, h2, h3, h4, h5,
           margin-top : 0.8%;
         }
 
-        #container_lieu_avion{
-          display : flex;
-          padding-top: 5.5%;
-          margin-top : 6%;
-          margin-bottom : 15%;
-          margin-right : 4%;
-          margin-left : 11%;
-          text-align: center;
-          position : sticky;
+        .container_lieu_transport{
+          display : flex !important;
+          margin-left : 9% !important;
+          position : sticky !important;
         }
         
         .custom-buttonWego {
@@ -8902,10 +8918,14 @@ h1, h2, h3, h4, h5,
         }
 
 
-        #divLieuDepArrive{
-          background-color: #e8f1fc;
-          height: 7%;
-          
+        .divLieuDepArrive{
+          margin-bottom : 50px !important;
+          margin-top: 50px !important;          
+        }
+
+        .btn:hover {
+          transform: scale(1.1);
+          background-color : #0c8726;
         }
         
 

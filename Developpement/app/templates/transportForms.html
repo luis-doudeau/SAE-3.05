@@ -2,19 +2,19 @@
 <body>
     <main style="background-color : #ebf3fc;">
         <section class="ftco-section row justify-content-center shadow-lg">    
-          <form method="POST" id="formCoo" class="container flex wrap p-4">
-            <label style="text-decoration : underline;" for="transport" class="col-sm-2 col-form-label mb-1 fs-2" id="voyage">Transport</label>
-            <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted fs-5">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
+          <form method="POST" id="formCoo" class="container shadow flex wrap p-4" style="overflow : scroll;">
+            <label style="text-decoration : underline;" for="transport" class="col-sm-2 col-form-label mb-1 fs-3 ml-2" id="voyage">Transport</label>
+            <small id="emailHelp" class="col-form-label mb-3 ml-4 form-text text-muted fs-5">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
             
 
 
-            <div class="container-fluid justify-content-center">
+            <div class="container-fluid justify-content-center" style="margin-bottom : 6%;">
 
               <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-5">
 
                   <div class="col-sm-6 col-lg-3 btn-custom" id="cardAvion">
                       <!-- Simple card -->
-                      <div class="card d-block text-center shadow mt-5">
+                      <div class="card d-block text-center shadow mt-5 card_hover">
                           <div class=""> 
                             <img class="card-img-2" src="{{url_for('static', filename='img/plane.png')}}" alt="Card image cap">
                           </div>
@@ -25,9 +25,9 @@
                   </div><!-- end col -->
 
                   
-                  <div class="col-sm-6 col-lg-3 btn-custom">
+                  <div class="col-sm-6 col-lg-3 btn-custom" id="cardTrain">
                     <!-- Simple card -->
-                    <div class="card d-block text-center shadow mt-5">
+                    <div class="card d-block text-center shadow mt-5 card_hover">
                         <div class=""> 
                           <img class="card-img-2" src="{{url_for('static', filename='img/train.png')}}" alt="Card image cap">
                         </div>
@@ -38,9 +38,9 @@
                 </div><!-- end col -->
                   
 
-                <div class="col-sm-6 col-lg-3 btn-custom">
+                <div class="col-sm-6 col-lg-3 btn-custom" id="cardVoiture">
                   <!-- Simple card -->
-                  <div class="card d-block text-center shadow mt-5">
+                  <div class="card d-block text-center shadow mt-5 card_hover">
                       <div class=""> 
                         <img class="card-img-2" src="{{url_for('static', filename='img/car.png')}}" alt="Card image cap">
                       </div>
@@ -56,9 +56,9 @@
 
               <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-3">
 
-                <div class="col-sm-6 col-lg-3 btn-custom">
+                <div class="col-sm-6 col-lg-3 btn-custom" id="cardCovoiturage">
                   <!-- Simple card -->
-                  <div class="card d-block text-center shadow mt-5">
+                  <div class="card d-block text-center shadow mt-5 card_hover">
                       <div class=""> 
                         <img class="card-img-2" src="{{url_for('static', filename='img/carpooling.png')}}" alt="Card image cap">
                       </div>
@@ -69,9 +69,9 @@
               </div><!-- end col -->
 
                 
-              <div class="col-sm-6 col-lg-3 btn-custom">
+              <div class="col-sm-6 col-lg-3 btn-custom" id="cardAutre">
                 <!-- Simple card -->
-                <div class="card d-block text-center shadow mt-5">
+                <div class="card d-block text-center shadow mt-5 card_hover">
                     <div class=""> 
                       <img class="card-img-2" src="{{url_for('static', filename='img/other.png')}}" alt="Card image cap">
                     </div>
@@ -83,261 +83,46 @@
             </div>
           </div>
             
-
-            <div class="container-fluid justify-content-center" id="divLieuDepArrive">
-              <div class="row d-flex justify-content-center" id="container_lieu_avion">
-                <div class="col-sm-6 col-lg-3">
-                  <input autocomplete="off" id="lieuDepart" placeholder="Aéroport Départ" inputmode="text" spellcheck="false" class="form-control" style="height: 110%; width: 120%;">
-                </div>
-                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
-                  <button type="button" autocomplete="off" id="boutonReverse" placeholder="À Partir De" inputmode="text" spellcheck="false" class="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
-                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
-                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
-                    </svg>
-                  </button>
-                </div>
-                <div class="col-sm-6 col-lg-3" id="divLieuArrive">
-                  <input autocomplete="off" id="lieuArrive" placeholder="Aéroport Arrivé" inputmode="text" spellcheck="false" class="form-control" style="height: 110%; width: 120%;">
-                </div>
-                <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
-                  <button type="button" autocomplete="off" id="boutonSuppr" placeholder="À Partir De" inputmode="text" spellcheck="false" class="form-control">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              
+            <!-- div qui vont contenir les détails sur les transports-->
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion">
             </div>
 
-
-
-            <div class="row ml-5 mb-2" id="divAvionEntiere">
-              <div class="col-sm-10 mt-3">
-                <div id="divAvion">
-                  <input class=" form-controls checkboxTransport justify-content-center" type="checkbox" name="avion" id="avion" value="option1">
-                  <label for="avion" id="textTrain" class="col-sm-2 col-form-label pt-2">Avion</label>
-                  <input type="text" class="form-control col-sm-3 ml-3 mb-3" style="display:inline;" placeholder="Aéroport de départ" name="avionLieuDep" id="avionLieuDep">
-                  <input type="text" class="form-control col-sm-3 ml-3 mb-3" style="display:inline;" placeholder="Aéroport d'arrivé" name="avionLieuRetour" id="avionLieuRetour">
-                </div>
-              </div>
-
-              <div class="col-sm-10 mt-5" id="divBoutonTrain">
-                <div>
-                  <label class="text-dark font-weight-bold text-center mb-4 display-7">Consulter horaires</label>
-
-                  <a href="https://www.wego.fr/" target="_blank">
-                    <button id="" type="button" class="custom-buttonWego btn-custom" style="border-radius: 10px; background-image: linear-gradient(to right, #44b50c, #297a01); color: #fff; font-weight: bold;font-family: 'Gotham', sans-serif;">WEGO</button>
-                  </a>
-                  <label id="texte_justificatif" class="label-file" for="justificatif">Charger le billet souhaité (PDF, JPG) ...</label>
-                  <input type="file" class="col-sm-5 col-form-label input-file" style="display : none;" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
-                </div>
-              </div>        
-          </div>
-          <section class="ftco-section" style="max-width : 30%; max-height : auto;  margin-left : 20%;">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-5">
-                  <h2 class="heading-section">Calendar #01</h2>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="calendar calendar-first" id="calendar_first">
-                    <div class="calendar_header">
-                        <button class="switch-month switch-left"> <i class="fa fa-chevron-left"></i></button>
-                         <h2></h2>
-                        <button class="switch-month switch-right"> <i class="fa fa-chevron-right"></i></button>
-                    </div>
-                    <div class="calendar_weekdays"></div>
-                    <div class="calendar_content"></div>
-                  </div>
-                </div>
-              </div>
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain">
             </div>
-          </section>
 
-
-            <div class="row ml-5 mb-2" id="divTrainEntiere">
-              <div class="form-inline mt-3 mb-3" id="divGare">
-                <div class="form-group" id="divTrain">
-                  <input type="checkbox" class="mr-3 checkboxTransport form-controls justify-content-center" name="train" id="train" value="option1">
-                  <label for="train" id="textTrain" class="col-form-label pt-2">Train</label>
-                </div>
-                <div class="mr-4">
-                  <input type="text" class="form-control" placeholder="Gare de départ" name="gareDep" id="gare" onkeyup="filterFunction()" onclick="filterFunction()">
-                  <div class="dropdown-content" style="display:none;" id="optionsGare">
-                  </div>
-                </div>
-                <div>
-                  <input type="text" class="form-control mr-4" placeholder="Gare d'arrivé" id="myInput2" name="gareRetour" onkeyup="filterFunction2()" onclick="filterFunction2()">
-                  <div class="dropdown-content col-form-label" style="display:none;" id="optionsGare2">
-                  </div>
-                </div>
-                <label id="gareWarning" style="display:None; color:red;" class="col-form-label mr-3">Veuillez remplir ces champs</label>
-                <div class="form-group">
-                  <button  type="button" id="info-button" style="position:relative;" class="btn btn-secondary">Plus d'informations</button>
-                  <div class="col-sm-5" id="info-modal" style="display:none;">
-                    <label id="" style="background-color : #111111; color :#ffffff; position : absolute; min-width : 300px;z-index:10;" class="pl-2 pr-2 pb-2 pt-2">Si vous prenez plusieurs trains à destination de Blois, sélectionner Blois-Chambord comme gare d'arrivée.</label>
-                  </div>
-                </div>                
-              </div>
-
-              
-              <div class="col-sm-10 mt-5" id="divBoutonTrain">
-                <div>
-
-                  
-
-                </div>
-              </div>
-              
-
-        </div> 
-      </div>
-        
-        
-      <div class="row ml-5 mb-2" id="divVoitureEntiere">
-        <div class="col-sm-10 mt-3">
-          <div id="divVoiture">
-                <input type="checkbox" class="mr-2 checkboxTransport form-controls justify-content-center" name="voiture" id="voiture" value="option1">
-                <label for="voiture" id="textTrain" class="col-form-label pt-2 pl-1  divVoiture">Voiture</label>
-                <input type="text" class="form-control col-sm-3 ml-3  mb-3" style="display : inline;" placeholder="Lieu de départ" name="voitureDep" id="voitureDep">
-                <input type="text" class="form-control col-sm-3 mr-5 ml-3 mb-3" style="display : inline;" value="Blois" placeholder="Lieu d'Arrivé" name="voitureRetour" id="voitureDep">
-          </div>
-        </div>
-        <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divVoiture1" style="display:none;">
-            <div class="form-group">
-                <label class="d-block mb-3 labelTrain">Date d'Arrivé à Blois</label>
-                <div class="form-row">
-                  <div class="col-sm-6">
-                    <input id="dateVoiture1" name="dateVoiture1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="time" id="heureVoiture1" name="heureVoiture1" class="form-control" required>
-                  </div>
-                </div>
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveVoiture">
             </div>
-        </div>
-        <div class="col-sm-3 mt-3" id="divVoiture2" style="display:none;">
-            <div class="form-group">
-                <label class="d-block mb-3 labelTrain">Date de Départ de Blois</label>
-                <div class="form-row">
-                  <div class="col-sm-6">
-                    <input id="dateVoiture2" name="dateVoiture2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="time" id="heureVoiture2" name="heureVoiture2" class="form-control" required>
-                  </div>
-                </div>
+
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage">
             </div>
-        </div>
-      </div>
 
-         
-    
-          
-            <div class="row ml-5 mb-2" id="divCovoiturageEntiere">
-                <div class="col-sm-10">
-                  <div class="mt-3">
-                    <input class=" form-controls checkboxTransport justify-content-center" type="checkbox" name="covoiturage" id="covoiturage" value="option1">
-                    <label for="covoiturage" id="textTrain" class="col-sm-2 col-form-label pt-2">Covoiturage</label>
-                    <input type="text" class="form-control col-sm-3 mr-5 ml-3 mb-3" style="display:none;" placeholder="Lieu de départ" name="covoiturageLieuDep" id="covoiturageLieuDep">
-                    <label id="texte_justificatif" class="label-file" style="display : none;" for="justificatif">Choisir justificatif (PDF, JPG) ...</label>
-                  <input type="file" class="col-sm-5 col-form-label input-file" style="display : none;" id="justificatif" name="justificatif" accept=".pdf, .jpg" multiple />
-                  </div>
-                </div>
-
-                <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divCovoiturage1" style="display : none;">
-                  <div class="form-group">
-                      <label class="d-block mb-3 labelTrain">Date d'Arrivé à Blois</label>
-                      <div class="form-row">
-                        <div class="col-sm-6">
-                          <input id="dateCovoiturage1" name="dateCovoiturage1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                        </div>
-                        <div class="col-sm-6">
-                          <input type="time" id="heureCovoiturage1" name="heureCovoiturage1" class="form-control" required>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              
-                <div class="col-sm-3 mt-3" id="divCovoiturage2" style="display : none;">
-                    <div class="form-group">
-                        <label class="d-block mb-3 labelTrain">Date de Départ de Blois</label>
-                        <div class="form-row">
-                          <div class="col-sm-6">
-                            <input id="dateCovoiturage2" name="dateCovoiturage2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                          </div>
-                          <div class="col-sm-6">
-                            <input type="time" id="heureCovoiturage2" name="heureCovoiturage2" class="form-control" required>
-                          </div>
-                        </div>
-                    </div>
-                </div>          
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAutre">
             </div>
-            
-            <div class="form-group row ml-5" id="divAutreEntiere">
-                <div class="col-sm-10 mt-3 mb-3">
-                  <input class="form-controls checkboxTransport justify-content-center" type="checkbox" name="autre" id="autre" value="option1">
-                  <label for="autre" class="col-sm-2 col-form-label" id="textTrain">Autre</label>
-                  <input type="text" class=" col-sm-5 form-control" style="display:inline;" aria-describedby="emailHelp" placeholder="Précisez" name="precision" id="precision">
-                  <label id="precisionWarning" style="display:None; color:red;" class="col-sm-3 col-form-label">Veuillez remplir ce champ</label>
-                </div>
-                <div class="col-sm-3 mr-3 mt-3 divCovoiturage1" id="divAutre1" style="display : none;">
-                  <div class="form-group">
-                      <label class="d-block mb-3 labelTrain">Date d'Arrivé au festival</label>
-                      <div class="form-row">
-                        <div class="col-sm-6">
-                          <input id="dateAutre1" name="dateAutre1" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                        </div>
-                        <div class="col-sm-6">
-                          <input type="time" id="heureAutre1" name="heureAutre1" class="form-control" required>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              
-                <div class="col-sm-3 mt-3" id="divAutre2" style="display : none;">
-                    <div class="form-group">
-                        <label class="d-block mb-3 labelTrain">Date de Départ du festival</label>
-                        <div class="form-row">
-                          <div class="col-sm-6">
-                            <input id="dateAutre2" name="dateAutre2" class="form-control" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                          </div>
-                          <div class="col-sm-6">
-                            <input type="time" id="heureAutre2" name="heureAutre2" class="form-control" required>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
 
-              <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Arrivé à Blois</label>
+            <label for="transport" class="col-form-label mb-4 ml-4 fs-3" style="text-decoration : underline;" id="voyage">Arrivé à Blois</label>
             <div class="form-group row ml-5 mb-5">
-                <div class="col-sm-10">
-                  <label for="inputEmail3" class="mr-3 col-form-label">Le</label>
-                  <input id="dateArr" name="dateArr" class="col-sm-2 col-form-label" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
-                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label">à</label>
-                  <input type="time" id="hArrive" name="hArrive" class=" form-controls col-sm-2 col-form-label" required>
+                <div class="col-sm-10 form-row">
+                  <label for="inputEmail3" class="mr-3 col-form-label fs-4 pt-3">Le</label>
+                  <input id="dateArr" style="height: 120%;font-size : 1.1rem;" name="dateArr" class="col-sm-4 form-control pl-3" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label fs-4 pt-3">à</label>
+                  <input type="time" style="height: 120%; font-size : 1.1rem;" id="hArrive" name="hArrive" class="form-control col-sm-2 col-form-label pl-3" required>
                 </div>
             </div>
-            <label for="transport" class="col-form-label mb-3 ml-3" id="voyage">Départ de Blois</label>
-            <div class="form-group row ml-5">
-                <div class="col-sm-10">
-                  <label for="inputEmail3" class="mr-3 col-form-label">Le</label>
-                  <input id="dateDep" name="dateDep" class="col-sm-2 col-form-label" type="date" value="2022-12-05" title="Veuillez saisir une date valide au format : jj/mm/aaaa" required>
-                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label">à</label>
-                  <input type="time" id="hDep" name="hDep" class=" form-controls col-sm-2 col-form-label" required>
+            <label for="transport" class="col-form-label mb-4 ml-4 fs-3" style="text-decoration : underline;" id="voyage">Départ de Blois</label>
+            <div class="form-group row ml-5 mb-5">
+                <div class="col-sm-10 form-row">
+                  <label for="inputEmail3" class="mr-3 col-form-label fs-4 pt-3">Le</label>
+                  <input id="dateDep" style="height: 120%;font-size : 1.1rem;" name="dateDep" class="col-sm-4 form-control pl-3" type="date" value="2022-11-17" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label fs-4 pt-3">à</label>
+                  <input type="time" style="height: 120%; font-size : 1.1rem;" id="hDep" name="hDep" class="form-control col-sm-2 col-form-label pl-3" required>
                 </div>
             </div>
-            <small id="emailHelp" class="col-form-label mb-3 ml-3 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
+            <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
               <div class="form-group text-center mt-5 mb-1">
-                <button type="submit" class="btn text-light mr-2 bg-danger">Retour</button>
-                <button type="submit" class="btn text-light mr-2 bg-warning" onclick="return verif_champ_transport()">Suivant</button>
+                <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
+                <button type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_champ_transport()">Suivant</button>
             </div>
-        </form>
+          </form>
         
         </section>
     </main>
@@ -348,96 +133,267 @@
 <script>
 
 
-function createDiv1(){
+function createDivAutre(){
+  var container = document.createElement("div");
+  container.classList.add("row", "d-flex", "justify-content-center", "container_lieu_transport");
+  container.id = "divLieuDepArriveAutre";
 
-    const row = document.createElement("div");
-    row.classList.add("row", "d-flex", "justify-content-center");
-    row.id = "container_lieu_avion";
+  var departCol = document.createElement("div");
+  departCol.classList.add("col-sm-6", "col-lg-3");
+  
+  var precision = document.createElement("input");
+  precision.setAttribute("autocomplete", "off");
+  precision.id = "precision";
+  precision.placeholder = "Précision";
+  precision.setAttribute("inputmode", "text");
+  precision.setAttribute("spellcheck", "false");
+  precision.style = "font-size: 1.1em;";
+  precision.classList.add("form-control");
+  precision.style.height = "110%";
+  precision.style.width = "130%";
+  departCol.appendChild(precision);
+  container.appendChild(departCol);
+  var deleteButtonCol = document.createElement("div");
+  deleteButtonCol.classList.add("col-sm-6", "col-lg-1");
+  deleteButtonCol.id = "divBoutonSuppr";
 
-    const col1 = document.createElement("div");
-    col1.classList.add("col-sm-6", "col-lg-3");
+  var deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.setAttribute("autocomplete", "off");
+  deleteButton.id = "boutonSuppr";
+  deleteButton.placeholder = "À Partir De";
+  deleteButton.setAttribute("inputmode", "text");
+  deleteButton.setAttribute("spellcheck", "false");
+  deleteButton.classList.add("boutonSuppr");
+  deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"> <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/> </svg>';
+  deleteButtonCol.appendChild(deleteButton);
+  container.appendChild(deleteButtonCol);
+  deleteButton.addEventListener("click", function() {
+    if(container != null){
+      container.parentNode.removeChild(container);
+      var divTransport = document.getElementById("divLieuDepArriveAutre");
+      divTransport.style = '';
+      divTransport.innerHTML = '';
+      document.body.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+  return container;
+}
 
-    const input1 = document.createElement("input");
-    input1.autocomplete = "off";
-    input1.id = "lieuDepart";
-    input1.placeholder = "À Partir De";
-    input1.setAttribute("inputmode", "text");
-    input1.spellcheck = false;
-    input1.classList.add("form-control");
-    input1.style.height = "100%";
-    input1.style.width = "120%";
-    col1.appendChild(input1);
 
-    row.appendChild(col1);
 
-    const col2 = document.createElement("div");
-    col2.classList.add("col-sm-6", "col-lg-1");
-    col2.id = "divBoutonReverse";
 
-    const button = document.createElement("button");
-    button.type = "button";
-    button.autocomplete = "off";
-    button.id = "boutonReverse";
-    button.placeholder = "À Partir De";
-    button.setAttribute("inputmode", "text");
-    button.spellcheck = false;
-    button.classList.add("btn-lg", "btn-custom");
-    col2.appendChild(button);
+function createDiv1(nomTransport){
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svg.setAttribute("width", "35");
-    svg.setAttribute("height", "35");
-    svg.setAttribute("fill", "currentColor");
-    svg.setAttribute("viewBox", "0 0 16 16");
-    svg.classList.add("bi", "bi-arrow-repeat", "rotate");
+  var container = document.createElement("div");
+  container.classList.add("row", "d-flex", "justify-content-center", "container_lieu_transport");
+  container.id = "container_lieu_avion";
 
-    const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path1.setAttribute("d", "M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z");
+  var departCol = document.createElement("div");
+  departCol.classList.add("col-sm-6", "col-lg-3");
+  
+  var divTrainTransportArrive = document.createElement("div");
+  divTrainTransportArrive.classList.add("col-3");
+  var departInput = document.createElement("input");
+  departInput.setAttribute("autocomplete", "off");
+  departInput.id = "lieuDepartAvion";
+  departInput.placeholder = "Aéroport Départ";
+  departInput.setAttribute("inputmode", "text");
+  departInput.setAttribute("spellcheck", "false");
+  departInput.style = "font-size: 1.1em;";
+  departInput.classList.add("form-control");
+  departInput.style.height = "110%";
+  departInput.style.width = "120%";
+  divTrainTransportArrive.appendChild(departInput);
+  container.appendChild(divTrainTransportArrive);
 
-    const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path2.setAttribute("fill-rule", "evenodd");
-    path2.setAttribute("d", "M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z");
+  var reverseButtonCol = document.createElement("div");
+  reverseButtonCol.classList.add("col-sm-6", "col-lg-1");
+  reverseButtonCol.id = "divBoutonReverse";
 
-    svg.appendChild(path1);
-    svg.appendChild(path2);
-    button.appendChild(svg);
-    row.appendChild(col2);
+  var reverseButton = document.createElement("button");
+  reverseButton.type = "button";
+  reverseButton.setAttribute("autocomplete", "off");
+  reverseButton.id = "boutonReverse";
+  reverseButton.placeholder = "À Partir De";
+  reverseButton.setAttribute("inputmode", "text");
+  reverseButton.setAttribute("spellcheck", "false");
+  reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImg" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+  reverseButtonCol.appendChild(reverseButton);
+  container.appendChild(reverseButtonCol);
 
-    const col3 = document.createElement("div");
-    col3.classList.add("col-sm-6", "col-lg-3");
-    col3.id = "divLieuArrive";
+  var arriveCol = document.createElement("div");
+  arriveCol.classList.add("col-sm-6", "col-lg-3");
+  arriveCol.id = "divLieuArrive";
 
-    const input2 = document.createElement("input");
-    input2.autocomplete = "off";
-    input2.id = "lieuArrive";
-    input2.placeholder = "À Destionation De";
-    input2.setAttribute("inputmode", "text");
-    input2.spellcheck = false;
-    input2.classList.add("form-control");
-    input2.style.height = "100%";
-    input2.style.width = "120%";
-    col3.appendChild(input2);
 
-    row.appendChild(col3);
-    document.getElementById("divLieuDepArrive").appendChild(row);
+  var divTrainTransportDepart = document.createElement("div");
+  divTrainTransportDepart.classList.add("col-3");
+  var arriveInput = document.createElement("input");
+  arriveInput.setAttribute("autocomplete", "off");
+  arriveInput.id = "lieuArriveAvion";
+  arriveInput.placeholder = "Aéroport Arrivé";
+  arriveInput.setAttribute("inputmode", "text");
+  arriveInput.setAttribute("spellcheck", "false");
+  arriveInput.classList.add("form-control");
+  arriveInput.style = "font-size: 1.1em"
+  arriveInput.style.height = "110%";
+  arriveInput.style.width = "120%";
+  divTrainTransportDepart.appendChild(arriveInput);
+  container.appendChild(divTrainTransportDepart);
 
-    const boutonReverse = document.getElementById("boutonReverse");
-    const img_svg = document.querySelector(".rotate");
-    const lieuDepart = document.getElementById("lieuDepart");
-    const lieuArrive = document.getElementById("lieuArrive");
+  var deleteButtonCol = document.createElement("div");
+  deleteButtonCol.classList.add("col-sm-6", "col-lg-1");
+  deleteButtonCol.id = "divBoutonSuppr";
 
-    boutonReverse.addEventListener("click", function() {
-      if(lieuDepart.value != "" && lieuArrive.value != ""){
-        img_svg.classList.toggle("reverse");
-        const lieuDep = lieuDepart.value;
-        lieuDepart.value = lieuArrive.value;
-        lieuArrive.value = lieuDep;
-      }
+  var deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.classList.add("boutonSuppr");
+  deleteButton.setAttribute("autocomplete", "off");
+  deleteButton.id = "boutonSuppr";
+  deleteButton.placeholder = "À Partir De";
+  deleteButton.setAttribute("inputmode", "text");
+  deleteButton.setAttribute("spellcheck", "false");
+  deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"> <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/> </svg>';
+  deleteButtonCol.appendChild(deleteButton);
+  container.appendChild(deleteButtonCol);
+
+  let div = document.createElement("div");
+  let img = document.createElement("img");
+
+
+    switch(nomTransport){
+      case ('covoiturage') :
+        container.id = "container_lieu_covoiturage";
+        var divTransport = document.getElementById("divLieuDepArriveCovoiturage");
+        divTransport.style = 'background-color: #f5f7fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
+        departInput.placeholder = "Lieu Départ";
+        arriveInput.placeholder = "Lieu Arrivé";
+        departInput.id = "lieuDepartCovoiturage";
+        arriveInput.id = "lieuArriveCoivoiturage";
+        // Create a new img element
+        img.style = "height : 100%;"     
+        // Add the class "card-img-2" to the div element
+        div.classList.add("imgTransport");
+        img.src = "{{url_for('static', filename='img/carpooling.png')}}";
+        // Append the img element to the div element
+        div.appendChild(img); 
+        divTransport.appendChild(div);
+        reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgCo" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+        reverseButton.addEventListener("click", function() {
+        if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById("reverseButtonImgCo");
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          departInput.value = arriveInput.value;
+          arriveInput.value = lieuDep;
+        }
+        });
+        divTransport.appendChild(container);
+        break;
+      case ('train') :
+        container.id = "container_lieu_train";
+        var divTransport = document.getElementById("divLieuDepArriveTrain");
+        divTransport.style = 'background-color: #f5f7fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
+        departInput.placeholder = "Gare Départ";
+        arriveInput.placeholder = "Gare Arrivé";
+        departInput.id = "lieuDepartTrain";
+        arriveInput.id = "lieuArriveTrain";
+        // Create a new img element
+        img.style = "height : 100%;"     
+        // Add the class "card-img-2" to the div element
+        div.classList.add("imgTransport");
+        img.src = "{{url_for('static', filename='img/train.png')}}"
+        // Append the img element to the div element
+        div.appendChild(img); 
+        divTransport.appendChild(div);
+        reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgTrain" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+        reverseButton.addEventListener("click", function() {
+        if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById("reverseButtonImgTrain");
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          departInput.value = arriveInput.value;
+          arriveInput.value = lieuDep;
+        }
+        });
+        divTransport.appendChild(container);
+        break;
+      case ('voiture') :
+        container.id = "container_lieu_voiture";
+        var divTransport = document.getElementById("divLieuDepArriveVoiture");
+        divTransport.style = 'background-color: #f5f7fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
+        departInput.placeholder = "Lieu Départ";
+        arriveInput.placeholder = "Lieu Arrivé";
+        departInput.id = "lieuDepartVoiture";
+        arriveInput.id = "lieuArriveVoiture";
+        // Create a new img element
+        img.style = "height : 100%;"     
+        // Add the class "card-img-2" to the div element
+        div.classList.add("imgTransport");
+        img.src = "{{url_for('static', filename='img/car.png')}}"
+        // Append the img element to the div element
+        div.appendChild(img); 
+        divTransport.appendChild(div);
+        reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgVoiture" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+        reverseButton.addEventListener("click", function() {
+        if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById("reverseButtonImgVoiture");
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          departInput.value = arriveInput.value;
+          arriveInput.value = lieuDep;
+        }
+        });
+        divTransport.appendChild(container);
+        break;
+      case ('autre') :
+        container = createDivAutre();
+        container.id = "container_lieu_autre";
+        var divTransport = document.getElementById("divLieuDepArriveAutre");
+        divTransport.style = 'background-color: #f5f7fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
+        // Create a new img element
+        img.style = "height : 100%;"     
+        // Add the class "card-img-2" to the div element
+        div.classList.add("imgTransport");
+        img.src = "{{url_for('static', filename='img/other.png')}}"
+        // Append the img element to the div element
+        div.appendChild(img); 
+        divTransport.appendChild(div);
+        divTransport.appendChild(container);
+        break;
+      default :
+        var divTransport = document.getElementById("divLieuDepArriveAvion");
+        divTransport.style = 'background-color: #f7f8fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
+        // Create a new img element
+        img.style = "height : 100%;"     
+        // Add the class "card-img-2" to the div element
+        div.classList.add("imgTransport");
+        img.src = "{{url_for('static', filename='img/plane.png')}}"
+        // Append the img element to the div element
+        div.appendChild(img); 
+        divTransport.appendChild(div);
+        reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgAvion" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+        reverseButton.addEventListener("click", function() {
+        if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById("reverseButtonImgAvion");
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          departInput.value = arriveInput.value;
+          arriveInput.value = lieuDep;
+        }
+        });
+        divTransport.appendChild(container);
+        break;
+    } 
+
+    deleteButton.addEventListener("click", function() {
+      if(container != null){
+        container.parentNode.removeChild(container);
+        divTransport.style = '';
+        divTransport.removeChild(div);
+        document.body.scrollIntoView({ behavior: 'smooth' });      }
     });
-
-    // Ajoutez la div container à l'élément HTML de votre choix
-
 }
 
 const cardAvion = document.getElementById("cardAvion");
@@ -445,8 +401,90 @@ const cardAvion = document.getElementById("cardAvion");
 cardAvion.addEventListener("click", function(){
   const container_lieu_avion = document.getElementById("container_lieu_avion");
   if(container_lieu_avion == null){
-    createDiv1();
+    createDiv1('avion');
   }
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveAvion");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+
+const cardTrain = document.getElementById("cardTrain");
+
+cardTrain.addEventListener("click", function(){
+  const container_lieu_train= document.getElementById("container_lieu_train");
+  if(container_lieu_train == null){
+    createDiv1('train');
+  }
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveTrain");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+
+const cardVoiture = document.getElementById("cardVoiture");
+
+cardVoiture.addEventListener("click", function(){
+  const container_lieu_avion = document.getElementById("container_lieu_voiture");
+  if(container_lieu_avion == null){
+    createDiv1('voiture');
+  }
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveVoiture");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+
+
+const cardCovoiturage = document.getElementById("cardCovoiturage");
+
+cardCovoiturage.addEventListener("click", function(){
+  const container_lieu_avion = document.getElementById("container_lieu_covoiturage");
+  if(container_lieu_avion == null){
+    createDiv1('covoiturage');
+  }
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveCovoiturage");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+
+
+const cardAutre = document.getElementById("cardAutre");
+
+cardAutre.addEventListener("click", function(){
+  const container_lieu_avion = document.getElementById("container_lieu_autre");
+  if(container_lieu_avion == null){
+    createDiv1('autre');
+  }
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveAutre");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
 });
 
 
@@ -454,6 +492,8 @@ cardAvion.addEventListener("click", function(){
 
 
 
+
+/*
 
     var xhr = new XMLHttpRequest();
 
@@ -760,7 +800,7 @@ function changeValeur2(valeur){
   input = document.getElementById("myInput2");
   input.value = valeur.textContent;
   setupDropdown2();
-}
+} */
 
 
 </script>
