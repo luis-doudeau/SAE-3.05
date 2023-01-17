@@ -8249,10 +8249,10 @@ h1, h2, h3, h4, h5,
   border: 1px solid rgba(0, 0, 0, 0.1); }
   .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: rgba(0, 0, 0, 0.35) !important; }
+    color: rgba(0, 0, 0, 0.25) !important; }
   .form-control::-moz-placeholder {
     /* Firefox 19+ */
-    color: rgba(0, 0, 0, 0.35) !important; }
+    color: rgba(0, 0, 0, 0.25) !important; }
   .form-control:-ms-input-placeholder {
     /* IE 10+ */
     color: rgba(0, 0, 0, 0.35) !important; }
@@ -8665,7 +8665,7 @@ h1, h2, h3, h4, h5,
 
         .labelJourRestauration{
           font-size : 130% !important;
-          padding-bottom: 10px !important;
+          padding-left: 20px !important;
         }
         
         #textTrain{

@@ -1,3 +1,4 @@
+SET foreign_key_checks = 0;
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
 drop table if exists MOBILISER; 
@@ -24,4 +25,5 @@ drop table if exists LIEU;
 drop table if exists HOTEL;
 drop table if exists CRENEAU;
 drop table if exists RESTAURANT;
+SET foreign_key_checks = 1;
     

@@ -25,13 +25,14 @@ get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_part
 est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
-supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants
+supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
+suppprime_loger
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
-DATE_FESTIVAL = ["2022-11-17", "2022-11-18", "2022-11-19", "2022-11-20"]
-DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "2022-11-17-19-30-00/2022-11-17-22-00-00", "vendredi_midi": "2022-11-18-11-30-00/2022-11-18-14-00-00", "vendredi_soir":"2022-11-18-19-30-00/2022-11-18-22-00-00", "samedi_midi" : "2022-11-19-11-30-00/2022-11-19-14-00-00", "samedi_soir":"2022-11-19-19-30-00/2022-11-19-22-00-00", "dimanche_midi":"2022-11-20-11-30-00/2022-11-20-14-00-00", "dimanche_soir":"2022-11-20-19-30-00/2022-11-20-22-00-00"}
+DATE_FESTIVAL = ["2023-11-16", "2023-11-17", "2023-11-18", "2023-11-19"]
+DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "2023-11-17-19-30-00/2023-11-17-22-00-00", "vendredi_midi": "2023-11-18-11-30-00/2023-11-18-14-00-00", "vendredi_soir":"2023-11-18-19-30-00/2023-11-18-22-00-00", "samedi_midi" : "2023-11-19-11-30-00/2023-11-19-14-00-00", "samedi_soir":"2023-11-19-19-30-00/2023-11-19-22-00-00", "dimanche_midi":"2023-11-20-11-30-00/2023-11-20-14-00-00", "dimanche_soir":"2023-11-20-19-30-00/2023-11-20-22-00-00"}
 LISTE_HORAIRE_RESTAURANT = ["jeudi_soir", "vendredi_midi", "vendredi_soir", "samedi_midi" , "samedi_soir", "dimanche_midi", "dimanche_soir"]
 
 
@@ -228,7 +229,6 @@ def formulaire_auteur_transport():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-    print(request.method)
     if current_user.est_secretaire():
         return redirect(url_for("page_secretaire_accueil"))
 
@@ -239,14 +239,18 @@ def formulaire_reservation():
         request.form["dimanche_midi"],request.form["dimanche_soir"]]
         ajoute_repas_mangeur(session, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
         
-        if regime.isalpha():
+        if regime.isalpha(): # si le champ 'regime' contient des caractères
             id_regime = ajoute_regime(session, regime)
             ajoute_avoir_regime(session, current_user.idP, id_regime)
         remarques = request.form["remarque"]
-        modif_participant_remarque(session, current_user.idP, remarques)
-        if request.form["hebergement"] : 
-            pass #TODO AJOUTER HOTEL RECUPERER DATE ARRIVE DATE DEPART DE L'HOTEL
-        return redirect(url_for('page_fin')) #TODO                 
+        if remarques.isalpha():  # si le champ 'remarques' contient des caractères
+            modif_participant_remarque(session, current_user.idP, remarques)
+        
+        if request.form["hebergement"] =="true":
+            ajoute_hebergement(session, current_user.idP)
+        elif request.form["hebergement"] !="true": 
+            suppprime_loger(session, current_user.idP)
+        return render_template("pageFin.html", idp=current_user.idP) #TODO
         
     return render_template("formulaireReservation.html", idp=current_user.idP)
 

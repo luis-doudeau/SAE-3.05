@@ -104,21 +104,14 @@ INSERT INTO REPAS (idRepas,estMidi,idRest,idCreneau) VALUES   (1,true,1,2),
                                                                 (10,true,4,6),
                                                                 (11,true,4,9),
                                                                 (12,false,4,8),
-                                                                (13,false,5,12),
+                                                                (13,false,5,8),
                                                                 (14,true,5,3),
                                                                 (15,true,5,5),
                                                                 (16,true,5,6),
                                                                 (17,true,6,11),
-                                                                (18,false,6,12),
+                                                                (18,false,6,8),
                                                                 (19,true,7,11),
                                                                 (20,false,7,8);
-                                                                
-                
-INSERT INTO MANGER(idP, idRepas) VALUES (100, 3),
-                                        (101, 5),
-                                        (102, 6),
-                                        (102, 18),
-                                        (200, 1);
 
 
 INSERT INTO REGIME (idRegime,nomRegime) VALUES (1,"Végétarisme"),
@@ -164,17 +157,6 @@ INSERT INTO LOGER (idP, dateDebut, dateFin, idHotel) VALUES  (300, STR_TO_DATE("
                                                              (500, STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"), STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"), 2),
                                                             (301, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i"), 2),
                                                             (303, STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i"), 3);
-
-
-
-INSERT INTO ASSISTER(idP, dateArrive, dateDepart) VALUES  (300,STR_TO_DATE("2022-11-17 17:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                          (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
-                                                          (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
-                                                          (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
-                                                          (304,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
-                                                          (400,STR_TO_DATE("2022-11-20 11:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
-                                                          (401,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
-                                                          (500,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
 
 
 INSERT INTO MAISON_EDITION (idME, nomME, numStand) values (1, "Dargaud", 4),
@@ -231,10 +213,28 @@ INSERT INTO TRANSPORT (idTransport, nomTransport) values (1, "Avion"),
                                                           (4, "Covoiturage");
 
 
-INSERT INTO DEPLACER (idP, idTransport, lieuDepart, lieuArrive, annee) VALUES (301, 2, "Paris Gare du Nord", "Gare Blois", 2015),
+INSERT INTO DEPLACER (idP, idTransport, lieuDepart, lieuArrive, annee) values (301, 2, "Paris Gare du Nord", "Gare Blois", 2015),
                                                                       (301, 2, "Gare de Tours", "Gare Blois",2019),
                                                                       (303, 2, "Gare Orléans", "Gare Blois", 2022),
                                                                       (300, 2, "Aéroport Marseille Provence", "Aéroport d'Orly", 2022);
 
 
+
+INSERT INTO ASSISTER(idP, dateArrive, dateDepart) VALUES  (300,STR_TO_DATE("2022-11-17 17:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                          (301,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2022 19:30", "%d-%m-%Y %H:%i")),
+                                                          (302,STR_TO_DATE("2022-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:25", "%d-%m-%Y %H:%i")),
+                                                          (303,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:38", "%d-%m-%Y %H:%i")),
+                                                          (304,STR_TO_DATE("2022-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:00", "%d-%m-%Y %H:%i")),
+                                                          (400,STR_TO_DATE("2022-11-20 11:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2022 10:40", "%d-%m-%Y %H:%i")),
+                                                          (401,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 8:30", "%d-%m-%Y %H:%i")),
+                                                          (500,STR_TO_DATE("2022-11-18 16:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2022 10:30", "%d-%m-%Y %H:%i"));
+
+
 INSERT INTO SECRETAIRE (idP) VALUES (1000);
+
+
+INSERT INTO MANGER(idP, idRepas) VALUES (100, 3),
+                                        (101, 5),
+                                        (102, 6),
+                                        (102, 18),
+                                        (200, 5);

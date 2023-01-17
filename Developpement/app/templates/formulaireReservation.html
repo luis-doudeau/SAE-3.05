@@ -6,13 +6,13 @@
           <form method="POST" id="formCoo" style="min-width :65%;" class="container flex w-100 wrap p-4">
             <label for="restauration" class="col-sm-2 col-form-label mb-2 fs-3" style="text-decoration : underline;" id="restauration">Restauration</label>
             <div class="form-group row ml-5 mt-4">
-                <div class="col-sm-12 mb-2">
+                <div class="col-sm-12 mb-2" style="display: flex;align-items: center;">
                   <input class=" form-controls checkboxTransport justify-content-center" name="jeudi_soir" type="checkbox" id="jeudi_soir">
                   <label for="jeudi_soir" class="col-sm-2 labelJourRestauration col-form-label">Jeudi soir</label>
                 </div>
             </div>
             <div class="form-group row ml-5"> 
-                <div class="col-sm-12 mb-2"> 
+                <div class="col-sm-12 mb-2" style="display: flex;align-items: center;"> 
                   <input class=" form-controls checkboxTransport justify-content-center" name="vendredi_midi" type="checkbox" id="vendredi_midi">
                   <label for="vendredi_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Vendredi midi</label> 
                   <input class=" form-controls checkboxTransport justify-content-center" name="vendredi_soir" type="checkbox" id="vendredi_soir">
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="form-group row ml-5">
-                <div class="col-sm-12 mb-2">
+                <div class="col-sm-12 mb-2" style="display: flex;align-items: center;">
                   <input class=" form-controls checkboxTransport justify-content-center" name="samedi_midi" type="checkbox" id="samedi_midi">
                   <label for="samedi_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Samedi midi</label>
                   <input class=" form-controls checkboxTransport justify-content-center" name="samedi_soir" type="checkbox" id="samedi_soir">
@@ -29,7 +29,7 @@
 
             </div>
             <div class="form-group row ml-5 mb-3">
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="display: flex;align-items: center;">
                   <input class=" form-controls checkboxTransport justify-content-center" name="dimanche_midi" type="checkbox" id="dimanche_midi">
                   <label for="dimanche_midi" class="col-sm-2 labelJourRestauration mr-5 col-form-label">Dimanche midi</label>
                   <input class=" form-controls checkboxTransport justify-content-center" name="dimanche_soir" type="checkbox" id="dimanche_soir">
@@ -49,7 +49,7 @@
                 <div class="form-group">
                   <button  type="button" id="info-button" class="btn btn-secondary p-3 mb-3 mt-3 ml-5 mr-3 shadow-lg d-flex justify-content-center align-items-center" style="transition: background-color 0.5s ease; width: 180px; height: 45px;font-size:110%;">Plus d'informations</button>
                   <div id="info-modal" style="display:none;">
-                    <label id="" style="background-color : #111111; color :#ffffff; position : absolute; min-width : 300px;z-index:10;" class="pl-2 pr-2 pb-2 pt-2">Le coût de l'hotel est pris en charge par le festival bdBOUM / Maison d'édition. Hôtel : <a href="https://www.hotel-lemonarque.com/fr" target="_blank" style="color:#3455eb; text-decoration:underline;">Le Monarque</a></label>
+                    <label id="" style="background-color : #111111; color :#ffffff; position : absolute; min-width : 300px;z-index:10;" class="pl-2 pr-2 pb-2 pt-2">Le coût de l'hotel est pris en charge par le festival bdBOUM / Maison d'édition. Hôtel : <a href="https://www.hotel-lemonarque.com/fr" target="_blank" style="color:#6b7df2;font-size:110%; ; text-decoration:underline;">Le Monarque</a></label>
                   </div>
                 </div>  
               </div>
@@ -60,8 +60,8 @@
             <small id="prise_en_charge" class="col-form-label mb-3 ml-4 mt-4 form-text text-muted" style="font-size:1.2rem;"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
-              <button type="submit" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-              <button id="save" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
+              <button type="button" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
+              <button id="save" style="width: 140px; height: 45px;font-size:130%;" onclick="return verifFormulaire()" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -82,9 +82,19 @@
 
 <script>
 
+
+function verifFormulaire(){
+    success = document.getElementById("success").value;
+    echec = document.getElementById("echec").value;
+    if(success == "" && echec == ""){
+      window.alert("Vous devez choisir si vous souhaité être hébergé");
+      return false;
+    }
+    return true;
+}
+
   $(document).ready(function(){
     $("#save").on("click",function(){
-      console.log("re")
     var button1 = $("#jeudi_soir")[0].checked
     var button2 = $("#vendredi_midi")[0].checked 
     var button3 = $("#vendredi_soir")[0].checked
@@ -120,7 +130,6 @@
 const infoModal = document.getElementById('info-modal');
 
 infoButton.addEventListener('click', function() {
-  console.log("")
   if(infoModal.style.display == "none"){
     infoModal.style.display = 'block';
     infoButton.innerHTML = "Fermer";
