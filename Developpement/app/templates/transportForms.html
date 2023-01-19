@@ -85,6 +85,7 @@
             
             <!-- div qui vont contenir les détails sur les transports-->
             <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion">
+              
             </div>
 
             <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain">
@@ -133,13 +134,6 @@
 <script>
 
 
-const today = new Date();
-const dateArrInput = document.getElementById("dateArr");
-const dateDepInput = document.getElementById("dateDep");
-const formattedDate = today.toISOString().slice(0, 10);
-
-dateArrInput.value = formattedDate;
-dateDepInput.value = formattedDate;
 
 
 
@@ -309,6 +303,10 @@ function createDiv1(nomTransport){
         arriveInput.placeholder = "Gare Arrivé";
         departInput.id = "lieuDepartTrain";
         arriveInput.id = "lieuArriveTrain";
+        departInput.addEventListener("keyup", filterFunction);
+        departInput.addEventListener("click", filterFunction);
+        arriveInput.addEventListener("keyup", filterFunction2);
+        arriveInput.addEventListener("click", filterFunction2);
         // Create a new img element
         img.style = "height : 100%;"     
         // Add the class "card-img-2" to the div element
@@ -318,6 +316,22 @@ function createDiv1(nomTransport){
         div.appendChild(img); 
         divTransport.appendChild(div);
         reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgTrain" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
+        
+        
+        const optionsGare = document.createElement("div");
+        optionsGare.classList.add("dropdown-content");
+        optionsGare.style.display = "none";
+        optionsGare.id = "optionsGare";
+
+        const optionsGare2 = document.createElement("div");
+        optionsGare2.classList.add("dropdown-content", "col-form-label");
+        optionsGare2.style.display = "none";
+        optionsGare2.id = "optionsGare2";
+
+        divTrainTransportDepart.appendChild(optionsGare);
+        divTrainTransportDepart.appendChild(optionsGare2);
+
+
         reverseButton.addEventListener("click", function() {
         if(departInput.value != "" && arriveInput.value != ""){
           const img_svg = document.getElementById("reverseButtonImgTrain");
@@ -341,7 +355,7 @@ function createDiv1(nomTransport){
         img.style = "height : 100%;"     
         // Add the class "card-img-2" to the div element
         div.classList.add("imgTransport");
-        img.src = "{{url_for('static', filename='img/car.png')}}"
+        img.src = "{{url_for('static', filename='img/car.png')}}";
         // Append the img element to the div element
         div.appendChild(img); 
         divTransport.appendChild(div);
@@ -503,7 +517,7 @@ cardAutre.addEventListener("click", function(){
 
 
 
-/*
+
 
     var xhr = new XMLHttpRequest();
 
@@ -657,128 +671,6 @@ document.getElementById("hDep").value = currentTime;
 window.addEventListener("load", filterFunction);
 window.addEventListener("load", filterFunction2);
 
-const infoButton = document.getElementById('info-button');
-const infoModal = document.getElementById('info-modal');
-
-infoButton.addEventListener('click', function() {
-  console.log("")
-  if(infoModal.style.display == "none"){
-    infoModal.style.display = 'block';
-    infoButton.innerHTML = "Fermer";
-  }
-  else{
-    infoModal.style.display = 'none';
-    infoButton.innerHTML = "Plus d'informations";
-
-  }
-});
-
-
-const checkBoxTrain = document.getElementById("train");
-const divTrainHoraire = document.getElementById("horaireTrain");
-const divTrainHoraire2 = document.getElementById("horaireTrain2");
-const divTrainEntiere = document.getElementById("divTrainEntiere");
-
-checkBoxTrain.addEventListener('click', function() {
-  if(checkBoxTrain.checked){
-    divTrainHoraire.style.display = '';
-    divTrainHoraire2.style.display = '';
-    divTrainEntiere.style = "background-color: #e8f1fc"
-  }
-  else{
-    divTrainHoraire.style.display = 'none';
-    divTrainHoraire2.style.display = 'none';
-    divTrainEntiere.style = ""  
-  }
-});
-
-
-const checkBoxVoiture = document.getElementById("voiture");
-const divVoiture1 = document.getElementById("divVoiture1");
-const divVoiture2 = document.getElementById("divVoiture2");
-const divVoitureEntiere = document.getElementById("divVoitureEntiere");
-
-checkBoxVoiture.addEventListener('click', function() {
-  if(checkBoxVoiture.checked){
-    divVoiture1.style.display = '';
-    divVoiture2.style.display = '';
-    divVoitureEntiere.style = "background-color: #e8f1fc"
-  }
-  else{
-    divVoiture1.style.display = 'none';
-    divVoiture2.style.display = 'none';
-    divVoitureEntiere.style = ""  
-  }
-});
-
-
-const checkBoxCovoiturage = document.getElementById("covoiturage");
-const divCovoiturage1 = document.getElementById("divCovoiturage1");
-const divCovoiturage2 = document.getElementById("divCovoiturage2");
-const divCovoiturageEntiere = document.getElementById("divCovoiturageEntiere");
-const covoiturageLieuDep = document.getElementById("covoiturageLieuDep");
-const texte_justificatif = document.getElementById("texte_justificatif");
-const justificatif = document.getElementById("justificatif");
-
-
-checkBoxCovoiturage.addEventListener('click', function() {
-  if(checkBoxCovoiturage.checked){
-    divCovoiturage1.style.display = '';
-    divCovoiturage2.style.display = '';
-    covoiturageLieuDep.style.display = 'inline';
-    texte_justificatif.style.display = '';
-    justificatif.style.display = '';
-    divCovoiturageEntiere.style = "background-color: #e8f1fc"
-  }
-  else{
-    divCovoiturage1.style.display = 'none';
-    divCovoiturage2.style.display = 'none';
-    texte_justificatif.style.display = 'none';
-    covoiturageLieuDep.style.display = 'none';
-    justificatif.style.display = 'none';
-    divCovoiturageEntiere.style = ""  
-  }
-});
-
-
-const divAutreEntiere = document.getElementById('divAutreEntiere');
-const autre = document.getElementById('autre');
-const divAutre1 = document.getElementById('divAutre1');
-const divAutre2 = document.getElementById('divAutre2');
-
-
-autre.addEventListener('click', function() {
-  if(autre.checked){
-    divAutre1.style.display = '';
-    divAutre2.style.display = '';
-    divAutreEntiere.style = "background-color: #e8f1fc"
-  }
-  else{
-    divAutre1.style.display = 'none';
-    divAutre2.style.display = 'none';
-    divAutreEntiere.style = ""  
-  }
-});
-
-
-const avion = document.getElementById("avion");
-const divAvionEntiere = document.getElementById("divAvionEntiere");
-const horaireAvion = document.getElementById("horaireAvion");
-const horaireAvion2 = document.getElementById("horaireAvion2");
-
-
-avion.addEventListener('click', function() {
-  if(avion.checked){
-    horaireAvion.style.display = '';
-    horaireAvion2.style.display = '';
-    divAvionEntiere.style = "background-color: #e8f1fc"
-  }
-  else{
-    divAvionEntiere.style = ""
-    horaireAvion.style.display = 'none';
-    horaireAvion2.style.display = 'none';  
-  }
-});
 
 
 function setupDropdown(){
@@ -810,7 +702,7 @@ function changeValeur2(valeur){
   input = document.getElementById("myInput2");
   input.value = valeur.textContent;
   setupDropdown2();
-} */
+} 
 
 
 </script>
