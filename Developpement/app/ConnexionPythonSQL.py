@@ -11,7 +11,6 @@ from sqlalchemy import create_engine, cast
 from sqlalchemy import Column , Integer, Text , Date, DATETIME
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-import datetime
 from datetime import date, datetime
 import random
 import string
@@ -77,7 +76,9 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -257,6 +258,28 @@ def get_info_all_participants(session, prenomP, nomP, emailP, ddnP, role):
         participants = filtrer_par_role(role, participants)
     return participants.all()
 
+def get_info_all_consommateurs(session, prenomC, nomC, restaurant, la_date, creneau):
+    consommateurs = session.query(Manger)
+    if(prenomC != ""):
+        consommateurs = consommateurs.join(Consommateur, Manger.idP == Consommateur.idP).filter(Consommateur.prenomP == prenomC)
+    if(nomC != ""):
+        consommateurs = consommateurs.join(Consommateur, Manger.idP == Consommateur.idP).filter(Consommateur.nomP == nomC)
+    if (restaurant != ""):
+        consommateurs = consommateurs.join(
+                        Repas, Manger.idRepas == Repas.idRepas).join(
+                        Restaurant, Repas.idRest == Restaurant.idRest).filter(
+                        Restaurant.nomRest == restaurant)
+    # if(la_date!= ""):
+    #     jour = la_date.split("/")[0]
+    #     mois = la_date.split("/")[1]
+    #     annee = la_date.split("/")[2]
+    #     date = datetime.date(int(annee),int(mois),int(jour))
+    #     consommateurs = consommateurs.join(
+    #                     Repas, Manger.idRepas == Repas.idRepas).join(
+    #                     Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Creneau.dateDebut == date)
+    #CRENEAU A FAIRE
+    return consommateurs.all()
+
 def filtrer_par_role(role, participants):
     if role == "Secretaire":
         return participants.join(Secretaire, Participant.idP == Secretaire.idP)
@@ -270,7 +293,6 @@ def filtrer_par_role(role, participants):
         return participants.join(Presse, Participant.idP == Presse.idP)
     if role == "Invite":
         return participants.join(Invite, Participant.idP == Invite.idP)
-        
 
 def ajoute_secretaire(session, idP, prenomP, nomP, emailP, mdpP): 
     secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)

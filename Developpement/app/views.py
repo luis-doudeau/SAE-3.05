@@ -26,7 +26,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger
+suppprime_loger, get_info_all_consommateurs
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -129,13 +129,19 @@ def dataParticipant():
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
 
-@app.route('/api/dataConsommateurs')
+@app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
 def dataConsommateurs():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    restaurant = request.form["restaurant"]
+    la_date = request.form["la_date"]
+    creneau = request.form["creneau"]
+    consommateurs = get_info_all_consommateurs(session, prenom, nom, restaurant, la_date, creneau)
     liste_consommateur = []
-    for consommateur in session.query(Manger).all():
+    for consommateur in consommateurs:
         consommateur_dico = get_consommateur(session, consommateur.idP).to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(session, consommateur.idP)
         consommateur_dico["restaurant"] = get_restaurant(session, consommateur.idRepas)
