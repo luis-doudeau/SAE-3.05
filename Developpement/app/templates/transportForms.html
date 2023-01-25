@@ -197,7 +197,7 @@ function createDiv1(nomTransport){
   departCol.classList.add("col-sm-6", "col-lg-3");
   
   var divTrainTransportArrive = document.createElement("div");
-  divTrainTransportArrive.classList.add("col-3");
+  divTrainTransportArrive.classList.add("col-3","dropdownC");
   var departInput = document.createElement("input");
   departInput.setAttribute("autocomplete", "off");
   departInput.id = "lieuDepartAvion";
@@ -232,7 +232,7 @@ function createDiv1(nomTransport){
 
 
   var divTrainTransportDepart = document.createElement("div");
-  divTrainTransportDepart.classList.add("col-3");
+  divTrainTransportDepart.classList.add("col-3", "dropdownC");
   var arriveInput = document.createElement("input");
   arriveInput.setAttribute("autocomplete", "off");
   arriveInput.id = "lieuArriveAvion";
@@ -319,17 +319,17 @@ function createDiv1(nomTransport){
         
         
         const optionsGare = document.createElement("div");
-        optionsGare.classList.add("dropdown-content");
+        optionsGare.classList.add("divOptionsTransports");
         optionsGare.style.display = "none";
         optionsGare.id = "optionsGare";
 
         const optionsGare2 = document.createElement("div");
-        optionsGare2.classList.add("dropdown-content", "col-form-label");
+        optionsGare2.classList.add("col-form-label", "divOptionsTransports");
         optionsGare2.style.display = "none";
         optionsGare2.id = "optionsGare2";
 
-        divTrainTransportDepart.appendChild(optionsGare);
         divTrainTransportDepart.appendChild(optionsGare2);
+        divTrainTransportArrive.appendChild(optionsGare);
 
 
         reverseButton.addEventListener("click", function() {
@@ -445,6 +445,8 @@ cardTrain.addEventListener("click", function(){
   if(container_lieu_train == null){
     createDiv1('train');
   }
+  loadOptions();
+  loadOptions2();
 
   //décalage en px
   var offest = -60;
@@ -537,6 +539,7 @@ function loadOptions() {
         a.setAttribute("style", "margin: -3px;"); 
         a.style.display = "none";
         a.textContent = option;
+        a.classList.add("optionTransport");
 
         // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
         a.addEventListener("click", function(event) {
@@ -574,6 +577,8 @@ function loadOptions2() {
         a.setAttribute("style", "margin: -3px;"); 
         a.style.display = "none";
         a.textContent = option;
+        a.classList.add("optionTransport");
+
 
         // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
         a.addEventListener("click", function(event) {
@@ -594,12 +599,10 @@ function loadOptions2() {
   xhr.send();
 }
 
-window.addEventListener("load", loadOptions);
-window.addEventListener("load", loadOptions2);
 
 function filterFunction() {
   var input, filter, ul, li, a, i, existeElem, div2;
-  input = document.getElementById("gare");
+  input = document.getElementById("lieuDepartTrain");
   filter = input.value.toUpperCase();
   div2 = document.getElementById("optionsGare");
   a = div2.getElementsByTagName("a");
@@ -631,7 +634,7 @@ function filterFunction() {
 
 function filterFunction2() {
   var input, filter, ul, li, a, i, existeElem, div2;
-  input = document.getElementById("myInput2");
+  input = document.getElementById("lieuArriveTrain");
   filter = input.value.toUpperCase();
   div = document.getElementById("optionsGare2");
   a = div.getElementsByTagName("a");
@@ -668,11 +671,6 @@ document.getElementById("hArrive").value = currentTime;
 document.getElementById("hDep").value = currentTime;
 
 
-window.addEventListener("load", filterFunction);
-window.addEventListener("load", filterFunction2);
-
-
-
 function setupDropdown(){
   var div = document.getElementById("optionsGare");
   var options = div.getElementsByTagName("a");
@@ -692,14 +690,14 @@ function setupDropdown2(){
 
 
 function changeValeur(valeur){
-    input = document.getElementById("gare");
+    input = document.getElementById("lieuDepartTrain");
     input.value = valeur.textContent;
     setupDropdown();
 }
 
 
 function changeValeur2(valeur){
-  input = document.getElementById("myInput2");
+  input = document.getElementById("lieuArriveTrain");
   input.value = valeur.textContent;
   setupDropdown2();
 } 
