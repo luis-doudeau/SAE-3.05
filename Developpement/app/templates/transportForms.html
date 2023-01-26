@@ -126,7 +126,7 @@
         
         </section>
     </main>
-</body>
+  </body>
 </html>
 
 
@@ -184,7 +184,6 @@ $(document).ready(function(){
       "lieuArriveCovoiturage" : lieuArriveCovoiturage,
       "precision" : precision
     }
-
   })
   })
 })
@@ -197,6 +196,10 @@ function verif_champ_transport(){
   for(let element of liste){
     var elem = document.getElementById(element);
     if (elem != null && elem.children.length > 0) {
+      const params = new URLSearchParams(document.location.search);
+      const idP = params.get("idp");
+ 
+      window.location = "{{url_for('formulaire_reservation', idp='param')}}".replace('param', idP);
       return true;
     }
   }

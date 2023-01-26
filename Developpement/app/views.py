@@ -32,7 +32,7 @@ suppprime_loger, id_transport_with_name
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
 DATE_FESTIVAL = ["2023-11-16", "2023-11-17", "2023-11-18", "2023-11-19"]
-DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : "2023-11-17-19-30-00/2023-11-17-22-00-00", "vendredi_midi": "2023-11-18-11-30-00/2023-11-18-14-00-00", "vendredi_soir":"2023-11-18-19-30-00/2023-11-18-22-00-00", "samedi_midi" : "2023-11-19-11-30-00/2023-11-19-14-00-00", "samedi_soir":"2023-11-19-19-30-00/2023-11-19-22-00-00", "dimanche_midi":"2023-11-20-11-30-00/2023-11-20-14-00-00", "dimanche_soir":"2023-11-20-19-30-00/2023-11-20-22-00-00"}
+DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : DATE_FESTIVAL[0]+"-19-30-00/"+DATE_FESTIVAL[0]+"-22-00-00", "vendredi_midi": DATE_FESTIVAL[1]+"-11-30-00/"+DATE_FESTIVAL[1]+"-14-00-00", "vendredi_soir": DATE_FESTIVAL[1]+"-19-30-00/"+DATE_FESTIVAL[1]+"-22-00-00", "samedi_midi" : DATE_FESTIVAL[2]+"-11-30-00/"+DATE_FESTIVAL[2]+"-14-00-00", "samedi_soir":DATE_FESTIVAL[2]+"-19-30-00/"+DATE_FESTIVAL[2]+"-22-00-00", "dimanche_midi": DATE_FESTIVAL[3]+"-11-30-00/"+DATE_FESTIVAL[3]+"-14-00-00", "dimanche_soir": DATE_FESTIVAL[3]+"-19-30-00/"+DATE_FESTIVAL[3]+"-22-00-00"}
 LISTE_HORAIRE_RESTAURANT = ["jeudi_soir", "vendredi_midi", "vendredi_soir", "samedi_midi" , "samedi_soir", "dimanche_midi", "dimanche_soir"]
 
 
@@ -233,8 +233,7 @@ def formulaire_auteur_transport():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-    if current_user.est_secretaire():
-        return redirect(url_for("page_secretaire_accueil"))
+
 
     if request.method == "POST":
         regime = request.form["regime"] # stocker en variable car réutilisé ensuite
