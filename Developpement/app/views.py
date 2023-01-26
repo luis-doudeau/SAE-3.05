@@ -26,7 +26,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger
+suppprime_loger, id_transport_with_name
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -199,21 +199,25 @@ def formulaire_auteur_transport():
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
         liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
-        dico_champs_box = {"avion" : ["avionLieuDep", "avionLieuRetour", "dateAvion1", "heureAvion", "dateAvion2", "heureAvion2"],\
-                          "train": ["gareDep", "gareRetour", "dateGare1", "heureGare1", "dateGare2", "heureGare2"],\
-                          "voiture": ["voitureDep", "voitureRetour", "dateVoiture1", "heureVoiture1", "dateVoiture2", "heureVoiture2"],\
-                          "covoiturage": ["covoiturageLieuDep", "dateCovoiturage1", "heureCovoiturage1", "dateCovoiturage2", "heureCovoiturage2"],\
-                          "autre": ["precision", "dateAutre1", "heureAutre1", "dateAutre1", "heureAutre2"]}
+        dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
+                          "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
+                          "autre": ["precision"]}
         
-        for i in range(len(liste_id_box)):
-            if request.form.get(liste_id_box[i]) == "option1":
-                liste_val = []
-                for champ in dico_champs_box[liste_id_box[i]] :
-                    liste_val.append(request.form.get(champ))
-                    #insere_transport(session, liste_id_box[i], liste_val)
+        
+        for transport in liste_id_box:
+            if request.form[transport] == "true" and transport != "autre" :
+                print(transport)
+                lieu_depart = request.form[dico_champs_box[transport][0]]
+                lieu_arrive = request.form[dico_champs_box[transport][1]]
+                currentDateTime = datetime.now()
+                date = currentDateTime.date()
+                year = date.strftime("%Y")
+                ajoute_deplacer(session, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
+            elif transport == "autre" : 
+                modif_participant_remarque(session, current_user.idP, request.form[dico_champs_box[transport][0]])
 
-        dateArr = request.form["dateArr"].replace("-",",").split(",")
-        heureArr = request.form["hArrive"].replace(":",",").split(",")
+        dateArr = request.form["dateArr"].split("-")
+        heureArr = request.form["hArrive"].split(":")
         date_arr = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
 
         dateDep = request.form["dateDep"].replace("-",",").split(",")
@@ -222,7 +226,7 @@ def formulaire_auteur_transport():
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
         return redirect(url_for('formulaire_reservation', idp = current_user.idP))
         
-    return render_template("transportForms.html")   
+    return render_template("transportForms.html")
         
         
     

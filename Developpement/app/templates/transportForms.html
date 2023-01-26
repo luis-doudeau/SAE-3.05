@@ -16,7 +16,7 @@
                       <!-- Simple card -->
                       <div class="card d-block text-center shadow mt-5 card_hover">
                           <div class=""> 
-                            <img class="card-img-2" src="{{url_for('static', filename='img/plane.png')}}" alt="Card image cap">
+                            <img class="imgTransport" src="{{url_for('static', filename='img/plane.png')}}" alt="Card image cap">
                           </div>
                           <div class="card-body">
                               <h4 class="card-title mb-2">Avion</h4>
@@ -29,7 +29,7 @@
                     <!-- Simple card -->
                     <div class="card d-block text-center shadow mt-5 card_hover">
                         <div class=""> 
-                          <img class="card-img-2" src="{{url_for('static', filename='img/train.png')}}" alt="Card image cap">
+                          <img class="imgTransport" src="{{url_for('static', filename='img/train.png')}}" alt="Card image cap">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title mb-2">Train</h4>
@@ -42,7 +42,7 @@
                   <!-- Simple card -->
                   <div class="card d-block text-center shadow mt-5 card_hover">
                       <div class=""> 
-                        <img class="card-img-2" src="{{url_for('static', filename='img/car.png')}}" alt="Card image cap">
+                        <img class="imgTransport" src="{{url_for('static', filename='img/car.png')}}" alt="Card image cap">
                       </div>
                       <div class="card-body">
                           <h4 class="card-title mb-2">Voiture</h4>
@@ -60,7 +60,7 @@
                   <!-- Simple card -->
                   <div class="card d-block text-center shadow mt-5 card_hover">
                       <div class=""> 
-                        <img class="card-img-2" src="{{url_for('static', filename='img/carpooling.png')}}" alt="Card image cap">
+                        <img class="imgTransport" src="{{url_for('static', filename='img/carpooling.png')}}" alt="Card image cap">
                       </div>
                       <div class="card-body">
                           <h4 class="card-title mb-2">Covoiturage</h4>
@@ -73,7 +73,7 @@
                 <!-- Simple card -->
                 <div class="card d-block text-center shadow mt-5 card_hover">
                     <div class=""> 
-                      <img class="card-img-2" src="{{url_for('static', filename='img/other.png')}}" alt="Card image cap">
+                      <img class="imgTransport" src="{{url_for('static', filename='img/other.png')}}" alt="Card image cap">
                     </div>
                     <div class="card-body">
                         <h4 class="card-title mb-2">Autre</h4>
@@ -85,7 +85,6 @@
             
             <!-- div qui vont contenir les détails sur les transports-->
             <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion">
-              
             </div>
 
             <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain">
@@ -121,7 +120,7 @@
             <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
               <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-                <button type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_champ_transport()">Suivant</button>
+                <button id="save" type="button" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_champ_transport()">Suivant</button>
             </div>
           </form>
         
@@ -133,7 +132,77 @@
 
 <script>
 
+$(document).ready(function(){
+  $("#save").on("click", function(){
+    var avion = document.getElementById("divLieuDepArriveAvion").children.length >0;
+    var train = document.getElementById("divLieuDepArriveTrain").children.length >0;
+    var voiture = document.getElementById("divLieuDepArriveVoiture").children.length >0;
+    var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").children.length >0;
+    var autre = document.getElementById("divLieuDepArriveAutre").children.length >0;
+    var dateArr = document.getElementById("dateArr").value;
+    var hArrive = document.getElementById("hArrive").value;
+    var dateDep = document.getElementById("dateDep").value;
+    var hDep = document.getElementById("hDep").value;
 
+    var lieuDepartAvion = document.getElementById("lieuDepartAvion") != null ? document.getElementById("lieuDepartAvion").value : null;
+    var lieuArriveAvion = document.getElementById("lieuArriveAvion")!=null ? document.getElementById("lieuArriveAvion").value : null;
+
+    var lieuDepartTrain = document.getElementById("lieuDepartTrain") != null ? document.getElementById("lieuDepartTrain").value : null;
+    var lieuArriveTrain = document.getElementById("lieuArriveTrain") != null ? document.getElementById("lieuArriveTrain").value : null;
+
+    var lieuDepartVoiture = document.getElementById("lieuDepartVoiture")!=null ? document.getElementById("lieuDepartVoiture").value : null;
+    var lieuArriveVoiture = document.getElementById("lieuArriveVoiture")!= null ? document.getElementById("lieuArriveVoiture").value : null;
+
+    var lieuDepartCovoiturage = document.getElementById("lieuDepartCovoiturage") != null ? document.getElementById("lieuDepartCovoiturage").value : null;
+    var lieuArriveCovoiturage = document.getElementById("lieuArriveCovoiturage") != null ? document.getElementById("lieuArriveCovoiturage").value : null;
+
+    var precision = document.getElementById("precision") != null ? document.getElementById("precision").value : null;
+
+
+  $.ajax({
+    url : "{{url_for('formulaire_auteur_transport')}}",
+    type : "POST",
+    dataType : "application/json",
+    data : {
+      "avion" : avion,
+      "train" : train,
+      "voiture" : voiture,
+      "covoiturage" : covoiturage,
+      "autre" : autre,
+      "dateArr" : dateArr,
+      "hArrive" : hArrive,
+      "dateDep" : dateDep,
+      "hDep"  : hDep,
+
+      "lieuDepartAvion" : lieuDepartAvion,
+      "lieuArriveAvion" : lieuArriveAvion,
+      "lieuDepartTrain" : lieuDepartTrain,
+      "lieuArriveTrain" : lieuArriveTrain,
+      "lieuDepartVoiture" : lieuDepartVoiture,
+      "lieuArriveVoiture" : lieuArriveVoiture,
+      "lieuDepartCovoiturage" : lieuDepartCovoiturage,
+      "lieuArriveCovoiturage" : lieuArriveCovoiturage,
+      "precision" : precision
+    }
+
+  })
+  })
+})
+
+
+
+function verif_champ_transport(){
+  var liste = new Array();
+  liste.push("divLieuDepArriveAvion", "divLieuDepArriveTrain", "divLieuDepArriveVoiture", "divLieuDepArriveCovoiturage", "divLieuDepArriveAutre");
+  for(let element of liste){
+    var elem = document.getElementById(element);
+    if (elem != null && elem.children.length > 0) {
+      return true;
+    }
+  }
+  window.alert("Vous devez choisir un moyen de transport");
+  return false;
+} 
 
 
 
@@ -185,8 +254,6 @@ function createDivAutre(){
 }
 
 
-
-
 function createDiv1(nomTransport){
 
   var container = document.createElement("div");
@@ -204,6 +271,7 @@ function createDiv1(nomTransport){
   departInput.placeholder = "Aéroport Départ";
   departInput.setAttribute("inputmode", "text");
   departInput.setAttribute("spellcheck", "false");
+  departInput.setAttribute("required", true);
   departInput.style = "font-size: 1.1em;";
   departInput.classList.add("form-control");
   departInput.style.height = "110%";
@@ -237,6 +305,7 @@ function createDiv1(nomTransport){
   arriveInput.setAttribute("autocomplete", "off");
   arriveInput.id = "lieuArriveAvion";
   arriveInput.placeholder = "Aéroport Arrivé";
+  arriveInput.setAttribute("required", true);
   arriveInput.setAttribute("inputmode", "text");
   arriveInput.setAttribute("spellcheck", "false");
   arriveInput.classList.add("form-control");
@@ -319,7 +388,7 @@ function createDiv1(nomTransport){
         
         
         const optionsGare = document.createElement("div");
-        optionsGare.classList.add("divOptionsTransports");
+        optionsGare.classList.add("col-form-label", "divOptionsTransports");
         optionsGare.style.display = "none";
         optionsGare.id = "optionsGare";
 
@@ -390,11 +459,31 @@ function createDiv1(nomTransport){
         var divTransport = document.getElementById("divLieuDepArriveAvion");
         divTransport.style = 'background-color: #f7f8fa;height: 185px;border-radius: 0 .5rem .5rem .5rem;box-shadow: 0 0 24px 2px rgba(0,0,0,.2);width : 85%;';
         // Create a new img element
-        img.style = "height : 100%;"     
+        img.style = "height : 100%;"
         // Add the class "card-img-2" to the div element
         div.classList.add("imgTransport");
         img.src = "{{url_for('static', filename='img/plane.png')}}"
         // Append the img element to the div element
+
+        departInput.addEventListener("keyup", filterFunctionAvion);
+        departInput.addEventListener("click", filterFunctionAvion);
+        arriveInput.addEventListener("keyup", filterFunctionAvion2);
+        arriveInput.addEventListener("click", filterFunctionAvion2);
+
+        const optionsAvion = document.createElement("div");
+        optionsAvion.classList.add("col-form-label", "divOptionsTransports");
+        optionsAvion.style.display = "none";
+        optionsAvion.id = "optionsAvion";
+
+        const optionsAvion2 = document.createElement("div");
+        optionsAvion2.classList.add("col-form-label", "divOptionsTransports");
+        optionsAvion2.style.display = "none";
+        optionsAvion2.id = "optionsAvion2";
+
+        divTrainTransportDepart.appendChild(optionsAvion2);
+        divTrainTransportArrive.appendChild(optionsAvion);
+
+
         div.appendChild(img); 
         divTransport.appendChild(div);
         reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgAvion" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
@@ -420,6 +509,160 @@ function createDiv1(nomTransport){
     });
 }
 
+
+function loadOptionsAvionDepart() {
+  var xhr = new XMLHttpRequest();
+  var div = document.getElementById("optionsAvion");
+  xhr.open("GET", "../static/txt/aeroport.txt", true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = xhr.responseText.split("\n");
+      for (var i = 0; i < options.length; i++) {
+        var option = options[i];
+        var a = document.createElement("a");
+        a.setAttribute("onclick", "changeValeurAvion1(this)");
+        a.setAttribute("href", "#");
+        a.style.display = "none";
+        a.textContent = option;
+        a.classList.add("optionTransport");
+
+        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
+        a.addEventListener("click", function(event) {
+          // Empêcher le comportement par défaut de l'événement "mousedown"
+          event.preventDefault();
+
+          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
+          
+          div.style.display = "none";
+        });
+        div.appendChild(a);
+      
+        
+      }
+    } else {
+      // Il y a eu un problème avec la requête, traitez-le ici
+    }
+  };
+  xhr.send();
+}
+
+function loadOptionsAvionArrive() {
+  var xhr = new XMLHttpRequest();
+  var div2 = document.getElementById("optionsAvion2");
+  xhr.open("GET", "../static/txt/aeroport.txt", true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      var options = xhr.responseText.split("\n");
+      for (var i = 0; i < options.length; i++) {
+        var option = options[i];
+        var a = document.createElement("a");
+        a.setAttribute("onclick", "changeValeurAvion2(this)");
+        a.setAttribute("href", "#");
+        a.style.display = "none";
+        a.textContent = option;
+        a.classList.add("optionTransport");
+
+
+        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
+        a.addEventListener("click", function(event) {
+          // Empêcher le comportement par défaut de l'événement "mousedown"
+          event.preventDefault();
+
+          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
+          
+          div2.style.display = "none";
+        });
+        div2.appendChild(a);
+        
+      }
+    } else {
+      // Il y a eu un problème avec la requête, traitez-le ici
+    }
+  };
+  xhr.send();
+}
+
+
+function filterFunctionAvion() {
+  var input, filter, ul, li, a, i, existeElem, div2;
+  input = document.getElementById("lieuDepartAvion");
+  filter = input.value.toUpperCase();
+  div2 = document.getElementById("optionsAvion");
+  a = div2.getElementsByTagName("a");
+  existeElem = false;
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().includes(filter) && filter!="") {
+        a[i].style.display = "";
+        div2.style.display = "";
+        existeElem = true;
+    }
+    else {
+        a[i].style.display = "none";
+    }
+  }
+  if(!existeElem){
+    div2.style.display = "none";
+  }
+}
+
+
+function filterFunctionAvion2() {
+  var input, filter, ul, li, a, i, existeElem, div2;
+  input = document.getElementById("lieuArriveAvion");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("optionsAvion2");
+  a = div.getElementsByTagName("a");
+  existeElem = false;
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().includes(filter) && filter!="") {
+        a[i].style.display = "";
+        div.style.display = "";
+        existeElem = true;
+    }
+    else {
+        a[i].style.display = "none";
+    }
+    
+  }
+  if(!existeElem){
+    div.style.display = "none";
+  }
+}
+
+
+function setupDropdownAvion1(){
+  var div = document.getElementById("optionsAvion");
+  var options = div.getElementsByTagName("a");
+  for (var i = 0; i < options.length; i++) {
+    options[i].style.display = "none";
+  }
+}
+
+
+function setupDropdownAvion2(){
+  var div = document.getElementById("optionsAvion2");
+  var options = div.getElementsByTagName("a");
+  for (var i = 0; i < options.length; i++) {
+    options[i].style.display = "none";
+  }
+}
+
+
+function changeValeurAvion1(valeur){
+    input = document.getElementById("lieuDepartAvion");
+    input.value = valeur.textContent;
+    setupDropdownAvion1();
+}
+
+
+function changeValeurAvion2(valeur){
+  input = document.getElementById("lieuArriveAvion");
+  input.value = valeur.textContent;
+  setupDropdownAvion2();
+}
+
 const cardAvion = document.getElementById("cardAvion");
 
 cardAvion.addEventListener("click", function(){
@@ -427,6 +670,8 @@ cardAvion.addEventListener("click", function(){
   if(container_lieu_avion == null){
     createDiv1('avion');
   }
+  loadOptionsAvionDepart();
+  loadOptionsAvionArrive();
 
   //décalage en px
   var offest = -60;
@@ -514,13 +759,6 @@ cardAutre.addEventListener("click", function(){
 });
 
 
-
-
-
-
-
-
-
     var xhr = new XMLHttpRequest();
 
 function loadOptions() {
@@ -535,8 +773,6 @@ function loadOptions() {
         var a = document.createElement("a");
         a.setAttribute("onclick", "changeValeur(this)");
         a.setAttribute("href", "#");
-        a.setAttribute("style", "position: absolute;"); 
-        a.setAttribute("style", "margin: -3px;"); 
         a.style.display = "none";
         a.textContent = option;
         a.classList.add("optionTransport");
@@ -573,8 +809,6 @@ function loadOptions2() {
         var a = document.createElement("a");
         a.setAttribute("onclick", "changeValeur2(this)");
         a.setAttribute("href", "#");
-        a.setAttribute("style", "position: absolute;"); 
-        a.setAttribute("style", "margin: -3px;"); 
         a.style.display = "none";
         a.textContent = option;
         a.classList.add("optionTransport");
@@ -614,7 +848,6 @@ function filterFunction() {
             a[i].style.display = "";
             div2.style.display = "";
             existeElem = true;
-
         }
         else {
             a[i].style.display = "none";
@@ -628,12 +861,8 @@ function filterFunction() {
 }
 
 
-
-
-
-
 function filterFunction2() {
-  var input, filter, ul, li, a, i, existeElem, div2;
+  var input, filter, ul, li, a, i, existeElem, div;
   input = document.getElementById("lieuArriveTrain");
   filter = input.value.toUpperCase();
   div = document.getElementById("optionsGare2");
@@ -659,7 +888,7 @@ function filterFunction2() {
   }
 }
 
-let today = new Date().toISOString().substr(0, 10);
+let today = new Date().toISOString().substr(0, 10); 
 
 document.getElementById("dateDep").value = today;
 document.getElementById("dateArr").value = today;
@@ -667,7 +896,7 @@ document.getElementById("dateArr").value = today;
 
 let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
-document.getElementById("hArrive").value = currentTime;
+document.getElementById("hArrive").value = currentTime; // ENLEVER
 document.getElementById("hDep").value = currentTime;
 
 
@@ -700,7 +929,7 @@ function changeValeur2(valeur){
   input = document.getElementById("lieuArriveTrain");
   input.value = valeur.textContent;
   setupDropdown2();
-} 
+}
 
 
 </script>

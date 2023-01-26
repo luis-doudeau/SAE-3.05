@@ -1,0 +1,869 @@
+Abbeville Abbeville - Buigny - Saint Maclou Airport France
+Agen Agen - La Garenne Airport France
+Ajaccio Campo Dell Oro Airport France
+Albi Albi - Le Sequestre Airport France
+Angers Angers Loire Aeroport Airport France
+Angouleme Angouleme - Brie Champniers Airport France
+Annecy Annecy - Haute Savoie Airport France
+Arras Arras - Roclincourt Airport France
+Aubenas Aubenas Ardeche meridionale Airport France
+Auch Auch - Lamothe Airport France
+Aurillac Aurillac Airport France
+Autun Autun - Bellevue Airport France
+Auxerre Auxerre - Branches Airport France
+Avignon Avignon Airport France
+Basel-Mulhouse EuroAirport Basel-Mulhouse France
+Bastia Bastia-Poretta Airport France
+Beauvais Beauvais - Tille Airport France
+Bergerac Bergerac - Roumaniere Airport France
+Besacon Besancon - La Veze Airport France
+Beziers Beziers - Vias Airport France
+Biarritz Biarritz-Anglet-Bayonne Airport France
+Blois (Villefrancoeur) Blois - Le Breuil Airport France
+Bordeaux Bordeaux Airport Airport France
+Bourges Bourges Airport France
+Brest (Guipavas) Brest Bretagne Airport France
+Brive-La-Gaillarde Brive - La Roche Airport France
+Caen Caen - Carpiquet Airport France
+Cahors Cahors - Lalbenque Airport France
+Calais Calais - Dunkerque Airport France
+Calvi Calvi - Sainte-Catherine Airport France
+Cannes Cannes - Mandelieu Airport France
+Carcassonne Carcassonne en Pays Cathare Airport France
+Castres-Mazamet Castres-Mazamet Airport France
+Chambery Chambery-Savoie Airport France
+Chateauroux Chateauroux-Deols-Marcel Dassault Airport France
+Cherbourg Cherbourg - Maupertus Airport France
+Cholet Cholet Lepontreau Airport France
+Clermont-Ferrand Clermont-Ferrand - Auvergne Airport France
+Cognac Cognac - Chateaubernard Airport France
+Colmar Colmar - Houssen Airport France
+Courchevel Courchevel Airport France
+Creil Creil Airport France
+Deauville Deauville - Saint-Gatien Airport France
+Dieppe Dieppe - Saint-Aubin Airport France
+Dijon Dijon-Bourgogne Airport France
+Dinard Dinard - Pleurtuit-Saint Malo Airport France
+Dole Dole - Tavaux Airport France
+Epinal Epinal - Mirecourt Airport France
+Evreux Evreux - Fauville Airport France
+Figari Figari - Sud Corse Airport France
+Gap Tallard Airport France
+Granville Granville - Mont Saint Michel Airport France
+Grenoble Grenoble - Isere Airport France
+Ile d'Yeu d'Yeu - Grand Phare Airport France
+La Roche sur Yon La Roche sur Yon - Rene Couzinet Airport France
+La Rochelle La Rochelle - Ile de Re Airport France
+Labaule-Escoublac Labaule-Escoublac Airport France
+Lannion Lannion - Cote de Granit Airport France
+Laval Laval - Entrammes Airport France
+Le Castellet Le Castellet Airport France
+Le Havre Le Havre - Octeville Airport France
+Le Mans Le Mans-Arnage Airport France
+Le Puy Le Puy-en-Velay - Loudes Airport France
+Le Touquet Le Touquet - Cote d'Opale Airport France
+Lille Lille-Lesquin Airport France
+Limoges Limoges Airport France
+Lorient Lorient-Bretagne Sud Airport France
+Lyon Lyon Saint Exupery Airport France
+Lyon Lyon - Bron Airport France
+Marseille (Marignane) Marseille - Provence Airport France
+Megeve Megeve Airport France
+Mende Mende-Brenoux Airport France
+Meribel Meribel Airport France
+Merville Merville - Calonne Airport France
+Metz Metz - Frescaty Airport, France
+Metz (Goin) Metz-Nancy-Lorraine Airport France
+Montlucon-Gueret Montlucon-Gueret Airport France
+Montpellier Montpellier-Mediterranee Airport France
+Morlaix Morlaix - Ploujean Airport France
+Nancy Nancy - Essey Airport France
+Nantes Nantes Atlantique Airport France
+Nevers Nevers - Fourchambault Airport France
+Nice Nice - Cote d'Azur Airport France
+Niort Souche Airport France
+Orleans Orleans - Bricy Airport France
+Paris Paris - Roissy Charles de Gaulle Airport France
+Paris Paris - Le Bourget Airport France
+Paris Paris - Orly Airport France
+Pau Pau - Pyrenees Airport France
+Perigueux Perigueux - Bassillac Airport France
+Perpignan Perpignan - Rivesaltes Airport France
+Poitiers Poitiers-Biard Airport France
+Pontoise Pontoise - Cormeilles Airport France
+Propriano Tavaria Airport France
+Quimper Quimper - Cornouaille Airport France
+Reims Reims - Champagne Airport France
+Rennes Rennes - Saint-Jacques Airport France
+Roanne Roanne - Renaison Airport France
+Rochefort Rochefort - St Agnant Airport France
+Rodez Rodez - Marcillac Airport France
+Rouen Rouen - Vallee de Seine Airport France
+Royan Royan - Medis Airport France
+Solenzara Solenzara - Ventiseri Airport France
+St Brieuc Saint-Brieuc - Armor Airport France
+St Etienne Saint-Etienne - Boutheon Airport France
+St Nazaire Saint-Nazaire - Montoir Airport France
+Strasbourg Strasbourg Airport France
+Tarbes Tarbes-Lourdes-Pyrenees Airport France
+Toulouse Toulouse - Blagnac Airport France
+Tours Tours - Val-de-Loire Airport France
+Toussus-Le-Noble Toussus - le Noble Airport France
+Valence Valence - Chabeuil Airport France
+Vannes Vannes - Meucon Airport France
+Vichy Vichy - Charmeil Airport France
+Vittel Vittel - Champ de Courses Airport France
+Vittel Vittel - Auzainvilliers Airport France
+Cayenne Cayenne - Rochambeau French Guiana
+Bora Bora Bora Bora Airport French Polynesia
+Raiatea Island Raiatea Airport French Polynesia
+Tuamotu Island Rangiroa Airport French Polynesia
+Aruba Queen Beatrix Intl Airport Aruba (Netherlands)
+Feldkirchen Graz Austria
+Hoersching Linz Austria
+Innsbruck Innsbruck Austria
+Klagenfurt Klagenfurt Austria
+Salzburg Salzburg Austria
+Wien (Vienna) Wien - Schwechat Austria
+Baku Bina Azerbaijan
+Gyandzha Gyandzha Azerbaijan
+Bahrain Bahrain Intl Airport Bahrain
+Brigetown Grantley Adams Intl Barbados
+Antwerp Deurne Airport Belgium
+Brussels Brussels National Airport Belgium
+Charleroi Brussels South Charleroi Airport Belgium
+Kortrijk Kortrijk-Wevelgem Airport Belgium
+Liege Liege Airport Belgium
+Ostend Ostend-Bruges Intl Airport Belgium
+Belize Philip S W Goldson Intl Airport Belize
+Paro Paro Airport Bhutan
+Banja Luka Banja Luka Intl Airport Bosnia-Hercegovina
+Mostar Mostar Intl Airport Bosnia-Hercegovina
+Sarajevo Sarajevo Intl Airport Bosnia-Hercegovina
+Tuzla Tuzla Intl Airport Bosnia-Hercegovina
+Beef I Beef I Intl British Virgin Islands
+Virgin Gorda Virgin Gorda British Virgin Islands
+Bandar Seri Begawan Brunei Intl Airport Brunei Darussalam
+Burgas Burgas Intl Airport (Sarafovo Airport) Bulgaria
+Gorna Oryahovitsa Gorna Oryahovitsa Airport Bulgaria
+Plovdiv Plovdiv Intl Airport Bulgaria
+Sofia Sofia Airport Bulgaria
+Varna Varna Intl Airport Bulgaria
+Brac Airport Brac Croatia
+Dubrovnik Dubrovnik Airport Croatia
+Osijek Osijek Airport Croatia
+Pula Pula Airport Croatia
+Rijeka Rijeka Airport Croatia
+Split (Trogir) Airport Split-Kastela Croatia
+Zadar Zadar Airport Croatia
+Zagreb Zagreb Airport Croatia
+Larnaca Larnaca Intl Airport Cyprus
+Nicosia Ercan Intl Airport Cyprus
+Paphos Paphos Intl Airport Cyprus
+Brno Brno Turany Airport Czech Republic
+Karlovy Vary Karlovy Vary Intl Airport Czech Republic
+Ostrava Ostrava-Mosnov Intl Airport Czech Republic
+Pardubice Pardubice Airport Czech Republic
+Prague Prague Ruzyne Intl Airport Czech Republic
+Uherske Hradiste Kunovice Airport Czech Republic
+Aalborg Aalborg Airport Denmark
+Aarhus Aarhus Airport Denmark
+Billund Billund Airport Denmark
+Copenhagen Copenhagen Roskilde Airport Denmark
+Copenhagen Copenhagen Kastrup Intl Airport Denmark
+Esbjerg Esbjerg Airport Denmark
+Karup Karup Airport (Civil/Mil.) Denmark
+Odense Odense Airport Denmark
+Ronne Ronne Bornholm Airport Denmark
+Soenderborg Soenderborg Airport Denmark
+Stauning Stauning Airport Denmark
+Thisted Thisted Airport Denmark
+Kardla Kardla Airport Estonia
+Kuressaare Kuressaare Airport Estonia
+Parnu Parnu Airport Estonia
+Tallinn Tallinn Airport Estonia
+Tartu Tartu Airport Estonia
+Mount Pleasant Mount Pleasant Airport Falkland Islands (UK)
+FAROE Vagar Airprot Faroe Islands (Denmark)
+Enontekio Enontekio Airport Finland
+Helsinki Helsinki-Malmi Airport Finland
+Helsinki - Vantaa Helsinki-Vantaa Airport Finland
+Hyvinkaa Hyvinkaa Airport Finland
+Ivalo Ivalo Airport Finland
+Joensuu Joensuu Airport Finland
+Jyvaskylan Jyvaskyla Airport Finland
+Kajaani Kajaani Airport Finland
+Kauhajoki Kauhajoki Airport Finland
+Kauhava Kauhava Airport Finland
+Kemi Kemi-Tornio Airport Finland
+Kitee Kitee Airport Finland
+Kittila Kittila Airport Finland
+Kokkola Kruunupyy Airport Finland
+Kuopio (Toivala) Kuopio Airport Finland
+Kuusamo Kuusamo Airport Finland
+Lappeenranta Lappeenranta Airport Finland
+Mariehamn Mariehamn Airport Finland
+Mikkeli Mikkeli Airport Finland
+Oulunsalo Oulu Airport Finland
+Pori Pori Airport Finland
+Rovaniemen Rovaniemi Airport Finland
+Savonlinna Savonlinna Airport Finland
+Sein Seinajoki Airport Finland
+Sodankyl Sodankyla Airport Finland
+Tampere Tampere-Pirkkala Airport Finland
+Turku Turku Airport Finland
+Vaasa Vaasa Airport Finland
+Varkaus Varkaus Airport Finland
+Ylivieska Ylivieska Airport Finland
+Sukhimi Babushara Airport Georgia
+Tbilisi Lochini Georgia
+Tbilisi Tbilisi Intl Airport Georgia
+Augsburg Augsburg Germany
+Barth Ostseeflughafen Stralsund-Barth Germany
+Bayreuth Bayreuth Germany
+Berlin Berlin Schonefeld Germany
+Berlin Berlin Tegel (Otto Lilienthal) Germany
+Berlin Berlin Brandenburg (Willy Brandt) Germany
+Bielefeld Bielefeld Germany
+Borkum Borkum Germany
+Braunschweig Flughafen Braunschweig-Wolfsburg Germany
+Bremen Airport Bremen Germany
+Bremerhaven Bremerhaven Germany
+Burbach Siegerlandflughafen Germany
+Buren-Ahden Paderborn-Lippstadt Germany
+Busum Heide-Busum Germany
+Calden Kassel-Calden Germany
+Dortmund Dortmund Airport 21 Germany
+Dresden Flughafen Dresden Germany
+Dusseldorf Flughafen Dusseldorf International Germany
+Emden Emden Germany
+Erfurt Erfurt Germany
+Essen Flughafen Essen - Mulheim Germany
+Frankfurt Frankfurt am Main Germany
+Friedrichshafen Friedrichshafen Germany
+Greven Munster-Osnabruck Germany
+Hahn Frankfurt-Hahn Germany
+Hamburg Hamburg-Fuhlsbuttel Germany
+Hamburg Finkenwerder (Airbus) Germany
+Hannover Hannover-Langenhagen Germany
+Helgoland Helgoland-Dune Germany
+Heringsdorf Heringsdorf Germany
+Hof Hof-Plauen Germany
+Juist Juist Germany
+Kiel Kiel-Holtenau Germany
+Koln (Cologne) Koln - Bonn (Konrad Adenauer) Germany
+Laage Rostock-Laage (Mil./Civil) Germany
+Lahr Lahr (Black Forest Airport) Germany
+Leipzig Leipzig-Halle Germany
+Lubeck Lubeck-Blankensee Germany
+Magdeburg Magdeburg Germany
+Manching Ingolstadt-Manching Germany
+Mannheim Mannheim - City Germany
+Mariensiel Wilhelmshaven-Mariensiel Germany
+Memmingen Allgau Airport / Memmingen Germany
+Monchengladbach Monchengladbach Germany
+Munchen (Munich) Munchen (Franz Josef Strauss) Germany
+Nobitz Altenburg-Nobitz Germany
+Norderney Norderney Germany
+Nordholz Flughafen Cuxhaven - Nordholz (Sea - Airport) Germany
+Nurnberg (Nuremberg) Nurnberg Germany
+Parchim Schwerin - Parchim Germany
+Rheinmuenster Karlsruhe/Baden-Baden Germany
+Saarbrucken Saarbrucken Germany
+Stuttgart Stuttgart Germany
+Trollenhagen Neubrandenburg (Mil./Civ.) Germany
+Wangerooge Wangerooge Germany
+Weeze Airport Weeze Germany
+Wessling Sonderflughafen Oberpfaffenhofen Germany
+Westerland Sylt Germany
+Wyk Wyk Germany
+Zirchow Heringsdorf Germany
+Gibraltar Gibraltar Gibraltar (UK)
+Aghialos Aghialos National Airport Greece
+Alexandroupolis Alexandroupolis Intl Airport (Dimokritos) Greece
+Araxos Araxos National Airport Greece
+Astypalaia Astypalaia Island National Airport Greece
+Athens (Athina) Athens Intl Airport (Eleftherios Venizelos) Greece
+Chania, Crete Chania Intl Airport (Ioannis Daskalogiannis) Greece
+Chios Chios Island National Airport Greece
+Corfu (Kerkyra, Kerkira) Corfu Intl Airport (Ioannis Kapodistrias) Greece
+Heraklion (Iraklion), Crete Heraklion Intl Airport (Nikos Kazantzakis) Greece
+Ikaria Ikaria Island National Airport Greece
+Ioannina Ioannina National Airport Greece
+Kalamata Kalamata Intl Airport Greece
+Karpathos Karpathos Island National Airport Greece
+Kasos (Kassos) Kassos Island Public Airport Greece
+Kastelorizo Kastelorizo Island Public Airport Greece
+Kastoria Kastoria National Airport (Aristotelis) Greece
+Kavala Kavala Intl Airport (Megas Alexandros) Greece
+Kefalonia Kefalonia Island Intl Airport Greece
+Kos Kos Island Intl Airport (Ippokratis) Greece
+Kozani Kozani National Airport (Filippos) Greece
+Kythira (Kithira) Kithira Island National Airport Greece
+Lemnos (Limnos) Lemnos Intl Airport Greece
+Milos Milos Island National Airport Greece
+Mykonos (Mikonos) Mykonos Island National Airport Greece
+Mytilene (Mitilini), Lesbos Mytilene Intl Airport (Odysseas Elytis) Greece
+Naxos Naxos Island National Airport Greece
+Paros Paros National Airport Greece
+Preveza Aktion National Airport Greece
+Rhodes (Rhodos, Rodos) Rhodes Intl Airport (Diagoras) Greece
+Samos Samos Intl Airport (Aristarchos) Greece
+Santorini (Thira) Santorini (Thira) National Airport Greece
+Sitia, Crete Sitia Public Airport Greece
+Skiathos Skiathos Island National Airport Greece
+Skyros (Skiros) Skyros Island National Airport Greece
+Syros (Siros) Syros Island National Airport Greece
+Thessaloniki Thessaloniki Intl Airport (Makedonia) Greece
+Zakynthos (Zakinthos) Zakynthos Intl Airport (Dionysios Solomos) Greece
+Aasiaat (Egedesminde) Auisiait Airport Greenland (Denmark)
+Ammassalik Angmagssalik Airport Greenland (Denmark)
+Dundas Dundas Airport Greenland (Denmark)
+Ilulissat (Jakobshavn) Jakobshavn Airport Greenland (Denmark)
+Ittoqqortoormiit (Scoresbysund) Scoresbysund Airport Greenland (Denmark)
+Kangaatsiaq Kangaatsiaq Airport Greenland (Denmark)
+Kangerlussuaq (Sondre Stromfjord) Kangerlussuaq Airport Greenland (Denmark)
+Kulusuk Kulusuk Airport Greenland (Denmark)
+Nanortalik Nanortalik Airport Greenland (Denmark)
+Narsaq Narssaq Airport Greenland (Denmark)
+Narssarssuaq Narssarssuaq Airport Greenland (Denmark)
+Nerlerit Inaat Constable Pynt Airport Greenland (Denmark)
+Nuuk (Godthab) Nuuk Airport Greenland (Denmark)
+Paamiut (Frederikshab) Frederikshab Airport Greenland (Denmark)
+Qaanaaq (Thule) Thule Air Base Greenland (Denmark)
+Qaanaaq (Thule) Qaanaaq Airport Greenland (Denmark)
+Qasigiannguit (Christiansh Christianshab Airport Greenland (Denmark)
+Qeqertarsuaq (Godhavn) Godhavn Airport Greenland (Denmark)
+Sisimiut (Holsteinsborg) Holsteinsborg Airport Greenland (Denmark)
+Upernavik Upernavik Airport Greenland (Denmark)
+Uummannaq Uummannaq Airport Greenland (Denmark)
+Basse-Terre Baillif Airport Guadeloupe - French Antilles
+Grand-Bourg Marie Galante Airport Guadeloupe - French Antilles
+Grande-Anse, La D Grande Anse Airport Guadeloupe - French Antilles
+Pointe-a-Pitre Pointe-a-Pitre Intl Airport Guadeloupe - French Antilles
+Saint-Barthelemy Saint-Barthelemy Airport Guadeloupe - French Antilles
+Saint-Francois Saint-Francois Airport Guadeloupe - French Antilles
+Saint-Martin Grand Case Airport Guadeloupe - French Antilles
+Terre-de-Haut, Les Saintes Les Saintes Airport Guadeloupe - French Antilles
+Guam Guam Intl Airport Guam (USA)
+Aishalton Aishalton Guyana
+Annai Annai Guyana
+Georgetown Cheddi Jagan Intl Guyana
+Imbaimadai Imbaimadai Guyana
+Kamarang Kamarang Guyana
+Karanambo Karanambo Guyana
+Kato Kato Guyana
+Lethem Lethem Guyana
+Lumid Pau Lumid Pau Guyana
+Mahdia Mahdia Guyana
+Orinduik Orinduik Guyana
+Budapest Budapest Ferihegy Intl Airport Hungary
+Debrecen Debrecen Intl Airport Hungary
+Gyor-Per Gyor-P Hungary
+Miskolc Miskolc Airport Hungary
+Sarmellek S Hungary
+Akureyri Akureyri Airport Iceland
+Blonduos Blonduos Airport Iceland
+Egilsstaair Egilsstaoir Airport Iceland
+Hofn Hornafjorour Airport Iceland
+Isafj Isafjorour Airport Iceland
+Keflavik Keflavik Intl Airport Iceland
+Norofjorour Norofjorour Airport Iceland
+Patreksfjorour Patreksfjorour Airport Iceland
+Pingeyri Pingeyri Airport Iceland
+Raufarhofn Raufarhofn Airport Iceland
+Reykjavik Reykjavik Airport Iceland
+Sauoanes Sauoanes Airport Iceland
+Sauoarkrokur Alexander Airport Iceland
+Siglufjorour Siglufjordur Airport Iceland
+Stykkisholmur Stykkisholmur Airport Iceland
+Vestmannaeyjar Vestmannaeyjar Airport Iceland
+Carnmore Galway Airport Ireland
+Carrickfin Donegal Airport Ireland
+Cork Cork Intl Airport Ireland
+Dublin Dublin Intl Airport Ireland
+Farranfore Kerry Airport Ireland
+Inverin Connemara Regional Airport Ireland
+Knock Knock Intl Airport Ireland
+Shannon Shannon Airport Ireland
+Strandhill Sligo Airport Ireland
+Waterford Waterford Airport Ireland
+Albenga Villanova d'Albenga Intl Airport (C. Panero Airport) Italy
+Alghero Alghero Airport Italy
+Ancona Ancona Falconara Airport (Raffaello Sanzio Airport) Italy
+Aosta Aosta Airport (Corrado Gex Airport) Italy
+Bari Palese Macchie Airport Italy
+Belluno Belluno Airport Italy
+Bergamo Orio al Serio Intl Airport Italy
+Bologna Aeroporto G. Marconi di Bologna Italy
+Bolzano Bolzano Dolomiti Airport Italy
+Brescia Montichiari Airport Italy
+Brindisi Casale Airport Italy
+Cagliari Cagliari - Elmas Airport Italy
+Campoformido / Udine Campoformido Airport Italy
+Catania Catania-Fontanarossa Airport (Catania Intl Airport) Italy
+Crotone Crotone Airport (S. Anna Airport) Italy
+Cuneo Cuneo Levaldigi Airport Italy
+Florence (Firenze) A. Vespucci Florence Airport Italy
+Foggia Gino Lisa Airport Italy
+Forl Forli Airport (L. Ridolfi Airport) Italy
+Genoa (Genova) Genoa Cristoforo Colombo Airport Italy
+Grosseto Grosseto Airport Italy
+Lamezia Terme, Catanzaro Lamezia Terme Intl Airport Italy
+Lampedusa Lampedusa Airport Italy
+Latina Latina Airport Italy
+Lecce Lecce Airport Italy
+Lucca Tassignano Airport Italy
+Marina di Campo, Elba Aeroporto Marina di Campo Italy
+Milan Linate Airport Italy
+Milan Malpensa Intl Airport Italy
+Naples Naples Intl Airport (Capodichino Airport) Italy
+Olbia Olbia - Costa Smeralda Airport Italy
+Palermo / Punta Raisi Palermo Intl Airport Italy
+Pantelleria, Trapani Pantelleria Airport Italy
+Parma Parma Airport (G. Verdi Airport) Italy
+Perugia San Egidio Airport Italy
+Pescara Abruzzo Intl Airport Italy
+Pisa Galileo Galilei Airport (Pisa Intl Airport) Italy
+Ravenna Ravenna Airport Italy
+Reggio Calabria Reggio Calabria Airport Italy
+Rimini Federico Fellini Intl Airport Italy
+Rome Ciampino Airport (Giovan Battista Pastine) Italy
+Rome Fiumicino (Leonardo Da Vinci Intl Airport) Italy
+Ronchi dei Legionari / Trieste Friuli Venezia Giulia Airport (Trieste Ronchi dei Legionari Italy
+Siena Siena Airport Italy
+Taranto Grottaglie Airport Italy
+Tortoli Tortoli - Arbatax Airport Italy
+Trapani Vincenzo Florio Airport (Birgi Airport) Italy
+Treviso Treviso Airport (Sant'Angelo Airport) Italy
+Turin (Torino) Torino Caselle Airport (Turin Intl Airport) Italy
+Venice (Venezia) Marco Polo Venice Airport Italy
+Verona Verona Airport ( Valerio Catullo) Italy
+Vicenza Vicenza Trissino Airport Italy
+Luxembourg Luxembourg Intl Airport (Findel) Luxembourg
+Ohrid Ohrid Airport Macedonia
+Ohrid Ohrid Macedonia
+Skopje Skopje Macedonia
+Skopje Skopje Airport Macedonia
+Malta Luqa - Malta Intl Airport Malta
+Ft De France Le Lamentin Martinique - French Antilles
+MONACO Monaco Heliport Monaco
+Podgorica Podgorica-Golubovci Montenegro
+Tivat Tivat Airport Montenegro
+Amsterdam Amsterdam Schiphol Airport Netherlands
+Enschede Enschede Airport Twente Netherlands
+Groningen-Eelde Groningen Airport Eelde Netherlands
+Lelystad Lelystad Airport Netherlands
+Maastricht Maastricht Aachen Airport Netherlands
+Rotterdam Rotterdam Airport Netherlands
+Bonaire Flamingo Intl Airport Netherlands Antilles
+Curacao Hato Intl Airport Netherlands Antilles
+Saba Juancho E. Yrausquin Airport Netherlands Antilles
+Sint Eustatius F.D. Roosevelt Airport Netherlands Antilles
+Sint Maarten Princess Juliana Intl Airport Netherlands Antilles
+Des Pins Is. Moue New Caledonia (France)
+Houailou Nesson New Caledonia (France)
+Kone Kone New Caledonia (France)
+Koumac Koumac New Caledonia (France)
+Lifou Ouanaham New Caledonia (France)
+Mare La Roche Aero New Caledonia (France)
+Noumea Tontouta New Caledonia (France)
+Noumea Magenta New Caledonia (France)
+Ouvea Ouloup New Caledonia (France)
+Touho Touho New Caledonia (France)
+Rota Rota Island Northern Mariana Islands
+Saipan Obyan Intl Northern Mariana Islands
+Alesund Alesund Airport Norway
+Alta Alta Airport Norway
+Andenes Andoya Airport Norway
+Bardufoss Bardufoss Airport Norway
+Batsfjord Batsfjord Airport Norway
+Bergen Bergen Airport, Flesland Norway
+Berlevag Berlevag Airport Norway
+Bodo Bodo Airport Norway
+Bronnoysund Bronnoysund Airport Norway
+Evenes Harstad-Narvik Airport Norway
+Fagernes Fagernes Airport Norway
+Farsund Farsund Airport Norway
+Floro Floro Airport Norway
+Forde F Norway
+Geilo Geilo Airport Norway
+Gol Gol Airport Norway
+Hamar Hamar Airport Norway
+Hammerfest Hammerfest Airport Norway
+Hasvik Hasvik Airport Norway
+Haugesund Haugesund Airport Norway
+Honningsvag Honningsvag Airport Norway
+Kautokeino Kautokeino Airport Norway
+Kirkenes Kirkenes Airport Norway
+Kristiansand Kristiansand Airport Norway
+Kristiansund Kristiansund Airport Norway
+Lakselv Lakselv Airport Norway
+Leirvik Stord Airport, Sorstokken Norway
+Leknes Leknes Airport Norway
+Longyearbyen Svalbard Airport Norway
+Mehamn Mehamn Airport Norway
+Mo i Rana Mo i Rana Airport Norway
+Molde Molde Airport Norway
+Mosjoen Mosjoen Airport Norway
+Moss Moss Airport, Rygge Norway
+Namsos Namsos Airport Norway
+Narvik Narvik Airport Norway
+Notodden Notodden Airport Norway
+Orland Orland Main Air Station Norway
+Orsta / Volda Orsta-Volda Airport Norway
+Oslo - Gardermoen Oslo Gardermoen Airport Norway
+Roros Roros Airport Norway
+Rorvik Rorvik Airport Norway
+Rost Rost Airport Norway
+Sandane Sandane Airport Norway
+Sandefjord Sandefjord Airport Norway
+Sandnessjoen Sandnessjoen Airport Norway
+Skien Skien Airport Norway
+Sogndal Sogndal Airport Norway
+Sorkjosen, Nordreisa Sorkjosen Airport Norway
+Stavanger Stavanger Airport, Sola Norway
+Stjordal Trondheim Airport Norway
+Stokmarknes Stokmarknes Airport Norway
+Svolvaer Svolvae Airport Norway
+Tromso Tromso Airport Norway
+Vadso Vadso Airport Norway
+Vardo Vardo Airport Norway
+Bydgoszcz Bydgoszcz Ignacy Jan Paderewski Airport Poland
+Gdansk Gdansk Lech Walesa Airport Poland
+Krakow John Paul II Intl Airport Krakow-Balice Poland
+Lodz Lodz Wladyslaw Reymont Airport Poland
+Poznan Poznan-Lawica Airport Poland
+Pyrzowice Katowice Intl Airport Poland
+Rzeszow Rzeszow-Jasionka Airport Poland
+Szczecin Szczecin-Goleniow Solidarnosc Airport Poland
+Szczytno Szczytno-Szymany Intl Airport Poland
+Warsaw Warsaw Frederic Chopin Airport Poland
+Wroclaw Copernicus Airport Wroclaw Poland
+Zielona Gora Zielona Gora Intl Airport Poland
+Braga Braga Airport Portugal
+Braganca Braganca Airport Portugal
+Chaves Chaves Airport Portugal
+Coimbra Coimbra Airport Portugal
+Corvo Island Corvo Airport Portugal
+Covilha Covilha Airport Portugal
+Faial Island (Horta) Horta Airport Portugal
+Faro Faro Airport Portugal
+Flores Island Flores Airport Portugal
+Funchal Madeira Airport Portugal
+Graciosa Island Graciosa Airport Portugal
+Pico Island Pico Airport Portugal
+Portela, Loures Portela Airport (Lisbon Airport) Portugal
+Portimao Portimao Airport Portugal
+Porto Francisco Sa Carneiro Airport Portugal
+Porto Santo Island Porto Santo Airport Portugal
+Santa Maria Island Santa Maria Airport Portugal
+Sao Jorge Island Sao Jorge Airport Portugal
+Sao Miguel Island (Ponta Delgada) Joao Paulo II Airport Portugal
+Sines Sines Airport Portugal
+Vila Real Vila Real Airport Portugal
+Viseu Viseu Airport Portugal
+Saint-Denis St Denis Gillot Reunion
+Arad Arad Intl Airport Romania
+Bacau Bacau Intl Airport Romania
+Baia Mare Baia Mare Airport Romania
+Bucharest - Baneasa Bucharest (Aurel Vlaicu) Intl Airport Romania
+Bucharest - Otopeni Bucharest (Henri Coanda) Intl Airport Romania
+Caransebes - Resita Caransebes Airport Romania
+Cluj-Napoca Cluj-Napoca Intl Airport Romania
+Constanta Constanta (Mihail Kogalniceanu) Intl Airport Romania
+Craiova Craiova Airport Romania
+Iasi Iasi Intl Airport Romania
+Oradea Oradea Intl Airport Romania
+Satu Mare Satu Mare Intl Airport Romania
+Sibiu Sibiu Intl Airport Romania
+Suceava Suceava Airport Romania
+Targu-Mures Targu Mures Intl Airport Romania
+Timisoara Timisoara (Traian Vuia) Intl Airport Romania
+Tulcea Tulcea Airport Romania
+Aldan Aldan Airport Russia
+Amderma Amderma Airport Russia
+Anadyr Ugolny Airport Russia
+Anapa Vityazevo Airport Russia
+Arkhangelsk Talagi Airport Russia
+Astrakhan Astrakhan Airport Russia
+Barnaul Barnaul Airport Russia
+Belgorod Belgorod Airport Russia
+Blagoveschensk Ignatyevo Airport Russia
+Bratsk Bratsk Airport Russia
+Cheboksary Cheboksary Airport Russia
+Chelyabinsk Balandino Airport Russia
+Chita Kadala Airport Russia
+Chokurdakh Chokurdakh Airport Russia
+Chulman Chulman Airport Russia
+Irkutsk Irkutsk Intl Airport Russia
+Kaliningrad Khrabrovo Airport Russia
+Kazan Kazan Airport Russia
+Kemerovo Kemorovo Airport Russia
+Khabarovsk Novy Airport Russia
+Kirov Kirov Airport Russia
+Kotlas Kotlas Airport Russia
+Krasnodar Pashkovsky Airport Russia
+Krasnoyarsk Krasnoyarsk Yemelyanovo Airport Russia
+Kyzyl Kyzyl Airport Russia
+Magadan Sokol Airport Russia
+Magdagachi Magdagachi Airport Russia
+Magnitogorsk Magnitogorsk Airport Russia
+Mineralnye Vody Mineralnye Vody Airport Russia
+Mirny (Mirnyj) Mirny Airport Russia
+Moscow Sheremetyevo Intl Airport Russia
+Moscow Vnukovo Airport Russia
+Moscow Domodedovo Intl Airport Russia
+Murmansk Murmansk Airport Russia
+Nalchik Nalchik Airport Russia
+Naryan-Mar Naryan-Mar Airport Russia
+Nizhnevartovsk Nizhnevartovsk Airport Russia
+Nizhny Novgorod Strigino Airport (Gorkij Airport) Russia
+Norilsk Norilsk Airport Russia
+Novokuznetsk Novokuznetsk Spichenkovo Airport Russia
+Novosibirsk Novosibirsk Tolmachevo Airport Russia
+Omsk Tsentralny Airport Russia
+Orenburg Tsentralny Airport Russia
+Orsk Orsk Airport Russia
+Penza Penza Airport Russia
+Perm Bolshoye Savino Airport Russia
+Petropavlovsk - Kamchatsky Yelizovo Airport Russia
+Petrozavodsk Besovets Airport Russia
+Pevek Pevek Airport Russia
+Polyarny (Polyarnyj) Polyarny Airport Russia
+Provideniya Provideniya Bay Airport Russia
+Pskov Pskov Airport Russia
+Rostov-na-Donu Rostov-na-Donu Airport Russia
+Saint Petersburg Pulkovo Airport Russia
+Samara Kurumoch Airport Russia
+Saratov Tsentralny Airport Russia
+Stavropol Shpakovskoye Airport Russia
+Surgut Surgut Airport Russia
+Syktyvkar Syktyvkar Airport Russia
+Ufa Ufa Airport Russia
+Ukhta Ukhta Airport Russia
+Ulan-Ude Mukhino Airport Russia
+Vladikavkaz Beslan Airport Russia
+Vladivostok Vladivostok Intl Airport Russia
+Volgograd Gumrak Airport Russia
+Voronezh Chertovitskoye Airport Russia
+Yakutsk Yakutsk Airport Russia
+Yekaterinburg (Sverdlovsk) Koltsovo Intl Airport Russia
+Yuzhno-Sakhalinsk Yuzhno-Sakhalinsk Airport Russia
+St. Pierre St. Pierre Airport Saint-Pierre and Miquelon
+Belgrade Belgrade Nikola Tesla Airport Serbia
+Nis Nis Constantine the Great Intl Airport Serbia
+Novi Sad Novi Sad Airport Serbia
+Pancevo Pancevo Airport Serbia
+Pristina Pristina Intl Airport Serbia
+Uzice Uzice Airport Serbia
+Valjevo Valjevo Airport Serbia
+Changi Singapore Changi Intl Airport Singapore
+Bratislava M.R. Stefanik Airport Bratislava Slovakia
+Kosice Kosice Airport Slovakia
+Piestany Piestany Airport Slovakia
+Poprad Tatry Airport Slovakia
+Sliac Sliac Airport Slovakia
+Zilina Zilina Airport Slovakia
+Ljubljana Aerodrom Ljubljana Slovenia
+Maribor Maribor Airport Slovenia
+Portoroz, Piran Portoroz Airport Slovenia
+Honiara Honiara Intl Solomon Islands
+Munda New Georgia Island Munda Solomon Islands
+A Coruna A Coruna Airport Spain
+Albacete Albacete Airport (Mil./Civil) Spain
+Alicante Alicante Airport Spain
+Almeria Almeria Intl Airport Spain
+Arrecife, Lanzarote Lanzarote Airport (Arrecife Airport) Spain
+Asturias Asturias Airport Spain
+Badajoz Badajoz Airport Spain
+Barcelona Barcelona Intl Airport (El Prat) Spain
+Bilbao, Biscay Bilbao Airport Spain
+Ceuta Ceuta Heliport Spain
+Cordoba Cordoba Airport Spain
+El Hierro El Hierro Airport Spain
+Fuerteventura Fuerteventura Airport Spain
+Girona Girona-Costa Brava Airport Spain
+Granada Federico Garcia Lorca Granada-Jaen Airport Spain
+Granadilla de Abona, Tenerife Tenerife Reina Sofia Airport Spain
+Ibiza Ibiza Airport Spain
+Jerez de la Frontera Jerez Airport Spain
+La Gomera La Gomera Airport Spain
+La Laguna, Tenerife Tenerife Los Rodeos Airport Spain
+La Palma La Palma Airport Spain
+Las Palmas, Gran Canaria Gran Canaria Intl Airport Spain
+Leon Leon Airport (Mil./Civil) Spain
+Logrono Logrono-Agoncillo Airport Spain
+Madrid Madrid Barajas Intl Airport Spain
+Madrid Madrid Torrejon Airport Spain
+Malaga Malaga Airport Spain
+Melilla Melilla Airport Spain
+Menorca Menorca Airport Spain
+Murcia Murcia-San Javier Airport Spain
+Palma de Mallorca Palma de Mallorca Airport (Son Sant Joan) Spain
+Pamplona Pamplona Airport Spain
+Reus, Tarragona Reus Airport Spain
+Sabadell Sabadell Airport Spain
+Salamanca Salamanca Airport (Mil./Civil) Spain
+San Sebastian, Guipuscoa San Sebastian Airport Spain
+Santander Santander Airport Spain
+Santiago de Compostela Santiago Airport Spain
+Sevilla Seville Airport Spain
+Valencia Valencia Airport Spain
+Valladolid Valladolid Airport Spain
+Vigo, Pontevedra Vigo Airport Spain
+Vitoria-Gasteiz Vitoria Airport Spain
+Zaragoza Zaragoza Airport Spain
+Angelholm Angelholm Sweden
+Arvidsjaur Arvidsjaur Sweden
+Borlange Borlange Sweden
+Eskilstuna Eskilstuna Sweden
+Gallivare Gallivare Sweden
+Gavle-Sandviken Gavle-Sandviken Sweden
+Goteborg Landvetter Sweden
+Goteborg Goteborg City Airport Sweden
+Hagfors Hagfors Sweden
+Halmstad Halmstad Sweden
+Hemavan Hemavan Sweden
+Hudiksvall Hudiksvall Sweden
+Hultsfred Hultsfred Sweden
+Idre Idre Sweden
+Jonkoping Jonkoping Sweden
+Kalmar Kalmar Sweden
+Karlskoga Karlskoga Sweden
+Karlstad Karlstad Sweden
+Kiruna Kiruna Sweden
+Kramfors Kramfors Sweden
+Kristianstad Kristianstad Sweden
+Lidkoping Lidkoping Sweden
+Linkoping Saab Sweden
+Lulea Kallax Sweden
+Lycksele Lycksele Sweden
+Malmo Sturup Sweden
+Mora Siljan Sweden
+Norrkoping Kungsangen Sweden
+Orebro Orebro Sweden
+Ornskoldsvik Ornskoldsvik Sweden
+Oskarshamn Oskarshamn Sweden
+Ostersund Froson Sweden
+Pajala Pajala Sweden
+Ronneby Ronneby Sweden
+Skelleftea Skelleftea Sweden
+Skovde Skovde Sweden
+Soderhamn Soderhamn Sweden
+Stockholm Arlanda Sweden
+Stockholm Bromma Sweden
+Stockholm Skavsta Sweden
+Storuman Storuman Sweden
+Sundsvall Sundsvall - Harnosand Sweden
+Sveg Sveg Sweden
+Torsby Fryklanda Sweden
+Trollhattan - Vanersborg Trollhattan - Vanersborg Sweden
+Umea Umea Sweden
+Vasteras Hasslo Sweden
+Vastervik Vastervik Sweden
+Vaxjo Kronoberg Sweden
+Vilhelmina Vilhelmina Sweden
+Visby Visby Sweden
+Bern Bern - Belp Switzerland
+Geneva Geneva - Cointrin Switzerland
+Lugano Lugano Airport Switzerland
+Samedan Samedan Airport Switzerland
+Sion Sion Airport Switzerland
+St Gallen St Gallen - Altenrhein Switzerland
+Zurich Zurich Airport Switzerland
+Dnipropetrovsk Dnipropetrovsk Airport Ukraine
+Donetsk Donetsk Airport Ukraine
+Ivano-Frankivsk Ivano-Frankivsk Airport Ukraine
+Kharkiv Osnova Airport Ukraine
+Kiev Boryspil Intl Airport Ukraine
+Kiev Zhuliany Intl Airport Ukraine
+Krivoi Rog Lozuvatka Intl Airport Ukraine
+Lviv Lviv Airport Ukraine
+Mykolaiv Mykolaiv Airport Ukraine
+Odessa Odessa Airport Ukraine
+Rivne Rivne Airport Ukraine
+Simferopol Simferopol Airport Ukraine
+Uzhhorod Uzhhorod Airport Ukraine
+Vinnytsia Vinnytsia Airport Ukraine
+Zaporizhzhia Zaporizhzhia Intl Airport Ukraine
+Aberdeen Aberdeen Airport United Kingdom
+Aikerness Westray Airport United Kingdom
+Alderney Alderney Airport United Kingdom
+Balemartine Tiree Airport United Kingdom
+Barra Barra Airport United Kingdom
+Barrow-in-Furness Barrow/Walney Island Airport United Kingdom
+Basingstoke Lasham Airfield United Kingdom
+Belfast Belfast Intl Airport United Kingdom
+Belfast George Best Belfast City Airport United Kingdom
+Benbecula Benbecula Airport United Kingdom
+Birmingham Birmingham Intl Airport United Kingdom
+Blackpool Blackpool Intl Airport United Kingdom
+Bournemouth Bournemouth Airport United Kingdom
+Bristol Bristol Intl Airport United Kingdom
+Camberley Blackbushe Airport United Kingdom
+Cambridge Cambridge City Airport United Kingdom
+Campbeltown Campbeltown Airport United Kingdom
+Canterbury Kent Intl Airport United Kingdom
+Cardiff Cardiff Intl Airport United Kingdom
+Carlisle Carlisle Airport United Kingdom
+Chester Hawarden Airport United Kingdom
+Coventry Coventry Airport United Kingdom
+Derry City of Derry Airport United Kingdom
+Dundee Dundee Airport United Kingdom
+East Midlands Nottingham East Midlands Airport United Kingdom
+Edinburgh Edinburgh Airport United Kingdom
+Enniskillen Enniskillen/St Angelo Airport United Kingdom
+Exeter Exeter Intl Airport United Kingdom
+Farnborough Farnborough Airfield United Kingdom
+Filton Filton Aerodrome United Kingdom
+Glasgow Glasgow Prestwick Intl Airport United Kingdom
+Glasgow Glasgow Intl Airport United Kingdom
+Guernsey Guernsey Airport United Kingdom
+Haverfordwest Haverfordwest Aerodrome United Kingdom
+Inverness Inverness Airport United Kingdom
+Islay Islay Airport United Kingdom
+Isle of Man Isle of Man Airport United Kingdom
+Jersey Jersey Airport United Kingdom
+Kingston upon Hull Humberside Airport United Kingdom
+Kirkwall Kirkwall Airport United Kingdom
+Lerwick Tingwall Airport United Kingdom
+Lerwick Scatsta Airport United Kingdom
+Liverpool Liverpool John Lennon Airport United Kingdom
+London London Heathrow Airport United Kingdom
+London London Luton Airport United Kingdom
+London London Stansted Airport United Kingdom
+London London Biggin Hill Airport United Kingdom
+London London City Airport United Kingdom
+London London Gatwick Airport United Kingdom
+Lydd London Ashford Airport United Kingdom
+Manchester Manchester Intl Airport United Kingdom
+Newcastle upon Tyne Newcastle Airport United Kingdom
+Newquay Newquay Cornwall Intl Airport United Kingdom
+North Ronaldsay North Ronaldsay Airport United Kingdom
+Northampton Sywell Aerodrome United Kingdom
+Norwich Norwich Intl Airport United Kingdom
+Nottingham Nottingham Airport United Kingdom
+Oxford Oxford Airport United Kingdom
+Papa Westray Papa Westray Airport United Kingdom
+Perth Perth Airport (Scotland) United Kingdom
+Plymouth Plymouth City Airport United Kingdom
+Redhill Redhill Airport United Kingdom
+Rochester Rochester Airport, England United Kingdom
+Sandown Bembridge Airport United Kingdom
+Sheffield Sheffield City Airport United Kingdom
+Shetland Islands Sumburgh Airport United Kingdom
+Shoreham-by-Sea Shoreham Airport United Kingdom
+South Yorkshire Robin Hood Airport Doncaster Sheffield United Kingdom
+Southampton Southampton Airport United Kingdom
+Southend-on-Sea London Southend Airport United Kingdom
+St Just in Penwith Land's End Airport United Kingdom
+St. Mary's St. Mary's Airport United Kingdom
+Staverton Gloucestershire Airport United Kingdom
+Stornoway Stornoway Airport United Kingdom
+Swansea Swansea Airport United Kingdom
+Tees Valley Durham Tees Valley Airport United Kingdom
+Upavon Upavon Airfield United Kingdom
+West Yorkshire Leeds Bradford Intl Airport United Kingdom
+Whalsay Whalsay Airport United Kingdom
+Wick Wick Airport United Kingdom

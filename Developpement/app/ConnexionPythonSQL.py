@@ -76,8 +76,8 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -814,8 +814,20 @@ def get_dormeur(session, date_jour, hotel):
 
     return liste_participants
 
+
+def id_transport_with_name(nom_transport):
+    if nom_transport == "avion" : 
+        return 1
+    elif nom_transport == "train" : 
+        return 2
+    elif nom_transport == "voiture" : 
+        return 3
+    elif nom_transport == "covoiturage" :
+        return 4
+
+
 def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) : 
-    deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive)
+    deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive, annee)
     deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:
         session.add(deplacement)

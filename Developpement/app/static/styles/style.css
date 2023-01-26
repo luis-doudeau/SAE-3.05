@@ -8504,25 +8504,14 @@ h1, h2, h3, h4, h5,
         }
         
         .card-img-{
-          width:13%;
+          width:58px;
           height:auto;
           background-color: #024ebd;
           position: relative;
           top : -25px;
           padding : 12px;
           border-radius: 15px;
-        
-        }
-
-        .card-img-2{
-          width:22%;
-          height:auto;
-          background-color: #024ebd;
-          position: relative;
-          top : -25px;
-          padding : 15px;
-          border-radius: 15px;
-        
+          margin-left : 2%;        
         }
 
         .imgTransport{
@@ -8634,11 +8623,8 @@ h1, h2, h3, h4, h5,
          max-height: 30%;
         }
         
-        #optionsGare{
-          position: absolute;
-          background-color: #d7e0fc;
-          overflow: hidden; /* masque les éléments dépassant du conteneur */
-          max-height: 180px;
+        .optionsTransport{
+          
         
         }
         
@@ -8649,14 +8635,7 @@ h1, h2, h3, h4, h5,
          text-decoration: none;
          display: block;
         }
-        
-        #optionsGare2{
-          position: absolute;
-          background-color: #d7e0fc;
-          overflow: hidden; /* masque les éléments dépassant du conteneur */
-          max-height: 180px;
-          
-        }
+      
         
         /* Change color of dropdown links on hover */
         .dropdown-content a:hover {background-color: #bfd1e3}
@@ -8935,18 +8914,30 @@ h1, h2, h3, h4, h5,
         .optionTransport{
           color: black;
           padding: 12px 16px;
+          margin-left: -3px;
+          margin-bottom: -7px;
+          margin-right: -3px;
           text-decoration: none;
+          font-size : 110%;
           display: block;
           z-index: 9999 !important;
         }
 
 
+        .optionTransport:hover{
+          background-color: #ccd1f0;
+        }
+
+
         .divOptionsTransports{
           position: absolute;
-          background-color: #f9f9f9;
           min-width: 160px;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
           z-index: 9999 !important;
+          background-color: #e6e9fa;
+          overflow: hidden; /* masque les éléments dépassant du conteneur */
+          max-height: 180px;
+          
         }
 
         .dropdownC {
