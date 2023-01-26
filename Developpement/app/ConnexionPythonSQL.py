@@ -824,9 +824,23 @@ def id_transport_with_name(nom_transport):
         return 3
     elif nom_transport == "covoiturage" :
         return 4
+    
+
+def supprime_deplacer_annee(session, idP, annee):
+    deplacement = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee)
+    for dep in deplacement : 
+        session.query(Deplacer).filter(Deplacer.idP == dep.idP).filter(Deplacer.annee == dep.annee).delete()
+        try : 
+            session.commit()
+        except : 
+            session.rollback()
+            print("erreur supprimé déplacement !")
 
 
-def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) : 
+
+def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) :
+    print("842 VIEWS") 
+    supprime_deplacer_annee(session, idP, annee)
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive, annee)
     deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:
@@ -837,12 +851,9 @@ def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) :
         except:
             print("Erreur !")
             session.rollback()
- 
     else:
         print("Un même déplacement existe déjà pour cette personne")
   
-#ajoute_deplacer(session, 300, 1, "Paris", "Blois")
-
 
 def supprime_mangeur(session, idP):
     annee = datetime.now().year
@@ -957,6 +968,7 @@ def requete_transport_annee(session, idP, annee) :
         if annee_req == annee: 
             liste_deplacement.append(transport)
     return liste_deplacement       
+
 
 
 def ajoute_assister(session, idP, dateArrive, dateDepart):

@@ -196,17 +196,19 @@ def participant_secretaire():
 @app.route('/transportForms/', methods = ["POST", "GET"])
 @login_required
 def formulaire_auteur_transport():
+    print(request.form)
     print("l199")
     if est_secretaire(session, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
+        
         liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
         dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
                           "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
                           "autre": ["precision"]}
         
-        
         for transport in liste_id_box:
+            print("l209")
             if request.form[transport] == "true" and transport != "autre" :
                 print(transport)
                 lieu_depart = request.form[dico_champs_box[transport][0]]
@@ -226,7 +228,6 @@ def formulaire_auteur_transport():
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
-        return redirect(url_for('formulaire_reservation', idp = current_user.idP))
         
     return render_template("transportForms.html")
         
