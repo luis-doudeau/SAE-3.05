@@ -942,7 +942,9 @@ def est_intervenant(session, idP):
     return intervenant is not None
             
 def est_secretaire(session, idP):
-    secretaire = session.query(Secretaire).filter(Secretaire.idP == idP).first()
+    print(str(idP) + " secrea")
+    secretaire = get_secretaire(session, idP)
+    print(secretaire)
     return secretaire is not None
         
         
@@ -1064,6 +1066,8 @@ def ajoute_repas_mangeur(session, idP, liste_repas, liste_horaire_restau, dico_h
 @login_manager.user_loader
 def load_user(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
+    print(str(participant_id) + str("iddd"))
+    print("l1070")
     if est_secretaire(session, participant_id):
         return get_secretaire(session, participant_id)
     else:

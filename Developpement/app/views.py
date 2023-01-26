@@ -48,6 +48,7 @@ def connexion():
         mdp = request.form["mdp"]
         utilisateur = get_utilisateur_email_mdp(session, email, mdp)
         if utilisateur is not None:
+            print('l51')
             if est_secretaire(session, utilisateur.idP):
                 secretaire = get_secretaire(session, utilisateur.idP)
                 login_user(secretaire)
@@ -195,7 +196,8 @@ def participant_secretaire():
 @app.route('/transportForms/', methods = ["POST", "GET"])
 @login_required
 def formulaire_auteur_transport():
-    if current_user.est_secretaire():
+    print("l199")
+    if est_secretaire(session, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
         liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
@@ -233,7 +235,8 @@ def formulaire_auteur_transport():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-
+    if current_user.est_secretaire():
+        return redirect(url_for("page_secretaire_accueil"))
 
     if request.method == "POST":
         regime = request.form["regime"] # stocker en variable car réutilisé ensuite
