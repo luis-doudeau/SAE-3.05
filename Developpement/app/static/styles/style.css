@@ -8836,26 +8836,17 @@ h1, h2, h3, h4, h5,
         button.switch-month:hover {
           color: #1089ff; }
 
-        #boutonReverse{
-          border-radius : 40%;
-          padding-left : 0.25em;
-          padding-top : 0.15em;
-          padding-bottom : 0.15em;
-          padding-right : 0.25em;
-        }
-
-        .boutonSuppr:hover{
-          background-color: #fc5858 !important;
+        .boutonReverse{
+          margin-left : -5px !important;
         }
 
         #boutonSuppr{
-          border-radius : 30%;
-          padding-left : 0.25em;
+          border-radius : 50% ;
+          padding-left : 0.35em !important;
           padding-top : 0.15em;
           padding-bottom : 0.15em;
           padding-right : 0.25em;
           margin-bottom: 10%;
-          background-color: #fccaca;
         }
 
         .rotate {
@@ -8865,12 +8856,22 @@ h1, h2, h3, h4, h5,
           transform: rotate(180deg);
       }
 
-        #divBoutonReverse{
+        .divBoutonReverse{
           margin-top : 0.8%;
           margin-left : 5%;
-          margin-left: 6%;
           z-index : 10;
+          border-radius: 60px !important;
+          background-color: skyblue !important;
         }
+
+        #divBoutonReverse:hover{
+          margin-top : 0.8% !important;
+          margin-left : 5% !important;
+          z-index : 10 !important;
+          border-radius: 60px !important;
+          background-color: #0c8726 !important;
+        }
+
 
         #divBoutonSuppr{
           margin-left : 7%;
@@ -8945,4 +8946,10 @@ h1, h2, h3, h4, h5,
           display: inline-block;
           z-index: 9999 !important;
         }
+
+    .boutonTransport{
+      display : flex !important;
+      margin-top : 5px;
+    }
+    
         
