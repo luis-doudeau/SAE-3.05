@@ -122,7 +122,7 @@ def dataParticipant():
     adresseEmail = request.form["adresseEmail"]
     naissance = request.form["naissance"]
     role = request.form["role"]
-    participants = get_info_all_participants(session, prenom, nom, naissance, adresseEmail, role)
+    participants = get_info_all_participants(session, prenom, nom, adresseEmail,naissance, role)
     for participant in participants:
         participant_dico = participant.to_dict()
         participant_dico["role"] = get_role(session, participant.idP)

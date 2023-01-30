@@ -11,7 +11,7 @@ from sqlalchemy import create_engine, cast
 from sqlalchemy import Column , Integer, Text , Date, DATETIME
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import date, datetime
+import datetime
 import random
 import string
 import traceback
@@ -74,10 +74,10 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
-connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 
 
 # if __name__ == "__main__":
@@ -104,6 +104,14 @@ def datetime_to_dateFrancais(date):
     date = date[5:]
     date = date[:2]
     return debut_new_date + "-" + date + "-" + fin_new_date 
+
+def datetime_to_dateAnglais(date):
+    date = str(date)[:10]
+    debut_new_date = date[8:]
+    fin_new_date = date[:4]
+    date = date[5:]
+    date = date[:2]
+    return fin_new_date + "-" + date + "-" + debut_new_date 
 
 def datetime_to_heure(date):
     new_date = str(date)
@@ -248,6 +256,7 @@ def get_info_all_participants(session, prenomP, nomP, emailP, ddnP, role):
         participants = participants.filter(Participant.nomP == nomP)
     if(emailP != ""):
         participants = participants.filter(Participant.emailP == emailP)
+    print(ddnP)
     if(ddnP!= ""):
         jour = ddnP.split("/")[0]
         mois = ddnP.split("/")[1]
@@ -259,25 +268,33 @@ def get_info_all_participants(session, prenomP, nomP, emailP, ddnP, role):
     return participants.all()
 
 def get_info_all_consommateurs(session, prenomC, nomC, restaurant, la_date, creneau):
-    consommateurs = session.query(Manger)
-    if(prenomC != ""):
-        consommateurs = consommateurs.join(Consommateur, Manger.idP == Consommateur.idP).filter(Consommateur.prenomP == prenomC)
-    if(nomC != ""):
-        consommateurs = consommateurs.join(Consommateur, Manger.idP == Consommateur.idP).filter(Consommateur.nomP == nomC)
-    if (restaurant != ""):
-        consommateurs = consommateurs.join(
+    consommateurs = session.query(Manger).join(
                         Repas, Manger.idRepas == Repas.idRepas).join(
-                        Restaurant, Repas.idRest == Restaurant.idRest).filter(
-                        Restaurant.nomRest == restaurant)
-    # if(la_date!= ""):
-    #     jour = la_date.split("/")[0]
-    #     mois = la_date.split("/")[1]
-    #     annee = la_date.split("/")[2]
-    #     date = datetime.date(int(annee),int(mois),int(jour))
-    #     consommateurs = consommateurs.join(
-    #                     Repas, Manger.idRepas == Repas.idRepas).join(
-    #                     Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Creneau.dateDebut == date)
-    #CRENEAU A FAIRE
+                        Restaurant, Repas.idRest == Restaurant.idRest).join(
+                        Consommateur, Manger.idP == Consommateur.idP).join(
+                        Creneau, Repas.idCreneau == Creneau.idCreneau)
+    test2 = []
+    if(prenomC != ""):
+        consommateurs = consommateurs.filter(Consommateur.prenomP == prenomC)
+    if(nomC != ""):
+        consommateurs = consommateurs.filter(Consommateur.nomP == nomC)
+    if (restaurant != ""):
+        consommateurs = consommateurs.filter(Restaurant.nomRest == restaurant)
+    if(la_date!= ""):
+        jour = la_date.split("/")[1]
+        mois = la_date.split("/")[0]
+        annee = la_date.split("/")[2]
+        date_t = annee + "-" + mois + "-" + jour 
+        creneaux = session.query(Creneau).all()
+        liste_cren = []
+        for cren in creneaux:
+            new_cren = datetime_to_dateAnglais(cren.dateDebut)
+            if new_cren == date_t:
+                liste_cren.append(cren.dateDebut)
+        test = consommateurs
+        for les_creneaux in liste_cren:
+            test2.extend(test.filter(Creneau.dateDebut == les_creneaux).all())
+        return test2
     return consommateurs.all()
 
 def filtrer_par_role(role, participants):
