@@ -82,20 +82,153 @@
           </div>
             
             <!-- div qui vont contenir les détails sur les transports-->
-            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion">
+              
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion" style="background-color: rgb(247, 248, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/plane.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" id="container_lieu_avion">
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuDepartAvion" placeholder="Aéroport Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 110%; width: 120%;" class="form-control">
+                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsAvion">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
+                  <button type="button" autocomplete="off" id="boutonReverse" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgAvion" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+                      </path> 
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuArriveAvion" placeholder="Aéroport Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 110%; width: 120%;">
+                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsAvion2">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                  <button type="button" class="boutonSuppr" autocomplete="off" id="boutonSuppr" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                  </svg>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain">
+
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain" style="background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/train.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" id="container_lieu_train">
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuDepartTrain" placeholder="Gare Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 110%; width: 120%;" class="form-control">
+                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsGare">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
+                  <button type="button" autocomplete="off" id="boutonReverse" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgTrain" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuArriveTrain" placeholder="Gare Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 110%; width: 120%;">
+                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsGare2">
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                  <button type="button" class="boutonSuppr" autocomplete="off" id="boutonSuppr" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveVoiture">
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage" style="background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/carpooling.png">
+              </div><div class="row d-flex justify-content-center container_lieu_transport" id="container_lieu_covoiturage">
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuDepartCovoiturage" placeholder="Lieu Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 110%; width: 120%;" class="form-control">
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
+                  <button type="button" autocomplete="off" id="boutonReverse" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgCo" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="col-3 dropdownC">
+                <input autocomplete="off" id="lieuArriveCoivoiturage" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 110%; width: 120%;">
+              </div>
+              <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                <button type="button" class="boutonSuppr" autocomplete="off" id="boutonSuppr" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
+          </div>
 
-            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage">
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveVoiture" style="background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/car.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" id="container_lieu_voiture">
+                <div class="col-3 dropdownC">
+                  <input autocomplete="off" id="lieuDepartVoiture" placeholder="Lieu Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 110%; width: 120%;" class="form-control">
+                </div>
+                <div class="col-sm-6 col-lg-1" id="divBoutonReverse">
+                  <button type="button" autocomplete="off" id="boutonReverse" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgVoiture" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+                    </path>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="col-3 dropdownC">
+                <input autocomplete="off" id="lieuArriveVoiture" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 110%; width: 120%;">
+              </div>
+              <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                <button type="button" class="boutonSuppr" autocomplete="off" id="boutonSuppr" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
+          </div>
+            
 
-            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAutre">
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAutre" style="background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/other.png">
+              </div>
+                <div class="row d-flex justify-content-center container_lieu_transport" id="container_lieu_autre">
+                  <div class="col-sm-6 col-lg-3"><input autocomplete="off" id="precision" placeholder="Précision" inputmode="text" spellcheck="false" style="font-size: 1.1em; height: 110%; width: 130%;" class="form-control"></div>
+                    <div class="col-sm-6 col-lg-1" id="divBoutonSuppr">
+                      <button type="button" autocomplete="off" id="boutonSuppr" inputmode="text" spellcheck="false" class="boutonSuppr">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
             </div>
+              
+    
 
             <label for="transport" class="col-form-label mb-4 ml-4 fs-3" style="text-decoration : underline;" id="voyage">Arrivé à Blois</label>
             <div class="form-group row ml-5 mb-5">
@@ -208,40 +341,6 @@ function verif_champ_transport(){
 
 
 function createDivAutre(){
-  var container = document.createElement("div");
-  container.classList.add("row", "d-flex", "justify-content-center", "container_lieu_transport");
-  container.id = "divLieuDepArriveAutre";
-
-  var departCol = document.createElement("div");
-  departCol.classList.add("col-sm-6", "col-lg-3");
-  
-  var precision = document.createElement("input");
-  precision.setAttribute("autocomplete", "off");
-  precision.id = "precision";
-  precision.placeholder = "Précision";
-  precision.setAttribute("inputmode", "text");
-  precision.setAttribute("spellcheck", "false");
-  precision.style = "font-size: 1.1em;";
-  precision.classList.add("form-control");
-  precision.style.height = "110%";
-  precision.style.width = "130%";
-  departCol.appendChild(precision);
-  container.appendChild(departCol);
-  var deleteButtonCol = document.createElement("div");
-  deleteButtonCol.classList.add("col-sm-6", "col-lg-1");
-  deleteButtonCol.id = "divBoutonSuppr";
-
-  var deleteButton = document.createElement("button");
-  deleteButton.type = "button";
-  deleteButton.setAttribute("autocomplete", "off");
-  deleteButton.id = "boutonSuppr";
-  deleteButton.placeholder = "À Partir De";
-  deleteButton.setAttribute("inputmode", "text");
-  deleteButton.setAttribute("spellcheck", "false");
-  deleteButton.classList.add("boutonSuppr");
-  deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"> <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/> </svg>';
-  deleteButtonCol.appendChild(deleteButton);
-  container.appendChild(deleteButtonCol);
   deleteButton.addEventListener("click", function() {
     if(container != null){
       container.parentNode.removeChild(container);
@@ -251,89 +350,19 @@ function createDivAutre(){
       document.body.scrollIntoView({ behavior: 'smooth' });
     }
   });
-  return container;
+  reverseButton.addEventListener("click", function() {
+        if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById("reverseButtonImgCo");
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          departInput.value = arriveInput.value;
+          arriveInput.value = lieuDep;
+        }
+        });
 }
 
 
 function createDiv1(nomTransport){
-
-  var container = document.createElement("div");
-  container.classList.add("row", "d-flex", "justify-content-center", "container_lieu_transport");
-  container.id = "container_lieu_avion";
-
-  var departCol = document.createElement("div");
-  departCol.classList.add("col-sm-6", "col-lg-3");
-  
-  var divTrainTransportArrive = document.createElement("div");
-  divTrainTransportArrive.classList.add("col-3","dropdownC");
-  var departInput = document.createElement("input");
-  departInput.setAttribute("autocomplete", "off");
-  departInput.id = "lieuDepartAvion";
-  departInput.placeholder = "Aéroport Départ";
-  departInput.setAttribute("inputmode", "text");
-  departInput.setAttribute("spellcheck", "false");
-  departInput.setAttribute("required", true);
-  departInput.style = "font-size: 1.1em;";
-  departInput.classList.add("form-control");
-  departInput.style.height = "110%";
-  departInput.style.width = "120%";
-  divTrainTransportArrive.appendChild(departInput);
-  container.appendChild(divTrainTransportArrive);
-
-  var reverseButtonCol = document.createElement("div");
-  reverseButtonCol.classList.add("col-sm-6", "col-lg-1");
-  reverseButtonCol.id = "divBoutonReverse";
-
-  var reverseButton = document.createElement("button");
-  reverseButton.type = "button";
-  reverseButton.setAttribute("autocomplete", "off");
-  reverseButton.id = "boutonReverse";
-  reverseButton.placeholder = "À Partir De";
-  reverseButton.setAttribute("inputmode", "text");
-  reverseButton.setAttribute("spellcheck", "false");
-  reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImg" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
-  reverseButtonCol.appendChild(reverseButton);
-  container.appendChild(reverseButtonCol);
-
-  var arriveCol = document.createElement("div");
-  arriveCol.classList.add("col-sm-6", "col-lg-3");
-  arriveCol.id = "divLieuArrive";
-
-
-  var divTrainTransportDepart = document.createElement("div");
-  divTrainTransportDepart.classList.add("col-3", "dropdownC");
-  var arriveInput = document.createElement("input");
-  arriveInput.setAttribute("autocomplete", "off");
-  arriveInput.id = "lieuArriveAvion";
-  arriveInput.placeholder = "Aéroport Arrivé";
-  arriveInput.setAttribute("required", true);
-  arriveInput.setAttribute("inputmode", "text");
-  arriveInput.setAttribute("spellcheck", "false");
-  arriveInput.classList.add("form-control");
-  arriveInput.style = "font-size: 1.1em"
-  arriveInput.style.height = "110%";
-  arriveInput.style.width = "120%";
-  divTrainTransportDepart.appendChild(arriveInput);
-  container.appendChild(divTrainTransportDepart);
-
-  var deleteButtonCol = document.createElement("div");
-  deleteButtonCol.classList.add("col-sm-6", "col-lg-1");
-  deleteButtonCol.id = "divBoutonSuppr";
-
-  var deleteButton = document.createElement("button");
-  deleteButton.type = "button";
-  deleteButton.classList.add("boutonSuppr");
-  deleteButton.setAttribute("autocomplete", "off");
-  deleteButton.id = "boutonSuppr";
-  deleteButton.placeholder = "À Partir De";
-  deleteButton.setAttribute("inputmode", "text");
-  deleteButton.setAttribute("spellcheck", "false");
-  deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"> <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/> </svg>';
-  deleteButtonCol.appendChild(deleteButton);
-  container.appendChild(deleteButtonCol);
-
-  let div = document.createElement("div");
-  let img = document.createElement("img");
 
 
     switch(nomTransport){
@@ -354,15 +383,7 @@ function createDiv1(nomTransport){
         div.appendChild(img); 
         divTransport.appendChild(div);
         reverseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" id="reverseButtonImgCo" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path> </svg>';
-        reverseButton.addEventListener("click", function() {
-        if(departInput.value != "" && arriveInput.value != ""){
-          const img_svg = document.getElementById("reverseButtonImgCo");
-          img_svg.classList.toggle("reverse");
-          const lieuDep = departInput.value;
-          departInput.value = arriveInput.value;
-          arriveInput.value = lieuDep;
-        }
-        });
+        
         divTransport.appendChild(container);
         break;
       case ('train') :
@@ -671,8 +692,7 @@ cardAvion.addEventListener("click", function(){
   if(container_lieu_avion == null){
     createDiv1('avion');
   }
-  loadOptionsAvionDepart();
-  loadOptionsAvionArrive();
+ 
 
   //décalage en px
   var offest = -60;
@@ -691,8 +711,7 @@ cardTrain.addEventListener("click", function(){
   if(container_lieu_train == null){
     createDiv1('train');
   }
-  loadOptions();
-  loadOptions2();
+  
 
   //décalage en px
   var offest = -60;

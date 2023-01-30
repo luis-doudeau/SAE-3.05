@@ -829,7 +829,7 @@ def id_transport_with_name(nom_transport):
 def supprime_deplacer_annee(session, idP, annee):
     deplacement = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee)
     for dep in deplacement : 
-        session.query(Deplacer).filter(Deplacer.idP == dep.idP).filter(Deplacer.annee == dep.annee).delete()
+        session.delete(dep)
         try : 
             session.commit()
         except : 
@@ -839,8 +839,6 @@ def supprime_deplacer_annee(session, idP, annee):
 
 
 def ajoute_deplacer(session, idP, idTransport, lieuDepart, lieuArrive, annee) :
-    print("842 VIEWS") 
-    supprime_deplacer_annee(session, idP, annee)
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive, annee)
     deplacer = session.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:

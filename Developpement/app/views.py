@@ -26,7 +26,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger, id_transport_with_name
+suppprime_loger, id_transport_with_name, supprime_deplacer_annee
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -206,16 +206,15 @@ def formulaire_auteur_transport():
         dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
                           "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
                           "autre": ["precision"]}
-        
+
+        currentDateTime = datetime.now()
+        date = currentDateTime.date()
+        year = date.strftime("%Y")
+        supprime_deplacer_annee(session, current_user.idP, year)
         for transport in liste_id_box:
-            print("l209")
             if request.form[transport] == "true" and transport != "autre" :
-                print(transport)
                 lieu_depart = request.form[dico_champs_box[transport][0]]
-                lieu_arrive = request.form[dico_champs_box[transport][1]]
-                currentDateTime = datetime.now()
-                date = currentDateTime.date()
-                year = date.strftime("%Y")
+                lieu_arrive = request.form[dico_champs_box[transport][1]]   
                 ajoute_deplacer(session, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
             elif transport == "autre" : 
                 modif_participant_remarque(session, current_user.idP, request.form[dico_champs_box[transport][0]])
