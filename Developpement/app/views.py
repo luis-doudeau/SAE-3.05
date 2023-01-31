@@ -261,6 +261,19 @@ def formulaire_reservation():
         
     return render_template("formulaireReservation.html", idp=current_user.idP)
 
+
+@app.route('/secretaireIntervention/', methods = ["POST","GET"])
+@login_required
+def page_secretaire_intervention():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
+    if request.method == 'POST':
+        la_date = request.form["jours"].split(",")
+        liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
+        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
+    return render_template('secretaireIntervention.html')
+
+
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
