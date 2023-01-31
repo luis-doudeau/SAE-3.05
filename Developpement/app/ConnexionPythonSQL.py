@@ -295,6 +295,8 @@ def get_info_all_consommateurs(session, prenomC, nomC, restaurant, la_date, cren
         for les_creneaux in liste_cren:
             test2.extend(test.filter(Creneau.dateDebut == les_creneaux).all())
         return test2
+    if(creneau != ""):
+        pass
     return consommateurs.all()
 
 def filtrer_par_role(role, participants):
