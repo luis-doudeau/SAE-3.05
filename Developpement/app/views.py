@@ -197,7 +197,6 @@ def participant_secretaire():
 @login_required
 def formulaire_auteur_transport():
     print(request.form)
-    print("l199")
     if est_secretaire(session, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
@@ -227,6 +226,8 @@ def formulaire_auteur_transport():
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
+        print("kdspfkdsfkdsml")
+        return render_template("formulaireReservation.html", idp = current_user.idP)
         
     return render_template("transportForms.html")
         
@@ -252,10 +253,10 @@ def formulaire_reservation():
         if remarques.isalpha():  # si le champ 'remarques' contient des caractères
             modif_participant_remarque(session, current_user.idP, remarques)
         
+        suppprime_loger(session, current_user.idP)
         if request.form["hebergement"] =="true":
             ajoute_hebergement(session, current_user.idP)
-        elif request.form["hebergement"] !="true": 
-            suppprime_loger(session, current_user.idP)
+        
         return render_template("pageFin.html", idp=current_user.idP) #TODO
         
     return render_template("formulaireReservation.html", idp=current_user.idP)

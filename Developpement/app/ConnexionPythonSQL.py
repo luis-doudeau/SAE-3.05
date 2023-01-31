@@ -888,7 +888,6 @@ def suppprime_loger(session, idP):
 
 
 def ajoute_loger(session, idP, dateDebut, dateFin, idHotel):
-    suppprime_loger(session, idP)
     date_debut = datetime(dateDebut.year, dateDebut.month, dateDebut.day, dateDebut.hour, dateDebut.minute, dateDebut.second)
     date_fin = datetime(dateFin.year, dateFin.month, dateFin.day, dateFin.hour, dateFin.minute, dateFin.second)
 
@@ -994,9 +993,10 @@ def cherche_transport(session, nom_transport) :
 
 
 def modif_participant_remarque(session, idP, remarques) : 
-    nouvelles_remarques = remarques + " / "+str((session.query(Participant).filter(Participant.idP == idP).first()).remarques)
-    session.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
-    session.commit()  
+    if remarques.isalpha():
+        nouvelles_remarques = remarques + " / "+str((session.query(Participant).filter(Participant.idP == idP).first()).remarques)
+        session.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
+        session.commit()
 
 
 def get_utilisateur_email_mdp(session, mail, mdp):

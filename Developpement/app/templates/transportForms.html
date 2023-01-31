@@ -109,7 +109,7 @@
                   </div>
                 </div>
                 <div class="col-1" style = "margin-top : 5px;">
-                  <button type="button" class="btn btn-danger" style = "margin-top : 5px;" autocomplete="off" id="boutonSupprAvion" inputmode="text" spellcheck="false">
+                  <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprAvion" inputmode="text" spellcheck="false">
                   <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
                   </svg>
@@ -255,7 +255,7 @@
             <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
               <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-                <button id="save" type="button" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_transport()">Suivant</button>
+                <button id="save" type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_transport()">Suivant</button>
             </div>
           </form>
         
@@ -269,11 +269,11 @@
 
 $(document).ready(function(){
   $("#save").on("click", function(){
-    var avion = document.getElementById("divLieuDepArriveAvion").children.length >0;
-    var train = document.getElementById("divLieuDepArriveTrain").children.length >0;
-    var voiture = document.getElementById("divLieuDepArriveVoiture").children.length >0;
-    var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").children.length >0;
-    var autre = document.getElementById("divLieuDepArriveAutre").children.length >0;
+    var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
+    var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
+    var voiture = document.getElementById("divLieuDepArriveVoiture").style.display != "none";
+    var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").style.display != "none";
+    var autre = document.getElementById("divLieuDepArriveAutre").style.display != "none";
     var dateArr = document.getElementById("dateArr").value;
     var hArrive = document.getElementById("hArrive").value;
     var dateDep = document.getElementById("dateDep").value;
@@ -342,9 +342,6 @@ function verif_transport(){
   }
 
   if(champ_transport && transport){
-    const params = new URLSearchParams(document.location.search);
-    const idP = params.get("idp");
-    window.location = "{{url_for('formulaire_reservation', idp='param')}}".replace('param', idP);
     res = true;
   }
   else if(!transport){
@@ -570,6 +567,15 @@ function verif_reverse(departInput, arriveInput, reverseImg ){
         }
 }
 
+
+window.addEventListener("load", (event) => {
+  loadOptions();
+  loadOptions2();
+  loadOptionsAvionArrive();
+  loadOptionsAvionDepart();
+});
+
+
 const cardAvion = document.getElementById("cardAvion");
 
 cardAvion.addEventListener("click", function(){
@@ -596,8 +602,6 @@ cardAvion.addEventListener("click", function(){
   departInput.addEventListener("click", filterFunctionAvion);
   arriveInput.addEventListener("keyup", filterFunctionAvion2);
   arriveInput.addEventListener("click", filterFunctionAvion2);
-  loadOptionsAvionArrive();
-  loadOptionsAvionDepart();
 });
 
 var reverseButton = document.getElementById("boutonReverseAvion");
@@ -636,8 +640,6 @@ cardTrain.addEventListener("click", function(){
   departInput.addEventListener("click", filterFunction);
   arriveInput.addEventListener("keyup", filterFunction2);
   arriveInput.addEventListener("click", filterFunction2);
-  loadOptions();
-  loadOptions2();
 });
 
 var reverseButton = document.getElementById("boutonReverseTrain");
@@ -736,7 +738,7 @@ cardAutre.addEventListener("click", function(){
 
     var xhr = new XMLHttpRequest();
 
-function loadOptions() {
+function loadOptions(){
   var xhr = new XMLHttpRequest();
   var div = document.getElementById("optionsGare");
   xhr.open("GET", "../static/txt/gare.txt", true);
@@ -850,7 +852,6 @@ function filterFunction2() {
             a[i].style.display = "";
             div.style.display = "";
             existeElem = true;
-
         }
         else {
             a[i].style.display = "none";
