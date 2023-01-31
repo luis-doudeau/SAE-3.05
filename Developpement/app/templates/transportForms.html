@@ -202,7 +202,7 @@
               </button>
             </div>
             <div class="col-4">
-              <input autocomplete="off" id="lieuArriveCoivoiturage" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
+              <input autocomplete="off" id="lieuArriveCovoiturage" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
             </div>
             <div class="col-1" style = "margin-top : 5px;">
               <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprCovoiturage" inputmode="text" spellcheck="false">
@@ -255,7 +255,7 @@
             <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
               <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-                <button id="save" type="button" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_champ_transport()">Suivant</button>
+                <button id="save" type="button" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_transport()">Suivant</button>
             </div>
           </form>
         
@@ -325,22 +325,83 @@ $(document).ready(function(){
 
 
 
-function verif_champ_transport(){
+function verif_transport(){
   var liste = new Array();
+  var transport = false;
+  var champ_transport = true;
+  var res = false;
   liste.push("divLieuDepArriveAvion", "divLieuDepArriveTrain", "divLieuDepArriveVoiture", "divLieuDepArriveCovoiturage", "divLieuDepArriveAutre");
   for(let element of liste){
     var elem = document.getElementById(element);
-    if (elem != null && elem.children.length > 0) {
-      const params = new URLSearchParams(document.location.search);
-      const idP = params.get("idp");
- 
-      window.location = "{{url_for('formulaire_reservation', idp='param')}}".replace('param', idP);
-      return true;
+    if (elem.style.display != "none") {
+      transport = true;
+      if(!verif_champ_transport(element)){
+        champ_transport = false;
+      }
     }
   }
-  window.alert("Vous devez choisir un moyen de transport");
-  return false;
+
+  if(champ_transport && transport){
+    const params = new URLSearchParams(document.location.search);
+    const idP = params.get("idp");
+    window.location = "{{url_for('formulaire_reservation', idp='param')}}".replace('param', idP);
+    res = true;
+  }
+  else if(!transport){
+    window.alert("Vous devez choisir un moyen de transport");
+    res = false;
+  }
+  else{
+    res = false;
+  }
+  return res;
 } 
+
+
+
+function verif_champ_transport(transport){
+  const dico_champs_box = {"divLieuDepArriveAvion" : ["lieuDepartAvion", "lieuArriveAvion"], "divLieuDepArriveTrain": ["lieuDepartTrain", "lieuArriveTrain"],
+  "divLieuDepArriveVoiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "divLieuDepArriveCovoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],
+  "divLieuDepArriveAutre": ["precision"]};
+
+  var arrive = true;
+  var depart = true;
+
+  if(transport != "divLieuDepArriveAutre"){
+    var champ_dep = document.getElementById(dico_champs_box[transport][0]);
+    var champ_arr = document.getElementById(dico_champs_box[transport][1]);
+
+    console.log(champ_arr);
+
+    if(!champ_dep.value.trim()){
+      champ_dep.classList.add("error");
+      depart = false;
+    }
+    else{
+      champ_dep.classList.remove("error");
+    }
+    if(!champ_arr.value.trim()){
+      champ_arr.classList.add("error");
+      arrive = false;
+    }
+    else{
+      champ_arr.classList.remove("error");
+    }
+    return arrive && depart;
+  }
+  else{
+    var champ_dep = document.getElementById(dico_champs_box[transport][0]);
+
+    if(!champ_dep.value.trim()){
+      champ_dep.classList.add("error");
+      depart = false;
+    }
+    else{
+      champ_dep.classList.remove("error");
+    }
+    return depart;
+  }
+}
 
 
 function loadOptionsAvionDepart() {
@@ -527,6 +588,16 @@ cardAvion.addEventListener("click", function(){
     var rect = element.getBoundingClientRect();
     // Faire défiler la page jusqu'à l'élément
     window.scrollTo(0, rect.top + window.pageYOffset+offest);
+
+
+  var departInput = document.getElementById("lieuDepartAvion");
+  var arriveInput = document.getElementById("lieuArriveAvion");
+  departInput.addEventListener("keyup", filterFunctionAvion);
+  departInput.addEventListener("click", filterFunctionAvion);
+  arriveInput.addEventListener("keyup", filterFunctionAvion2);
+  arriveInput.addEventListener("click", filterFunctionAvion2);
+  loadOptionsAvionArrive();
+  loadOptionsAvionDepart();
 });
 
 var reverseButton = document.getElementById("boutonReverseAvion");
@@ -558,6 +629,15 @@ cardTrain.addEventListener("click", function(){
     var rect = element.getBoundingClientRect();
     // Faire défiler la page jusqu'à l'élément
     window.scrollTo(0, rect.top + window.pageYOffset+offest);
+
+  var departInput = document.getElementById("lieuDepartTrain");
+  var arriveInput = document.getElementById("lieuArriveTrain");
+  departInput.addEventListener("keyup", filterFunction);
+  departInput.addEventListener("click", filterFunction);
+  arriveInput.addEventListener("keyup", filterFunction2);
+  arriveInput.addEventListener("click", filterFunction2);
+  loadOptions();
+  loadOptions2();
 });
 
 var reverseButton = document.getElementById("boutonReverseTrain");
@@ -622,7 +702,7 @@ cardCovoiturage.addEventListener("click", function(){
 
 var reverseButton = document.getElementById("boutonReverseCovoiturage");
   reverseButton.addEventListener("click", function() {
-  verif_reverse("lieuDepartCovoiturage", "lieuArriveCoivoiturage", "reverseButtonImgCo");
+  verif_reverse("lieuDepartCovoiturage", "lieuArriveCovoiturage", "reverseButtonImgCo");
         });
 
 

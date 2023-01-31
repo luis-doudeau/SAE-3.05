@@ -8937,7 +8937,7 @@ h1, h2, h3, h4, h5,
           z-index: 9999 !important;
           background-color: #e6e9fa;
           overflow: hidden; /* masque les éléments dépassant du conteneur */
-          max-height: 180px;
+          max-height: 170px;
           
         }
 
@@ -8950,6 +8950,10 @@ h1, h2, h3, h4, h5,
     .boutonTransport{
       display : flex !important;
       margin-top : 5px;
+    }
+
+    .error{
+      border : 2px red solid !important;
     }
     
         
