@@ -24,7 +24,6 @@ from .Transport import Transport
 from .ConnexionPythonSQL import *
 import json
 import pandas as pd
-import openpyxl
 from io import BytesIO
 import xlsxwriter
 
@@ -356,21 +355,11 @@ def delete_utilisateur():
 def download_file():
     df = pd.DataFrame.from_dict(session["data"]["data"])
     output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False)
-    writer.save()
+    with pd.ExcelWriter(output) as writer:
+        df.to_excel(writer)
     output.seek(0)
     response = send_file(output, download_name='file.xlsx', as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    #response.headers["Content-Disposition"] = "attachment; filename=fichier.xlsx"
     return response
-    """print(session)
-
-    df = pd.DataFrame.from_dict(session["data"]["data"])
-    df.to_excel("./Developpement/app/fichier.xlsx")
-    print(df)
-    return send_file("fichier.xlsx", as_attachment=True)
-    print(e)
-    return str(e)"""
 
 #Ne pas effacer test
 """@app.before_request
