@@ -226,8 +226,7 @@ def formulaire_auteur_transport():
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
-        print("kdspfkdsfkdsml")
-        return render_template("formulaireReservation.html", idp = current_user.idP)
+        return "True"
         
     return render_template("transportForms.html")
         
