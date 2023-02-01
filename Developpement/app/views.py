@@ -20,13 +20,7 @@ from .Deplacer import Deplacer
 from .Assister import Assister
 from .Transport import Transport
 
-from .ConnexionPythonSQL import get_info_personne, get_regime,session,get_nom_restaurant,\
-get_nom_hotel, get_dormeur, afficher_consommateur, est_intervenant, affiche_participant_trier,\
-est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_participant_remarque, ajoute_avoir_regime,\
-ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
-get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
-supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger, id_transport_with_name, supprime_deplacer_annee
+from .ConnexionPythonSQL import *
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -98,17 +92,23 @@ def dormeur_secretaire():
 
     return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
 
-@app.route('/api/dataDormeurs')
+@app.route('/api/dataDormeurs', methods = ["POST"])
 @login_required
 def dataDormeurs():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
     liste_dormeurs = []
-    for intervenants in session.query(Loger).all():
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    hotel = request.form["hotel"]
+    dateDebut = request.form["dateDebut"]
+    dateFin = request.form["dateFin"]
+    liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(session, prenom, nom, hotel, dateDebut, dateFin)
+    for intervenants in liste_dormeur_sans_info:
         dormeurs_dico = get_intervenant(session, intervenants.idP).to_dict_sans_ddn()
         dormeurs_dico["hotel"] = get_hotel(session, intervenants.idHotel)
-        dormeurs_dico["dateDeb"] = datetime_to_dateFrancais(intervenants.dateDebut)
-        dormeurs_dico["dateFin"] = datetime_to_dateFrancais(intervenants.dateFin)
+        dormeurs_dico["dateDeb"] = intervenants.dateDebut.date()
+        dormeurs_dico["dateFin"] = intervenants.dateFin.date()
         liste_dormeurs.append(dormeurs_dico)
     return {'data': liste_dormeurs}
 

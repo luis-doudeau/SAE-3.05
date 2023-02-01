@@ -77,7 +77,9 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -256,6 +258,32 @@ def get_info_all_participants(session, prenomP, nomP, emailP, ddnP, role):
     if(role!= ""):
         participants = filtrer_par_role(role, participants)
     return participants.all()
+
+def get_tout_dormeurs_avec_filtre(session, prenomP, nomP, nomHotel, dateArrive, dateDeparts):
+    participants = session.query(Loger).join(Intervenant, Loger.idP == Intervenant.idP).join(Hotel, Loger.idHotel == Hotel.idHotel)
+    if(prenomP != ""):
+        participants = participants.filter(Intervenant.prenomP == prenomP)
+    if(nomP != ""):
+        participants = participants.filter(Intervenant.nomP == nomP)
+    if(nomHotel != ""):
+        participants = participants.filter(Hotel.nomHotel == nomHotel)
+    if(dateArrive!= ""):
+        jour = dateArrive.split("/")[0]
+        mois = dateArrive.split("/")[1]
+        annee = dateArrive.split("/")[2]
+        print(jour, mois, annee)
+        date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
+        date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
+        participants = participants.filter(Loger.dateDebut >= date_jour_debut).filter(Loger.dateDebut <= date_jour_fin)
+    if(dateDeparts!= ""):
+        jour = dateDeparts.split("/")[0]
+        mois = dateDeparts.split("/")[1]
+        annee = dateDeparts.split("/")[2]
+        date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
+        date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
+        participants = participants.filter(Loger.dateFin >= date_jour_debut).filter(Loger.dateFin <= date_jour_fin)
+    return participants.all()
+
 
 def filtrer_par_role(role, participants):
     if role == "Secretaire":
