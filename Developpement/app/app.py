@@ -1,11 +1,6 @@
 from flask import Flask
-
 from secrets import token_urlsafe
-
 from flask_login import LoginManager
-
-
-
 
 
 app = Flask(__name__)
