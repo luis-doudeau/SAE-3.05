@@ -271,7 +271,6 @@ def get_tout_dormeurs_avec_filtre(session, prenomP, nomP, nomHotel, dateArrive, 
         jour = dateArrive.split("/")[0]
         mois = dateArrive.split("/")[1]
         annee = dateArrive.split("/")[2]
-        print(jour, mois, annee)
         date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
         date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
         participants = participants.filter(Loger.dateDebut >= date_jour_debut).filter(Loger.dateDebut <= date_jour_fin)
@@ -279,6 +278,7 @@ def get_tout_dormeurs_avec_filtre(session, prenomP, nomP, nomHotel, dateArrive, 
         jour = dateDeparts.split("/")[0]
         mois = dateDeparts.split("/")[1]
         annee = dateDeparts.split("/")[2]
+        print(jour, mois, annee)
         date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
         date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
         participants = participants.filter(Loger.dateFin >= date_jour_debut).filter(Loger.dateFin <= date_jour_fin)
