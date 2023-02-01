@@ -11,7 +11,10 @@ pip install flask
 pip3 install mysql-connector-python
 pip install flask-wtf
 pip install flask-login
+pip install xlsxwriter
+pip install pandas
 
+a test openpyxl
 ## Link GitHub
 
 https://github.com/luis-doudeau/SAE-3.05-BDBOUM
