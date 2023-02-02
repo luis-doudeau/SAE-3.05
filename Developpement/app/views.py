@@ -9,7 +9,6 @@ from secrets import token_urlsafe
 from .Mobiliser import Mobiliser
 from .Navette import Navette
 from .Transporter import Transporter
-
 from .Consommateur import Consommateur
 from .Participant import Participant
 from .Avoir import Avoir
@@ -26,7 +25,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger, id_transport_with_name, supprime_deplacer_annee
+suppprime_loger, id_transport_with_name, supprime_deplacer_annee, get_all_lieu, get_all_participant, get_all_interventions
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -270,14 +269,14 @@ def page_secretaire_intervention():
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
         return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
-    return render_template('secretaireIntervention.html')
+    return render_template('secretaireIntervention.html', lieux=get_all_lieu(session), participants=get_all_participant(session), type_inter=get_all_interventions(session))
 
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
     if not current_user.est_secretaire():
-        return redirect(url_for('logout'))   
+        return redirect(url_for('logout'))
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])

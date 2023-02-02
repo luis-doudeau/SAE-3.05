@@ -238,3 +238,18 @@ INSERT INTO MANGER(idP, idRepas) VALUES (100, 3),
                                         (102, 6),
                                         (102, 18),
                                         (200, 5);
+
+
+
+INSERT INTO INTERVENTION(idIntervention, nomIntervention) VALUES (1, "Conférence de presse"),
+                                                                (2, "Dédicace"),
+                                                                (3, "Atelier dessin"),
+                                                                (4, "Présentation"),
+                                                                (5, "Autre");
+
+
+INSERT INTO LIEU(idLieu, nomLieu) VALUES (1,"Hall 1"),
+                                        (2, "Hall 2"),
+                                        (3, "Hall 3"),
+                                        (4, "Hall 4"),
+                                        (5, "Hall 5");

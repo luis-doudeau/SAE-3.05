@@ -33,8 +33,7 @@ class Participant(Utilisateur, Base):
         self.remarques = remarques
 
     def __repr__(self) -> str:
-        print("id",self.idP)
-        return str(self.idP)    
+        return str(self.idP)+ " " +self.prenomP + " "+ self.nomP
 
     def to_dict(self):
         return {

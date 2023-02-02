@@ -27,11 +27,13 @@ from .Intervenant import Intervenant
 from .Auteur import Auteur
 from .Presse import Presse
 from .Invite import Invite
+from .Intervention import Intervention
 from .Participant import Participant
 from .Loger import Loger
 from .Hotel import Hotel
 from .Deplacer import Deplacer
 from .Manger import Manger
+from .Lieu import Lieu
 from .Repas import Repas
 from .Creneau import Creneau
 from .Restaurant import Restaurant
@@ -152,6 +154,10 @@ def get_lieu_depart_voyage(session, idVoyage):
         return "Festival → Gare Blois"
     else:
         return "Gare Blois → Festival"
+
+
+def get_all_lieu(session) : 
+    return session.query(Lieu.nomLieu).all()
     
 
 # def get_max_id_utilisateur(session):
@@ -587,6 +593,13 @@ def get_info_personne(session, email, mdp):
 
 def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
+
+
+def get_all_participant(session):
+    return session.query(Participant).all()
+
+def get_all_interventions(session) : 
+    return session.query(Intervention).all()
 
 def get_exposant(session, id_exposant):
     return session.query(Exposant).filter(Exposant.idP == id_exposant).first()

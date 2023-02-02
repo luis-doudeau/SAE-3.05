@@ -223,14 +223,23 @@ CREATE TABLE LIEU (
   PRIMARY KEY(idLieu)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
+
+CREATE TABLE INTERVENTION (
+  idIntervention int,
+  nomIntervention VARCHAR(50),
+  PRIMARY KEY(idIntervention)
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+
 CREATE TABLE INTERVENIR (
   idP int,
   idCreneau int,
   idLieu int,
-  nomIntervention VARCHAR(50),
+  idIntervention VARCHAR(50),
   descIntervention VARCHAR(500),
-  PRIMARY KEY (idP, idCreneau),
+  PRIMARY KEY (idP, idCreneau, idIntervention),
   FOREIGN KEY(idP) REFERENCES AUTEUR(idP),
   FOREIGN KEY(idCreneau) REFERENCES CRENEAU(idCreneau),
-  FOREIGN KEY(idLieu) REFERENCES LIEU(idLieu)
+  FOREIGN KEY(idLieu) REFERENCES LIEU(idLieu),
+  FOREIGN KEY(idIntervention) REFERENCES INTERVENTION(idIntervention)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
