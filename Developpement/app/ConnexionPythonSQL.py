@@ -281,22 +281,18 @@ def get_info_all_consommateurs(session, prenomC, nomC, restaurant, la_date, cren
     if (restaurant != ""):
         consommateurs = consommateurs.filter(Restaurant.nomRest == restaurant)
     if(la_date!= ""):
-        jour = la_date.split("/")[1]
-        mois = la_date.split("/")[0]
+        jour = la_date.split("/")[0]
+        mois = la_date.split("/")[1]
         annee = la_date.split("/")[2]
-        date_t = annee + "-" + mois + "-" + jour 
-        creneaux = session.query(Creneau).all()
-        liste_cren = []
-        for cren in creneaux:
-            new_cren = datetime_to_dateAnglais(cren.dateDebut)
-            if new_cren == date_t:
-                liste_cren.append(cren.dateDebut)
-        test = consommateurs
-        for les_creneaux in liste_cren:
-            test2.extend(test.filter(Creneau.dateDebut == les_creneaux).all())
-        return test2
+        my_date = datetime.date(int(annee), int(mois), int(jour))
+        consommateurs = consommateurs.filter(func.date(Creneau.dateDebut) == my_date)
+        
     if(creneau != ""):
-        pass
+        (heure_creneau_debut, minute_creneau_debut) = creneau.split('-')[0].split(':')
+        (heure_creneau_fin, minute_creneau_fin) = creneau.split('-')[1].split(':')
+        consommateurs = consommateurs.filter(extract('hour', Creneau.dateDebut) == heure_creneau_debut).filter(extract('minute', Creneau.dateDebut) == minute_creneau_debut)
+        consommateurs = consommateurs.filter(extract('hour', Creneau.dateFin) == heure_creneau_fin).filter(extract('minute', Creneau.dateFin) == minute_creneau_fin)
+
     return consommateurs.all()
 
 def filtrer_par_role(role, participants):
@@ -736,7 +732,7 @@ def afficher_consommateur(session, date_jour, restaurant, midi):
         repas = session.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.estMidi == midi).all()
     
     if date_jour[0] != "Date":
-        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
+        date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
         for cren in repas:
             if cren[1].date() == date_jour:
                 liste_creneau.append(cren[2])
@@ -831,7 +827,7 @@ def get_regime(session, id_p):
 
 def get_dormeur(session, date_jour, hotel):
     if date_jour[0] != "Date":
-        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
+        date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     else:
         date_jour = date_jour[0]
         print(date_jour)
