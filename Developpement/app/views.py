@@ -1,8 +1,8 @@
 import json
-from .app import app
+from .app import app, mail
 
 from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, send_file, session
+from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify
 from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
 
@@ -26,6 +26,8 @@ import json
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
+
+from flask_mail import Mail, Message
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -94,7 +96,7 @@ def dormeur_secretaire():
     if request.method == "POST":
         return render_template("dormeurSecretaire.html")
 
-    return render_template('dormeurSecretaire.html', nomHotel = get_nom_hotel())
+    return render_template('dormeurSecretaire.html')
 
 @app.route('/api/dataDormeurs', methods = ["POST", "GET"])
 def dataDormeurs():
@@ -128,7 +130,10 @@ def dataDormeurs():
 
     return {'data': liste_dormeurs}
 
-    
+  
+@app.route("/api/data/nomHotel")
+def data_nom_hotel():
+    return jsonify(get_nom_hotel())
 
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
@@ -360,6 +365,16 @@ def download_file():
     output.seek(0)
     response = send_file(output, download_name='file.xlsx', as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     return response
+
+@app.route("/mail")
+def envoie_mail():
+    msg = Message('Hello', sender = 'bdboum45@gmail.com', recipients = ['azertytoqwerty2@gmail.com'])
+    msg.body = "This is the email body2"
+    mail.send(msg)
+    return "Sent"
+    
+
+
 
 #Ne pas effacer test
 """@app.before_request

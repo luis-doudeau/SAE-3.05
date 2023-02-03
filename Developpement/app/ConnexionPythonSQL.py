@@ -696,8 +696,9 @@ def get_nom_restaurant():
 def get_nom_hotel():
     liste_nom_hotel = []
     for nom in sessionSQL.query(Hotel):
-        liste_nom_hotel.append((nom.nomHotel, nom.idHotel))
+        liste_nom_hotel.append(nom.nomHotel)
     return liste_nom_hotel
+
 
     
         

@@ -13,6 +13,7 @@ pip install flask-wtf
 pip install flask-login
 pip install xlsxwriter
 pip install pandas
+pip install Flask-Mail
 
 ## Link GitHub
 
