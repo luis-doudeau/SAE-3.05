@@ -125,8 +125,8 @@
               </div>
               <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_train">
                 <div class="col-4">
-                  <input autocomplete="off" id="lieuDepartTrain" placeholder="Gare Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 100%; width: 100%;" class="form-control">
-                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsGare">
+                  <div class="k-w-300">
+                    <input id="lieuDepartTrain" name="lieuDepartTrain" placeholder="Gare Départ" style=" height:60px; max-width:350px; font-size : 110%;" required />
                   </div>
                 </div>
                 <div class="col-1" style="display : flex;">
@@ -138,8 +138,8 @@
                   </button>
                 </div>
                 <div class="col-4">
-                  <input autocomplete="off" id="lieuArriveTrain" placeholder="Gare Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
-                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsGare2">
+                  <div class="k-w-300">
+                    <input id="lieuArriveTrain" name="lieuArriveTrain" placeholder="Gare Arrivé" style=" height:60px; max-width:350px; font-size : 110%;" required />
                   </div>
                 </div>
                 <div class="col-1" style = "margin-top : 5px;">
@@ -267,7 +267,50 @@
 
 <script>
 
-$(document).ready(function(){
+  document.addEventListener("DOMContentLoaded", function() {
+
+  var dataSource = new Array();
+    liste_dep_train = "{{liste_lieu_train}}".replaceAll("&#39;", "").replaceAll("&#34;", "").replaceAll("[","").replaceAll("]","").split(",");
+    console.log(liste_dep_train);
+    for(lieu_dep_train of liste_dep_train){
+      if (lieu_dep_train != ""){
+        var dico = {text : lieu_dep_train, value : lieu_dep_train};
+        dataSource.push(dico);
+      }
+    }
+  
+    // { text: "Cotton", value: "1" }
+    $("#lieuDepartTrain").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+
+    var dataSource = [];
+var liste_arr_train = "{{liste_lieu_train}}".replace(/&#39;/g, "").replace(/&#34;/g, "").replace(/[\[\]]/g, "");
+
+dataSource = liste_arr_train
+  .split(",")
+  .filter(lieu_arr_train => lieu_arr_train !== "")
+  .map(lieu_arr_train => ({text: lieu_arr_train, value: lieu_arr_train}));
+
+  
+    // { text: "Cotton", value: "1" }
+    $("#lieuArriveTrain").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+
+
   $("#save").on("click", function(){
     var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
     var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
@@ -567,16 +610,18 @@ function verif_reverse(departInput, arriveInput, reverseImg ){
   if(departInput.value != "" && arriveInput.value != ""){
           const img_svg = document.getElementById(reverseImg);
           img_svg.classList.toggle("reverse");
+          console.log(departInput.value);
+          console.log(arriveInput.value);
           const lieuDep = departInput.value;
           departInput.value = arriveInput.value;
           arriveInput.value = lieuDep;
+          console.log(departInput.value);
+          console.log(arriveInput.value);
         }
 }
 
 
 window.addEventListener("load", (event) => {
-  loadOptions();
-  loadOptions2();
   loadOptionsAvionArrive();
   loadOptionsAvionDepart();
 });
@@ -642,10 +687,6 @@ cardTrain.addEventListener("click", function(){
 
   var departInput = document.getElementById("lieuDepartTrain");
   var arriveInput = document.getElementById("lieuArriveTrain");
-  departInput.addEventListener("keyup", filterFunction);
-  departInput.addEventListener("click", filterFunction);
-  arriveInput.addEventListener("keyup", filterFunction2);
-  arriveInput.addEventListener("click", filterFunction2);
 });
 
 var reverseButton = document.getElementById("boutonReverseTrain");
@@ -742,133 +783,6 @@ cardAutre.addEventListener("click", function(){
 // FIN AUTRE
 
 
-    var xhr = new XMLHttpRequest();
-
-function loadOptions(){
-  var xhr = new XMLHttpRequest();
-  var div = document.getElementById("optionsGare");
-  xhr.open("GET", "../static/txt/gare.txt", true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      var options = xhr.responseText.split("\n");
-      for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        var a = document.createElement("a");
-        a.setAttribute("onclick", "changeValeur(this)");
-        a.setAttribute("href", "#");
-        a.style.display = "none";
-        a.textContent = option;
-        a.classList.add("optionTransport");
-
-        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
-        a.addEventListener("click", function(event) {
-          // Empêcher le comportement par défaut de l'événement "mousedown"
-          event.preventDefault();
-
-          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
-          
-          div.style.display = "none";
-        });
-        div.appendChild(a);
-      
-        
-      }
-    } else {
-      // Il y a eu un problème avec la requête, traitez-le ici
-    }
-  };
-  xhr.send();
-}
-
-function loadOptions2() {
-  var xhr = new XMLHttpRequest();
-  var div2 = document.getElementById("optionsGare2");
-  xhr.open("GET", "../static/txt/gare.txt", true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      var options = xhr.responseText.split("\n");
-      for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        var a = document.createElement("a");
-        a.setAttribute("onclick", "changeValeur2(this)");
-        a.setAttribute("href", "#");
-        a.style.display = "none";
-        a.textContent = option;
-        a.classList.add("optionTransport");
-
-
-        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
-        a.addEventListener("click", function(event) {
-          // Empêcher le comportement par défaut de l'événement "mousedown"
-          event.preventDefault();
-
-          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
-          
-          div2.style.display = "none";
-        });
-        div2.appendChild(a);
-        
-      }
-    } else {
-      // Il y a eu un problème avec la requête, traitez-le ici
-    }
-  };
-  xhr.send();
-}
-
-
-function filterFunction() {
-  var input, filter, ul, li, a, i, existeElem, div2;
-  input = document.getElementById("lieuDepartTrain");
-  filter = input.value.toUpperCase();
-  div2 = document.getElementById("optionsGare");
-  a = div2.getElementsByTagName("a");
-  existeElem = false;
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    for(y = 0; y < filter.length; y++) {
-        if (txtValue.toUpperCase()[y] == filter[y]) {
-            a[i].style.display = "";
-            div2.style.display = "";
-            existeElem = true;
-        }
-        else {
-            a[i].style.display = "none";
-            break;
-        }
-    }
-  }
-  if(!existeElem){
-    div2.style.display = "none";
-  }
-}
-
-
-function filterFunction2() {
-  var input, filter, ul, li, a, i, existeElem, div;
-  input = document.getElementById("lieuArriveTrain");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("optionsGare2");
-  a = div.getElementsByTagName("a");
-  existeElem = false;
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    for(y = 0; y < filter.length; y++) {
-        if (txtValue.toUpperCase()[y] == filter[y] || txtValue =="Blois-Chambord") {
-            a[i].style.display = "";
-            div.style.display = "";
-            existeElem = true;
-        }
-        else {
-            a[i].style.display = "none";
-            break;
-        }
-    }
-  }
-  if(!existeElem){
-    div.style.display = "none";
-  }
-}
 
 let today = new Date().toISOString().substr(0, 10); 
 
@@ -881,37 +795,6 @@ let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: 
 document.getElementById("hArrive").value = currentTime; // ENLEVER
 document.getElementById("hDep").value = currentTime;
 
-
-function setupDropdown(){
-  var div = document.getElementById("optionsGare");
-  var options = div.getElementsByTagName("a");
-  for (var i = 0; i < options.length; i++) {
-    options[i].style.display = "none";
-  }
-}
-
-
-function setupDropdown2(){
-  var div = document.getElementById("optionsGare2");
-  var options = div.getElementsByTagName("a");
-  for (var i = 0; i < options.length; i++) {
-    options[i].style.display = "none";
-  }
-}
-
-
-function changeValeur(valeur){
-    input = document.getElementById("lieuDepartTrain");
-    input.value = valeur.textContent;
-    setupDropdown();
-}
-
-
-function changeValeur2(valeur){
-  input = document.getElementById("lieuArriveTrain");
-  input.value = valeur.textContent;
-  setupDropdown2();
-}
 
 
 </script>

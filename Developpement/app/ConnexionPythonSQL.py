@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from email.headerregistry import DateHeader
 from logging import exception
+import os
 from shutil import register_unpack_format
 from sqlite3 import DatabaseError
 from statistics import quantiles
@@ -1139,4 +1140,9 @@ def get_heure(time) :
     return (heure, minute)
     
 
+@staticmethod
+def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"): 
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        return [line.strip() for line in lines]
 

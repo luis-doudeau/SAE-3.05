@@ -25,7 +25,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger, id_transport_with_name, supprime_deplacer_annee, get_all_lieu, get_all_auteur, get_all_interventions, ajoute_creneau, get_heure, ajoute_intervention
+suppprime_loger, id_transport_with_name, supprime_deplacer_annee, get_all_lieu, get_all_auteur, get_all_interventions, ajoute_creneau, get_heure, ajoute_intervention,get_all_lieu_train
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -57,7 +57,7 @@ def connexion():
                 login_user(participant)
                 return redirect(url_for('page_inscription'))
         return render_template('login.html', mail = request.form["email"])
-    return render_template('login.html', mail = "lenina@gmail.com")
+    return render_template('login.html', mail = "ac@icloud.ca")
 
 
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
@@ -227,7 +227,7 @@ def formulaire_auteur_transport():
         ajoute_assister(session, current_user.idP, date_arr, date_dep)
         return "True"
         
-    return render_template("transportForms.html")
+    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
         
         
     
