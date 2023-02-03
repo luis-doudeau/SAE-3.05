@@ -19,8 +19,6 @@ from .Loger import Loger
 from .Deplacer import Deplacer
 from .Assister import Assister
 from .Transport import Transport
-
-
 from .ConnexionPythonSQL import *
 import json
 import pandas as pd
@@ -146,20 +144,26 @@ def dataParticipant():
     adresseEmail = request.form["adresseEmail"]
     naissance = request.form["naissance"]
     role = request.form["role"]
-    participants = get_info_all_participants(sessionSQL, prenom, nom, naissance, adresseEmail, role)
+    participants = get_info_all_participants(sessionSQL, prenom, nom, adresseEmail,naissance, role)
     for participant in participants:
         participant_dico = participant.to_dict()
         participant_dico["role"] = get_role(sessionSQL, participant.idP)
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
 
-@app.route('/api/dataConsommateurs')
+@app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
 def dataConsommateurs():
     if not current_user.est_secretaire():
         return redirect(url_for('logout')) 
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    restaurant = request.form["restaurant"]
+    la_date = request.form["la_date"]
+    creneau = request.form["creneau"]
+    consommateurs = get_info_all_consommateurs(sessionSQL, prenom, nom, restaurant, la_date, creneau)
     liste_consommateur = []
-    for consommateur in sessionSQL.query(Manger).all():
+    for consommateur in consommateurs:
         consommateur_dico = get_consommateur(sessionSQL, consommateur.idP).to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(sessionSQL, consommateur.idP)
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
