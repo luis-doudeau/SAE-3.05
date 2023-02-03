@@ -8753,7 +8753,7 @@ h1, h2, h3, h4, h5,
         .calendar_weekdays div {
           display: inline-block;
           vertical-align: top;
-          color: #fff !important; }
+          color: #fff !important;}
         
         .calendar_weekdays div, .calendar_content div {
           width: 14.28571%;
@@ -8955,5 +8955,51 @@ h1, h2, h3, h4, h5,
     .error{
       border : 2px red solid !important;
     }
-    
+
+    #tickets {
+        width: 510px;
+        height: 323px;
+        margin: 0 auto;
+        padding: 10px 20px 20px 170px;
+        background: url('../content/web/validator/ticketsOnline.png') transparent no-repeat 0 0;
+      }
+      #tickets h3 {
+        font-weight: normal;
+        font-size: 1.4em;
+        border-bottom: 1px solid #ccc;
+        margin: 10px 0 0;
+        padding: 0;
+      }
+      #tickets ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #tickets li {
+        margin: 10px 0 0 0;
+      }
+      
+      .required {
+        font-weight: bold;
+      }
+      .accept, .status {
+        padding-left: 90px;
+      }
+      .valid {
+        color: green;
+      }
+      .invalid {
+        color: red;
+      }
+      span.k-tooltip {
+        margin-left: 6px;
+      }
+      .k-input.k-invalid {
+        border: 1px solid red;
+      }
+
+      .textFieldInfo{
+        height : 60px;
+        font-size: 120%;;
+      }    
         

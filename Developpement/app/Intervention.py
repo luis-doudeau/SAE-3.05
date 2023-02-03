@@ -14,4 +14,4 @@ class Intervention(Base):
         self.nomIntervention = nomIntervention
 
     def __repr__(self) -> str:
-        return "ID intervention : " + str(self.idIntervention) + ", nom intervention : " + self.nomIntervention
+        return self.nomIntervention

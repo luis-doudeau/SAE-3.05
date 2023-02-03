@@ -18,6 +18,7 @@ import string
 import traceback
 import sys
 from sqlalchemy.sql import operators, extract
+from sqlalchemy.orm import aliased
 
 from .Exposant import Exposant
 from .Intervenir import Intervenir
@@ -78,8 +79,8 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -157,7 +158,9 @@ def get_lieu_depart_voyage(session, idVoyage):
 
 
 def get_all_lieu(session) : 
-    return session.query(Lieu.nomLieu).all()
+    lieux = session.query(Lieu).all()
+    lieux_dict = {lieu.idLieu: lieu for lieu in lieux}
+    return lieux_dict
     
 
 # def get_max_id_utilisateur(session):
@@ -377,15 +380,16 @@ def ajoute_participant_role(session, prenomP, nomP, emailP, adresseP, telP, ddnP
         print("Le rôle n'est pas reconnu")
 
 
-def ajoute_intervention(session, idP, idCreneau, idLieu, nomIntervention, descIntervention):
-    intervenir = Intervenir(idP, idCreneau, idLieu, nomIntervention, descIntervention)
-    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).first()
+def ajoute_intervention(session, idP, idCreneau, idLieu, idIntervention, descIntervention):
+    intervenir = Intervenir(idP, idCreneau, idLieu, idIntervention, descIntervention)
+    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).filter(Intervenir.idIntervention == idIntervention).first()
     if intervention is None:
         session.add(intervenir)
         try:
             session.commit()
             print("L'intervention " + str(intervenir) + " est maintenant créée !")
-        except:
+        except Exception as e:
+            print("Une erreur est survenue :", str(e))
             print("Erreur")
             session.rollback()
     else:
@@ -595,11 +599,14 @@ def get_participant(session, id_participant):
     return session.query(Participant).filter(Participant.idP == id_participant).first()
 
 
-def get_all_participant(session):
-    return session.query(Participant).all()
+def get_all_auteur(session):
+    Auteur_alias = aliased(Auteur)
+    liste_auteur = session.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
+    return {auteur.idP : auteur for auteur in liste_auteur}
 
 def get_all_interventions(session) : 
-    return session.query(Intervention).all()
+    liste_interventions =  session.query(Intervention).all()
+    return {intervention.idIntervention : intervention for intervention in liste_interventions}
 
 def get_exposant(session, id_exposant):
     return session.query(Exposant).filter(Exposant.idP == id_exposant).first()
@@ -1023,7 +1030,7 @@ def transforme_datetime(date):
     date = date.split("-")
     return date
 
-def ajoute_creneau(session, dateDebut,dateFin):
+def ajoute_creneau_v1(session, dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -1035,11 +1042,29 @@ def ajoute_creneau(session, dateDebut,dateFin):
         session.add(creneau)
         try :
             session.commit()
-        except : 
+        except :
             print("erreur creneau")
             session.rollback()
         return creneau.idCreneau
     return creneau_test.idCreneau
+
+
+def ajoute_creneau(session, date_debut, date_fin):
+    creneau_test = session.query(Creneau).filter(Creneau.dateDebut == date_debut).filter(Creneau.dateFin == date_fin).first()
+    if creneau_test is None :
+        idCreneau = get_max_id_creneau(session)+1
+        creneau = Creneau(idCreneau, date_debut, date_fin)
+        session.add(creneau)
+        try :
+            session.commit()
+        except : 
+            print("erreur creneau")
+            session.rollback()
+        return creneau.idCreneau
+    else : 
+        print("un creneau similaire existe déjà")
+        return creneau_test.idCreneau
+    
 
 def ajoute_repas(session, estMidi,idRest,idCreneau) : 
     repas_verif = session.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
@@ -1080,7 +1105,7 @@ def ajoute_repas_mangeur(session, idP, liste_repas, liste_horaire_restau, dico_h
     for i in range(0, len(liste_repas)):
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
-            idCreneau = ajoute_creneau(session, horaire.split("/")[0], horaire.split("/")[1])
+            idCreneau = ajoute_creneau_v1(session, horaire.split("/")[0], horaire.split("/")[1])
             idRest = choix_restaurant(session) # ajouter ROLE TODO
             idRepas = ajoute_repas(session, False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(session, idP, idRepas)
@@ -1106,5 +1131,12 @@ def generate_password(length=8):
   password = ''.join(random.sample(characters, length))
   return password
 
+
+@staticmethod
+def get_heure(time) :
+    heure = time.split(':')[0]
+    minute = time.split(':')[1][0:2]
+    return (heure, minute)
+    
 
 

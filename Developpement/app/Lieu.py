@@ -13,4 +13,4 @@ class Lieu(Base):
         self.nomLieu = nomLieu
 
     def __repr__(self) -> str:
-        return "ID lieu : " + str(self.idLieu) + ", nom du lieu : " + self.nomLieu
+        return self.nomLieu

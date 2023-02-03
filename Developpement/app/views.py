@@ -25,7 +25,7 @@ est_secretaire,modifier_participant, ajoute_assister, ajoute_deplacer, modif_par
 ajoute_regime, get_max_id_regime, get_deb_voyage, get_lieu_depart_voyage, get_nom, get_prenom, load_user, get_utilisateur_email_mdp, get_secretaire,\
 get_participant, modifier_utilisateur, get_restaurant, get_creneau, get_date, get_hotel, get_periode_hotel, get_date_dormeur, get_consommateur, get_intervenant, datetime_to_dateFrancais, \
 supprimer_utilisateur_role, get_participant, modifier_utilisateur, ajoute_participant_role, ajoute_repas_mangeur, datetime_to_heure, get_role, get_info_all_participants, ajoute_hebergement,\
-suppprime_loger, id_transport_with_name, supprime_deplacer_annee, get_all_lieu, get_all_participant, get_all_interventions
+suppprime_loger, id_transport_with_name, supprime_deplacer_annee, get_all_lieu, get_all_auteur, get_all_interventions, ajoute_creneau, get_heure, ajoute_intervention
 
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -57,7 +57,7 @@ def connexion():
                 login_user(participant)
                 return redirect(url_for('page_inscription'))
         return render_template('login.html', mail = request.form["email"])
-    return render_template('login.html', mail = "ac@icloud.ca")
+    return render_template('login.html', mail = "lenina@gmail.com")
 
 
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
@@ -266,10 +266,25 @@ def page_secretaire_intervention():
     if not current_user.est_secretaire():
         return redirect(url_for('logout'))   
     if request.method == 'POST':
-        la_date = request.form["jours"].split(",")
-        liste_navette = afficher_consommateur(session,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
-    return render_template('secretaireIntervention.html', lieux=get_all_lieu(session), participants=get_all_participant(session), type_inter=get_all_interventions(session))
+        idP = request.form["participant"]
+        date_intervention = request.form["date"]
+        heure_debut = request.form["debut"]
+        heure_fin = request.form["fin"]
+        id_lieu = request.form["lieu"]
+        id_type = request.form["type"]
+        desc = request.form["description"]
+        year = date_intervention.split("/")[2]
+        month = date_intervention.split("/")[0]
+        day = date_intervention.split("/")[1]
+        heure_debut2 = datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
+        heure_fin2 = datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
+        idCreneau = ajoute_creneau(session, heure_debut2, heure_fin2)
+        try : 
+            ajoute_intervention(session, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
+        except : 
+            print("erreur dans l'ajout de l'intervention")
+        
+    return render_template('secretaireIntervention.html', lieux=get_all_lieu(session), participants=get_all_auteur(session), type_inter=get_all_interventions(session))
 
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
