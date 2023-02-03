@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from email.headerregistry import DateHeader
 from logging import exception
+import os
 from shutil import register_unpack_format
 from sqlite3 import DatabaseError
 from statistics import quantiles
@@ -18,6 +19,7 @@ import string
 import traceback
 import sys
 from sqlalchemy.sql import operators, extract
+from sqlalchemy.orm import aliased
 
 from .Exposant import Exposant
 from .Intervenir import Intervenir
@@ -27,11 +29,13 @@ from .Intervenant import Intervenant
 from .Auteur import Auteur
 from .Presse import Presse
 from .Invite import Invite
+from .Intervention import Intervention
 from .Participant import Participant
 from .Loger import Loger
 from .Hotel import Hotel
 from .Deplacer import Deplacer
 from .Manger import Manger
+from .Lieu import Lieu
 from .Repas import Repas
 from .Creneau import Creneau
 from .Restaurant import Restaurant
@@ -77,9 +81,9 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
-connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -154,6 +158,12 @@ def get_lieu_depart_voyage(sessionSQL, idVoyage):
         return "Festival → Gare Blois"
     else:
         return "Gare Blois → Festival"
+
+
+def get_all_lieu(session) : 
+    lieux = session.query(Lieu).all()
+    lieux_dict = {lieu.idLieu: lieu for lieu in lieux}
+    return lieux_dict
     
 
 # def get_max_id_utilisateur(sessionSQL):
@@ -399,15 +409,16 @@ def ajoute_participant_role(sessionSQL, prenomP, nomP, emailP, adresseP, telP, d
         print("Le rôle n'est pas reconnu")
 
 
-def ajoute_intervention(sessionSQL, idP, idCreneau, idLieu, nomIntervention, descIntervention):
-    intervenir = Intervenir(idP, idCreneau, idLieu, nomIntervention, descIntervention)
-    intervention = sessionSQL.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).first()
+def ajoute_intervention(session, idP, idCreneau, idLieu, idIntervention, descIntervention):
+    intervenir = Intervenir(idP, idCreneau, idLieu, idIntervention, descIntervention)
+    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).filter(Intervenir.idIntervention == idIntervention).first()
     if intervention is None:
         sessionSQL.add(intervenir)
         try:
             sessionSQL.commit()
             print("L'intervention " + str(intervenir) + " est maintenant créée !")
-        except:
+        except Exception as e:
+            print("Une erreur est survenue :", str(e))
             print("Erreur")
             sessionSQL.rollback()
     else:
@@ -618,6 +629,18 @@ def get_participant(sessionSQL, id_participant):
 
 def get_exposant(sessionSQL, id_exposant):
     return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
+
+def get_all_auteur(session):
+    Auteur_alias = aliased(Auteur)
+    liste_auteur = session.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
+    return {auteur.idP : auteur for auteur in liste_auteur}
+
+def get_all_interventions(session) : 
+    liste_interventions =  session.query(Intervention).all()
+    return {intervention.idIntervention : intervention for intervention in liste_interventions}
+
+def get_exposant(session, id_exposant):
+    return session.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
 def get_invite(sessionSQL, id_invite):
     return sessionSQL.query(Invite).filter(Invite.idP == id_invite).first()
@@ -1039,7 +1062,7 @@ def transforme_datetime(date):
     date = date.split("-")
     return date
 
-def ajoute_creneau(sessionSQL, dateDebut,dateFin):
+def ajoute_creneau_v1(session, dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -1050,15 +1073,33 @@ def ajoute_creneau(sessionSQL, dateDebut,dateFin):
         creneau = Creneau(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
-            sessionSQL.commit()
-        except : 
+            session.commit()
+        except :
             print("erreur creneau")
             sessionSQL.rollback()
         return creneau.idCreneau
     return creneau_test.idCreneau
 
-def ajoute_repas(sessionSQL, estMidi,idRest,idCreneau) : 
-    repas_verif = sessionSQL.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
+
+def ajoute_creneau(session, date_debut, date_fin):
+    creneau_test = session.query(Creneau).filter(Creneau.dateDebut == date_debut).filter(Creneau.dateFin == date_fin).first()
+    if creneau_test is None :
+        idCreneau = get_max_id_creneau(session)+1
+        creneau = Creneau(idCreneau, date_debut, date_fin)
+        session.add(creneau)
+        try :
+            session.commit()
+        except : 
+            print("erreur creneau")
+            session.rollback()
+        return creneau.idCreneau
+    else : 
+        print("un creneau similaire existe déjà")
+        return creneau_test.idCreneau
+    
+
+def ajoute_repas(session, estMidi,idRest,idCreneau) : 
+    repas_verif = session.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
     if repas_verif is None :
         idRepas = get_max_id_repas(sessionSQL)+1
         repas = Repas(idRepas, estMidi, idRest, idCreneau)
@@ -1096,7 +1137,7 @@ def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dic
     for i in range(0, len(liste_repas)):
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
-            idCreneau = ajoute_creneau(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
+            idCreneau = ajoute_creneau_v1(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
             idRest = choix_restaurant(sessionSQL) # ajouter ROLE TODO
             idRepas = ajoute_repas(sessionSQL, False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(sessionSQL, idP, idRepas)
@@ -1123,4 +1164,16 @@ def generate_password(length=8):
   return password
 
 
+@staticmethod
+def get_heure(time) :
+    heure = time.split(':')[0]
+    minute = time.split(':')[1][0:2]
+    return (heure, minute)
+    
+
+@staticmethod
+def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"): 
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        return [line.strip() for line in lines]
 

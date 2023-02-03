@@ -9,7 +9,6 @@ from secrets import token_urlsafe
 from .Mobiliser import Mobiliser
 from .Navette import Navette
 from .Transporter import Transporter
-
 from .Consommateur import Consommateur
 from .Participant import Participant
 from .Avoir import Avoir
@@ -248,11 +247,10 @@ def formulaire_auteur_transport():
         dateDep = request.form["dateDep"].replace("-",",").split(",")
         heureDep = request.form["hDep"].replace(":",",").split(",")
         date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-        ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
-        print("kdspfkdsfkdsml")
-        return render_template("formulaireReservation.html", idp = current_user.idP)
+        ajoute_assister(session, current_user.idP, date_arr, date_dep)
+        return "True"
         
-    return render_template("transportForms.html")
+    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
         
         
     
@@ -284,11 +282,39 @@ def formulaire_reservation():
         
     return render_template("formulaireReservation.html", idp=current_user.idP)
 
+
+@app.route('/secretaireIntervention/', methods = ["POST","GET"])
+@login_required
+def page_secretaire_intervention():
+    if not current_user.est_secretaire():
+        return redirect(url_for('logout'))   
+    if request.method == 'POST':
+        idP = request.form["participant"]
+        date_intervention = request.form["date"]
+        heure_debut = request.form["debut"]
+        heure_fin = request.form["fin"]
+        id_lieu = request.form["lieu"]
+        id_type = request.form["type"]
+        desc = request.form["description"]
+        year = date_intervention.split("/")[2]
+        month = date_intervention.split("/")[0]
+        day = date_intervention.split("/")[1]
+        heure_debut2 = datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
+        heure_fin2 = datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
+        idCreneau = ajoute_creneau(session, heure_debut2, heure_fin2)
+        try : 
+            ajoute_intervention(session, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
+        except : 
+            print("erreur dans l'ajout de l'intervention")
+        
+    return render_template('secretaireIntervention.html', lieux=get_all_lieu(session), participants=get_all_auteur(session), type_inter=get_all_interventions(session))
+
+
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
     if not current_user.est_secretaire():
-        return redirect(url_for('logout'))   
+        return redirect(url_for('logout'))
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
