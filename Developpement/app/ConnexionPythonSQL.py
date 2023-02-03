@@ -13,7 +13,6 @@ from sqlalchemy import Column , Integer, Text , Date, DATETIME
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
-from datetime import date, datetime
 import random
 import string
 import traceback
@@ -80,10 +79,11 @@ def ouvrir_connexion(user,passwd,host,database):
     return cnx,engine
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
+
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -109,6 +109,14 @@ def datetime_to_dateFrancais(date):
     date = date[5:]
     date = date[:2]
     return debut_new_date + "-" + date + "-" + fin_new_date 
+
+def datetime_to_dateAnglais(date):
+    date = str(date)[:10]
+    debut_new_date = date[8:]
+    fin_new_date = date[:4]
+    date = date[5:]
+    date = date[:2]
+    return fin_new_date + "-" + date + "-" + debut_new_date 
 
 def datetime_to_heure(date):
     new_date = str(date)
@@ -288,12 +296,37 @@ def get_tout_dormeurs_avec_filtre(sessionSQL, prenomP, nomP, nomHotel, dateArriv
         jour = dateDeparts.split("/")[0]
         mois = dateDeparts.split("/")[1]
         annee = dateDeparts.split("/")[2]
-        print(jour, mois, annee)
         date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
         date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
         participants = participants.filter(Loger.dateFin >= date_jour_debut).filter(Loger.dateFin <= date_jour_fin)
     return participants.all()
 
+def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, creneau):
+    consommateurs = sessionSQL.query(Manger).join(
+                        Repas, Manger.idRepas == Repas.idRepas).join(
+                        Restaurant, Repas.idRest == Restaurant.idRest).join(
+                        Consommateur, Manger.idP == Consommateur.idP).join(
+                        Creneau, Repas.idCreneau == Creneau.idCreneau)
+    if(prenomC != ""):
+        consommateurs = consommateurs.filter(Consommateur.prenomP == prenomC)
+    if(nomC != ""):
+        consommateurs = consommateurs.filter(Consommateur.nomP == nomC)
+    if (restaurant != ""):
+        consommateurs = consommateurs.filter(Restaurant.nomRest == restaurant)
+    if(la_date!= ""):
+        jour = la_date.split("/")[0]
+        mois = la_date.split("/")[1]
+        annee = la_date.split("/")[2]
+        my_date = datetime.date(int(annee), int(mois), int(jour))
+        consommateurs = consommateurs.filter(func.date(Creneau.dateDebut) == my_date)
+        
+    if(creneau != ""):
+        (heure_creneau_debut, minute_creneau_debut) = creneau.split('-')[0].split(':')
+        (heure_creneau_fin, minute_creneau_fin) = creneau.split('-')[1].split(':')
+        consommateurs = consommateurs.filter(extract('hour', Creneau.dateDebut) == heure_creneau_debut).filter(extract('minute', Creneau.dateDebut) == minute_creneau_debut)
+        consommateurs = consommateurs.filter(extract('hour', Creneau.dateFin) == heure_creneau_fin).filter(extract('minute', Creneau.dateFin) == minute_creneau_fin)
+
+    return consommateurs.all()
 
 def filtrer_par_role(role, participants):
     if role == "Secretaire":
@@ -308,7 +341,6 @@ def filtrer_par_role(role, participants):
         return participants.join(Presse, Participant.idP == Presse.idP)
     if role == "Invite":
         return participants.join(Invite, Participant.idP == Invite.idP)
-        
 
 def ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP): 
     secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)
@@ -747,7 +779,7 @@ def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
         repas = sessionSQL.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.estMidi == midi).all()
     
     if date_jour[0] != "Date":
-        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
+        date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
         for cren in repas:
             if cren[1].date() == date_jour:
                 liste_creneau.append(cren[2])
@@ -842,7 +874,7 @@ def get_regime(sessionSQL, id_p):
 
 def get_dormeur(sessionSQL, date_jour, hotel):
     if date_jour[0] != "Date":
-        date_jour = date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
+        date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     else:
         date_jour = date_jour[0]
         print(date_jour)
