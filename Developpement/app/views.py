@@ -41,8 +41,11 @@ def connexion():
     if current_user.is_authenticated:
         return redirect(url_for('logout'))
     if request.method == "POST":
+        print("post")
+        print(request.form)
         email = request.form["email"]
         mdp = request.form["mdp"]
+        
         utilisateur = get_utilisateur_email_mdp(sessionSQL, email, mdp)
         if utilisateur is not None:
             print('l51')
@@ -61,9 +64,11 @@ def connexion():
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
 @login_required
 def page_inscription():
-    if current_user.est_secretaire():
+    if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
+        print("posteCOOOR")
+        print(request.form)
         modifier_participant(sessionSQL, current_user.idP,request.form["adresse"],request.form["ddn"],request.form["tel"])
         modifier_utilisateur(sessionSQL, current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
         if est_intervenant(sessionSQL, current_user.idP):
@@ -77,7 +82,7 @@ def page_inscription():
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
 @login_required
 def secretaire_consommateur():
-    if not current_user.est_secretaire():
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))       
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
@@ -88,7 +93,7 @@ def secretaire_consommateur():
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
-    if not current_user.est_secretaire():
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         return render_template("dormeurSecretaire.html")
@@ -97,23 +102,14 @@ def dormeur_secretaire():
 
 @app.route('/api/dataDormeurs', methods = ["POST", "GET"])
 def dataDormeurs():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     if request.method == "POST":
         prenom = request.form["prenom"]
         nom = request.form["nom"]
         hotel = request.form["hotel"]
         dateDebut = request.form["dateDebut"]
-        dateFin = request.form["dateFin"]
-        session["filtres"] = {"prenom": prenom, "nom": nom, "hotel": hotel, "dateDebut": dateDebut, "dateFin": dateFin}
-        
-    else:
-        if "filtres" in session:
-            prenom = session["filtres"]["prenom"]
-            nom = session["filtres"]["nom"]
-            hotel = session["filtres"]["hotel"]
-            dateDebut = session["filtres"]["dateDebut"]
-            dateFin = session["filtres"]["dateFin"]
+        dateFin = request.form["dateFin"]        
 
     liste_dormeurs = []
     liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(sessionSQL, prenom, nom, hotel, dateDebut, dateFin)
@@ -135,7 +131,7 @@ def data_nom_hotel():
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
 def dataParticipant():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_participants = []
     prenom = request.form["prenom"]
@@ -153,7 +149,7 @@ def dataParticipant():
 @app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
 def dataConsommateurs():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     prenom = request.form["prenom"]
     nom = request.form["nom"]
@@ -175,7 +171,7 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes')
 @login_required
 def dataNavettes():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     liste_voyages = []
     for voyages in sessionSQL.query(Mobiliser).all():
@@ -192,7 +188,7 @@ def dataNavettes():
 @app.route('/api/dataTransporte')
 @login_required
 def dataTransport():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_transport = []
     for transport in sessionSQL.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
@@ -211,7 +207,7 @@ def dataTransport():
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 @login_required
 def participant_secretaire():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         liste_personne = affiche_participant_trier(sessionSQL, request.form["trier"])
@@ -226,13 +222,14 @@ def formulaire_auteur_transport():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
+        print("postTransport" , request.form)
         
         liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
         dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
                           "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
                           "autre": ["precision"]}
 
-        currentDateTime = datetime.now()
+        currentDateTime = datetime.datetime.now()
         date = currentDateTime.date()
         year = date.strftime("%Y")
         supprime_deplacer_annee(sessionSQL, current_user.idP, year)
@@ -246,13 +243,14 @@ def formulaire_auteur_transport():
 
         dateArr = request.form["dateArr"].split("-")
         heureArr = request.form["hArrive"].split(":")
-        date_arr = datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
+        date_arr = datetime.datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
 
         dateDep = request.form["dateDep"].replace("-",",").split(",")
         heureDep = request.form["hDep"].replace(":",",").split(",")
-        date_dep = datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-        ajoute_assister(session, current_user.idP, date_arr, date_dep)
-        return "True"
+        date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
+        print("l245")
+        ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
+        return redirect(url_for("formulaire_reservation"))
         
     return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
         
@@ -261,10 +259,10 @@ def formulaire_auteur_transport():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-    if current_user.est_secretaire():
+    if  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-
     if request.method == "POST":
+        print("reser ",request.form)
         regime = request.form["regime"] # stocker en variable car réutilisé ensuite
         liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
         request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
@@ -283,14 +281,14 @@ def formulaire_reservation():
             ajoute_hebergement(sessionSQL, current_user.idP)
         
         return render_template("pageFin.html", idp=current_user.idP) #TODO
-        
-    return render_template("formulaireReservation.html", idp=current_user.idP)
+    print("return la page formulaire")
+    return render_template("formulaireReservation.html")
 
 
 @app.route('/secretaireIntervention/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_intervention():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
         idP = request.form["participant"]
@@ -305,19 +303,19 @@ def page_secretaire_intervention():
         day = date_intervention.split("/")[1]
         heure_debut2 = datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
         heure_fin2 = datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
-        idCreneau = ajoute_creneau(session, heure_debut2, heure_fin2)
+        idCreneau = ajoute_creneau(sessionSQL, heure_debut2, heure_fin2)
         try : 
-            ajoute_intervention(session, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
+            ajoute_intervention(sessionSQL, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
         except : 
             print("erreur dans l'ajout de l'intervention")
         
-    return render_template('secretaireIntervention.html', lieux=get_all_lieu(session), participants=get_all_auteur(session), type_inter=get_all_interventions(session))
+    return render_template('secretaireIntervention.html', lieux=get_all_lieu(sessionSQL), participants=get_all_auteur(sessionSQL), type_inter=get_all_interventions(sessionSQL))
 
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
@@ -330,7 +328,7 @@ def page_secretaire_navette():
 @app.route('/secretaireGererTransport/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_gerer_participants():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
         return render_template('secretaireGererTransport.html')
@@ -340,14 +338,14 @@ def page_secretaire_gerer_participants():
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
 def page_fin():
-    if current_user.est_secretaire():
+    if  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     return render_template("pageFin.html")
 
 @app.route('/secretaire/', methods = ["GET"])
 @login_required
 def page_secretaire_accueil():
-    if current_user.est_secretaire():
+    if  est_secretaire(sessionSQL, current_user.idP):
         return render_template("secretaire.html")
     else:
         return redirect(url_for('logout'))
@@ -361,7 +359,7 @@ def logout():
 @app.route('/inscrireSecretaire/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_inscrire():
-    if not current_user.est_secretaire():
+    if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
         role = request.form["role"]

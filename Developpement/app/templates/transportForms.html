@@ -2,7 +2,7 @@
 <body>
     <main style="background-color : #ebf3fc;">
         <section class="ftco-section row justify-content-center shadow-lg">    
-          <form id="formCoo" class="container shadow flex wrap p-4" style="overflow : scroll;" action="/FormulaireReservation/">
+          <form id="formCoo" class="container shadow flex wrap p-4" style="overflow : scroll;" method="POST">
             <label style="text-decoration : underline;" for="transport" class="col-sm-2 col-form-label mb-1 fs-3 ml-2" id="voyage">Transport</label>
             <small id="emailHelp" class="col-form-label mb-3 ml-4 form-text text-muted fs-5">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
             
@@ -79,7 +79,7 @@
                 </div> <!-- end card-->
             </div><!-- end col -->
             </div>
-          </div>
+            </div>
             
             <!-- div qui vont contenir les détails sur les transports-->
               
@@ -182,10 +182,10 @@
               </div>
               
             </div>
-          </div>
+           </div>
 
           
-          <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+           <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
             <div class="imgTransport">
               <img style="height: 100%;" src="/static/img/carpooling.png">
             </div>
@@ -211,8 +211,8 @@
                 </svg>
               </button>
             </div>
-          </div>
-        </div>
+           </div>
+           </div>
             
 
             <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAutre" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
@@ -255,7 +255,8 @@
             <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
               <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-                <button id="save" type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;" onclick="return verif_transport()">Suivant</button>
+                <button id="save" type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;">Suivant</button>
+                <input type="submit" name="fr" id="">
             </div>
           </form>
         
@@ -309,7 +310,7 @@ dataSource = liste_arr_train
       size : "large"
     });
 
-
+/*
 
   $("#save").on("click", function(){
     var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
@@ -363,7 +364,8 @@ dataSource = liste_arr_train
       "precision" : precision
     }
   })
-  })
+  
+  })*/
 })
 
 
@@ -395,10 +397,6 @@ function verif_transport(){
     res = false;
   }
 
-
-  if(res == true){
-    window.location = "/FormulaireReservation/"
-  }  
   return res;
 
 } 

@@ -657,6 +657,7 @@ def get_info_personne(sessionSQL, email, mdp):
         return personne
 
 def get_participant(sessionSQL, id_participant):
+    print("l660 ",id_participant)
     return sessionSQL.query(Participant).filter(Participant.idP == id_participant).first()
 
 def get_exposant(sessionSQL, id_exposant):
@@ -688,7 +689,9 @@ def get_presse(sessionSQL, id_presse):
 
 
 def get_secretaire(sessionSQL, id_secretaire):
-    return sessionSQL.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
+    secretaire = sessionSQL.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
+    print("Ma secretaire ", secretaire)
+    return secretaire
 
 def get_prenom(sessionSQL, id_participant):
     return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).prenomP
@@ -1036,7 +1039,8 @@ def est_intervenant(sessionSQL, idP):
 def est_secretaire(sessionSQL, idP):
     print(str(idP) + " secrea")
     secretaire = get_secretaire(sessionSQL, idP)
-    print(secretaire)
+    print("l1042 ma secr" ,secretaire)
+    print(type(secretaire))
     return secretaire is not None
         
         
@@ -1181,8 +1185,10 @@ def load_user(participant_id):
     print(str(participant_id) + str("iddd"))
     print("l1070")
     if est_secretaire(sessionSQL, participant_id):
+        print("ID ",participant_id, "est une secretaire")
         return get_secretaire(sessionSQL, participant_id)
     else:
+        print("l1186 id part ",participant_id)
         return get_participant(sessionSQL, participant_id)
 
 
