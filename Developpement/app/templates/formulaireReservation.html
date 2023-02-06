@@ -61,7 +61,7 @@
                 ainsi que les repas, transport, hebergement du conjoint.</small>
             <div class="form-group text-center mt-3">
               <button type="button" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
-              <button id="save" style="width: 140px; height: 45px;font-size:130%;" onclick="return verifFormulaire()" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
+              <button id="save" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
             </div>     
         </form>
         </section>
@@ -95,34 +95,40 @@ function verifFormulaire(){
 
   $(document).ready(function(){
     $("#save").on("click",function(){
-    var button1 = $("#jeudi_soir")[0].checked
-    var button2 = $("#vendredi_midi")[0].checked 
-    var button3 = $("#vendredi_soir")[0].checked
-    var button4 = $("#samedi_midi")[0].checked 
-    var button5 = $("#samedi_soir")[0].checked
-    var button6 = $("#dimanche_midi")[0].checked 
-    var regime = $("#regime").val() 
-    var hebergement = $("#success")[0].value
-    var button7 = $("#dimanche_soir")[0].checked 
-    var remarque = $("#remarque").val()
-    $.ajax({
-     
-      url:"{{url_for('formulaire_reservation')}}",
-      type:'POST',
-      dataType: 'application/json',
-      data: {
-        "jeudi_soir" : button1,
-        "vendredi_midi" : button2,
-        "vendredi_soir" : button3,
-        "samedi_midi" : button4,
-        "samedi_soir" : button5,
-        "dimanche_midi" : button6,
-        "dimanche_soir" : button7,
-        "regime" : regime,
-        "hebergement" : hebergement,
-        "remarque" : remarque,
-      }      
-    })
+    if(verifFormulaire){
+      var button1 = $("#jeudi_soir")[0].checked
+      var button2 = $("#vendredi_midi")[0].checked 
+      var button3 = $("#vendredi_soir")[0].checked
+      var button4 = $("#samedi_midi")[0].checked 
+      var button5 = $("#samedi_soir")[0].checked
+      var button6 = $("#dimanche_midi")[0].checked 
+      var regime = $("#regime").val() 
+      var hebergement = $("#success")[0].value
+      var button7 = $("#dimanche_soir")[0].checked 
+      var remarque = $("#remarque").val()
+      $.ajax({
+      
+        url:"{{url_for('formulaire_reservation')}}",
+        type:'POST',
+        dataType: 'application/json',
+        data: {
+          "jeudi_soir" : button1,
+          "vendredi_midi" : button2,
+          "vendredi_soir" : button3,
+          "samedi_midi" : button4,
+          "samedi_soir" : button5,
+          "dimanche_midi" : button6,
+          "dimanche_soir" : button7,
+          "regime" : regime,
+          "hebergement" : hebergement,
+          "remarque" : remarque,
+        }      
+      })
+      window.location.href = "{{url_for('page_fin')}}";
+    }
+    
+    
+    
 
   })
 })

@@ -310,62 +310,65 @@ dataSource = liste_arr_train
       size : "large"
     });
 
-/*
+
 
   $("#save").on("click", function(){
-    var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
-    var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
-    var voiture = document.getElementById("divLieuDepArriveVoiture").style.display != "none";
-    var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").style.display != "none";
-    var autre = document.getElementById("divLieuDepArriveAutre").style.display != "none";
-    var dateArr = document.getElementById("dateArr").value;
-    var hArrive = document.getElementById("hArrive").value;
-    var dateDep = document.getElementById("dateDep").value;
-    var hDep = document.getElementById("hDep").value;
+    if(verif_transport()){
+      var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
+      var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
+      var voiture = document.getElementById("divLieuDepArriveVoiture").style.display != "none";
+      var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").style.display != "none";
+      var autre = document.getElementById("divLieuDepArriveAutre").style.display != "none";
+      var dateArr = document.getElementById("dateArr").value;
+      var hArrive = document.getElementById("hArrive").value;
+      var dateDep = document.getElementById("dateDep").value;
+      var hDep = document.getElementById("hDep").value;
 
-    var lieuDepartAvion = document.getElementById("lieuDepartAvion") != null ? document.getElementById("lieuDepartAvion").value : null;
-    var lieuArriveAvion = document.getElementById("lieuArriveAvion")!=null ? document.getElementById("lieuArriveAvion").value : null;
+      var lieuDepartAvion = document.getElementById("lieuDepartAvion") != null ? document.getElementById("lieuDepartAvion").value : null;
+      var lieuArriveAvion = document.getElementById("lieuArriveAvion")!=null ? document.getElementById("lieuArriveAvion").value : null;
 
-    var lieuDepartTrain = document.getElementById("lieuDepartTrain") != null ? document.getElementById("lieuDepartTrain").value : null;
-    var lieuArriveTrain = document.getElementById("lieuArriveTrain") != null ? document.getElementById("lieuArriveTrain").value : null;
+      var lieuDepartTrain = document.getElementById("lieuDepartTrain") != null ? document.getElementById("lieuDepartTrain").value : null;
+      var lieuArriveTrain = document.getElementById("lieuArriveTrain") != null ? document.getElementById("lieuArriveTrain").value : null;
 
-    var lieuDepartVoiture = document.getElementById("lieuDepartVoiture")!=null ? document.getElementById("lieuDepartVoiture").value : null;
-    var lieuArriveVoiture = document.getElementById("lieuArriveVoiture")!= null ? document.getElementById("lieuArriveVoiture").value : null;
+      var lieuDepartVoiture = document.getElementById("lieuDepartVoiture")!=null ? document.getElementById("lieuDepartVoiture").value : null;
+      var lieuArriveVoiture = document.getElementById("lieuArriveVoiture")!= null ? document.getElementById("lieuArriveVoiture").value : null;
 
-    var lieuDepartCovoiturage = document.getElementById("lieuDepartCovoiturage") != null ? document.getElementById("lieuDepartCovoiturage").value : null;
-    var lieuArriveCovoiturage = document.getElementById("lieuArriveCovoiturage") != null ? document.getElementById("lieuArriveCovoiturage").value : null;
+      var lieuDepartCovoiturage = document.getElementById("lieuDepartCovoiturage") != null ? document.getElementById("lieuDepartCovoiturage").value : null;
+      var lieuArriveCovoiturage = document.getElementById("lieuArriveCovoiturage") != null ? document.getElementById("lieuArriveCovoiturage").value : null;
 
-    var precision = document.getElementById("precision") != null ? document.getElementById("precision").value : null;
+      var precision = document.getElementById("precision") != null ? document.getElementById("precision").value : null;
 
 
-  $.ajax({
-    url : "{{url_for('formulaire_auteur_transport')}}",
-    type : "POST",
-    dataType : "application/json",
-    data : {
-      "avion" : avion,
-      "train" : train,
-      "voiture" : voiture,
-      "covoiturage" : covoiturage,
-      "autre" : autre,
-      "dateArr" : dateArr,
-      "hArrive" : hArrive,
-      "dateDep" : dateDep,
-      "hDep"  : hDep,
+    $.ajax({
+      url : "{{url_for('formulaire_auteur_transport')}}",
+      type : "POST",
+      dataType : "application/json",
+      data : {
+        "avion" : avion,
+        "train" : train,
+        "voiture" : voiture,
+        "covoiturage" : covoiturage,
+        "autre" : autre,
+        "dateArr" : dateArr,
+        "hArrive" : hArrive,
+        "dateDep" : dateDep,
+        "hDep"  : hDep,
 
-      "lieuDepartAvion" : lieuDepartAvion,  
-      "lieuArriveAvion" : lieuArriveAvion,
-      "lieuDepartTrain" : lieuDepartTrain,
-      "lieuArriveTrain" : lieuArriveTrain,
-      "lieuDepartVoiture" : lieuDepartVoiture,
-      "lieuArriveVoiture" : lieuArriveVoiture,
-      "lieuDepartCovoiturage" : lieuDepartCovoiturage,
-      "lieuArriveCovoiturage" : lieuArriveCovoiturage,
-      "precision" : precision
-    }
-  })
+        "lieuDepartAvion" : lieuDepartAvion,  
+        "lieuArriveAvion" : lieuArriveAvion,
+        "lieuDepartTrain" : lieuDepartTrain,
+        "lieuArriveTrain" : lieuArriveTrain,
+        "lieuDepartVoiture" : lieuDepartVoiture,
+        "lieuArriveVoiture" : lieuArriveVoiture,
+        "lieuDepartCovoiturage" : lieuDepartCovoiturage,
+        "lieuArriveCovoiturage" : lieuArriveCovoiturage,
+        "precision" : precision
+      }
+    })
+    window.location.href = "{{url_for('formulaire_reservation')}}";
+}
   
-  })*/
+  })
 })
 
 
