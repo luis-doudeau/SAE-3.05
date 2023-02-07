@@ -8643,7 +8643,7 @@ h1, h2, h3, h4, h5,
         /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
         .show {display:block;} 
         
-        .checkboxTransport{width: 23px; height: 23px; padding-top: 10% !important;}
+        .checkboxTransport{width: 23px; height: 23px !important;}
 
         .labelJourRestauration{
           font-size : 130% !important;
@@ -8953,8 +8953,16 @@ h1, h2, h3, h4, h5,
     }
 
     .error{
-      border : 2px red solid !important;
+      background-color : #e4606d !important;
     }
+
+
+.k-widget > span.k-invalid,
+input.k-invalid
+{
+  border: 1px solid red !important;
+}
+
 
     #tickets {
         width: 510px;
@@ -9000,6 +9008,6 @@ h1, h2, h3, h4, h5,
 
       .textFieldInfo{
         height : 60px;
-        font-size: 120%;;
+        font-size: 120% !important;
       }    
         

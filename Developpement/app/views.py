@@ -77,7 +77,78 @@ def page_inscription():
             return redirect(url_for('page_fin'))
     return render_template('coordonneeForms.html')
 
-    
+
+@app.route('/transportForms/', methods = ["POST"])
+def insererTransportPersonne():
+    liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
+    dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
+                        "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
+                        "autre": ["precision"]}
+
+    currentDateTime = datetime.datetime.now()
+    date = currentDateTime.date()
+    year = date.strftime("%Y")
+    supprime_deplacer_annee(sessionSQL, current_user.idP, year)
+    for transport in liste_id_box:
+        if request.form[transport] == "true" and transport != "autre" :
+            lieu_depart = request.form[dico_champs_box[transport][0]]
+            lieu_arrive = request.form[dico_champs_box[transport][1]]   
+            ajoute_deplacer(sessionSQL, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
+        elif transport == "autre" : 
+            modif_participant_remarque(sessionSQL, current_user.idP, request.form[dico_champs_box[transport][0]])
+
+    dateArr = request.form["dateArr"].split("-")
+    heureArr = request.form["hArrive"].split(":")
+    date_arr = datetime.datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
+
+    dateDep = request.form["dateDep"].replace("-",",").split(",")
+    heureDep = request.form["hDep"].replace(":",",").split(",")
+    date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
+    ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
+    return jsonify({"status": "success"})
+
+
+@app.route('/transportForms/', methods = ["POST", "GET"])
+@login_required
+def formulaire_auteur_transport():
+    if est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for("page_secretaire_accueil"))
+    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
+        
+
+@app.route('/FormulaireReservation/', methods = ["POST","GET"])
+@login_required
+def formulaire_reservation():
+    if est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for("page_secretaire_accueil"))
+    if request.method == "POST":
+        regime = request.form["regime"] # stocker en variable car réutilisé ensuite
+        liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
+        request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
+        request.form["dimanche_midi"],request.form["dimanche_soir"]]
+        ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
+        
+        if regime.isalpha(): # si le champ 'regime' contient des caractères
+            id_regime = ajoute_regime(sessionSQL, regime)
+            ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
+        remarques = request.form["remarque"]
+        if remarques.isalpha():  # si le champ 'remarques' contient des caractères
+            modif_participant_remarque(sessionSQL, current_user.idP, remarques)
+        
+        suppprime_loger(sessionSQL, current_user.idP)
+        if request.form["hebergement"] =="true":
+            ajoute_hebergement(sessionSQL, current_user.idP)
+        return render_template("pageFin.html", idp=current_user.idP) #TODO
+    return render_template("formulaireReservation.html")
+
+
+@app.route('/pageFin/', methods = ["GET"])
+@login_required
+def page_fin():
+    if  est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for("page_secretaire_accueil"))
+    return render_template("pageFin.html")
+
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
 @login_required
@@ -90,6 +161,7 @@ def secretaire_consommateur():
         return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
     
+
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
@@ -99,6 +171,7 @@ def dormeur_secretaire():
         return render_template("dormeurSecretaire.html")
 
     return render_template('dormeurSecretaire.html')
+
 
 @app.route('/api/dataDormeurs', methods = ["POST", "GET"])
 def dataDormeurs():
@@ -145,6 +218,7 @@ def dataParticipant():
         participant_dico["role"] = get_role(sessionSQL, participant.idP)
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
+
 
 @app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
@@ -214,78 +288,6 @@ def participant_secretaire():
         return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
     return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
 
-@app.route('/transportForms/', methods = ["POST"])
-def insererTransportPersonne():
-    print("mapageinserer")
-    print("postTransport" , request.form)
-    liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
-    dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
-                        "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
-                        "autre": ["precision"]}
-
-    currentDateTime = datetime.datetime.now()
-    date = currentDateTime.date()
-    year = date.strftime("%Y")
-    supprime_deplacer_annee(sessionSQL, current_user.idP, year)
-    for transport in liste_id_box:
-        if request.form[transport] == "true" and transport != "autre" :
-            lieu_depart = request.form[dico_champs_box[transport][0]]
-            lieu_arrive = request.form[dico_champs_box[transport][1]]   
-            ajoute_deplacer(sessionSQL, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
-        elif transport == "autre" : 
-            modif_participant_remarque(sessionSQL, current_user.idP, request.form[dico_champs_box[transport][0]])
-
-    dateArr = request.form["dateArr"].split("-")
-    heureArr = request.form["hArrive"].split(":")
-    date_arr = datetime.datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
-
-    dateDep = request.form["dateDep"].replace("-",",").split(",")
-    heureDep = request.form["hDep"].replace(":",",").split(",")
-    date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-    print("l245")
-    ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
-    print("success")
-    return jsonify({"status": "success"})
-
-
-@app.route('/transportForms/', methods = ["POST", "GET"])
-@login_required
-def formulaire_auteur_transport():
-    print(request.form)
-    if est_secretaire(sessionSQL, current_user.idP):
-        return redirect(url_for("page_secretaire_accueil"))
-    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
-        
-        
-    
-@app.route('/FormulaireReservation/', methods = ["POST","GET"])
-@login_required
-def formulaire_reservation():
-    if  est_secretaire(sessionSQL, current_user.idP):
-        return redirect(url_for("page_secretaire_accueil"))
-    if request.method == "POST":
-        print("reser ",request.form)
-        regime = request.form["regime"] # stocker en variable car réutilisé ensuite
-        liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
-        request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
-        request.form["dimanche_midi"],request.form["dimanche_soir"]]
-        ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
-        
-        if regime.isalpha(): # si le champ 'regime' contient des caractères
-            id_regime = ajoute_regime(sessionSQL, regime)
-            ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
-        remarques = request.form["remarque"]
-        if remarques.isalpha():  # si le champ 'remarques' contient des caractères
-            modif_participant_remarque(sessionSQL, current_user.idP, remarques)
-        
-        suppprime_loger(sessionSQL, current_user.idP)
-        if request.form["hebergement"] =="true":
-            ajoute_hebergement(sessionSQL, current_user.idP)
-        
-        return render_template("pageFin.html", idp=current_user.idP) #TODO
-    print("return la page formulaire")
-    return render_template("formulaireReservation.html")
-
 
 @app.route('/secretaireIntervention/', methods = ["POST","GET"])
 @login_required
@@ -303,8 +305,8 @@ def page_secretaire_intervention():
         year = date_intervention.split("/")[2]
         month = date_intervention.split("/")[0]
         day = date_intervention.split("/")[1]
-        heure_debut2 = datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
-        heure_fin2 = datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
+        heure_debut2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
+        heure_fin2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
         idCreneau = ajoute_creneau(sessionSQL, heure_debut2, heure_fin2)
         try : 
             ajoute_intervention(sessionSQL, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
@@ -336,13 +338,6 @@ def page_secretaire_gerer_participants():
         return render_template('secretaireGererTransport.html')
     return render_template('secretaireGererTransport.html')
 
-
-@app.route('/pageFin/', methods = ["GET"])
-@login_required
-def page_fin():
-    if  est_secretaire(sessionSQL, current_user.idP):
-        return redirect(url_for("page_secretaire_accueil"))
-    return render_template("pageFin.html")
 
 @app.route('/secretaire/', methods = ["GET"])
 @login_required
@@ -395,6 +390,15 @@ def download_file():
     output.seek(0)
     response = send_file(output, download_name='file.xlsx', as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     return response
+
+
+@app.route("/Participant/<id>",methods=['POST',"GET"])
+def participant_detail(idP):
+    if not est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for('logout'))
+    return render_template("detail_participant.html")
+
+
 
 @app.route("/mail")
 def envoie_mail():

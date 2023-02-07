@@ -1,0 +1,169 @@
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+    body{
+        background-color: rgb(247, 255, 249);
+    }
+
+    p,input,span{font-size: 101% !important}
+    h2{
+        font-size: 150% !important;
+    }
+    body{
+        background-color: rgb(247, 255, 249);
+    }
+    #loader-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(82, 82, 82, 0.1); /* Opacité de 50% */
+        z-index: 999; /* Place l'élément en arrière-plan */
+    }
+
+    #loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centre l'SVG du loader */
+    }
+</style> 
+{% include 'banner.html' %}
+<div class="container-fluid" style="margin-top: 1em;">
+    <div class="row">
+    <div class="col-md-4" style="display: flex;align-items: center;">
+        <img src="{{Poney.url_image}}" alt="Cours De Saut" style="width:100%;height: 50em;" id="imagePoney">
+    </div>
+    <div class="col-md-7 d-flex align-items-center" style="width: 60%;margin-left: 1em;">
+        <div class="row">
+    <div class="row" style="border-bottom: solid 1px">
+        <h1 for="InfoCours" >Poneys</h1>
+    </div>
+
+    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
+        <div class="row">
+            <div class="col-sm-4">
+                <h2 for="InfoP" style="color: gray;">Informations du Poney</h2>
+            </div>
+            <div class="col-md-8">
+                <input id="PoneyID">
+            </div>
+        </div>
+        <div class="row"  style="margin-top: 1em;">
+            <div class="col-md-4"></div>
+            <div class="col-md-8">
+                <input id="PoneyNom">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-md-4"></div>
+            <div class="col-md-8">
+                <input id="PoneyPoids">
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
+        <div class="row"  style="margin-top: 1em;">
+            <div class="col-md-4"><h2 for="InfoP" style="color: gray;">Photo du Poney</h2></div>
+            <div class="col-md-8">
+                <input id="UrlImage">
+            </div>
+        </div>
+    </div>
+   
+
+    <div class="row" style="margin: 1em 0;">
+        <div class="col-8"></div>
+        <div class="col-4 d-flex justify-content-end">
+            <button id="save" type="button" class="btn btn-success">Sauvegarder</button>
+        </div>
+        </div>
+
+    </div>
+</div>
+<div class="col-md-1"></div>
+</div>
+</div>
+<div id="loader-background" style="display: none;">
+    <img id="loader" src="{{url_for('static', filename='img/loader.svg')}}"/>
+</div>
+<script>
+    
+
+    $(document).ready(function() {
+
+        $("#PoneyID").kendoTextBox({
+            value: '{{Poney.idpo}}',
+            enable : false,
+            label:"ID",
+        })
+
+        $("#PoneyNom").kendoTextBox({
+            value: '{{Poney.nomp}}',
+            label:"Nom",
+            
+        })
+        $("#PoneyPoids").kendoNumericTextBox({
+            value: '{{Poney.poidssup}}',
+            min:0,
+            label:"Poids supporté",
+        })
+        $("#UrlImage").kendoTextBox({
+            value: '{{Poney.url_image}}',
+            label:"URL image",
+            
+        })
+
+
+        $("#save").on("click",async function(){
+            
+            if(checkfield()){
+                $("#loader-background").show()
+                var url = $("#UrlImage").val()
+                var nompo = $("#PoneyNom").val()
+                var poids =   $("#PoneyPoids").val()
+                var idpo = "{{Poney.idpo}}"
+                
+                $.ajax({
+                    url : '{{url_for("UpdatePoney")}}',
+                    data:{
+                        "idpo": idpo,
+                        "poids" : poids,
+                        "nompo" : nompo,
+                        "url" : url
+
+                    },
+                    type:'POST',
+                    success:function(response){
+                        if(response == "false"){
+                            alert("Problème lors de la sauvegarde")
+                        }
+                        else{
+                            document.getElementById("imagePoney").src=$("#UrlImage").val();
+                        }
+                    }
+                });
+            }else{
+                alert("Veuillez remplir tous les champs")
+            }
+            await delay(1);
+            $("#loader-background").hide()
+        })
+        
+    });
+    function checkfield(){
+
+        hasUrl = $("#UrlImage").val() != "" ?true : false;
+        hasNom = $("#PoneyNom").val() != ""?true : false;
+        hasPoids =  $("#PoneyPoids").val() != ""?true : false;
+        return hasUrl && hasNom && hasPoids
+    }
+
+    function delay(n){
+    return new Promise(function(resolve){
+        setTimeout(resolve,n*1000);
+    });
+}
+</script>

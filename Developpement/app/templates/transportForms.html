@@ -256,7 +256,6 @@
               <div class="form-group text-center mt-5 mb-1">
                 <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
                 <button id="save" type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;">Suivant</button>
-                <input type="submit" name="fr" id="">
             </div>
           </form>
         
@@ -270,15 +269,11 @@
 
   document.addEventListener("DOMContentLoaded", function() {
 
-  var dataSource = new Array();
-    liste_dep_train = "{{liste_lieu_train}}".replaceAll("&#39;", "").replaceAll("&#34;", "").replaceAll("[","").replaceAll("]","").split(",");
-    console.log(liste_dep_train);
-    for(lieu_dep_train of liste_dep_train){
-      if (lieu_dep_train != ""){
-        var dico = {text : lieu_dep_train, value : lieu_dep_train};
-        dataSource.push(dico);
-      }
-    }
+    var liste_dep_train = "{{liste_lieu_train}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
+    var dataSource = liste_dep_train
+      .map(lieu_dep_train => lieu_dep_train.trim())
+      .filter(Boolean)
+      .map(lieu_dep_train => ({text: lieu_dep_train, value: lieu_dep_train}));
   
     // { text: "Cotton", value: "1" }
     $("#lieuDepartTrain").kendoComboBox({
@@ -292,12 +287,12 @@
 
 
     var dataSource = [];
-var liste_arr_train = "{{liste_lieu_train}}".replace(/&#39;/g, "").replace(/&#34;/g, "").replace(/[\[\]]/g, "");
+    var liste_arr_train = "{{liste_lieu_train}}".replace(/&#39;/g, "").replace(/&#34;/g, "").replace(/[\[\]]/g, "");
 
-dataSource = liste_arr_train
-  .split(",")
-  .filter(lieu_arr_train => lieu_arr_train !== "")
-  .map(lieu_arr_train => ({text: lieu_arr_train, value: lieu_arr_train}));
+    dataSource = liste_arr_train
+      .split(",")
+      .filter(lieu_arr_train => lieu_arr_train !== "")
+      .map(lieu_arr_train => ({text: lieu_arr_train, value: lieu_arr_train}));
 
   
     // { text: "Cotton", value: "1" }
@@ -433,6 +428,7 @@ function verif_champ_transport(transport){
       champ_dep.classList.remove("error");
     }
     if(!champ_arr.value.trim()){
+      console.log('errorrro')
       champ_arr.classList.add("error");
       arrive = false;
     }
@@ -610,19 +606,17 @@ function changeValeurAvion2(valeur){
 }
 
 
-function verif_reverse(departInput, arriveInput, reverseImg ){
-  var departInput = document.getElementById(departInput);
-  var arriveInput = document.getElementById(arriveInput);
+function verif_reverse(departInputID, arriveInputID, reverseImg ){
+  var departInput = document.getElementById(departInputID);
+  var arriveInput = document.getElementById(arriveInputID);
   if(departInput.value != "" && arriveInput.value != ""){
           const img_svg = document.getElementById(reverseImg);
           img_svg.classList.toggle("reverse");
-          console.log(departInput.value);
-          console.log(arriveInput.value);
           const lieuDep = departInput.value;
-          departInput.value = arriveInput.value;
-          arriveInput.value = lieuDep;
-          console.log(departInput.value);
-          console.log(arriveInput.value);
+          var dep = $("#"+departInputID).data("kendoComboBox");
+          dep.value(arriveInput.value);
+          var arr = $("#"+arriveInputID).data("kendoComboBox");
+          arr.value(lieuDep);
         }
 }
 
