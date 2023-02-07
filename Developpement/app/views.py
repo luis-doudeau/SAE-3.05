@@ -78,7 +78,7 @@ def page_inscription():
     return render_template('coordonneeForms.html')
 
 
-@app.route('/transportForms/', methods = ["POST"])
+@app.route('/insereTransportForms/', methods = ["POST"])
 def insererTransportPersonne():
     liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
     dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
@@ -116,29 +116,35 @@ def formulaire_auteur_transport():
     return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
         
 
+
+@app.route('/insererFormulaireReservation/', methods = ["POST"])
+def inserer_formulaire_reservation():
+    print("formulaire_reserver")
+    regime = request.form["regime"] # stocker en variable car réutilisé ensuite
+    liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
+    request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
+    request.form["dimanche_midi"],request.form["dimanche_soir"]]
+    ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
+    
+    if regime.isalpha(): # si le champ 'regime' contient des caractères
+        id_regime = ajoute_regime(sessionSQL, regime)
+        ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
+    remarques = request.form["remarque"]
+    if remarques.isalpha():  # si le champ 'remarques' contient des caractères
+        modif_participant_remarque(sessionSQL, current_user.idP, remarques)
+    
+    suppprime_loger(sessionSQL, current_user.idP)
+    if request.form["hebergement"] =="true":
+        ajoute_hebergement(sessionSQL, current_user.idP)
+    print("success")
+    return jsonify({"status": "success"})
+
+
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    if request.method == "POST":
-        regime = request.form["regime"] # stocker en variable car réutilisé ensuite
-        liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
-        request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
-        request.form["dimanche_midi"],request.form["dimanche_soir"]]
-        ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
-        
-        if regime.isalpha(): # si le champ 'regime' contient des caractères
-            id_regime = ajoute_regime(sessionSQL, regime)
-            ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
-        remarques = request.form["remarque"]
-        if remarques.isalpha():  # si le champ 'remarques' contient des caractères
-            modif_participant_remarque(sessionSQL, current_user.idP, remarques)
-        
-        suppprime_loger(sessionSQL, current_user.idP)
-        if request.form["hebergement"] =="true":
-            ajoute_hebergement(sessionSQL, current_user.idP)
-        return render_template("pageFin.html", idp=current_user.idP) #TODO
     return render_template("formulaireReservation.html")
 
 

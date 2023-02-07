@@ -107,10 +107,9 @@ function verifFormulaire(){
       var button7 = $("#dimanche_soir")[0].checked 
       var remarque = $("#remarque").val()
       $.ajax({
-      
-        url:"{{url_for('formulaire_reservation')}}",
+        url:"{{url_for('inserer_formulaire_reservation')}}",
         type:'POST',
-        dataType: 'application/json',
+        dataType: 'json',
         data: {
           "jeudi_soir" : button1,
           "vendredi_midi" : button2,
@@ -122,9 +121,13 @@ function verifFormulaire(){
           "regime" : regime,
           "hebergement" : hebergement,
           "remarque" : remarque,
-        }      
+        },
+        success: function() {
+          console.log("sucess");
+          window.location.href = "{{url_for('page_fin')}}";;
+        }    
       })
-      window.location.href = "{{url_for('page_fin')}}";
+      
     }
     
     

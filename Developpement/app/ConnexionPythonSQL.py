@@ -80,8 +80,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -289,15 +289,15 @@ def get_tout_dormeurs_avec_filtre(sessionSQL, prenomP, nomP, nomHotel, dateArriv
         jour = dateArrive.split("/")[0]
         mois = dateArrive.split("/")[1]
         annee = dateArrive.split("/")[2]
-        date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
-        date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
+        date_jour_debut = datetime.datetime(int(annee),int(mois),int(jour), 0,0,0)
+        date_jour_fin = datetime.datetime(int(annee),int(mois),int(jour), 23,59,59)
         participants = participants.filter(Loger.dateDebut >= date_jour_debut).filter(Loger.dateDebut <= date_jour_fin)
     if(dateDeparts!= ""):
         jour = dateDeparts.split("/")[0]
         mois = dateDeparts.split("/")[1]
         annee = dateDeparts.split("/")[2]
-        date_jour_debut = datetime(int(annee),int(mois),int(jour), 0,0,0)
-        date_jour_fin = datetime(int(annee),int(mois),int(jour), 23,59,59)
+        date_jour_debut = datetime.datetime(int(annee),int(mois),int(jour), 0,0,0)
+        date_jour_fin = datetime.datetime(int(annee),int(mois),int(jour), 23,59,59)
         participants = participants.filter(Loger.dateFin >= date_jour_debut).filter(Loger.dateFin <= date_jour_fin)
     return participants.all()
 
@@ -941,7 +941,7 @@ def ajoute_deplacer(sessionSQL, idP, idTransport, lieuDepart, lieuArrive, annee)
   
 
 def supprime_mangeur(sessionSQL, idP):
-    annee = datetime.now().year
+    annee = datetime.datetime.now().year
     manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Manger.idP == idP).filter(extract('year', Creneau.dateDebut) == annee).all()
     for mang in manger :
         sessionSQL.query(Manger).filter(Manger.idP == mang.idP).filter(Manger.idRepas == mang.idRepas).delete()
@@ -967,7 +967,7 @@ def ajoute_mangeur(sessionSQL, idP, idRepas):
         
 
 def suppprime_loger(sessionSQL, idP):
-    annee = datetime.today().year
+    annee = datetime.datetime.today().year
     loger = sessionSQL.query(Loger).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut) == annee).all()
     for log in loger :
         sessionSQL.query(Loger).filter(Loger.idP == log.idP).delete()
@@ -975,8 +975,8 @@ def suppprime_loger(sessionSQL, idP):
 
 
 def ajoute_loger(sessionSQL, idP, dateDebut, dateFin, idHotel):
-    date_debut = datetime(dateDebut.year, dateDebut.month, dateDebut.day, dateDebut.hour, dateDebut.minute, dateDebut.second)
-    date_fin = datetime(dateFin.year, dateFin.month, dateFin.day, dateFin.hour, dateFin.minute, dateFin.second)
+    date_debut = datetime.datetime(dateDebut.year, dateDebut.month, dateDebut.day, dateDebut.hour, dateDebut.minute, dateDebut.second)
+    date_fin = datetime.datetime(dateFin.year, dateFin.month, dateFin.day, dateFin.hour, dateFin.minute, dateFin.second)
 
     logeur = Loger(idP, date_debut, date_fin, idHotel)
     sessionSQL.add(logeur)
@@ -996,7 +996,7 @@ def choix_hotel(sessionSQL, idP):
         
         
 def ajoute_hebergement(sessionSQL, idP): 
-    annee = datetime.today().year
+    annee = datetime.datetime.today().year
     dates = sessionSQL.query(Assister.dateArrive, Assister.dateDepart).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
     dateDebut = dates[0]
     dateFin = dates[1]
@@ -1010,7 +1010,7 @@ def get_max_id_regime(sessionSQL):
     else:
         return regime._data[0]
         
-def ajoute_regime(sessionSQL, idP, regime) :
+def ajoute_regime(sessionSQL,regime) :
     sessionSQL.query
     id_regime = get_max_id_regime(sessionSQL)+1
     regime = Regime(id_regime, regime)
@@ -1101,8 +1101,8 @@ def transforme_datetime(date):
 def ajoute_creneau_v1(session, dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
-    dateDebut = datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
-    dateFin = datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
+    dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
+    dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
     creneau_test = sessionSQL.query(Creneau).filter(Creneau.dateDebut == dateDebut).filter(Creneau.dateFin == dateFin).first()
     if creneau_test is None :
         idCreneau = get_max_id_creneau(sessionSQL)+1
