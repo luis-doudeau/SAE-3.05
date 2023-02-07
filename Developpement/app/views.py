@@ -254,37 +254,6 @@ def formulaire_auteur_transport():
     print(request.form)
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    if request.method == "POST":
-        print("postTransport" , request.form)
-        
-        liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
-        dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
-                          "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
-                          "autre": ["precision"]}
-
-        currentDateTime = datetime.datetime.now()
-        date = currentDateTime.date()
-        year = date.strftime("%Y")
-        supprime_deplacer_annee(sessionSQL, current_user.idP, year)
-        for transport in liste_id_box:
-            if request.form[transport] == "true" and transport != "autre" :
-                lieu_depart = request.form[dico_champs_box[transport][0]]
-                lieu_arrive = request.form[dico_champs_box[transport][1]]   
-                ajoute_deplacer(sessionSQL, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
-            elif transport == "autre" : 
-                modif_participant_remarque(sessionSQL, current_user.idP, request.form[dico_champs_box[transport][0]])
-
-        dateArr = request.form["dateArr"].split("-")
-        heureArr = request.form["hArrive"].split(":")
-        date_arr = datetime.datetime(int(dateArr[0]), int(dateArr[1]), int(dateArr[2]), int(heureArr[0]), int(heureArr[1]))
-
-        dateDep = request.form["dateDep"].replace("-",",").split(",")
-        heureDep = request.form["hDep"].replace(":",",").split(",")
-        date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-        print("l245")
-        ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
-        return redirect(url_for("formulaire_reservation"))
-        
     return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
         
         
