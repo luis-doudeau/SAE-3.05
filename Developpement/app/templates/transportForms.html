@@ -313,7 +313,9 @@ dataSource = liste_arr_train
 
 
   $("#save").on("click", function(){
+    console.log("essaieverif");
     if(verif_transport()){
+      console.log("verig");
       var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
       var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
       var voiture = document.getElementById("divLieuDepArriveVoiture").style.display != "none";
@@ -339,33 +341,36 @@ dataSource = liste_arr_train
       var precision = document.getElementById("precision") != null ? document.getElementById("precision").value : null;
 
 
-    $.ajax({
-      url : "{{url_for('formulaire_auteur_transport')}}",
-      type : "POST",
-      dataType : "application/json",
-      data : {
-        "avion" : avion,
-        "train" : train,
-        "voiture" : voiture,
-        "covoiturage" : covoiturage,
-        "autre" : autre,
-        "dateArr" : dateArr,
-        "hArrive" : hArrive,
-        "dateDep" : dateDep,
-        "hDep"  : hDep,
+      $.ajax({
+        url : "{{url_for('insererTransportPersonne')}}",
+        type : "POST",
+        dataType : "json",
+        data : {
+          "avion" : avion,
+          "train" : train,
+          "voiture" : voiture,
+          "covoiturage" : covoiturage,
+          "autre" : autre,
+          "dateArr" : dateArr,
+          "hArrive" : hArrive,
+          "dateDep" : dateDep,
+          "hDep"  : hDep,
 
-        "lieuDepartAvion" : lieuDepartAvion,  
-        "lieuArriveAvion" : lieuArriveAvion,
-        "lieuDepartTrain" : lieuDepartTrain,
-        "lieuArriveTrain" : lieuArriveTrain,
-        "lieuDepartVoiture" : lieuDepartVoiture,
-        "lieuArriveVoiture" : lieuArriveVoiture,
-        "lieuDepartCovoiturage" : lieuDepartCovoiturage,
-        "lieuArriveCovoiturage" : lieuArriveCovoiturage,
-        "precision" : precision
-      }
-    })
-    window.location.href = "{{url_for('formulaire_reservation')}}";
+          "lieuDepartAvion" : lieuDepartAvion,  
+          "lieuArriveAvion" : lieuArriveAvion,
+          "lieuDepartTrain" : lieuDepartTrain,
+          "lieuArriveTrain" : lieuArriveTrain,
+          "lieuDepartVoiture" : lieuDepartVoiture,
+          "lieuArriveVoiture" : lieuArriveVoiture,
+          "lieuDepartCovoiturage" : lieuDepartCovoiturage,
+          "lieuArriveCovoiturage" : lieuArriveCovoiturage,
+          "precision" : precision
+        },
+        success: function() {
+          console.log("sucess");
+          window.location.href = "{{url_for('formulaire_reservation')}}";
+        }
+      })
 }
   
   })
