@@ -58,7 +58,7 @@ def connexion():
                 login_user(participant)
                 return redirect(url_for('page_inscription'))
         return render_template('login.html', mail = request.form["email"])
-    return render_template('login.html', mail = "ac@icloud.ca")
+    return render_template('login.html', mail = "lenina@gmail.com")
 
 
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
@@ -69,7 +69,7 @@ def page_inscription():
     if request.method == "POST":
         print("posteCOOOR")
         print(request.form)
-        modifier_participant(sessionSQL, current_user.idP,request.form["adresse"],request.form["ddn"],request.form["tel"])
+        modifier_participant(sessionSQL, current_user.idP,request.form["adresse"], request.form["codePostal"], request.form["ville"],request.form["ddn"],request.form["tel"])
         modifier_utilisateur(sessionSQL, current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
         if est_intervenant(sessionSQL, current_user.idP):
             return redirect(url_for('formulaire_auteur_transport', idp = current_user.idP))
@@ -113,7 +113,7 @@ def insererTransportPersonne():
 def formulaire_auteur_transport():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train())
+    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
         
 
 
@@ -251,7 +251,7 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes')
 @login_required
 def dataNavettes():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     liste_voyages = []
     for voyages in sessionSQL.query(Mobiliser).all():
@@ -268,7 +268,7 @@ def dataNavettes():
 @app.route('/api/dataTransporte')
 @login_required
 def dataTransport():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_transport = []
     for transport in sessionSQL.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
@@ -284,10 +284,43 @@ def dataTransport():
     return {'data': liste_transport}
 
 
+@app.route('/api/dataInterventions')
+@login_required
+def dataIntervenir():
+    if not est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for('logout')) 
+    liste_intervenir = []
+    for intervenir in sessionSQL.query(Intervenir, Intervention, Creneau, Lieu, Auteur).join(
+        Intervention, Intervention.idIntervention==Intervenir.idIntervention).join(
+        Creneau, Creneau.idCreneau == Intervenir.idCreneau).join(
+        Lieu, Lieu.idLieu == Intervenir.idLieu).join(
+        Auteur, Auteur.idP == Intervenir.idP).all():
+        dico_intervenir = {}
+        dico_intervenir["prenom"] = intervenir[4].prenomP
+        dico_intervenir["nom"] = intervenir[4].nomP
+        dico_intervenir["lieu"] = intervenir[3].nomLieu
+        dico_intervenir["typeIntervention"] = intervenir[1].nomIntervention
+        dico_intervenir["dateDebut"] = datetime_to_heure(intervenir[2].dateDebut)
+        dico_intervenir["dateArrive"] = datetime_to_heure(intervenir[2].dateFin)
+        liste_intervenir.append(dico_intervenir)
+    return {'data': liste_intervenir}
+
+
+@app.route('/interventionsSecretaire/', methods = ["POST", "GET"])
+@login_required
+def interventions_secretaire():
+    if not est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for('logout'))   
+    if request.method == "POST":
+        return render_template("datatable_interventions.html")
+
+    return render_template('datatable_interventions.html')
+
+
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 @login_required
 def participant_secretaire():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         liste_personne = affiche_participant_trier(sessionSQL, request.form["trier"])
@@ -362,13 +395,11 @@ def logout():
 @app.route('/inscrireSecretaire/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_inscrire():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
         role = request.form["role"]
-        print(role)
         prenom = request.form["prenom"]
-        print(prenom)
         nom = request.form["nom"]
         email = request.form["email"]
         adresse = request.form["adresse"]
@@ -398,14 +429,6 @@ def download_file():
     return response
 
 
-@app.route("/Participant/<id>",methods=['POST',"GET"])
-def participant_detail(idP):
-    if not est_secretaire(sessionSQL, current_user.idP):
-        return redirect(url_for('logout'))
-    return render_template("detail_participant.html")
-
-
-
 @app.route("/mail")
 def envoie_mail():
     msg = Message('Hello', sender = 'bdboum45@gmail.com', recipients = ['azertytoqwerty2@gmail.com'])
@@ -413,8 +436,6 @@ def envoie_mail():
     mail.send(msg)
     return "Sent"
     
-
-
 
 #Ne pas effacer test
 """@app.before_request
@@ -427,6 +448,28 @@ def before_request():
         print("Ref2:", request.values.get("url"))"""
         
 
-# @app.route('/Participant/<idP>',methods=['POST',"GET"])
-# def Participant(id):
-#     return render_template("index.html",id=id)#TODO
+@app.route('/participantSecretaire/<id>',methods=['POST',"GET"])
+def participant_detail(id):
+    
+    return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
+
+
+@app.route('/Personne/Update',methods=['POST'])
+def UpdateParticipant():
+    id = request.form["id"]
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    email = request.form["email"]
+    ddn = request.form["ddn"]
+    remarques = request.form["remarques"]
+    adresse = request.form["adresse"]
+    code_postal = int(request.form["code_postal"])
+    ville = request.form["ville"]
+    tel = request.form["tel"]
+    password = request.form["password"]
+    save_participant = modifier_participant(sessionSQL,id,adresse,code_postal,ville,date_str_datetime(ddn),tel)
+    save_remarques = modif_participant_remarque(sessionSQL, id, remarques)
+    save_user = modifier_utilisateur(sessionSQL,id,prenom,nom,email)
+    save_pw = modifier_password(sessionSQL, id, password)
+    res = save_participant and save_user and save_remarques and save_pw
+    return "true" if res == True else res

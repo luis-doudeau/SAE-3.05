@@ -606,24 +606,47 @@ def supprimer_utilisateur_role(sessionSQL, id_utilisateur):
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(sessionSQL, idP, adresseP, ddnP, telP):
+def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, telP):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
-        {Participant.adresseP : adresseP, Participant.ddnP : ddnP, Participant.telP : telP})
-    sessionSQL.commit()
-    print("Le participant a bien été modifié")
-    
+        {Participant.adresseP : adresseP, Participant.codePostalP : codePostalP, Participant.villeP : villeP,
+        Participant.ddnP : ddnP, Participant.telP : telP})
+    try : 
+        sessionSQL.commit()
+        print("Le participant a bien été modifié")
+        return True
+    except : 
+        sessionSQL.rollback()
+        print("erreur lors de la modif du participant")
+        return False
     
 def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update(
         {Utilisateur.prenomP : prenomP, Utilisateur.nomP : nomP, Utilisateur.emailP : emailP})
-    sessionSQL.commit()
-    print("L'utilisateur a bien été modifié")
+    try : 
+        sessionSQL.commit()
+        print("L'utilisateur a bien été modifié")
+        return True
+    except : 
+        print("erreur lors de la modif du user")
+        return False
+    
 
-def modifier_participant_tout(sessionSQL, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, mdpP, invite, emailEnvoye, remarques):
+def modifier_password(sessionSQL, idP, new_password):
+    sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update({Utilisateur.mdpP : new_password})
+    try : 
+        sessionSQL.commit()
+        return True
+    except :
+        sessionSQL.rollback()
+        print("erreur lors de la modif du MDP")
+        return False
+    
+def modifier_participant_tout(sessionSQL, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, codePostalP, villeP, mdpP, invite, emailEnvoye, remarques):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
-         Participant.telP : telP, Participant.emailP : emailP, Participant.adresseP : adresseP, Participant.mdpP : mdpP,
-         Participant.invite : invite, Participant.emailEnvoye : emailEnvoye, Participant.remarques : remarques})
+         Participant.telP : telP, Participant.emailP : emailP, Participant.adresseP : adresseP, Participant.codePostalP : codePostalP,
+         Participant.villeP : villeP, Participant.mdpP : mdpP, Participant.invite : invite, Participant.emailEnvoye : emailEnvoye, 
+         Participant.remarques : remarques})
     sessionSQL.commit()
     print("Le participant a bien été modifié")
    
@@ -657,23 +680,29 @@ def get_info_personne(sessionSQL, email, mdp):
         return personne
 
 def get_participant(sessionSQL, id_participant):
-    print("l660 ",id_participant)
     return sessionSQL.query(Participant).filter(Participant.idP == id_participant).first()
 
 def get_exposant(sessionSQL, id_exposant):
     return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
-def get_all_auteur(session):
+def get_all_auteur(sessionSQL):
     Auteur_alias = aliased(Auteur)
-    liste_auteur = session.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
+    liste_auteur = sessionSQL.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
     return {auteur.idP : auteur for auteur in liste_auteur}
 
-def get_all_interventions(session) : 
-    liste_interventions =  session.query(Intervention).all()
+def get_all_interventions(sessionSQL) :
+    """" Récupère un dictionnaire d'intervervention 
+        Key : id de l'intervention (id_intervention)
+        Value : l'intervention : (Intervention)
+    """ 
+    liste_interventions =  sessionSQL.query(Intervention).all()
     return {intervention.idIntervention : intervention for intervention in liste_interventions}
 
-def get_exposant(session, id_exposant):
-    return session.query(Exposant).filter(Exposant.idP == id_exposant).first()
+def get_intervenirs(sessionSQL) : 
+    return sessionSQL.query(Intervenir).all()
+
+def get_exposant(sessionSQL, id_exposant):
+    return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
 def get_invite(sessionSQL, id_invite):
     return sessionSQL.query(Invite).filter(Invite.idP == id_invite).first()
@@ -1084,7 +1113,12 @@ def modif_participant_remarque(sessionSQL, idP, remarques) :
     if remarques.isalpha():
         nouvelles_remarques = remarques + " / "+str((sessionSQL.query(Participant).filter(Participant.idP == idP).first()).remarques)
         sessionSQL.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
+    try : 
         sessionSQL.commit()
+        return True
+    except : 
+        print("erreur modif remarques")
+        return False
 
 
 def get_utilisateur_email_mdp(sessionSQL, mail, mdp):
@@ -1214,4 +1248,17 @@ def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"):
     with open(file_path, 'r') as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
+    
+
+@staticmethod
+def get_all_lieu_avion(file_path="./Developpement/app/static/txt/aeroport.txt"): 
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        return [line.strip() for line in lines]
+    
+
+def date_str_datetime(date_str):
+    date_format = "%d/%m/%Y"
+    date_object = datetime.datetime.strptime(date_str, date_format)
+    return date_object
 
