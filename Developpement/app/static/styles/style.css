@@ -9010,4 +9010,8 @@ input.k-invalid
         height : 60px;
         font-size: 120% !important;
       }    
+
+      .labelDetail{
+        margin-top : 15px !important;
+      }
         

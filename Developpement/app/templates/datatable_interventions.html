@@ -1,0 +1,199 @@
+{% include 'banner.html' %}
+<body style="background-color : #ebf3fc">
+    <main>
+      <div class="container mt-5">
+        <div class="row">
+            <div class="row">
+                <div class="col-12 col-md-8"></div>
+                <div class="col-6 col-md-4">
+                    <button id="Filtres" type="button" class="btn btn-success">Filtres</button>
+                    <button id="buttonmodalSupr" type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalSupprimer">Supprimer</button>
+                </div>
+            </div>
+        </div>
+        <div style="background-color : #f5f7fa" class="container mt-5">
+            {% block content %}
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                      <th>Prenom</th>
+                      <th>Nom</th>
+                      <th>Lieu</th>
+                      <th>Type</th>
+                      <th>Début</th>
+                      <th>Fin</th>
+                    </tr>
+                  </thead>
+              </table>
+              {% endblock %}
+        </div>
+        <div class="modal" id="modalFiltreConsommateurs" tabindex="2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Filtrer<h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-5">
+                        <label for="PrenomFiltre" class="label label-primary">Prénom</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input  id="PrenomFiltre">
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-5">
+                          <label for="NomFiltre" class="k-label">Nom</label>
+                      </div>
+                      <div class="col-md-7">
+                          <input id="NomFiltre">
+                      </div>
+                  </div>
+  
+                  <div class="row">
+                    <div class="col-md-5">
+                        <label for="RestaurantFiltre" class="label label-primary">Lieu</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input  id="RestaurantFiltre">
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                      <div class="col-md-5">
+                          <label for="DateFiltre" class="label label-primary">Type</label>
+                      </div>
+                      <div class="col-md-7">
+                          <input id="DateFiltre">
+                      </div>
+                  </div>
+  
+                  <div class="row">
+                      <div class="col-md-5">
+                          <label for="CreneauFiltre" class="label label-primary">Date</label>
+                      </div>
+                      <div class="col-md-7">
+                          <input id="CreneauFiltre">
+                      </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                        <label for="CreneauFiltre" class="label label-primary">Créneau</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input id="CreneauFiltre">
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-success" id="savefilter">Sauvegarder</button>
+              </div>
+          </div>
+          </div>
+      </div>
+          {% block scripts %}
+
+          
+    <script>
+        $(document).ready(function () {
+          $("#PrenomFiltre").kendoTextBox({
+            placeholder: "Entrer le prénom d'un consommateur",
+            size : "medium",
+        });
+        
+        $("#NomFiltre").kendoTextBox({
+            placeholder: "Entrer le nom d'un consommateur",
+            size : "medium",
+        });
+
+        $("#RestaurantFiltre").kendoTextBox({
+            placeholder: "Entrer le nom d'un restaurant",
+            size : "medium",
+        });
+
+        $("#DateFiltre").kendoDatePicker({
+            culture: "fr-FR",
+            size : "medium",
+        });
+
+        $("#CreneauFiltre").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+                { text: "", value: "1" },
+                { text: "11:30 - 13:30", value: "2" },
+                { text: "11:30 - 12:30", value: "3" },
+                { text: "12:30 - 13:30", value: "4" },
+                { text: "19:30 - 20:30", value: "5" },
+                { text: "19:30 - 21:30", value: "6" },
+                { text: "20:30 - 21:30", value: "7" },
+                
+            ],
+            size : "medium",
+        });
+
+          let table = $('#data').DataTable({
+            ajax:{
+              url:'/api/dataInterventions',
+                type:"POST",
+                data:function(c){
+                    if(c!=undefined){
+                      c.prenom = $("#PrenomFiltre").val();
+                      c.nom = $("#NomFiltre").val();
+                      c.restaurant = $("#RestaurantFiltre").val();
+                      c.la_date = $("#DateFiltre").val();
+                      c.creneau = $("#CreneauFiltre").data("kendoComboBox").text();
+                      console.log(c.creneau)
+                  }
+                  return c
+                }
+              },
+              columns:[
+                {data: 'prenom'},
+                {data: 'nom'},
+                {data: 'lieu'},
+                {data: 'typeIntervention',orderable:false},
+                {data: 'dateDebut',orderable:false,"render" : function(data) { 
+    
+                    let m = new Date(data);
+                    return moment(m).format("DD/MM/YYYY");
+                }
+                },
+                {data: 'dateArrive',orderable:false,"render" : function(data) { 
+    
+                    let m = new Date(data);
+                    return moment(m).format("DD/MM/YYYY");
+                }
+                },
+              ],
+
+              scrollY:500,
+              deferRender:    true,
+              scroller:true,
+              select:false,
+              paging: false,
+              combobox : true,
+              info: false,
+            });
+            $("#savefilter").on("click",function(){
+              table.ajax.reload();
+              $("#modalFiltreConsommateurs").modal("hide")
+            });
+            $("#Filtres").on("click",function(){
+                $("#modalFiltreConsommateurs").modal("show")
+            })
+        });
+
+            
+          </script>
+        {% endblock %}
+        </div>
+    </main>
+</body>
+</html>

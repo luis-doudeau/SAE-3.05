@@ -88,9 +88,9 @@
                 <img style="height: 100%;" src="/static/img/plane.png">
               </div>
               <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_avion">
-                <div class="col-4 dropdownC">
-                  <input autocomplete="off" id="lieuDepartAvion" placeholder="Aéroport Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 100%; width: 100%;" class="form-control">
-                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsAvion">
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input autocomplete="off" id="lieuDepartAvion" placeholder="Aéroport Départ" required="true" inputmode="text" spellcheck="false" style="height:60px; max-width:350px; font-size : 110%;">
                   </div>
                 </div>
                 <div class="col-1" style="display : flex;">
@@ -103,9 +103,9 @@
                     </svg>
                   </button>
                 </div>
-                <div class="col-4 dropdownC">
-                  <input autocomplete="off" id="lieuArriveAvion" placeholder="Aéroport Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
-                  <div class="col-form-label divOptionsTransports" style="display: none;" id="optionsAvion2">
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input autocomplete="off" id="lieuArriveAvion" placeholder="Aéroport Arrivé" required="true" inputmode="text" spellcheck="false" style="height:60px; max-width:350px; font-size : 110%;">
                   </div>
                 </div>
                 <div class="col-1" style = "margin-top : 5px;">
@@ -269,13 +269,14 @@
 
   document.addEventListener("DOMContentLoaded", function() {
 
+
+    //TRAIN
     var liste_dep_train = "{{liste_lieu_train}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
     var dataSource = liste_dep_train
       .map(lieu_dep_train => lieu_dep_train.trim())
       .filter(Boolean)
       .map(lieu_dep_train => ({text: lieu_dep_train, value: lieu_dep_train}));
   
-    // { text: "Cotton", value: "1" }
     $("#lieuDepartTrain").kendoComboBox({
       dataTextField: "text",
       dataValueField: "value",
@@ -285,18 +286,36 @@
       size : "large"
     });
 
+  
+    $("#lieuArriveTrain").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
 
-    var dataSource = [];
-    var liste_arr_train = "{{liste_lieu_train}}".replace(/&#39;/g, "").replace(/&#34;/g, "").replace(/[\[\]]/g, "");
 
-    dataSource = liste_arr_train
-      .split(",")
-      .filter(lieu_arr_train => lieu_arr_train !== "")
-      .map(lieu_arr_train => ({text: lieu_arr_train, value: lieu_arr_train}));
-
+    //AVION
+    var liste_dep_train = "{{liste_lieu_avion}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
+    var dataSource = liste_dep_train
+      .map(lieu_dep_train => lieu_dep_train.trim())
+      .filter(Boolean)
+      .map(lieu_dep_train => ({text: lieu_dep_train, value: lieu_dep_train}));
   
     // { text: "Cotton", value: "1" }
-    $("#lieuArriveTrain").kendoComboBox({
+    $("#lieuDepartAvion").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+  
+    $("#lieuArriveAvion").kendoComboBox({
       dataTextField: "text",
       dataValueField: "value",
       dataSource: dataSource,
@@ -428,7 +447,6 @@ function verif_champ_transport(transport){
       champ_dep.classList.remove("error");
     }
     if(!champ_arr.value.trim()){
-      console.log('errorrro')
       champ_arr.classList.add("error");
       arrive = false;
     }
@@ -452,160 +470,6 @@ function verif_champ_transport(transport){
 }
 
 
-function loadOptionsAvionDepart() {
-  var xhr = new XMLHttpRequest();
-  var div = document.getElementById("optionsAvion");
-  xhr.open("GET", "../static/txt/aeroport.txt", true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      var options = xhr.responseText.split("\n");
-      for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        var a = document.createElement("a");
-        a.setAttribute("onclick", "changeValeurAvion1(this)");
-        a.setAttribute("href", "#");
-        a.style.display = "none";
-        a.textContent = option;
-        a.classList.add("optionTransport");
-
-        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
-        a.addEventListener("click", function(event) {
-          // Empêcher le comportement par défaut de l'événement "mousedown"
-          event.preventDefault();
-
-          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
-          
-          div.style.display = "none";
-        });
-        div.appendChild(a);
-      
-        
-      }
-    } else {
-      // Il y a eu un problème avec la requête, traitez-le ici
-    }
-  };
-  xhr.send();
-}
-
-function loadOptionsAvionArrive() {
-  var xhr = new XMLHttpRequest();
-  var div2 = document.getElementById("optionsAvion2");
-  xhr.open("GET", "../static/txt/aeroport.txt", true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      var options = xhr.responseText.split("\n");
-      for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        var a = document.createElement("a");
-        a.setAttribute("onclick", "changeValeurAvion2(this)");
-        a.setAttribute("href", "#");
-        a.style.display = "none";
-        a.textContent = option;
-        a.classList.add("optionTransport");
-
-
-        // Ajouter un écouteur d'événement "mousedown" à chaque élément "a"
-        a.addEventListener("click", function(event) {
-          // Empêcher le comportement par défaut de l'événement "mousedown"
-          event.preventDefault();
-
-          // Mettre à jour la valeur de l'input avec le texte de l'élément "a" sur lequel vous avez cliqué
-          
-          div2.style.display = "none";
-        });
-        div2.appendChild(a);
-        
-      }
-    } else {
-      // Il y a eu un problème avec la requête, traitez-le ici
-    }
-  };
-  xhr.send();
-}
-
-
-function filterFunctionAvion() {
-  var input, filter, ul, li, a, i, existeElem, div2;
-  input = document.getElementById("lieuDepartAvion");
-  filter = input.value.toUpperCase();
-  div2 = document.getElementById("optionsAvion");
-  a = div2.getElementsByTagName("a");
-  existeElem = false;
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().includes(filter) && filter!="") {
-        a[i].style.display = "";
-        div2.style.display = "";
-        existeElem = true;
-    }
-    else {
-        a[i].style.display = "none";
-    }
-  }
-  if(!existeElem){
-    div2.style.display = "none";
-  }
-}
-
-
-function filterFunctionAvion2() {
-  var input, filter, ul, li, a, i, existeElem, div2;
-  input = document.getElementById("lieuArriveAvion");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("optionsAvion2");
-  a = div.getElementsByTagName("a");
-  existeElem = false;
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().includes(filter) && filter!="") {
-        a[i].style.display = "";
-        div.style.display = "";
-        existeElem = true;
-    }
-    else {
-        a[i].style.display = "none";
-    }
-    
-  }
-  if(!existeElem){
-    div.style.display = "none";
-  }
-}
-
-
-function setupDropdownAvion1(){
-  var div = document.getElementById("optionsAvion");
-  var options = div.getElementsByTagName("a");
-  for (var i = 0; i < options.length; i++) {
-    options[i].style.display = "none";
-  }
-}
-
-
-function setupDropdownAvion2(){
-  var div = document.getElementById("optionsAvion2");
-  var options = div.getElementsByTagName("a");
-  for (var i = 0; i < options.length; i++) {
-    options[i].style.display = "none";
-  }
-}
-
-
-function changeValeurAvion1(valeur){
-    input = document.getElementById("lieuDepartAvion");
-    input.value = valeur.textContent;
-    setupDropdownAvion1();
-}
-
-
-function changeValeurAvion2(valeur){
-  input = document.getElementById("lieuArriveAvion");
-  input.value = valeur.textContent;
-  setupDropdownAvion2();
-}
-
-
 function verif_reverse(departInputID, arriveInputID, reverseImg ){
   var departInput = document.getElementById(departInputID);
   var arriveInput = document.getElementById(arriveInputID);
@@ -613,19 +477,18 @@ function verif_reverse(departInputID, arriveInputID, reverseImg ){
           const img_svg = document.getElementById(reverseImg);
           img_svg.classList.toggle("reverse");
           const lieuDep = departInput.value;
+          if (departInputID == "lieuDepartAvion" || departInputID == "lieuDepartTrain"){
           var dep = $("#"+departInputID).data("kendoComboBox");
           dep.value(arriveInput.value);
           var arr = $("#"+arriveInputID).data("kendoComboBox");
           arr.value(lieuDep);
+          }
+          else{
+            departInput.value = arriveInput.value;
+            arriveInput.value = lieuDep;
+          }
         }
 }
-
-
-window.addEventListener("load", (event) => {
-  loadOptionsAvionArrive();
-  loadOptionsAvionDepart();
-});
-
 
 const cardAvion = document.getElementById("cardAvion");
 
@@ -645,14 +508,6 @@ cardAvion.addEventListener("click", function(){
     var rect = element.getBoundingClientRect();
     // Faire défiler la page jusqu'à l'élément
     window.scrollTo(0, rect.top + window.pageYOffset+offest);
-
-
-  var departInput = document.getElementById("lieuDepartAvion");
-  var arriveInput = document.getElementById("lieuArriveAvion");
-  departInput.addEventListener("keyup", filterFunctionAvion);
-  departInput.addEventListener("click", filterFunctionAvion);
-  arriveInput.addEventListener("keyup", filterFunctionAvion2);
-  arriveInput.addEventListener("click", filterFunctionAvion2);
 });
 
 var reverseButton = document.getElementById("boutonReverseAvion");
@@ -684,9 +539,6 @@ cardTrain.addEventListener("click", function(){
     var rect = element.getBoundingClientRect();
     // Faire défiler la page jusqu'à l'élément
     window.scrollTo(0, rect.top + window.pageYOffset+offest);
-
-  var departInput = document.getElementById("lieuDepartTrain");
-  var arriveInput = document.getElementById("lieuArriveTrain");
 });
 
 var reverseButton = document.getElementById("boutonReverseTrain");

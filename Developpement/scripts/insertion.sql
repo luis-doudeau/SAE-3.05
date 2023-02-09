@@ -22,27 +22,27 @@ INSERT INTO UTILISATEUR (idP,prenomP, nomP,emailP,mdpP) VALUES
   (1000,"Lenina","Dadina", "lenina@gmail.com","mdp");
 
 
-INSERT INTO PARTICIPANT (idP,ddnP,telP,adresseP,invite,emailEnvoye,remarques) VALUES
-  (1,"2002-03-21","0867392610", "5461 Phasellus Street", false, false, "dolor dapibus gravida. Aliquam tincidunt"),
-  (2,"1970-12-09","0563395678","P.O. Box 714, 970 Imperdiet Rd.",  false, false,"ac risus. Morbi metus. Vivamus"),
-  (3,"1965-12-24","0861673417","2976 Mauris Avenue", false, false,"egestas lacinia. Sed congue, elit"),
-  (4,"1974-12-12","0668301399","Ap #970-7190 Ultrices St.", false, false,"fermentum risus, at fringilla purus"),
-  (5,"1939-05-28","0335257324","Ap #753-3031 Lorem Rd.", false, false,"eget, dictum placerat, augue. Sed"),
-  (100,"2003-12-18","0434772107","9959 Euismod Ave", false, false,"eu, eleifend nec, malesuada ut,"),
-  (101,"1988-07-25","0783665556","623-5236 Non St.", false, false,"nulla. Integer urna. Vivamus molestie"),
-  (102,"1943-10-10","0674873608","643-2164 Sed Avenue", false, false,"lorem, luctus ut, pellentesque eget,"),
-  (200,"1942-02-25","0950147618","Ap #353-5122 Neque. St.", false, false,"mattis. Cras eget nisi dictum"),
-  (201,"2004-12-25","0761573559","Ap #919-1437 Quis Ave", false, false,"sociis natoque penatibus et magnis"),
-  (202,"1972-03-30","0757524228","550-8069 Ac Rd.", false, false,"imperdiet nec, leo. Morbi neque"),
-  (203,"1969-10-31","0305721353","7570 Id, Road", false, false,"Ut tincidunt vehicula risus. Nulla"),
-  (300,"1998-07-10","0647576667","994-6410 Magnis Rd.", false, false,"sociis natoque penatibus et magnis"),
-  (301,"1982-05-20","0246856015","P.O. Street 719, 970 Imperdiet.", false, false,"erat eget ipsum. Suspendisse sagittis."),
-  (302,"1982-11-28","0382746845", "5111 Nonummy. St.", false, false,"odio semper cursus. Integer mollis."),
-  (303,"1977-08-28","0426439659", "214-9764 Arcu. Avenue", false, false,"sagittis felis. Donec tempor, est"),
-  (304,"1989-07-28","0710462294", "169-6992 Ligula St.", false, false,"metus vitae velit egestas lacinia."),
-  (400,"1979-05-01","0328243833", "4203 Proin Avenue", false, false,"velit justo nec ante. Maecenas"),
-  (401,"1943-10-20","0613357729", "4422 Ut, Avenue", false, false,"faucibus leo, in lobortis tellus"),
-  (500,"1994-07-04","0348483828", "895-5679 Faucibus St.", false, false,"vitae, erat. Vivamus nisi. Mauris");
+INSERT INTO PARTICIPANT (idP,ddnP,telP,adresseP,codePostalP, villeP, invite,emailEnvoye,remarques) VALUES
+  (1,"2002-03-21","0867392610", "5461 Phasellus Street", 45260, "Lorris", false, false, "dolor dapibus gravida. Aliquam tincidunt"),
+  (2,"1970-12-09","0563395678","P.O. Box 714, 970 Imperdiet Rd.", 45260, "Lorris", false, false,"ac risus. Morbi metus. Vivamus"),
+  (3,"1965-12-24","0861673417","2976 Mauris Avenue", 45260, "Lorris", false, false,"egestas lacinia. Sed congue, elit"),
+  (4,"1974-12-12","0668301399","Ap #970-7190 Ultrices St.", 45260, "Lorris", false, false,"fermentum risus, at fringilla purus"),
+  (5,"1939-05-28","0335257324","Ap #753-3031 Lorem Rd.", 45260, "Lorris", false, false,"eget, dictum placerat, augue. Sed"),
+  (100,"2003-12-18","0434772107","9959 Euismod Ave", 45260, "Lorris", false, false,"eu, eleifend nec, malesuada ut,"),
+  (101,"1988-07-25","0783665556","623-5236 Non St.", 45260, "Lorris", false, false,"nulla. Integer urna. Vivamus molestie"),
+  (102,"1943-10-10","0674873608","643-2164 Sed Avenue", 45260, "Lorris", false, false,"lorem, luctus ut, pellentesque eget,"),
+  (200,"1942-02-25","0950147618","Ap #353-5122 Neque. St.", 45260, "Lorris", false, false,"mattis. Cras eget nisi dictum"),
+  (201,"2004-12-25","0761573559","Ap #919-1437 Quis Ave", 45260, "Lorris", false, false,"sociis natoque penatibus et magnis"),
+  (202,"1972-03-30","0757524228","550-8069 Ac Rd.", 45260, "Lorris", false, false,"imperdiet nec, leo. Morbi neque"),
+  (203,"1969-10-31","0305721353","7570 Id, Road", 45260, "Lorris", false, false,"Ut tincidunt vehicula risus. Nulla"),
+  (300,"1998-07-10","0647576667","994-6410 Magnis Rd.", 45260, "Lorris", false, false,"sociis natoque penatibus et magnis"),
+  (301,"1982-05-20","0246856015","P.O. Street 719, 970 Imperdiet.", 45260, "Lorris", false, false,"erat eget ipsum. Suspendisse sagittis."),
+  (302,"1982-11-28","0382746845", "5111 Nonummy. St.", 45260, "Lorris", false, false,"odio semper cursus. Integer mollis."),
+  (303,"1977-08-28","0426439659", "214-9764 Arcu. Avenue", 45260, "Lorris", false, false,"sagittis felis. Donec tempor, est"),
+  (304,"1989-07-28","0710462294", "169-6992 Ligula St.",  45260, "Lorris",false, false,"metus vitae velit egestas lacinia."),
+  (400,"1979-05-01","0328243833", "4203 Proin Avenue", 45260, "Lorris", false, false,"velit justo nec ante. Maecenas"),
+  (401,"1943-10-20","0613357729", "4422 Ut, Avenue", 45260, "Lorris", false, false,"faucibus leo, in lobortis tellus"),
+  (500,"1994-07-04","0348483828", "895-5679 Faucibus St.", 45260, "Lorris", false, false,"vitae, erat. Vivamus nisi. Mauris");
 
 
 INSERT INTO EXPOSANT (idP,numStand) VALUES  (1,5),
