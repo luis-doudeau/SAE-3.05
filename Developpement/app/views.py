@@ -355,10 +355,16 @@ def page_secretaire_inscrire():
 
 @app.route('/delete_utilisateur',methods=['POST'])
 def delete_utilisateur():
-    print(request.form["id"])
     supprimer_utilisateur_role(sessionSQL, request.form["id"])
     return ""
 
+@app.route('/delete_consommateur',methods=['POST'])
+def delete_consommateur():
+    print("AHZIOAFHZOEIFJZE^PZOEA^F")
+    print(request.form["id"])
+    print("AHZIOAFHZOEIFJZE^PZOEA^F")
+    supprimer_consommateur(sessionSQL, request.form["id"])
+    return ""
 
 @app.route("/download")
 def download_file():

@@ -27,6 +27,7 @@ class Consommateur(Participant, Base):
 
     def to_dict_sans_ddn(self):
         return {
+            "idConsommateur": self.idP,
             "prenomP" : self.prenomP,
             "nomP" : self.nomP,
             "emailP" : self.emailP
