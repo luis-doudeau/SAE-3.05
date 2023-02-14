@@ -8,7 +8,7 @@ class Invite(Intervenant, Base):
     __tablename__ = "INVITE"
     idP = Column(Integer, ForeignKey('INTERVENANT.idP'), primary_key=True)
 
-    def __init__(self,idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, remarques="", invite = False, emailEnvoye = False) -> None:
+    def __init__(self, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP, remarques="", invite = False, emailEnvoye = False) -> None:
         self.idP = idP
         self.prenomP = prenomP
         self.nomP = nomP
@@ -17,6 +17,8 @@ class Invite(Intervenant, Base):
         self.ddnP = ddnP
         self.telP = telP
         self.adresseP = adresseP
+        self.codePostalP = codePostalP
+        self.villeP = villeP
         self.invite = invite
         self.emailEnvoye = emailEnvoye
         self.remarques = remarques

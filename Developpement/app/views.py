@@ -403,9 +403,11 @@ def page_secretaire_inscrire():
         nom = request.form["nom"]
         email = request.form["email"]
         adresse = request.form["adresse"]
+        codePostal = request.form["codePostal"]
+        ville = request.form["ville"]
         tel = request.form["tel"]
         ddn = request.form["ddn"]
-        ajoute_participant_role(sessionSQL, prenom, nom, email, adresse, tel, ddn, role)
+        ajoute_participant_role(sessionSQL, prenom, nom, email, adresse, codePostal, ville, tel, ddn,role)
         return render_template("secretaire.html")
     return render_template("inscrireSecretaire.html", liste_roles=TYPE_PARTICIPANT_FINALE)
 

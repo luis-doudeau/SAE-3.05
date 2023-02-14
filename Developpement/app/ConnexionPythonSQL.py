@@ -80,8 +80,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -352,8 +352,8 @@ def ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP):
         print("Erreur")
 
 
-def ajoute_exposant(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):
-    exposant = Exposant(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+def ajoute_exposant(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+    exposant = Exposant(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     sessionSQL.add(exposant)
     try:
         sessionSQL.commit()
@@ -361,8 +361,8 @@ def ajoute_exposant(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adr
         print(inst)
         sessionSQL.rollback()
 
-def ajoute_staff(sessionSQL,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):
-    staff = Staff(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+def ajoute_staff(sessionSQL,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+    staff = Staff(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     personne = sessionSQL.query(Participant).filter(Participant.idP == staff.idP).first()
     sessionSQL.add(staff)
     try:
@@ -385,11 +385,8 @@ def ajoute_intervenant(sessionSQL, idP):
         sessionSQL.rollback()
 
     
-def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP): # NE MARCHE PAS TODO
-    auteur = Auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
-    print("test")
-    print(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
-    print(auteur)
+def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+    auteur = Auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     sessionSQL.add(auteur)
     try:
         sessionSQL.commit()
@@ -397,8 +394,8 @@ def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adre
         print(inst)
         sessionSQL.rollback()
 
-def ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):
-    presse = Presse(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+def ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP):
+    presse = Presse(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP)
     sessionSQL.add(presse)
     try:
         sessionSQL.commit()
@@ -406,8 +403,8 @@ def ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adre
         print("Erreur")
         sessionSQL.rollback()
 
-def ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP):
-    invite = Invite(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+def ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+    invite = Invite(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP)
     sessionSQL.add(invite)
     try:
         sessionSQL.commit()
@@ -416,7 +413,7 @@ def ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adres
         sessionSQL.rollback()
         
 
-def ajoute_participant_role(sessionSQL, prenomP, nomP, emailP, adresseP, telP, ddnP, role):
+def ajoute_participant_role(sessionSQL, prenomP, nomP, emailP, adresseP, codePostal, ville, telP, ddnP, role):
     if role in ROLE:
         mdpP = generate_password()
         if role == "Secretaire" : 
@@ -424,19 +421,19 @@ def ajoute_participant_role(sessionSQL, prenomP, nomP, emailP, adresseP, telP, d
             ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP )
         elif role == "Exposant":
             idP = get_max_id_exposant(sessionSQL)+1
-            ajoute_exposant(sessionSQL, idP, prenomP, nomP, emailP, adresseP, ddnP, telP, role)
+            ajoute_exposant(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Staff":
             idP = get_max_id_staff(sessionSQL)+1
-            ajoute_staff(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+            ajoute_staff(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal, ville)
         elif role == "Auteur":
             idP = get_max_id_auteur(sessionSQL)+1
-            ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+            ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Presse":
             idP = get_max_id_presse(sessionSQL)+1
-            ajoute_presse(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+            ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Invite" :
             idP = get_max_id_invite(sessionSQL)+1
-            ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
+            ajoute_invite(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
     else:
         print("Le rôle n'est pas reconnu")
 

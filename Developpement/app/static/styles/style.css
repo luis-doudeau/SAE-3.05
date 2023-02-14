@@ -4,6 +4,8 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+ @import url(//db.onlinewebfonts.com/c/de69d33101b3661c4d5ac7a88ddb7b2e?family=Crique+Grotesk+Display);
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -478,6 +480,12 @@ pre {
   @media (min-width: 1200px) {
     .container {
       max-width: 1140px; } }
+
+  @media (max-width: 1467px) {
+    .baniere2023 {
+      display: none;
+    }
+  }
 
 .container-fluid {
   width: 100%;
@@ -8484,7 +8492,7 @@ h1, h2, h3, h4, h5,
         
 
         #imgbdboum, #maisonbd{
-          max-height: 80px !important;
+          max-height: 90px !important;
         }
         
         #bienvenue{
@@ -9013,5 +9021,9 @@ input.k-invalid
 
       .labelDetail{
         margin-top : 15px !important;
+      }
+
+      .bdboum{
+        font-family: "Crique Grotesk Display";
       }
         
