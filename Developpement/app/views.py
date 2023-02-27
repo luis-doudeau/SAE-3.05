@@ -19,12 +19,13 @@ from .Deplacer import Deplacer
 from .Assister import Assister
 from .Transport import Transport
 from .ConnexionPythonSQL import *
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import json
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
-
-from flask_mail import Mail, Message
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -464,12 +465,24 @@ def download_file():
     return response
 
 
-@app.route("/mail")
-def envoie_mail():
-    msg = Message('Hello', sender = 'bdboum45@gmail.com', recipients = ['azertytoqwerty2@gmail.com'])
-    msg.body = "This is the email body2"
-    mail.send(msg)
-    return "Sent"
+def envoie_mail(mail_destination):
+    message = Mail(
+    from_email="bdboum45@gmail.com",
+    to_emails=mail_destination,
+    subject='Invitation au festival bdBOUM ' + "2023", # a changé
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+    body = "test"
+    try:
+        print("l475")
+        sg = SendGridAPIClient('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')
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print("test")
+        print(response.headers)
+    except Exception as e:
+        print(e)
+
     
 
 #Ne pas effacer test
@@ -515,5 +528,9 @@ def traitement():
     for id_partcipant in ids:
         id_partcipant = int(id_partcipant)
         invite_un_participant(sessionSQL, id_partcipant)
+        email = get_mail(sessionSQL, id_partcipant)
+        print(email)
+        if email is not None:
+            envoie_mail(email)
     # Traiter les IDs récupérés
     return jsonify({"status": "success"})

@@ -244,6 +244,11 @@ def get_max_id_repas(sessionSQL):
     else:
         return max_num._data[0]
     
+def get_mail(sessionSQL, idParticipant):
+    email = (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idParticipant).first()).emailP
+    if email:
+        return email
+    return None
 
 def get_max_id_creneau(sessionSQL):        
     max_num = sessionSQL.query(func.max(Creneau.idCreneau)).first()
