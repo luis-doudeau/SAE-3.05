@@ -78,9 +78,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
@@ -387,9 +387,6 @@ def ajoute_intervenant(sessionSQL, idP):
     
 def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP): # NE MARCHE PAS TODO
     auteur = Auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
-    print("test")
-    print(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP)
-    print(auteur)
     sessionSQL.add(auteur)
     try:
         sessionSQL.commit()
@@ -554,9 +551,16 @@ def supprimer_invite(sessionSQL, id_invite):
     print("L'invité a été supprimé")
 
 def supprimer_repas_consommateur(sessionSQL, id_consommateur, id_repas):
-    print("VRAI IIII")
-    print(id_consommateur, id_repas)
     sessionSQL.query(Manger).filter(Manger.idP == id_consommateur).filter(Manger.idRepas == id_repas).delete()
+    sessionSQL.commit()
+
+def supprimer_nuit_dormeur(sessionSQL, id_dormeur, id_hotel, dateDeb, dateFin):
+    liste_date_deb = transforme_datetime(dateDeb)
+    liste_date_fin = transforme_datetime(dateFin)
+    dateDeb_datetime = datetime.date(int(liste_date_deb[2]), int(liste_date_deb[1]), int(liste_date_deb[0]))
+    dateFin_datetime = datetime.date(int(liste_date_fin[2]), int(liste_date_fin[1]), int(liste_date_fin[0]))
+    test = sessionSQL.query(Loger).filter(Loger.idP == id_dormeur).filter(Loger.idHotel == id_hotel).filter(func.date(Loger.dateDebut) == dateDeb_datetime).filter(func.date(Loger.dateFin) == dateFin_datetime).first()
+    sessionSQL.query(Loger).filter(Loger.idP == test.idP).filter(Loger.idHotel == test.idHotel).filter(Loger.dateDebut == test.dateDebut).filter(Loger.dateFin == test.dateFin).delete()
     sessionSQL.commit()
 
 def get_role(sessionSQL, id_utilisateur):
@@ -724,7 +728,6 @@ def get_presse(sessionSQL, id_presse):
 
 def get_secretaire(sessionSQL, id_secretaire):
     secretaire = sessionSQL.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
-    print("Ma secretaire ", secretaire)
     return secretaire
 
 def get_prenom(sessionSQL, id_participant):
@@ -797,7 +800,6 @@ def get_nom_hotel():
 def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
-        print(restaurant)
     if midi == "true":
         midi = True
     elif midi == "false":
@@ -838,7 +840,6 @@ def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm[1])
-    print(liste_consommateurs)
     liste_participants = get_liste_participant_idp_regime(sessionSQL, liste_consommateurs)
     return liste_participants
 
@@ -870,7 +871,6 @@ def affiche_navette(sessionSQL, date, navette, directionGare):
     elif directionGare != "Direction":
         transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Voyage.directionGare == directionGare).distinct().all()
     
-    print(transport)
     
     if date[0] != "Date":
         date = date(int(date[0]), int(date[1]), int(date[2])) # modifier ça et modifier le HTML
@@ -914,7 +914,6 @@ def get_dormeur(sessionSQL, date_jour, hotel):
         date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     else:
         date_jour = date_jour[0]
-        print(date_jour)
     liste_dormeur_date_hotel = []
     if hotel == "Hôtel":
         hotel = None
@@ -1071,10 +1070,7 @@ def est_intervenant(sessionSQL, idP):
     return intervenant is not None
             
 def est_secretaire(sessionSQL, idP):
-    print(str(idP) + " secrea")
     secretaire = get_secretaire(sessionSQL, idP)
-    print("l1042 ma secr" ,secretaire)
-    print(type(secretaire))
     return secretaire is not None
         
         
@@ -1134,7 +1130,10 @@ def get_utilisateur_email_mdp(sessionSQL, mail, mdp):
 
 @staticmethod
 def transforme_datetime(date):
-    date = date.split("-")
+    if "-" in date:
+        date = date.split("-")
+    elif "/" in date:
+        date = date.split("/")
     return date
 
 def ajoute_creneau_v1(session, dateDebut,dateFin):
@@ -1221,13 +1220,9 @@ def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dic
 @login_manager.user_loader
 def load_user(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
-    print(str(participant_id) + str("iddd"))
-    print("l1070")
     if est_secretaire(sessionSQL, participant_id):
-        print("ID ",participant_id, "est une secretaire")
         return get_secretaire(sessionSQL, participant_id)
     else:
-        print("l1186 id part ",participant_id)
         return get_participant(sessionSQL, participant_id)
 
 
