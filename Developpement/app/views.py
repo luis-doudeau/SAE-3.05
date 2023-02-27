@@ -18,6 +18,7 @@ from .Loger import Loger
 from .Deplacer import Deplacer
 from .Assister import Assister
 from .Transport import Transport
+from .Intervenant import Intervenant
 from .ConnexionPythonSQL import *
 import json
 import pandas as pd
@@ -41,14 +42,11 @@ def connexion():
     if current_user.is_authenticated:
         return redirect(url_for('logout'))
     if request.method == "POST":
-        print("post")
-        print(request.form)
         email = request.form["email"]
         mdp = request.form["mdp"]
         
         utilisateur = get_utilisateur_email_mdp(sessionSQL, email, mdp)
         if utilisateur is not None:
-            print('l51')
             if est_secretaire(sessionSQL, utilisateur.idP):
                 secretaire = get_secretaire(sessionSQL, utilisateur.idP)
                 login_user(secretaire)
@@ -67,8 +65,6 @@ def page_inscription():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
-        print("posteCOOOR")
-        print(request.form)
         modifier_participant(sessionSQL, current_user.idP,request.form["adresse"], request.form["codePostal"], request.form["ville"],request.form["ddn"],request.form["tel"])
         modifier_utilisateur(sessionSQL, current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
         if est_intervenant(sessionSQL, current_user.idP):
@@ -119,7 +115,6 @@ def formulaire_auteur_transport():
 
 @app.route('/insererFormulaireReservation/', methods = ["POST"])
 def inserer_formulaire_reservation():
-    print("formulaire_reserver")
     regime = request.form["regime"] # stocker en variable car réutilisé ensuite
     liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
@@ -193,8 +188,9 @@ def dataDormeurs():
     liste_dormeurs = []
     liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(sessionSQL, prenom, nom, hotel, dateDebut, dateFin)
     for intervenants in liste_dormeur_sans_info:
-        dormeurs_dico = get_intervenant(sessionSQL, intervenants.idP).to_dict_sans_ddn()
+        dormeurs_dico = get_intervenant(sessionSQL, intervenants.idP).to_dict()
         dormeurs_dico["hotel"] = get_hotel(sessionSQL, intervenants.idHotel)
+        dormeurs_dico["idHotel"] = intervenants.idHotel
         dormeurs_dico["dateDeb"] = intervenants.dateDebut.date()
         dormeurs_dico["dateFin"] = intervenants.dateFin.date()
         liste_dormeurs.append(dormeurs_dico)
@@ -453,6 +449,11 @@ def delete_utilisateur():
 @app.route('/delete_consommateur',methods=['POST'])
 def delete_consommateur():
     supprimer_repas_consommateur(sessionSQL, request.form["idConsommateur"], request.form["idRepas"])
+    return ""
+
+@app.route('/delete_dormeur',methods=['POST'])
+def delete_dormeur():
+    supprimer_nuit_dormeur(sessionSQL, request.form["idDormeur"], request.form["idHotel"], request.form["dateDeb"], request.form["dateFin"])
     return ""
 
 @app.route("/download")
