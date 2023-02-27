@@ -1,0 +1,11 @@
+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
+
+
+
+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
+
+echo "export SENDGRID_API_KEY='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'" > sendgrid.env
+
+echo "sendgrid.env" >> .gitignore
+
+source ./sendgrid.env

@@ -244,6 +244,11 @@ def get_max_id_repas(sessionSQL):
     else:
         return max_num._data[0]
     
+def get_mail(sessionSQL, idParticipant):
+    email = (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idParticipant).first()).emailP
+    if email:
+        return email
+    return None
 
 def get_max_id_creneau(sessionSQL):        
     max_num = sessionSQL.query(func.max(Creneau.idCreneau)).first()
@@ -287,7 +292,7 @@ def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role):
         participants = participants.filter(Participant.nomP == nomP)
     if(emailP != ""):
         participants = participants.filter(Participant.emailP == emailP)
-    if(invite != "true") : 
+    if(invite != ""):
         participants = participants.filter(Participant.invite == bool(invite))
     if(role!= ""):
         participants = filtrer_par_role(role, participants)
@@ -1234,6 +1239,10 @@ def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dic
             idRepas = ajoute_repas(sessionSQL, False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(sessionSQL, idP, idRepas)
 
+def invite_un_participant(sessionSQL, idP):
+    sessionSQL.query(Participant).filter(Participant.idP == idP).update(
+        {Participant.invite : True})
+    sessionSQL.commit()
 
 @login_manager.user_loader
 def load_user(participant_id):
