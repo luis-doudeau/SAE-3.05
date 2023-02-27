@@ -14,6 +14,7 @@ pip install flask-login
 pip install xlsxwriter
 pip install pandas
 pip install Flask-Mail
+pip install pdfkit
 
 ## Link GitHub
 

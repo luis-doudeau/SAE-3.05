@@ -2,7 +2,7 @@ import json
 from .app import app, mail
 
 from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify, make_response
 from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
 
@@ -25,6 +25,8 @@ from io import BytesIO
 import xlsxwriter
 
 from flask_mail import Mail, Message
+
+import pdfkit
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -477,3 +479,9 @@ def UpdateParticipant():
     save_pw = modifier_password(sessionSQL, id, password)
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
+
+
+
+@app.route("/feuille_route/")
+def feuille_route():
+    return render_template("feuille_route.html")
