@@ -169,6 +169,7 @@ def dataConsommateurs():
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
         consommateur_dico["date"] = get_date(sessionSQL, consommateur.idRepas)
         consommateur_dico["creneau"] = get_creneau(sessionSQL, consommateur.idRepas)
+        consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
 
@@ -360,10 +361,7 @@ def delete_utilisateur():
 
 @app.route('/delete_consommateur',methods=['POST'])
 def delete_consommateur():
-    print("AHZIOAFHZOEIFJZE^PZOEA^F")
-    print(request.form["id"])
-    print("AHZIOAFHZOEIFJZE^PZOEA^F")
-    supprimer_consommateur(sessionSQL, request.form["id"])
+    supprimer_repas_consommateur(sessionSQL, request.form["idConsommateur"], request.form["idRepas"])
     return ""
 
 @app.route("/download")
