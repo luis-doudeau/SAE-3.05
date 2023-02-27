@@ -285,6 +285,26 @@ def dataTransport():
     return {'data': liste_transport}
 
 
+@app.route('/api/dataInvitation', methods = ["POST"])
+@login_required
+def dataInvitation():
+    if not est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for('logout'))
+    liste_participants = []
+    #prenom = request.form["prenom"]
+    #nom = request.form["nom"]
+    #adresseEmail = request.form["adresseEmail"]
+    #invite = request.form["invite"]
+    #role = request.form["role"]
+    invites = get_info_all_invite(sessionSQL, "", "", "", "", "")
+    for inv in invites:
+        participant_dico = inv.to_dict()
+        participant_dico["role"] = get_role(sessionSQL, inv.idP)
+        participant_dico["invite"] = inv.invite
+        liste_participants.append(participant_dico)
+    return {'data': liste_participants}
+
+
 @app.route('/api/dataInterventions')
 @login_required
 def dataIntervenir():
@@ -412,6 +432,17 @@ def page_secretaire_inscrire():
 
 
 
+@app.route('/inviteSecretaire/', methods = ["POST", "GET"])
+@login_required
+def invite_secretaire():
+    if not est_secretaire(sessionSQL, current_user.idP):
+        return redirect(url_for('logout'))   
+    if request.method == "POST":
+        liste_personne = affiche_participant_trier(sessionSQL, request.form["trier"])
+        return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
+    return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT)
+
+
 @app.route('/delete_utilisateur',methods=['POST'])
 def delete_utilisateur():
     supprimer_utilisateur_role(sessionSQL, request.form["id"])
@@ -454,7 +485,6 @@ def before_request():
 
 @app.route('/participantSecretaire/<id>',methods=['POST',"GET"])
 def participant_detail(id):
-    
     return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
 
 

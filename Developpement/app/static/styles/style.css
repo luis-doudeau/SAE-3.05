@@ -9014,4 +9014,8 @@ input.k-invalid
       .labelDetail{
         margin-top : 15px !important;
       }
+
+      .row_selected{
+        background-color: #002752 ;
+      }
         
