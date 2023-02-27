@@ -244,6 +244,7 @@ def dataConsommateurs():
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
         consommateur_dico["date"] = get_date(sessionSQL, consommateur.idRepas)
         consommateur_dico["creneau"] = get_creneau(sessionSQL, consommateur.idRepas)
+        consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
 
@@ -413,10 +414,13 @@ def page_secretaire_inscrire():
 
 @app.route('/delete_utilisateur',methods=['POST'])
 def delete_utilisateur():
-    print(request.form["id"])
     supprimer_utilisateur_role(sessionSQL, request.form["id"])
     return ""
 
+@app.route('/delete_consommateur',methods=['POST'])
+def delete_consommateur():
+    supprimer_repas_consommateur(sessionSQL, request.form["idConsommateur"], request.form["idRepas"])
+    return ""
 
 @app.route("/download")
 def download_file():

@@ -553,6 +553,11 @@ def supprimer_invite(sessionSQL, id_invite):
     sessionSQL.commit()        
     print("L'invité a été supprimé")
 
+def supprimer_repas_consommateur(sessionSQL, id_consommateur, id_repas):
+    print("VRAI IIII")
+    print(id_consommateur, id_repas)
+    sessionSQL.query(Manger).filter(Manger.idP == id_consommateur).filter(Manger.idRepas == id_repas).delete()
+    sessionSQL.commit()
 
 def get_role(sessionSQL, id_utilisateur):
     utilisateur_existe = get_utilisateur(sessionSQL, id_utilisateur)
