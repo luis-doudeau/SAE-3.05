@@ -279,7 +279,7 @@ def get_info_all_participants(sessionSQL, prenomP, nomP, emailP, ddnP, role):
 
 
 
-def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role) : 
+def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role): 
     participants = sessionSQL.query(Participant)
     if(prenomP != ""):
         participants = participants.filter(Participant.prenomP == prenomP)

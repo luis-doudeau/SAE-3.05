@@ -288,17 +288,18 @@ def dataTransport():
 @login_required
 def dataInvitation():
     if not est_secretaire(sessionSQL, current_user.idP):
-        return redirect(url_for('logout')) 
+        return redirect(url_for('logout'))
     liste_participants = []
-    prenom = request.form["prenom"]
-    nom = request.form["nom"]
-    adresseEmail = request.form["adresseEmail"]
-    invite = request.form["invite"]
-    role = request.form["role"]
-    invites = get_info_all_invite(sessionSQL, prenom, nom, adresseEmail, invite, role)
+    #prenom = request.form["prenom"]
+    #nom = request.form["nom"]
+    #adresseEmail = request.form["adresseEmail"]
+    #invite = request.form["invite"]
+    #role = request.form["role"]
+    invites = get_info_all_invite(sessionSQL, "", "", "", "", "")
     for inv in invites:
         participant_dico = inv.to_dict()
         participant_dico["role"] = get_role(sessionSQL, inv.idP)
+        participant_dico["invite"] = inv.invite
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
 
