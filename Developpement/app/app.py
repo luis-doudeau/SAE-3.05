@@ -20,3 +20,4 @@ app.config['MAIL_PASSWORD'] = 'otpvlohopdtlvrjz'
 #app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
+#llmbdboum1234567

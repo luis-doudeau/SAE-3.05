@@ -507,3 +507,13 @@ def UpdateParticipant():
     save_pw = modifier_password(sessionSQL, id, password)
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
+
+
+@app.route('/invite_les_participants', methods=['POST'])
+def traitement():
+    ids = request.form.getlist('ids[]')
+    for id_partcipant in ids:
+        id_partcipant = int(id_partcipant)
+        invite_un_participant(sessionSQL, id_partcipant)
+    # Traiter les IDs récupérés
+    return jsonify({"status": "success"})
