@@ -277,6 +277,24 @@ def get_info_all_participants(sessionSQL, prenomP, nomP, emailP, ddnP, role):
         participants = filtrer_par_role(role, participants)
     return participants.all()
 
+
+
+def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role) : 
+    participants = sessionSQL.query(Participant)
+    if(prenomP != ""):
+        participants = participants.filter(Participant.prenomP == prenomP)
+    if(nomP != ""):
+        participants = participants.filter(Participant.nomP == nomP)
+    if(emailP != ""):
+        participants = participants.filter(Participant.emailP == emailP)
+    if(invite != "true") : 
+        participants = participants.filter(Participant.invite == bool(invite))
+    if(role!= ""):
+        participants = filtrer_par_role(role, participants)
+    return participants.all()
+ 
+
+
 def get_tout_dormeurs_avec_filtre(sessionSQL, prenomP, nomP, nomHotel, dateArrive, dateDeparts):
     participants = sessionSQL.query(Loger).join(Intervenant, Loger.idP == Intervenant.idP).join(Hotel, Loger.idHotel == Hotel.idHotel)
     if(prenomP != ""):
