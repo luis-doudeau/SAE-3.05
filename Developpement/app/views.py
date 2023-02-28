@@ -161,8 +161,8 @@ def secretaire_consommateur():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_consommateur = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
-    return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
+        return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_consommateur)
+    return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant())
     
 
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
@@ -206,11 +206,11 @@ def data_nom_hotel():
 
 @app.route("/api/data/nomRestaurant")
 def data_nom_restaurant():
-    return jsonify(get_nom_restaurant())
+    return jsonify(get_liste_nom_restaurant())
 
-@app.route("/api/data/creneauRepas")
+@app.route("/api/data/creneauRepas", methods = ["GET"])
 def data_creneauRepas():
-    return jsonify(get_creneau_repas())
+    return jsonify(get_liste_creneau_repas())
 
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
@@ -406,8 +406,8 @@ def page_secretaire_navette():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
-    return render_template('secretaireNavette.html', nomsRestau = get_nom_restaurant())
+        return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_navette)
+    return render_template('secretaireNavette.html', nomsRestau = get_liste_nom_restaurant())
 
 
 
@@ -533,11 +533,12 @@ def before_request():
 def participant_detail(id):
     return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
 
-@app.route('/consommateurSecretaire/<id>',methods=['POST',"GET"])
-def consommateur_detail(id, idR):
+@app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET"])
+def consommateur_detail(id, idRepas):
+    print(id, idRepas)
     return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
-    regimes = get_regime(sessionSQL, id), nomRestaurant = get_nom_restaurant(sessionSQL, idR),
-    creneauRepas = get_creneau_repas(sessionSQL, idR), dateRepas = get_date_repas(sessionSQL, idR))
+    regimes = get_regime(sessionSQL, id), nomRestaurant = get_restaurant(sessionSQL, idRepas),
+    creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas))
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():

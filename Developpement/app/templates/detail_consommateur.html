@@ -94,7 +94,7 @@
         $("#idPersonne").kendoTextBox({
             label: "ID",
             size: "large",
-            value: '{{participant.idP}}',
+            value: '{{consommateur.idP}}',
             enable: false,
         });
         
@@ -114,11 +114,21 @@
             size: "large",
             value: '{{regimes}}',
         });
-        $("#Restaurant").kendoTextBox({
-            label: "Nom restaurant",
-            size: "large",
-            value: '{{nomRestaurant}}',
-        });
+        $.ajax({
+            url: "/api/data/nomRestaurant",
+            type:'get',
+            dataType:'json',
+            async: false,
+            success:function (response) {  
+              var mesRestaurants = [];
+              for (var i = 0; i < response.length; i++) {
+                mesRestaurants.push({ text: response[i], value: response[i] });
+              }
+              $("#Restaurant").kendoComboBox({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesRestaurants , label: "Restaurant"
+              });
+            },
+          }),
 
         $("#DateRepas").kendoDatePicker({
             label: "Date repas",
@@ -127,11 +137,21 @@
             culture:"fr-FR",
         });
 
-        $("#CreneauRepas").kendoTextBox({
-            label: "Créneau repas",
-            size: "large",
-            value: '{{creneauRepas}}',
-        });
+        $.ajax({
+            url: "/api/data/creneauRepas",
+            type:'get',
+            dataType:'json',
+            async: false,
+            success:function (response) {  
+              var mesCreneaux = [];
+              for (var i = 0; i < response.length; i++) {
+                mesCreneaux.push({ text: response[i], value: response[i] });
+              }
+              $("#CreneauRepas").kendoComboBox({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesCreneaux, label: "Créneau"
+              });
+            },
+          });
        
         $("#save").on("click",function(){
             $("#loader-background").show()

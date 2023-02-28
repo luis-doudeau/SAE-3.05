@@ -882,11 +882,21 @@ def affiche_participant_trier_consommateur(sessionSQL):
     return participant
 
 
-def get_nom_restaurant():
+
+def get_liste_nom_restaurant():
     liste_nom_resteau = []
     for nom in sessionSQL.query(Restaurant):
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
+
+def get_liste_creneau_repas():
+    liste_creneau = []
+    for creneau in sessionSQL.query(CreneauRepas):
+        debut = creneau.dateDebut
+        fin = creneau.dateFin
+        format = format_creneau(debut, fin)
+        liste_creneau.append(format)
+    return liste_creneau
 
 def get_nom_hotel():
     liste_nom_hotel = []
