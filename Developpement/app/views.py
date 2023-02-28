@@ -176,16 +176,15 @@ def dormeur_secretaire():
     return render_template('dormeurSecretaire.html')
 
 
-@app.route('/api/dataDormeurs', methods = ["POST", "GET"])
+@app.route('/api/dataDormeurs', methods = ["POST"])
 def dataDormeurs():
     if not  est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
-    if request.method == "POST":
-        prenom = request.form["prenom"]
-        nom = request.form["nom"]
-        hotel = request.form["hotel"]
-        dateDebut = request.form["dateDebut"]
-        dateFin = request.form["dateFin"]        
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    hotel = request.form["hotel"]
+    dateDebut = request.form["dateDebut"]
+    dateFin = request.form["dateFin"]
 
     liste_dormeurs = []
     liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(sessionSQL, prenom, nom, hotel, dateDebut, dateFin)
@@ -247,20 +246,32 @@ def dataConsommateurs():
     return {'data': liste_consommateur}
 
 
-@app.route('/api/dataNavettes')
+@app.route('/api/dataNavettes', methods = ["POST", "GET"])
 @login_required
 def dataNavettes():
     if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout'))
+    id_voyage = request.form["idVoyage"]
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    direction = request.form["depart"]
+    id_navette = request.form["idNavette"]
+    dateDepart = request.form["dateDepart"]
+    liste_voyages_sans_info = get_tout_navette_avec_filtre(sessionSQL, id_voyage, direction, id_navette, dateDepart)   
+    print("voyages ",liste_voyages_sans_info)
     liste_voyages = []
-    for voyages in sessionSQL.query(Mobiliser).all():
+    for voyages in liste_voyages_sans_info:
         voyages_dico = voyages.to_dict()
+        print(voyages_dico)
         voyages_dico["heureDeb"] = get_deb_voyage(sessionSQL, voyages.idVoy)
         voyages_dico["depart"] = get_lieu_depart_voyage(sessionSQL, voyages.idVoy)
-        for elements in sessionSQL.query(Transporter).filter(Transporter.idVoy == voyages.idVoy).all():
-            voyages_dico["prenom"] = get_prenom(sessionSQL, elements.idP)
-            voyages_dico["nom"] = get_nom(sessionSQL, elements.idP)
+        intervenants_navette = get_intervenant_dans_navette_avec_filtre(sessionSQL, voyages.idVoy, prenom, nom)
+        for intervenant in intervenants_navette:
+            voyages_dico["prenom"] = get_prenom(sessionSQL, intervenant.idP)
+            voyages_dico["nom"] = get_nom(sessionSQL, intervenant.idP)
             liste_voyages.append(voyages_dico)
+    print("voyages2 ",liste_voyages)
+    session["data"] = {'data': liste_voyages}
     return {'data': liste_voyages}
 
 

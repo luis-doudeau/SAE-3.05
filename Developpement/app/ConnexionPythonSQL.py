@@ -84,6 +84,10 @@ connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DB
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+#connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
+
+
 
 # if __name__ == "__main__":
 #     login=input("login MySQL ")
@@ -350,6 +354,39 @@ def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, c
         consommateurs = consommateurs.filter(extract('hour', Creneau.dateFin) == heure_creneau_fin).filter(extract('minute', Creneau.dateFin) == minute_creneau_fin)
 
     return consommateurs.all()
+def get_tout_navette_avec_filtre(sessionSQL,id_voyage, direction, id_navette, date_depart):
+    print(sessionSQL,id_voyage, direction, id_navette, date_depart)
+    participants = sessionSQL.query(Mobiliser).join(
+        Voyage, Mobiliser.idVoy == Voyage.idVoy)
+    if(id_voyage != ""):
+        participants = participants.filter(Mobiliser.idVoy == int(id_voyage))
+    if(direction != ""):
+        if(direction == "Gare"):
+            participants = participants.filter(Voyage.directionGare == True)
+        else:
+            participants = participants.filter(Voyage.directionGare == False)
+    if(id_navette != ""):
+        participants = participants.filter(Mobiliser.idNavette == int(id_navette))
+    if(date_depart != ""):
+        jour = date_depart.split("/")[0]
+        mois = date_depart.split("/")[1]
+        annee = date_depart.split("/")[2]
+        date_datetime = datetime(int(annee),int(mois),int(jour), 0,0,0)
+        participants = participants.filter(func.date(Voyage.heureDebVoy) == date_datetime)
+    return participants.all()
+
+
+def get_intervenant_dans_navette_avec_filtre(sessionSQL,id_voyage, prenom_p, nom_p):
+    print(sessionSQL,id_voyage, prenom_p, nom_p)
+    intervenants = sessionSQL.query(Transporter).join(
+                Intervenant, Intervenant.idP == Transporter.idP).filter(
+                    Transporter.idVoy == id_voyage)  
+    if(nom_p != ""):
+        intervenants = intervenants.filter(Intervenant.nomP == nom_p)
+    if(prenom_p != ""):
+        intervenants = intervenants.filter(Intervenant.prenomP == prenom_p)
+    
+    return intervenants.all()
 
 def filtrer_par_role(role, participants):
     if role == "Secretaire":
