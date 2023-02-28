@@ -204,6 +204,10 @@ def dataDormeurs():
 def data_nom_hotel():
     return jsonify(get_nom_hotel())
 
+@app.route("/api/data/nomRestaurant")
+def data_nom_restaurant():
+    return jsonify(get_nom_restaurant())
+
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
 def dataParticipant():
