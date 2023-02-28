@@ -1,7 +1,6 @@
 SET foreign_key_checks = 0;
 drop table if exists INTERVENIR;
 drop table if exists TRAVAILLER;
-drop table if exists MOBILISER; 
 drop table if exists DEPLACER;
 drop table if exists LOGER;
 drop table if exists TRANSPORTER;

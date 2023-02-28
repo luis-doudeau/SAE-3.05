@@ -85,16 +85,11 @@ CREATE TABLE VOYAGE (
   heureDebVoy datetime,
   dureeVoy time,
   directionGare boolean,
-  PRIMARY KEY (idVoy)
+  idNavette int,
+  PRIMARY KEY (idVoy),
+  FOREIGN KEY (idNavette) REFERENCES NAVETTE(idNavette)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
-CREATE TABLE MOBILISER(
-  idVoy int,
-  idNavette int,
-  PRIMARY KEY (idVoy, idNavette),
-  FOREIGN KEY (idVoy) REFERENCES VOYAGE(idVoy),
-  FOREIGN KEY (idNavette) REFERENCES NAVETTE(idNavette)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE EXPOSANT (
   idP int,

@@ -46,7 +46,6 @@ from .Navette import Navette
 from .Transporter import Transporter
 from .Travailler import Travailler
 from .Voyage import Voyage
-from .Mobiliser import Mobiliser
 from .Transport import Transport
 from .Utilisateur import Utilisateur
 
@@ -78,9 +77,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
@@ -161,8 +160,7 @@ def get_date(sessionSQL, idRepas):
 
 
 def get_deb_voyage(sessionSQL, idVoyage):
-    row = sessionSQL.query(Voyage.heureDebVoy).filter(Voyage.idVoy == idVoyage).first()
-    return row[0]
+    return sessionSQL.query(Voyage).filter(Voyage.idVoy == idVoyage).first().heureDebVoy
 
 def get_lieu_depart_voyage(sessionSQL, idVoyage):
     if (sessionSQL.query(Voyage).filter(Voyage.idVoy == idVoyage).first()).directionGare:
@@ -353,33 +351,36 @@ def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, c
         consommateurs = consommateurs.filter(extract('hour', Creneau.dateFin) == heure_creneau_fin).filter(extract('minute', Creneau.dateFin) == minute_creneau_fin)
 
     return consommateurs.all()
-def get_tout_navette_avec_filtre(sessionSQL,id_voyage, direction, id_navette, date_depart):
+
+def get_tout_voyage_avec_filtre(sessionSQL,id_voyage, direction, id_navette, date_depart):
     print(sessionSQL,id_voyage, direction, id_navette, date_depart)
-    participants = sessionSQL.query(Mobiliser).join(
-        Voyage, Mobiliser.idVoy == Voyage.idVoy)
+    voyages = sessionSQL.query(Voyage)
     if(id_voyage != ""):
-        participants = participants.filter(Mobiliser.idVoy == int(id_voyage))
+        voyages = voyages.filter(Voyage.idVoy == int(id_voyage))
     if(direction != ""):
         if(direction == "Gare"):
-            participants = participants.filter(Voyage.directionGare == True)
+            voyages = voyages.filter(Voyage.directionGare == True)
         else:
-            participants = participants.filter(Voyage.directionGare == False)
+            voyages = voyages.filter(Voyage.directionGare == False)
     if(id_navette != ""):
-        participants = participants.filter(Mobiliser.idNavette == int(id_navette))
+        voyages = voyages.filter(Voyage.idNavette == int(id_navette))
     if(date_depart != ""):
         jour = date_depart.split("/")[0]
         mois = date_depart.split("/")[1]
         annee = date_depart.split("/")[2]
         date_datetime = datetime(int(annee),int(mois),int(jour), 0,0,0)
-        participants = participants.filter(func.date(Voyage.heureDebVoy) == date_datetime)
-    return participants.all()
+        voyages = voyages.filter(func.date(Voyage.heureDebVoy) == date_datetime)
+    return voyages.all()
 
 
-def get_intervenant_dans_navette_avec_filtre(sessionSQL,id_voyage, prenom_p, nom_p):
+def get_intervenant_dans_voyage_avec_filtre(sessionSQL,id_voyage, prenom_p, nom_p):
     print(sessionSQL,id_voyage, prenom_p, nom_p)
-    intervenants = sessionSQL.query(Transporter).join(
-                Intervenant, Intervenant.idP == Transporter.idP).filter(
-                    Transporter.idVoy == id_voyage)  
+    #intervenants = sessionSQL.query(Transporter).filter(
+    #                Transporter.idVoy == id_voyage).join(
+    #            Intervenant, Intervenant.idP == Transporter.idP)
+    intervenants = sessionSQL.query(Intervenant).join(
+                Transporter, Intervenant.idP == Transporter.idP).filter(
+                Transporter.idVoy == id_voyage)
     if(nom_p != ""):
         intervenants = intervenants.filter(Intervenant.nomP == nom_p)
     if(prenom_p != ""):
@@ -533,7 +534,6 @@ def supprimer_personne_transporter(sessionSQL, idP, idVoyage):
     if len(liste_personne) == 1:
         sessionSQL.query(Transporter).filter(Transporter.idP == idP).filter(Transporter.idVoy == idVoyage).delete()
         sessionSQL.query(Voyage).filter(Voyage.idVoy == idVoyage).delete()
-        sessionSQL.query(Mobiliser).filter(Mobiliser.idVoy == idVoyage).delete()
         sessionSQL.commit()
         print("Le transport a été supprimé car cette personne était seul dans ce voyage")
     else:
@@ -910,6 +910,8 @@ def get_liste_participant_idp_regime(sessionSQL, liste_id):
             liste_participants.append((une_personne, get_regime(sessionSQL, une_personne.idP)))
     return liste_participants
 
+#Inutile ???
+""" 
 def affiche_navette(sessionSQL, date, navette, directionGare):
     if navette != "Navette" :
         navette = int(navette)
@@ -945,7 +947,7 @@ def affiche_navette(sessionSQL, date, navette, directionGare):
             liste_transport.append(tran[3])
 
     return liste_transport
-
+"""
 # affiche_navette(sessionSQL, "Date", "Navette", "Direction")
          
 

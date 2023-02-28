@@ -7,7 +7,6 @@ from flask import Flask, render_template, request, redirect, url_for, send_file,
 from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
 
-from .Mobiliser import Mobiliser
 from .Navette import Navette
 from .Transporter import Transporter
 from .Consommateur import Consommateur
@@ -261,20 +260,15 @@ def dataNavettes():
     direction = request.form["depart"]
     id_navette = request.form["idNavette"]
     dateDepart = request.form["dateDepart"]
-    liste_voyages_sans_info = get_tout_navette_avec_filtre(sessionSQL, id_voyage, direction, id_navette, dateDepart)   
-    print("voyages ",liste_voyages_sans_info)
+    liste_voyages_sans_info = get_tout_voyage_avec_filtre(sessionSQL, id_voyage, direction, id_navette, dateDepart)   
     liste_voyages = []
     for voyages in liste_voyages_sans_info:
-        voyages_dico = voyages.to_dict()
-        print(voyages_dico)
-        voyages_dico["heureDeb"] = get_deb_voyage(sessionSQL, voyages.idVoy)
-        voyages_dico["depart"] = get_lieu_depart_voyage(sessionSQL, voyages.idVoy)
-        intervenants_navette = get_intervenant_dans_navette_avec_filtre(sessionSQL, voyages.idVoy, prenom, nom)
+        intervenants_navette = get_intervenant_dans_voyage_avec_filtre(sessionSQL, voyages.idVoy, prenom, nom)
         for intervenant in intervenants_navette:
-            voyages_dico["prenom"] = get_prenom(sessionSQL, intervenant.idP)
-            voyages_dico["nom"] = get_nom(sessionSQL, intervenant.idP)
+            voyages_dico = voyages.to_dict()
+            voyages_dico["prenom"] = intervenant.prenomP
+            voyages_dico["nom"] = intervenant.nomP
             liste_voyages.append(voyages_dico)
-    print("voyages2 ",liste_voyages)
     session["data"] = {'data': liste_voyages}
     return {'data': liste_voyages}
 
