@@ -208,6 +208,10 @@ def data_nom_hotel():
 def data_nom_restaurant():
     return jsonify(get_nom_restaurant())
 
+@app.route("/api/data/creneauRepas")
+def data_creneauRepas():
+    return jsonify(get_creneau_repas())
+
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
 def dataParticipant():
@@ -244,7 +248,7 @@ def dataConsommateurs():
         consommateur_dico["regime"] = get_regime(sessionSQL, consommateur.idP)
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
         consommateur_dico["date"] = get_date_repas(sessionSQL, consommateur.idRepas)
-        consommateur_dico["creneau"] = get_creneau(sessionSQL, consommateur.idRepas)
+        consommateur_dico["creneau"] = get_creneau_repas(sessionSQL, consommateur.idRepas)
         consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
@@ -533,7 +537,7 @@ def participant_detail(id):
 def consommateur_detail(id, idR):
     return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
     regimes = get_regime(sessionSQL, id), nomRestaurant = get_nom_restaurant(sessionSQL, idR),
-    creneauRepas = get_creneau(sessionSQL, idR), dateRepas = get_date_repas(sessionSQL, idR))
+    creneauRepas = get_creneau_repas(sessionSQL, idR), dateRepas = get_date_repas(sessionSQL, idR))
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():

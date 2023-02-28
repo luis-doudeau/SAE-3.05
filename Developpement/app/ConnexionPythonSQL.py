@@ -147,7 +147,7 @@ def get_restaurant(sessionSQL, idRepas):
     return (sessionSQL.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
 
 
-def get_creneau(sessionSQL, idRepas):
+def get_creneau_repas(sessionSQL, idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateDebut
     fin = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateFin
