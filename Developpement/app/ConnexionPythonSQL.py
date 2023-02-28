@@ -145,6 +145,7 @@ def get_restaurant(sessionSQL, idRepas):
     idRestaurant = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idRest
     return (sessionSQL.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
 
+
 def get_creneau(sessionSQL, idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (sessionSQL.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
@@ -154,7 +155,7 @@ def get_creneau(sessionSQL, idRepas):
 def get_intervenant(sessionSQL, idP):
     return sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
 
-def get_date(sessionSQL, idRepas):
+def get_date_repas(sessionSQL, idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (sessionSQL.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
     return datetime_to_dateFrancais(debut)
@@ -678,6 +679,38 @@ def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, t
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.adresseP : adresseP, Participant.codePostalP : codePostalP, Participant.villeP : villeP,
         Participant.ddnP : ddnP, Participant.telP : telP})
+    try : 
+        sessionSQL.commit()
+        print("Le participant a bien été modifié")
+        return True
+    except : 
+        sessionSQL.rollback()
+        print("erreur lors de la modif du participant")
+        return False
+
+def verif_regime_existe(sessionSQL, nomRegime):
+    regime = sessionSQL.query(Regime).filter(Regime.nomRegime == nomRegime)
+    if regime is not None:
+        return regime.idRegime
+    else:
+        ajoute_regime(sessionSQL, nomRegime)
+
+def modifier_consommateur(sessionSQL, idP, nomP, prenomP, regimePersonne):
+    id_regime = verif_regime_existe(sessionSQL, regimePersonne)
+
+    sessionSQL.query(Consommateur).join(Avoir, Consommateur.idP == Avoir.idP).filter(Consommateur.idP == idP).update(
+        {Consommateur.nomP : nomP, Consommateur.prenomP : prenomP, Avoir.idRegime : id_regime})
+    try : 
+        sessionSQL.commit()
+        print("Le participant a bien été modifié")
+        return True
+    except : 
+        sessionSQL.rollback()
+        print("erreur lors de la modif du participant")
+        return False
+
+def modifier_repas(sessionSQL, idP, nomRestaurant, dateRepas, creneauRepas):
+    id_manger = verif_repas_existe(sessionSQL, )
     try : 
         sessionSQL.commit()
         print("Le participant a bien été modifié")

@@ -243,7 +243,7 @@ def dataConsommateurs():
         consommateur_dico = get_consommateur(sessionSQL, consommateur.idP).to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(sessionSQL, consommateur.idP)
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
-        consommateur_dico["date"] = get_date(sessionSQL, consommateur.idRepas)
+        consommateur_dico["date"] = get_date_repas(sessionSQL, consommateur.idRepas)
         consommateur_dico["creneau"] = get_creneau(sessionSQL, consommateur.idRepas)
         consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
@@ -529,6 +529,11 @@ def before_request():
 def participant_detail(id):
     return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
 
+@app.route('/consommateurSecretaire/<id>',methods=['POST',"GET"])
+def consommateur_detail(id, idR):
+    return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
+    regimes = get_regime(sessionSQL, id), nomRestaurant = get_nom_restaurant(sessionSQL, idR),
+    creneauRepas = get_creneau(sessionSQL, idR), dateRepas = get_date_repas(sessionSQL, idR))
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():
@@ -550,6 +555,20 @@ def UpdateParticipant():
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
 
+@app.route('/Consommateur/Update',methods=['POST'])
+def UpdateConsommateur():
+    id = request.form["id"]
+    prenom = request.form["prenom"]
+    nom = request.form["nom"]
+    dateRepas = request.form["dateRepas"]
+    creneauRepas = request.form["creneauRepas"]
+    restaurant = request.form["restaurant"]
+    regimePersonne = request.form["regimePersonne"]
+    save_consommateur = modifier_consommateur(sessionSQL, id, nom, prenom, regimePersonne, restaurant, dateRepas, creneauRepas)
+
+
+    res = save_consommateur
+    return "true" if res == True else res
 
 @app.route('/invite_les_participants', methods=['POST'])
 def traitement():
