@@ -9036,14 +9036,19 @@ input.k-invalid
         font-family: "Crique Grotesk Display";
       }
 
-      #btn-invite{
-        display : flex;
+      #bouton-page-invite
+      {
+        display: flex;
+        justify-content: space-between;
         margin-left : auto;
         margin-right : auto;
         justify-content: center;
-        width: 120px;
         height: 45px;
         font-size:130%;
         margin-top : 2%;
         margin-bottom : 1%;
+      }
+
+      #btn-invite{
+        margin-right: 10%;
       }

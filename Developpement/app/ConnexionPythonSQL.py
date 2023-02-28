@@ -294,7 +294,13 @@ def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role):
     if(emailP != ""):
         participants = participants.filter(Participant.emailP == emailP)
     if(invite != ""):
-        participants = participants.filter(Participant.invite == bool(invite))
+        print(invite)
+        print(bool(invite))
+        print(type(bool(invite)))
+        if invite == "True":
+            participants = participants.filter(Participant.invite == True)
+        else:
+            participants = participants.filter(Participant.invite == False)
     if(role!= ""):
         participants = filtrer_par_role(role, participants)
     return participants.all()
