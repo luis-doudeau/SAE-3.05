@@ -1,4 +1,4 @@
-from sqlalchemy import DATETIME, BOOLEAN
+from sqlalchemy import DATETIME, BOOLEAN, TIME
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -8,7 +8,7 @@ class Voyage(Base):
     __tablename__ = "VOYAGE"
     idVoy = Column(Integer, primary_key = True)
     heureDebVoy = Column(DATETIME)
-    DureeVoy = Column(DATETIME)
+    DureeVoy = Column(TIME)
     directionGare = Column(BOOLEAN)
     idNavette = Column(Integer)
 

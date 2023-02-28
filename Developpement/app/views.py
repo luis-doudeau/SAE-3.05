@@ -558,3 +558,8 @@ def traitement():
     return jsonify({"status": "success"})
 
 
+
+@app.route('/testt', methods=['GET'])
+def test():
+    affecter_intervenant_voyage(sessionSQL, 300)
+    return "OK"

@@ -265,6 +265,12 @@ def get_max_id_restaurant(sessionSQL):
     else:
         return max_num._data[0]
     
+def get_max_id_voyage(sessionSQL):
+    max_num = sessionSQL.query(func.max(Voyage.idVoy)).first()
+    if (max_num[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
 def get_info_all_participants(sessionSQL, prenomP, nomP, emailP, ddnP, role):
     participants = sessionSQL.query(Participant)
     if(prenomP != ""):
@@ -1287,6 +1293,50 @@ def invite_un_participant(sessionSQL, idP):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.invite : True})
     sessionSQL.commit()
+
+def voyage_est_complet(sessionSQL, voyage):
+    nb_place_dispo = sessionSQL.query(Navette).filter(Navette.idNavette == voyage.idNavette).first().capaciteNavette
+    voyageurs = sessionSQL.query(Transporter).fitler(Transporter.idVoy == voyage.idVoy).all()
+    return (voyageurs is None or len(voyageurs)<nb_place_dispo)
+
+def get_navette_dispo(sessionSQL, heureDeb, heureFin):
+    voyages = sessionSQL.query(Voyage).filter((Voyage.heureDebVoy <= heureFin) &
+                              (Voyage.heureDebVoy+Voyage.DureeVoy >= heureDeb)).all()
+    navette_ids = {voyage.idNavette for voyage in voyages}
+    navettes = sessionSQL.query(Navette).all()
+    for navette in navettes:
+        if not navette.idNavette in navette_ids:
+            return navette.idNavette
+    print("Pas de navette dispo")
+    
+
+
+def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
+    id_navette_dispo = get_navette_dispo(sessionSQL, heureDebVoy, heureDebVoy+datetime.timedelta(minutes=10))
+    nouvelle_id_voyage = get_max_id_voyage(sessionSQL)+1
+    if id_navette_dispo is not None:
+        sessionSQL.add(Voyage(nouvelle_id_voyage, heureDebVoy, datetime.time(0, 10, 0), directionGARE, id_navette_dispo))
+        sessionSQL.commit()
+        return nouvelle_id_voyage
+
+
+def affecter_intervenant_voyage(sessionSQL, idP):
+    date_arrive = sessionSQL.query(Assister).filter(Assister.idP == idP).first().dateArrive
+    if date_arrive is None:
+        print("Pas de date d'arrive")
+        return None
+    voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.heureDebVoy.between(date_arrive, date_arrive+datetime.timedelta(minutes=10))).all()
+    if voyages_dispo is not None:
+        for voyage in voyages_dispo:
+            if not voyage_est_complet(sessionSQL, voyage):
+                sessionSQL.add(Transporter(idP, voyage.idVoy))
+                sessionSQL.commit()
+                return True
+    id_voyage = cree_un_voyage(sessionSQL, date_arrive, True)
+    sessionSQL.add(Transporter(idP, id_voyage))
+    sessionSQL.commit()
+    return True
+
 
 @login_manager.user_loader
 def load_user(participant_id):
