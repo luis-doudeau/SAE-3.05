@@ -6,3 +6,4 @@ mysql-connector-python
 flask_mail
 pandas
 XlsxWriter
+pdfkit

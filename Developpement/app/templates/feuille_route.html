@@ -1,3 +1,4 @@
+{% include 'head.html' %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +8,48 @@
     <title>Feuille de route</title>
 </head>
 <body>
-    <h1>Bonjour Lenny</h1>
+    <header>
+        <nav id="nav_feuille_route" class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <img id="imgbdboum" class="img-fluid2 ml-3" src="{{url_for('static', filename='img/bdboum.svg')}}" alt="">
+            <a class="navbar-brand fs-1" id="bdboum" href="">bdBOUM</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            </ul>
+              <div class="form-inline my-2 my-lg-0">
+                <img id="maisonbd" class="my-2 my-sm-0 mr-3" src="{{url_for('static', filename='img/maisonbd.svg')}}" alt="">
+              </div>
+            </div>
+          </nav> 
+    </header>
+    <main id="main_feuille_route" class="ftco-section row justify-content-center shadow-lg">
+    	<h2 class="fs-3" style="text-decoration: underline;">Transport</h2>
+
+			<h2 class="fs-3" style="text-decoration: underline;">Repas</h2>
+
+			<h2 class="fs-3" style="text-decoration: underline;">Intervention</h2>
+
+			<h2 class="fs-3" style="text-decoration: underline;">Transport</h2>
+    </main>
     
 </body>
 </html>
+
+
+<style>
+
+#nav_feuille_route {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+#main_feuille_route{
+	display : flex;
+	min-height : 40%;
+	max-width : 80%;
+	margin-left :auto;
+	margin-right:auto;
+}
+
+</style>

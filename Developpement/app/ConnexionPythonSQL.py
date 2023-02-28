@@ -80,8 +80,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -850,6 +850,11 @@ def get_liste_participant_idp_regime(sessionSQL, liste_id):
             liste_participants.append((une_personne, get_regime(sessionSQL, une_personne.idP)))
     return liste_participants
 
+
+def get_navette(sessionSQL, idP, annee) : 
+        return sessionSQL.query(Transporter).filter(Transporter.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
+
+
 def affiche_navette(sessionSQL, date, navette, directionGare):
     if navette != "Navette" :
         navette = int(navette)
@@ -1044,6 +1049,11 @@ def get_max_id_regime(sessionSQL):
     else:
         return regime._data[0]
         
+        
+def get_assister(sessionSQL, idP, annee):
+    return sessionSQL.query(Assister).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
+
+
 def ajoute_regime(sessionSQL,regime) :
     sessionSQL.query
     id_regime = get_max_id_regime(sessionSQL)+1

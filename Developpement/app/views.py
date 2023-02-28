@@ -23,9 +23,7 @@ import json
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
-
 from flask_mail import Mail, Message
-
 import pdfkit
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -484,4 +482,10 @@ def UpdateParticipant():
 
 @app.route("/feuille_route/")
 def feuille_route():
-    return render_template("feuille_route.html")
+    annee = datetime.datetime.year
+    res = render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, current_user.idP), transport=requete_transport_annee(sessionSQL, current_user.idP, annee), periodes=get_assister(sessionSQL, current_user.idP, annee), navette=None, repas=None, regime=None, hotel=None, intervention=None)
+    reponsestring = pdfkit.from_string(res, False)
+    reponse = make_response(reponsestring)
+    reponse.headers['Content-Type'] = "application/pdf"
+    reponse.headers["Content-Disposition"] = "attachement;filename=Feuille_route.pdf"
+    return reponse
