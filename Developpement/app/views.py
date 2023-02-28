@@ -328,9 +328,9 @@ def dataIntervenir():
     if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_intervenir = []
-    for intervenir in sessionSQL.query(Intervenir, Intervention, Creneau, Lieu, Auteur).join(
+    for intervenir in sessionSQL.query(Intervenir, Intervention, CreneauTravail, Lieu, Auteur).join(
         Intervention, Intervention.idIntervention==Intervenir.idIntervention).join(
-        Creneau, Creneau.idCreneau == Intervenir.idCreneau).join(
+        CreneauTravail, CreneauTravail.idCreneau == Intervenir.idCreneau).join(
         Lieu, Lieu.idLieu == Intervenir.idLieu).join(
         Auteur, Auteur.idP == Intervenir.idP).all():
         dico_intervenir = {}
@@ -385,7 +385,7 @@ def page_secretaire_intervention():
         day = date_intervention.split("/")[1]
         heure_debut2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
         heure_fin2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
-        idCreneau = ajoute_creneau(sessionSQL, heure_debut2, heure_fin2)
+        idCreneau = ajoute_creneau_travail(sessionSQL, heure_debut2, heure_fin2)
         try : 
             ajoute_intervention(sessionSQL, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
         except : 
