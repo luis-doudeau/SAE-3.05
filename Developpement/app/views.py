@@ -1,4 +1,5 @@
 import json
+
 from .app import app, mail
 
 from datetime import date, datetime
@@ -269,15 +270,19 @@ def dataTransport():
     if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_transport = []
-    for transport in sessionSQL.query(Deplacer, Transport).join(Transport, Deplacer.idTransport==Transport.idTransport).all():
+    res = sessionSQL.query(Deplacer, Transport, Assister).join(Transport, Deplacer.idTransport==Transport.idTransport).join(Assister, Assister.idP == Deplacer.idP).all()
+    for transport in res:
+        print(transport)
         voyages_dico = {}
         voyages_dico["transport"] = transport[1].nomTransport
         voyages_dico["lieuDepart"] = transport[0].lieuDepart
-        voyages_dico["dateDepart"] = datetime_to_heure(transport[0].dateArrive)
+        voyages_dico["dateDepart"] = datetime_to_heure(transport[2].dateArrive)
         voyages_dico["lieuArrive"] = transport[0].lieuArrive
-        voyages_dico["dateArrive"] = datetime_to_heure(transport[0].dateDepart)
+        voyages_dico["date"] = str(transport[2].dateArrive).split(" ")[0]
+        voyages_dico["dateArrive"] = datetime_to_heure(transport[2].dateDepart)
         voyages_dico["prenomP"] = get_prenom(sessionSQL, transport[0].idP)
         voyages_dico["nomP"] = get_nom(sessionSQL, transport[0].idP)
+        print(voyages_dico)
         liste_transport.append(voyages_dico)
     return {'data': liste_transport}
 
@@ -302,7 +307,7 @@ def dataInvitation():
     return {'data': liste_participants}
 
 
-@app.route('/api/dataInterventions')
+@app.route('/api/dataInterventions', methods = ["POST"])
 @login_required
 def dataIntervenir():
     if not est_secretaire(sessionSQL, current_user.idP):
@@ -318,6 +323,7 @@ def dataIntervenir():
         dico_intervenir["nom"] = intervenir[4].nomP
         dico_intervenir["lieu"] = intervenir[3].nomLieu
         dico_intervenir["typeIntervention"] = intervenir[1].nomIntervention
+        dico_intervenir["date"] = str(intervenir[2].dateDebut).split(" ")[0]
         dico_intervenir["dateDebut"] = datetime_to_heure(intervenir[2].dateDebut)
         dico_intervenir["dateArrive"] = datetime_to_heure(intervenir[2].dateFin)
         liste_intervenir.append(dico_intervenir)
@@ -441,6 +447,11 @@ def invite_secretaire():
         return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
     return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT)
 
+@app.route('/resetInvitations/', methods = ["POST"])
+@login_required
+def reset_invite():
+    reiniatilise_invitation(sessionSQL)
+    return redirect(url_for("invite_secretaire"))
 
 @app.route('/delete_utilisateur',methods=['POST'])
 def delete_utilisateur():

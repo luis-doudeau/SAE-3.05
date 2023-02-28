@@ -8548,7 +8548,7 @@ h1, h2, h3, h4, h5,
         }
         
         #img_account{
-          width:30%;
+          width:25%;
           margin-right: -150px;
         }
         
@@ -9023,12 +9023,27 @@ input.k-invalid
         margin-top : 15px !important;
       }
 
-<<<<<<< HEAD
       .row_selected{
         background-color: #002752 ;
-=======
+      }
+
+      .textFieldInfo::placeholder {
+        font-size: 19px;
+      }
+
+
       .bdboum{
         font-family: "Crique Grotesk Display";
->>>>>>> branche_test
       }
-        
+
+      #btn-invite{
+        display : flex;
+        margin-left : auto;
+        margin-right : auto;
+        justify-content: center;
+        width: 120px;
+        height: 45px;
+        font-size:130%;
+        margin-top : 2%;
+        margin-bottom : 1%;
+      }

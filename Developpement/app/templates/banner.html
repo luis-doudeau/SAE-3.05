@@ -52,7 +52,7 @@
               </div>
             </li>
 
-            <li class="ml-4 navi-item dropdown"><a href=""><span class="fs-5 text-white">LIENS UTILES </span> <i class="bi bi-chevron-down"></i></a>
+            <li class="ml-4 navi-item dropdown"><a href=""><span class="fs-5 text-white">LIENS UTILES</span><i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="https://www.maisondelabd.com/">Site bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/bdboum.png')}}"></a></li>
                 <li><a href="https://www.blois.fr/attractive/remarquable/maison-de-la-bd">Maison de la BD <img class="img_nav" src="{{url_for('static', filename='img/logo_maison_de_la_bd.png')}}"></a></li>
@@ -67,14 +67,14 @@
             {% if current_user.is_authenticated %} <!--is_authenticated()-->
             <li>
               
-              <a class="text-white btn-info rounded submit px-3 py-2 mr-5"> <img id="img_account" src="{{url_for('static', filename='img/user.png')}}">{{ current_user.prenomP }}</a></li>
+              <a class="text-white btn-primary rounded submit px-3 py-2 mr-5"> <img id="img_account" src="{{url_for('static', filename='img/user.png')}}"><span style="font-size : 115%;">{{ current_user.prenomP }}</span></a></li>
             <li>
-              <a class="rounded submit px-3 py-2 mr-5 text-white bg-danger" href="{{ url_for("logout") }}"><img id="img_logout" src="{{url_for('static', filename='img/logout.png')}}">Déconnexion</a>
+              <a class="rounded submit px-3 py-2 mr-5 text-white bg-danger" href="{{ url_for("logout") }}"><img id="img_logout" src="{{url_for('static', filename='img/logout.png')}}"><span style="font-size : 115%;">Déconnexion</span></a>
             </li>
             {% endif %}
             {% if not current_user.is_authenticated %} <!--is_authenticated()-->
             <li>
-              <a class="text-white btn-info btn-lg rounded submit px-3 mr-5" href="{{ url_for("connexion") }}">Connexion</a>
+              <a class="text-white btn-primary btn-lg rounded submit px-3 mr-5 fs-6" style="padding-bottom : 4%;" href="{{ url_for("connexion") }}">Connexion</a>
             </li>
             {% endif %}
         </ul>

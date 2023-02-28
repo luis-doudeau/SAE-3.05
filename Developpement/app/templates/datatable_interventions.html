@@ -20,6 +20,7 @@
                       <th>Nom</th>
                       <th>Lieu</th>
                       <th>Type</th>
+                      <th>Date</th>
                       <th>Début</th>
                       <th>Fin</th>
                     </tr>
@@ -159,22 +160,13 @@
                 {data: 'nom'},
                 {data: 'lieu'},
                 {data: 'typeIntervention',orderable:false},
-                {data: 'dateDebut',orderable:false,"render" : function(data) { 
-    
-                    let m = new Date(data);
-                    return moment(m).format("DD/MM/YYYY");
-                }
-                },
-                {data: 'dateArrive',orderable:false,"render" : function(data) { 
-    
-                    let m = new Date(data);
-                    return moment(m).format("DD/MM/YYYY");
-                }
-                },
+                {data: 'date'},
+                {data: 'dateDebut'},
+                {data: 'dateArrive'},
               ],
 
               scrollY:500,
-              deferRender:    true,
+              deferRender:true,
               scroller:true,
               select:false,
               paging: false,

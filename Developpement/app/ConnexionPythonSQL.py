@@ -78,10 +78,10 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -1252,7 +1252,11 @@ def load_user(participant_id):
     else:
         return get_participant(sessionSQL, participant_id)
 
-
+def reiniatilise_invitation(sessionSQL): 
+    participants = sessionSQL.query(Participant).all()
+    for p in participants : 
+        sessionSQL.query(Participant).filter(Participant.idP == p.idP).update({Participant.invite : False})
+        sessionSQL.commit()
 
 @staticmethod
 def generate_password(length=8):
@@ -1272,14 +1276,14 @@ def get_heure(time) :
 
 @staticmethod
 def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"): 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
     
 
 @staticmethod
 def get_all_lieu_avion(file_path="./Developpement/app/static/txt/aeroport.txt"): 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
     
