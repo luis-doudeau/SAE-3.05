@@ -78,10 +78,10 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -808,7 +808,7 @@ def affiche_participant_trier_consommateur(sessionSQL):
 def get_nom_restaurant():
     liste_nom_resteau = []
     for nom in sessionSQL.query(Restaurant):
-        liste_nom_resteau.append((nom.nomRest, nom.idRest))
+        liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
 
 def get_nom_hotel():
