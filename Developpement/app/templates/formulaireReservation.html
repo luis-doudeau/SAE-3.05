@@ -95,7 +95,7 @@ function verifFormulaire(){
 
   $(document).ready(function(){
     $("#save").on("click",function(){
-    if(verifFormulaire){
+    if(verifFormulaire()){
       var button1 = $("#jeudi_soir")[0].checked
       var button2 = $("#vendredi_midi")[0].checked 
       var button3 = $("#vendredi_soir")[0].checked
@@ -124,7 +124,7 @@ function verifFormulaire(){
         },
         success: function() {
           console.log("sucess");
-          window.location.href = "{{url_for('page_fin')}}";;
+          window.location.href = "{{url_for('page_fin')}}";
         }    
       })
       

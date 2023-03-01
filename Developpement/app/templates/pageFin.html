@@ -9,11 +9,25 @@
                     <a> <img class="card-img-" src="{{url_for('static', filename='img/doc.png')}}" alt=""> </a>
                     <div class="card-body">
                         <h5 class="card-title mb-4 fs-2">Fin du formulaire</h5>
-                        <p class="card-text mb-4 fs-4">Télécharger votre feuille de route <a style="text-decoration:underline;" href="#">ici</a></p>
-                    </div> <!-- end card-body-->
+                        <p class="card-text mb-4 fs-4">Télécharger votre feuille de route <a id="myLink" style="text-decoration:underline;" href="">ici</a></p>
+                    </div> <!-- end card-body-->    
                 </div> <!-- end card-->
             </div><!-- end col -->
         </div>
     </main>
 </body>
 </html>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        // Récupérer l'ID de l'utilisateur actuel
+        var current_user = {{idP}};
+
+        // Générer l'URL avec l'identifiant de l'utilisateur en tant qu'argument
+        var url = "../feuille_route?idP=" + current_user;
+
+        // Mettre à jour l'attribut href du lien avec l'URL générée
+        document.getElementById("myLink").href = url;
+    })
+</script>

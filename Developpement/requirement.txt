@@ -6,4 +6,8 @@ mysql-connector-python
 flask_mail
 pandas
 XlsxWriter
+<<<<<<< HEAD
 sendgrid
+=======
+pdfkit
+>>>>>>> feuille_route

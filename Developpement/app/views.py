@@ -3,7 +3,7 @@ import json
 from .app import app, mail
 
 from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify, make_response
 from flask_login import login_required, login_user, LoginManager, current_user, logout_user
 from secrets import token_urlsafe
 
@@ -27,16 +27,20 @@ import json
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
+<<<<<<< HEAD
 import threading
+=======
+from flask_mail import Mail, Message
+import pdfkit
+
+
+>>>>>>> feuille_route
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
 DATE_FESTIVAL = ["2023-11-16", "2023-11-17", "2023-11-18", "2023-11-19"]
 DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : DATE_FESTIVAL[0]+"-19-30-00/"+DATE_FESTIVAL[0]+"-22-00-00", "vendredi_midi": DATE_FESTIVAL[1]+"-11-30-00/"+DATE_FESTIVAL[1]+"-14-00-00", "vendredi_soir": DATE_FESTIVAL[1]+"-19-30-00/"+DATE_FESTIVAL[1]+"-22-00-00", "samedi_midi" : DATE_FESTIVAL[2]+"-11-30-00/"+DATE_FESTIVAL[2]+"-14-00-00", "samedi_soir":DATE_FESTIVAL[2]+"-19-30-00/"+DATE_FESTIVAL[2]+"-22-00-00", "dimanche_midi": DATE_FESTIVAL[3]+"-11-30-00/"+DATE_FESTIVAL[3]+"-14-00-00", "dimanche_soir": DATE_FESTIVAL[3]+"-19-30-00/"+DATE_FESTIVAL[3]+"-22-00-00"}
 LISTE_HORAIRE_RESTAURANT = ["jeudi_soir", "vendredi_midi", "vendredi_soir", "samedi_midi" , "samedi_soir", "dimanche_midi", "dimanche_soir"]
-
-
-
 LISTE_ROUTE = ["connexion", "page_inscription", "page_secretaire_accueil"]
 
 @app.route('/', methods = ["GET", "POST"])
@@ -72,7 +76,7 @@ def page_inscription():
         if est_intervenant(sessionSQL, current_user.idP):
             return redirect(url_for('formulaire_auteur_transport', idp = current_user.idP))
         else:
-            return redirect(url_for('page_fin'))
+            return redirect(url_for('page_fin', idp = current_user.idP))
     return render_template('coordonneeForms.html')
 
 
@@ -134,7 +138,7 @@ def inserer_formulaire_reservation():
     print(current_user.prenomP)
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
     
-    if regime.isalpha(): # si le champ 'regime' contient des caractères
+    if regime.isalpha() and not verif_existe_regime: # si le champ 'regime' contient des caractères
         id_regime = ajoute_regime(sessionSQL, regime)
         ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
     remarques = request.form["remarque"]
@@ -159,9 +163,9 @@ def formulaire_reservation():
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
 def page_fin():
-    if  est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("pageFin.html")
+    return render_template("pageFin.html", idP = current_user.idP)
 
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
@@ -561,6 +565,7 @@ def UpdateParticipant():
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
 
+<<<<<<< HEAD
 @app.route('/Consommateur/Update',methods=['POST'])
 def UpdateConsommateur():
     id = request.form["id"]
@@ -592,3 +597,18 @@ def traitement():
 def test():
     affecter_intervenant_voyage(sessionSQL, 303)
     return "OK"
+=======
+
+
+@app.route("/feuille_route/")
+def feuille_route():
+    idP = request.args.get('idP')
+    annee = datetime.datetime.now().year
+    repas = get_repas(sessionSQL, idP, annee)
+    return render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, idP), transports=requete_transport_annee2(sessionSQL, idP, annee),\
+        periodes=get_assister(sessionSQL, idP, annee), navette=get_navette(sessionSQL, idP, annee), repas=repas, regime=get_regime(sessionSQL, idP),\
+        hotels=(get_dormir(sessionSQL, idP, annee)), interventions=get_intervenirs(sessionSQL, idP))
+
+
+    
+>>>>>>> feuille_route

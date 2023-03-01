@@ -8502,6 +8502,7 @@ h1, h2, h3, h4, h5,
         
         #bdboum{
           font-size: 25px;
+          font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         }
         
         
@@ -8630,11 +8631,7 @@ h1, h2, h3, h4, h5,
          overflow: hidden;
          max-height: 30%;
         }
-        
-        .optionsTransport{
-          
-        
-        }
+      
         
         /* Links inside the dropdown */
         .dropdown-content a {
@@ -8961,7 +8958,7 @@ h1, h2, h3, h4, h5,
     }
 
     .error{
-      background-color : #e4606d !important;
+      border-color : #e4606d !important;
     }
 
 

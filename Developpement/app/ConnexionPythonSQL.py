@@ -50,12 +50,22 @@ from .Voyage import Voyage
 from .Transport import Transport
 from .Utilisateur import Utilisateur
 
+
 from .app import login_manager
 # pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
 # pip3 install mysql-connector-python
 ROLE = ["Auteur", "Exposant", "Staff", "Presse", "Invite", "Secretaire", "Participant"]
+JOURS_SEMAINES = {
+    "Monday": "Lundi",
+    "Tuesday": "Mardi",
+    "Wednesday": "Mercredi",
+    "Thursday": "Jeudi",
+    "Friday": "Vendredi",
+    "Saturday": "Samedi",
+    "Sunday": "Dimanche"
+}
 
 def ouvrir_connexion(user,passwd,host,database):
     """
@@ -128,6 +138,9 @@ def datetime_to_heure(date):
 def get_hotel(sessionSQL, idH):
     return (sessionSQL.query(Hotel).filter(Hotel.idHotel == idH).first()).nomHotel
 
+def get_nom_hotel_idP(sessionSQL, idP) : 
+    return sessionSQL.query(Hotel).join(Loger, Loger.idHotel == Hotel.idHotel).filter(Loger.idP == idP).first().nomHotel
+
 def get_periode_hotel(sessionSQL, idP):
     debut = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateDebut
     fin = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateFin
@@ -175,6 +188,24 @@ def get_all_lieu(session) :
     lieux = session.query(Lieu).all()
     lieux_dict = {lieu.idLieu: lieu for lieu in lieux}
     return lieux_dict
+
+
+def get_repas(sessionSQL, idP, annee):
+    resultat = sessionSQL.query(Repas, Creneau, Restaurant)\
+        .join(Creneau, Creneau.idCreneau == Repas.idCreneau)\
+        .join(Restaurant, Restaurant.idRest == Repas.idRest)\
+        .join(Manger, Manger.idRepas == Repas.idRepas)\
+        .filter(Manger.idP == idP)\
+        .filter(extract('year', Creneau.dateDebut) == annee).order_by(Creneau.dateDebut.asc()).all()
+    
+    liste_res = []
+    if resultat:
+        for res in resultat:
+            repas, creneau, restaurant = res
+            liste_res.append((repas, creneau, restaurant, JOURS_SEMAINES[creneau.dateDebut.strftime("%A")]))
+    
+    return liste_res
+
     
 
 # def get_max_id_utilisateur(sessionSQL):
@@ -853,6 +884,17 @@ def get_all_interventions(sessionSQL) :
 def get_intervenirs(sessionSQL) : 
     return sessionSQL.query(Intervenir).all()
 
+def get_intervenirs(sessionSQL, idP) : 
+    resultat = sessionSQL.query(Intervenir, Lieu, Intervention, Creneau).join(Lieu, Lieu.idLieu == Intervenir.idLieu).join(Intervention, Intervention.idIntervention == Intervenir.idIntervention).join(Creneau, Creneau.idCreneau == Intervenir.idCreneau).filter(Intervenir.idP == idP).all()
+    liste_res = list()
+    if resultat:
+        for res in resultat:
+            intervenir, lieu, intervention, creneau = res
+            liste_res.append((intervenir, lieu, intervention, creneau, JOURS_SEMAINES[creneau.dateDebut.strftime("%A")]))
+    
+    return liste_res
+
+
 def get_exposant(sessionSQL, id_exposant):
     return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
@@ -1007,8 +1049,19 @@ def get_liste_participant_idp_regime(sessionSQL, liste_id):
             liste_participants.append((une_personne, get_regime(sessionSQL, une_personne.idP)))
     return liste_participants
 
+<<<<<<< HEAD
 #Inutile ???
 """ 
+=======
+
+def get_navette(sessionSQL, idP, annee) : 
+        resultat = sessionSQL.query(Voyage).join(Transporter, Transporter.idVoy == Voyage.idVoy).filter(Transporter.idP == idP).filter(extract('year', Voyage.heureDebVoy) == annee).all()
+        liste_res = []
+        for res in resultat : 
+            liste_res.append((res, JOURS_SEMAINES[res.heureDebVoy.strftime("%A")]))
+        return liste_res
+
+>>>>>>> feuille_route
 def affiche_navette(sessionSQL, date, navette, directionGare):
     if navette != "Navette" :
         navette = int(navette)
@@ -1092,6 +1145,15 @@ def get_dormeur(sessionSQL, date_jour, hotel):
 
     return liste_participants
 
+def get_dormir(sessionSQL, idP, annee):  
+    resultat = sessionSQL.query(Loger, Hotel).join(Hotel, Hotel.idHotel == Loger.idHotel).filter(Loger.idP == idP).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut)==annee).all()
+    liste_res = []
+    if resultat:
+        for res in resultat:
+            loger, hotel = res
+            liste_res.append((loger, hotel, JOURS_SEMAINES[loger.dateDebut.strftime("%A")], JOURS_SEMAINES[loger.dateFin.strftime("%A")]))
+    
+    return liste_res
 
 def id_transport_with_name(nom_transport):
     if nom_transport == "avion" : 
@@ -1202,6 +1264,11 @@ def get_max_id_regime(sessionSQL):
     else:
         return regime._data[0]
         
+        
+def get_assister(sessionSQL, idP, annee):
+    return sessionSQL.query(Assister).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
+
+
 def ajoute_regime(sessionSQL,regime) :
     sessionSQL.query
     id_regime = get_max_id_regime(sessionSQL)+1
@@ -1223,6 +1290,9 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
     except : 
         print("erreur")
         sessionSQL.rollback() 
+
+def verif_existe_regime(sessionSQL, nomRegime) : 
+    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter(Regime.nomRegime == nomRegime).all() != []
     
 def est_intervenant(sessionSQL, idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
@@ -1241,7 +1311,12 @@ def requete_transport_annee(sessionSQL, idP, annee) :
         annee_req = transport[1].year
         if annee_req == annee: 
             liste_deplacement.append(transport)
-    return liste_deplacement       
+    return liste_deplacement  
+
+
+def requete_transport_annee2(sessionSQL, idP, annee) : 
+    return sessionSQL.query(Deplacer, Transport).join(Transport, Transport.idTransport == Deplacer.idTransport).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee).all()
+    
 
 
 
