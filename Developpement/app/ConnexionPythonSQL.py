@@ -1104,6 +1104,7 @@ def choix_hotel(sessionSQL, idP):
 def ajoute_hebergement(sessionSQL, idP): 
     annee = datetime.datetime.today().year
     dates = sessionSQL.query(Assister.dateArrive, Assister.dateDepart).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
+    print("d ",dates)
     dateDebut = dates[0]
     dateFin = dates[1]
     idHotel = choix_hotel(sessionSQL, idP)
@@ -1160,8 +1161,11 @@ def requete_transport_annee(sessionSQL, idP, annee) :
 
 
 def ajoute_assister(sessionSQL, idP, dateArrive, dateDepart):
+    print("test asssist")
     assisteur = Assister(idP, dateArrive, dateDepart)
-    assister = sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).first()
+    assister = sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).first()
+    print(assisteur)
+    print(assister)
     if assister is None :
         sessionSQL.add(assisteur)
         try : 
@@ -1296,14 +1300,21 @@ def invite_un_participant(sessionSQL, idP):
 
 def voyage_est_complet(sessionSQL, voyage):
     nb_place_dispo = sessionSQL.query(Navette).filter(Navette.idNavette == voyage.idNavette).first().capaciteNavette
-    voyageurs = sessionSQL.query(Transporter).fitler(Transporter.idVoy == voyage.idVoy).all()
-    return (voyageurs is None or len(voyageurs)<nb_place_dispo)
+    voyageurs = sessionSQL.query(Transporter).filter(Transporter.idVoy == voyage.idVoy).all()
+    print("place dispo ",nb_place_dispo)
+    print("voyageur ",voyageurs)
+    print("nb_voyageur ",len(voyageurs))
+    return (voyageurs is not None and len(voyageurs)>=nb_place_dispo)
 
 def get_navette_dispo(sessionSQL, heureDeb, heureFin):
     voyages = sessionSQL.query(Voyage).filter((Voyage.heureDebVoy <= heureFin) &
-                              (Voyage.heureDebVoy+Voyage.DureeVoy >= heureDeb)).all()
+                              (Voyage.heureDebVoy+Voyage.DureeVoy >= heureDeb) &
+                              func.date(Voyage.heureDebVoy) == heureDeb.date()).all()
     navette_ids = {voyage.idNavette for voyage in voyages}
     navettes = sessionSQL.query(Navette).all()
+    print("nav")
+    print(navette_ids)
+    print(navettes)
     for navette in navettes:
         if not navette.idNavette in navette_ids:
             return navette.idNavette
@@ -1320,23 +1331,51 @@ def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
         return nouvelle_id_voyage
 
 
-def affecter_intervenant_voyage(sessionSQL, idP):
+def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
     date_arrive = sessionSQL.query(Assister).filter(Assister.idP == idP).first().dateArrive
     if date_arrive is None:
         print("Pas de date d'arrive")
         return None
-    voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.heureDebVoy.between(date_arrive, date_arrive+datetime.timedelta(minutes=10))).all()
+    print("depart gare")
+    print(date_arrive)
+    print(date_arrive-datetime.timedelta(seconds=1))
+    print(date_arrive+datetime.timedelta(minutes=10,seconds=1))
+    voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.directionGare == False).filter(Voyage.heureDebVoy.between(date_arrive-datetime.timedelta(seconds=1), date_arrive+datetime.timedelta(minutes=10,seconds=1))).all()
+    print("voy dispo ",voyages_dispo)
     if voyages_dispo is not None:
         for voyage in voyages_dispo:
-            if not voyage_est_complet(sessionSQL, voyage):
+            if not voyage_est_complet(sessionSQL, voyage) and not voyage.directionGare:
+                print("ici")
+                print(idP, voyage.idVoy)
                 sessionSQL.add(Transporter(idP, voyage.idVoy))
                 sessionSQL.commit()
                 return True
-    id_voyage = cree_un_voyage(sessionSQL, date_arrive, True)
+    id_voyage = cree_un_voyage(sessionSQL, date_arrive, False)
     sessionSQL.add(Transporter(idP, id_voyage))
     sessionSQL.commit()
     return True
 
+def affecter_intervenant_voyage_depart_festival(sessionSQL, idP):
+    date_depart = sessionSQL.query(Assister).filter(Assister.idP == idP).first().dateDepart
+    if date_depart is None:
+        print("Pas de date de depart")
+        return None
+    print("depart festival")
+    print(date_depart)
+    print(date_depart-datetime.timedelta(seconds=1))
+    print(date_depart+datetime.timedelta(minutes=10,seconds=1))
+    voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.directionGare == True).filter(Voyage.heureDebVoy.between(date_depart-datetime.timedelta(seconds=1), date_depart+datetime.timedelta(minutes=10,seconds=1))).all()
+    print("voy dispo ",voyages_dispo)
+    if voyages_dispo is not None:
+        for voyage in voyages_dispo:
+            if not voyage_est_complet(sessionSQL, voyage) and voyage.directionGare:
+                sessionSQL.add(Transporter(idP, voyage.idVoy))
+                sessionSQL.commit()
+                return True
+    id_voyage = cree_un_voyage(sessionSQL, date_depart, True)
+    sessionSQL.add(Transporter(idP, id_voyage))
+    sessionSQL.commit()
+    return True
 
 @login_manager.user_loader
 def load_user(participant_id):

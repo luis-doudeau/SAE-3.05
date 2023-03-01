@@ -102,7 +102,15 @@ def insererTransportPersonne():
     dateDep = request.form["dateDep"].replace("-",",").split(",")
     heureDep = request.form["hDep"].replace(":",",").split(",")
     date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
+    print(date_arr, date_dep)
     ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
+    print("on insere")
+    print(request.form["train"])
+    if request.form["train"] == "true" and "BLOIS" in request.form["lieuArriveTrain"].upper():
+        print(current_user.idP)
+        print(type(current_user.idP))
+        affecter_intervenant_voyage_depart_gare(sessionSQL, current_user.idP)
+        affecter_intervenant_voyage_depart_festival(sessionSQL, current_user.idP)
     return jsonify({"status": "success"})
 
 
@@ -121,6 +129,8 @@ def inserer_formulaire_reservation():
     liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
     request.form["dimanche_midi"],request.form["dimanche_soir"]]
+    print(current_user)
+    print(current_user.prenomP)
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
     
     if regime.isalpha(): # si le champ 'regime' contient des caractères
@@ -561,5 +571,5 @@ def traitement():
 
 @app.route('/testt', methods=['GET'])
 def test():
-    affecter_intervenant_voyage(sessionSQL, 300)
+    affecter_intervenant_voyage(sessionSQL, 303)
     return "OK"

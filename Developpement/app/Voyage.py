@@ -37,8 +37,8 @@ class Voyage(Base):
         else:
             return "Gare Blois → Festival"
     def get_duree(self):
-        nb_minutes = (self.DureeVoy.seconds % 3600) // 60
-        nb_secondes = self.DureeVoy.seconds // 3600
+        nb_minutes = (self.DureeVoy.second % 3600) // 60
+        nb_secondes = self.DureeVoy.second // 3600
         res = str(nb_minutes) +" minutes"
         if nb_secondes != 0:
             res += " "+str(nb_secondes) + " secondes"
