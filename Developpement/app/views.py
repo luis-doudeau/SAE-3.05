@@ -106,6 +106,7 @@ def insererTransportPersonne():
     ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
     print("on insere")
     print(request.form["train"])
+    supprimer_intervenant_voyage_navette(sessionSQL, current_user.idP)
     if request.form["train"] == "true" and "BLOIS" in request.form["lieuArriveTrain"].upper():
         print(current_user.idP)
         print(type(current_user.idP))

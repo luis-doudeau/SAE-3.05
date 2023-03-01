@@ -1330,9 +1330,22 @@ def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
         sessionSQL.commit()
         return nouvelle_id_voyage
 
-
+def supprimer_intervenant_voyage_navette(sessionSQL, idP):
+    annee_en_cours =  datetime.date.today().year
+    transports = sessionSQL.query(Transporter).filter(Transporter.idP == idP).all()
+    for transport in transports:
+        voyage = sessionSQL.query(Voyage).filter((Voyage.idVoy == transport.idVoy)  & (extract('year', Voyage.heureDebVoy) == annee_en_cours) ).first()
+        if voyage is not None:
+            sessionSQL.delete(transport)
+            sessionSQL.commit()
+            nb_voyageurs = len(sessionSQL.query(Transporter).filter(Transporter.idVoy == voyage.idVoy).all())
+            if nb_voyageurs == 0:
+                sessionSQL.delete(voyage)
+                sessionSQL.commit()
+                
 def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
-    date_arrive = sessionSQL.query(Assister).filter(Assister.idP == idP).first().dateArrive
+    annee_en_cours =  datetime.date.today().year
+    date_arrive = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
     if date_arrive is None:
         print("Pas de date d'arrive")
         return None
@@ -1356,7 +1369,8 @@ def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
     return True
 
 def affecter_intervenant_voyage_depart_festival(sessionSQL, idP):
-    date_depart = sessionSQL.query(Assister).filter(Assister.idP == idP).first().dateDepart
+    annee_en_cours =  datetime.date.today().year
+    date_depart = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
     if date_depart is None:
         print("Pas de date de depart")
         return None
