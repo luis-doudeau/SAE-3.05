@@ -4,8 +4,8 @@ from sqlalchemy . ext . declarative import declarative_base
 
 Base = declarative_base()
 
-class Creneau(Base):
-    __tablename__ = "CRENEAU"
+class CreneauRepas(Base):
+    __tablename__ = "CRENEAUREPAS"
     idCreneau = Column(Integer, primary_key = True)
     dateDebut = Column(DATETIME)
     dateFin = Column(DATETIME)
@@ -16,5 +16,5 @@ class Creneau(Base):
         self.dateFin = dateFin
 
     def __repr__(self) -> str:
-        return "ID créneau : " + str(self.idCreneau) + " date début : " + str(self.dateDebut)+ " date fin : " + str(self.dateFin)
+        return "ID créneau repas : " + str(self.idCreneau) + " date début : " + str(self.dateDebut)+ " date fin : " + str(self.dateFin)
         

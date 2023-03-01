@@ -36,7 +36,8 @@ from .Deplacer import Deplacer
 from .Manger import Manger
 from .Lieu import Lieu
 from .Repas import Repas
-from .Creneau import Creneau
+from .CreneauRepas import CreneauRepas
+from .CreneauTravail import CreneauTravail
 from .Restaurant import Restaurant
 from .Avoir import Avoir
 from .Regime import Regime
@@ -144,18 +145,19 @@ def get_restaurant(sessionSQL, idRepas):
     idRestaurant = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idRest
     return (sessionSQL.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
 
-def get_creneau(sessionSQL, idRepas):
+
+def get_creneau_repas(sessionSQL, idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
-    debut = (sessionSQL.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
-    fin = (sessionSQL.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateFin
+    debut = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateDebut
+    fin = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateFin
     return format_creneau(debut, fin)
 
 def get_intervenant(sessionSQL, idP):
     return sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
 
-def get_date(sessionSQL, idRepas):
+def get_date_repas(sessionSQL, idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
-    debut = (sessionSQL.query(Creneau).filter(Creneau.idCreneau == idCreneau).first()).dateDebut
+    debut = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateDebut
     return datetime_to_dateFrancais(debut)
 
 
@@ -251,8 +253,15 @@ def get_mail(sessionSQL, idParticipant):
         return email
     return None
 
-def get_max_id_creneau(sessionSQL):        
-    max_num = sessionSQL.query(func.max(Creneau.idCreneau)).first()
+def get_max_id_creneau_repas(sessionSQL):        
+    max_num = sessionSQL.query(func.max(CreneauRepas.idCreneau)).first()
+    if (max_num[0]) is None:
+        return 0
+    else:
+        return max_num._data[0]
+
+def get_max_id_creneau_travail(sessionSQL):        
+    max_num = sessionSQL.query(func.max(CreneauTravail.idCreneau)).first()
     if (max_num[0]) is None:
         return 0
     else:
@@ -336,7 +345,7 @@ def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, c
                         Repas, Manger.idRepas == Repas.idRepas).join(
                         Restaurant, Repas.idRest == Restaurant.idRest).join(
                         Consommateur, Manger.idP == Consommateur.idP).join(
-                        Creneau, Repas.idCreneau == Creneau.idCreneau)
+                        CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau)
     if(prenomC != ""):
         consommateurs = consommateurs.filter(Consommateur.prenomP == prenomC)
     if(nomC != ""):
@@ -348,13 +357,13 @@ def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, c
         mois = la_date.split("/")[1]
         annee = la_date.split("/")[2]
         my_date = datetime.date(int(annee), int(mois), int(jour))
-        consommateurs = consommateurs.filter(func.date(Creneau.dateDebut) == my_date)
+        consommateurs = consommateurs.filter(func.date(CreneauRepas.dateDebut) == my_date)
         
     if(creneau != ""):
         (heure_creneau_debut, minute_creneau_debut) = creneau.split('-')[0].split(':')
         (heure_creneau_fin, minute_creneau_fin) = creneau.split('-')[1].split(':')
-        consommateurs = consommateurs.filter(extract('hour', Creneau.dateDebut) == heure_creneau_debut).filter(extract('minute', Creneau.dateDebut) == minute_creneau_debut)
-        consommateurs = consommateurs.filter(extract('hour', Creneau.dateFin) == heure_creneau_fin).filter(extract('minute', Creneau.dateFin) == minute_creneau_fin)
+        consommateurs = consommateurs.filter(extract('hour', CreneauRepas.dateDebut) == heure_creneau_debut).filter(extract('minute', CreneauRepas.dateDebut) == minute_creneau_debut)
+        consommateurs = consommateurs.filter(extract('hour', CreneauRepas.dateFin) == heure_creneau_fin).filter(extract('minute', CreneauRepas.dateFin) == minute_creneau_fin)
 
     return consommateurs.all()
 
@@ -692,6 +701,69 @@ def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, t
         sessionSQL.rollback()
         print("erreur lors de la modif du participant")
         return False
+
+def verif_regime_existe(sessionSQL, nomRegime):
+    regime = sessionSQL.query(Regime).filter(Regime.nomRegime == nomRegime).first()
+    if regime is not None:
+        return regime.idRegime
+    else:
+        ajoute_regime(sessionSQL, nomRegime)
+
+def get_id_creneau_repas(date_debut, date_fin):
+    id_creneau = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()).idCreneau
+    return id_creneau
+
+def est_midi(date_debut):
+    # Obtenir l'heure de la date de début
+    heure_debut = date_debut.time()
+    
+    # Définir l'heure de début et de fin de la période midi
+    heure_midi_debut = datetime.time(11, 0)
+    heure_midi_fin = datetime.time(13, 0)
+    
+    # Vérifier si l'heure de début est comprise entre l'heure de début et de fin de la période midi
+    if heure_debut >= heure_midi_debut and heure_debut <= heure_midi_fin:
+        return True
+    else:
+        return False    
+
+def verif_repas_existe(nomRestaurant, date_debut, date_fin):
+    id_restaurant = get_id_restaurant(sessionSQL, nomRestaurant)
+    id_creneau = get_id_creneau_repas(date_debut, date_fin)
+    repas = sessionSQL.query(Repas).filter(Repas.idCreneau == id_creneau).filter(Repas.idRest == id_restaurant).first()
+    if repas is not None:
+        return repas.idRepas
+    elif est_midi(date_debut):
+        id = ajoute_repas(True, id_restaurant, id_creneau)
+        return id
+    else:
+        id = ajoute_repas(False, id_restaurant, id_creneau)
+        return id
+
+def modifier_repas(idP, nomRestaurant, dateRepas, creneauRepas, idRepas):
+
+    creneau_debut = creneauRepas.split("-")[0]
+    liste_creneau_debut = creneau_debut.split(":")
+
+    creneau_fin = creneauRepas.split("-")[1]
+    liste_creneau_fin = creneau_fin.split(":")
+
+    liste_date = dateRepas.split("-")
+
+    date_debut = datetime.datetime(int(liste_date[2]), int(liste_date[1]), int(liste_date[0]), int(liste_creneau_debut[0]), int(liste_creneau_debut[1]), int(liste_creneau_debut[2]))
+    date_fin = datetime.datetime(int(liste_date[2]), int(liste_date[1]), int(liste_date[0]), int(liste_creneau_fin[0]), int(liste_creneau_fin[1]), int(liste_creneau_fin[2]))
+
+    new_idRepas = verif_repas_existe(nomRestaurant, date_debut, date_fin)
+    sessionSQL.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).update({Manger.idRepas: new_idRepas})
+
+    try : 
+        sessionSQL.commit()
+        print("Le repas associé à ce participant a bien été modifié")
+        return True
+    except : 
+        sessionSQL.rollback()
+        print("erreur lors de la modif du repas")
+        return False
     
 def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update(
@@ -803,7 +875,10 @@ def get_nom(sessionSQL, id_participant):
 
 def get_id_hotel(sessionSQL, nom_hotel):
     return (sessionSQL.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
-   
+
+
+def get_id_restaurant(sessionSQL, nom_restaurant):
+    return (sessionSQL.query(Restaurant).filter(Restaurant.nomRest == nom_restaurant).first()).idRest
 
 def get_utilisateur(sessionSQL, id_utilisateur):
     return sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).first()
@@ -847,11 +922,21 @@ def affiche_participant_trier_consommateur(sessionSQL):
     return participant
 
 
-def get_nom_restaurant():
+
+def get_liste_nom_restaurant():
     liste_nom_resteau = []
     for nom in sessionSQL.query(Restaurant):
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
+
+def get_liste_creneau_repas():
+    liste_creneau = []
+    for creneau in sessionSQL.query(CreneauRepas):
+        debut = creneau.dateDebut
+        fin = creneau.dateFin
+        format = format_creneau(debut, fin)
+        liste_creneau.append(format)
+    return liste_creneau
 
 def get_nom_hotel():
     liste_nom_hotel = []
@@ -874,13 +959,13 @@ def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
     liste_repas = []
     liste_mangeur = []
     if restaurant != "Restaurant" and midi != "Journee":
-        repas = sessionSQL.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.idRest == restaurant).filter(Repas.estMidi == midi).all()
+        repas = sessionSQL.query(CreneauRepas, CreneauRepas.dateDebut, CreneauRepas.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Repas.idRest == restaurant).filter(Repas.estMidi == midi).all()
     elif restaurant == "Restaurant" and midi == "Journee":
-        repas = sessionSQL.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau)
+        repas = sessionSQL.query(CreneauRepas, CreneauRepas.dateDebut, CreneauRepas.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == CreneauRepas.idCreneau)
     elif restaurant != "Restaurant":
-        repas = sessionSQL.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.idRest == restaurant).all()
+        repas = sessionSQL.query(CreneauRepas, CreneauRepas.dateDebut, CreneauRepas.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Repas.idRest == restaurant).all()
     elif midi != "Journee":
-        repas = sessionSQL.query(Creneau, Creneau.dateDebut, Creneau.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == Creneau.idCreneau).filter(Repas.estMidi == midi).all()
+        repas = sessionSQL.query(CreneauRepas, CreneauRepas.dateDebut, CreneauRepas.idCreneau, Repas.idRepas).join(Repas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Repas.estMidi == midi).all()
     
     if date_jour[0] != "Date":
         date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
@@ -1042,7 +1127,7 @@ def ajoute_deplacer(sessionSQL, idP, idTransport, lieuDepart, lieuArrive, annee)
 
 def supprime_mangeur(sessionSQL, idP):
     annee = datetime.datetime.now().year
-    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Manger.idP == idP).filter(extract('year', Creneau.dateDebut) == annee).all()
+    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(extract('year', CreneauRepas.dateDebut) == annee).all()
     for mang in manger :
         sessionSQL.query(Manger).filter(Manger.idP == mang.idP).filter(Manger.idRepas == mang.idRepas).delete()
         sessionSQL.commit()
@@ -1050,7 +1135,7 @@ def supprime_mangeur(sessionSQL, idP):
 
 def ajoute_mangeur(sessionSQL, idP, idRepas):
     mangeur = Manger(idP, idRepas)
-    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(Creneau, Repas.idCreneau == Creneau.idCreneau).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
+    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
     if manger is None:
         sessionSQL.add(mangeur)
         try: 
@@ -1203,15 +1288,33 @@ def transforme_datetime(date):
         date = date.split("/")
     return date
 
-def ajoute_creneau_v1(session, dateDebut,dateFin):
+def ajoute_creneau_repas_v1(session, dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
     dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
-    creneau_test = sessionSQL.query(Creneau).filter(Creneau.dateDebut == dateDebut).filter(Creneau.dateFin == dateFin).first()
+    creneau_test = sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == dateDebut).filter(CreneauRepas.dateFin == dateFin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau(sessionSQL)+1
-        creneau = Creneau(idCreneau, dateDebut, dateFin)
+        idCreneau = get_max_id_creneau_repas(sessionSQL)+1
+        creneau = CreneauRepas(idCreneau, dateDebut, dateFin)
+        sessionSQL.add(creneau)
+        try :
+            session.commit()
+        except :
+            print("erreur creneau")
+            sessionSQL.rollback()
+        return creneau.idCreneau
+    return creneau_test.idCreneau
+
+def ajoute_creneau_travail_v1(session, dateDebut,dateFin):
+    liste_date_deb = transforme_datetime(dateDebut)
+    liste_date_fin = transforme_datetime(dateFin)
+    dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
+    dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
+    creneau_test = sessionSQL.query(CreneauTravail).filter(CreneauTravail.dateDebut == dateDebut).filter(CreneauTravail.dateFin == dateFin).first()
+    if creneau_test is None :
+        idCreneau = get_max_id_creneau_travail(sessionSQL)+1
+        creneau = CreneauTravail(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
             session.commit()
@@ -1222,11 +1325,11 @@ def ajoute_creneau_v1(session, dateDebut,dateFin):
     return creneau_test.idCreneau
 
 
-def ajoute_creneau(session, date_debut, date_fin):
-    creneau_test = session.query(Creneau).filter(Creneau.dateDebut == date_debut).filter(Creneau.dateFin == date_fin).first()
+def ajoute_creneau_repas(session, date_debut, date_fin):
+    creneau_test = session.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau(session)+1
-        creneau = Creneau(idCreneau, date_debut, date_fin)
+        idCreneau = get_max_id_creneau_repas(session)+1
+        creneau = CreneauRepas(idCreneau, date_debut, date_fin)
         session.add(creneau)
         try :
             session.commit()
@@ -1237,10 +1340,25 @@ def ajoute_creneau(session, date_debut, date_fin):
     else : 
         print("un creneau similaire existe déjà")
         return creneau_test.idCreneau
-    
 
-def ajoute_repas(session, estMidi,idRest,idCreneau) : 
-    repas_verif = session.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
+def ajoute_creneau_travail(session, date_debut, date_fin):
+    creneau_test = session.query(CreneauTravail).filter(CreneauTravail.dateDebut == date_debut).filter(CreneauTravail.dateFin == date_fin).first()
+    if creneau_test is None :
+        idCreneau = get_max_id_creneau_travail(session)+1
+        creneau = CreneauTravail(idCreneau, date_debut, date_fin)
+        session.add(creneau)
+        try :
+            session.commit()
+        except : 
+            print("erreur creneau")
+            session.rollback()
+        return creneau.idCreneau
+    else : 
+        print("un creneau similaire existe déjà")
+        return creneau_test.idCreneau    
+
+def ajoute_repas(estMidi,idRest,idCreneau) : 
+    repas_verif = sessionSQL.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
     if repas_verif is None :
         idRepas = get_max_id_repas(sessionSQL)+1
         repas = Repas(idRepas, estMidi, idRest, idCreneau)
@@ -1278,7 +1396,7 @@ def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dic
     for i in range(0, len(liste_repas)):
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
-            idCreneau = ajoute_creneau_v1(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
+            idCreneau = ajoute_creneau_repas_v1(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
             idRest = choix_restaurant(sessionSQL) # ajouter ROLE TODO
             idRepas = ajoute_repas(sessionSQL, False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(sessionSQL, idP, idRepas)

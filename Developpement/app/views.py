@@ -161,8 +161,8 @@ def secretaire_consommateur():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_consommateur = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_consommateur)
-    return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant())
+        return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_consommateur)
+    return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant())
     
 
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
@@ -206,7 +206,11 @@ def data_nom_hotel():
 
 @app.route("/api/data/nomRestaurant")
 def data_nom_restaurant():
-    return jsonify(get_nom_restaurant())
+    return jsonify(get_liste_nom_restaurant())
+
+@app.route("/api/data/creneauRepas", methods = ["GET"])
+def data_creneauRepas():
+    return jsonify(get_liste_creneau_repas())
 
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
@@ -243,8 +247,8 @@ def dataConsommateurs():
         consommateur_dico = get_consommateur(sessionSQL, consommateur.idP).to_dict_sans_ddn()
         consommateur_dico["regime"] = get_regime(sessionSQL, consommateur.idP)
         consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
-        consommateur_dico["date"] = get_date(sessionSQL, consommateur.idRepas)
-        consommateur_dico["creneau"] = get_creneau(sessionSQL, consommateur.idRepas)
+        consommateur_dico["date"] = get_date_repas(sessionSQL, consommateur.idRepas)
+        consommateur_dico["creneau"] = get_creneau_repas(sessionSQL, consommateur.idRepas)
         consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
@@ -323,9 +327,9 @@ def dataIntervenir():
     if not est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for('logout')) 
     liste_intervenir = []
-    for intervenir in sessionSQL.query(Intervenir, Intervention, Creneau, Lieu, Auteur).join(
+    for intervenir in sessionSQL.query(Intervenir, Intervention, CreneauTravail, Lieu, Auteur).join(
         Intervention, Intervention.idIntervention==Intervenir.idIntervention).join(
-        Creneau, Creneau.idCreneau == Intervenir.idCreneau).join(
+        CreneauTravail, CreneauTravail.idCreneau == Intervenir.idCreneau).join(
         Lieu, Lieu.idLieu == Intervenir.idLieu).join(
         Auteur, Auteur.idP == Intervenir.idP).all():
         dico_intervenir = {}
@@ -380,7 +384,7 @@ def page_secretaire_intervention():
         day = date_intervention.split("/")[1]
         heure_debut2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
         heure_fin2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
-        idCreneau = ajoute_creneau(sessionSQL, heure_debut2, heure_fin2)
+        idCreneau = ajoute_creneau_travail(sessionSQL, heure_debut2, heure_fin2)
         try : 
             ajoute_intervention(sessionSQL, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
         except : 
@@ -397,8 +401,8 @@ def page_secretaire_navette():
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
         liste_navette = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
-        return render_template('secretaire_consommateur.html', nomsRestau = get_nom_restaurant(), liste_conso = liste_navette)
-    return render_template('secretaireNavette.html', nomsRestau = get_nom_restaurant())
+        return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_navette)
+    return render_template('secretaireNavette.html', nomsRestau = get_liste_nom_restaurant())
 
 
 
@@ -520,6 +524,11 @@ def before_request():
 def participant_detail(id):
     return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
 
+@app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET"])
+def consommateur_detail(id, idRepas):
+    return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
+    regimes = get_regime(sessionSQL, id), nomRestaurant = get_restaurant(sessionSQL, idRepas),
+    creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas)
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():
@@ -541,6 +550,15 @@ def UpdateParticipant():
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
 
+@app.route('/Consommateur/Update',methods=['POST'])
+def UpdateConsommateur():
+    id = request.form["id"]
+    dateRepas = request.form["dateRepas"]
+    creneauRepas = request.form["creneauRepas"]
+    restaurant = request.form["restaurant"]
+    idRepas = request.form["idRepas"]
+    save_repas = modifier_repas(id, restaurant, dateRepas, creneauRepas, idRepas)
+    return "true" if save_repas == True else save_repas
 
 @app.route('/invite_les_participants', methods=['POST'])
 def traitement():

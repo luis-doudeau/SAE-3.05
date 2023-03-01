@@ -38,25 +38,15 @@
 
     <div class="row" style="border-bottom: solid 1px;padding: 1em;">
         <div class="col-sm-4">
-            <h4 for="InfoP" style="color: gray;">Informations Connexion</h4>
-        </div>
-        <div class="col-sm-8">
-            <div class="row">
-                <input id="EmailPersonne"/>
-            </div>
-            <div class="row labelDetail">
-                <input id="PasswordPersonne"/>
-            </div>
-            <div class="row labelDetail">
-                <input id="idPersonne"/>
-            </div>
-        </div>
-    </div>
-    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
-        <div class="col-sm-4">
             <h4 for="InfoP" style="color: gray;">Informations Personnel</h4>
         </div>
         <div class="col-sm-8">
+            <div class="row labelDetail">
+                <input id="idPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="idRepas"/>
+            </div>
             <div class="row labelDetail">
                 <input id="NomPersonne"/>
             </div>
@@ -64,30 +54,24 @@
                 <input id="PrenomPersonne"/>
             </div>
             <div class="row labelDetail">
-                <input id="DdnPersonne"/>
-            </div>
-            <div class="row labelDetail">
-                <input id="TelPersonne"/>
-            </div>
-            <div class="row labelDetail">
-                <input id="remarquesPersonne"/>
+                <input id="RegimePersonne"/>
             </div>
         </div>
     </div>
 
     <div class="row" style="border-bottom: solid 1px;padding: 1em;">
         <div class="col-sm-4">
-            <h4 for="InfoP"style="color: gray;" >Localisation</h4>
+            <h4 for="InfoP"style="color: gray;" >Consommation</h4>
         </div>
         <div class="col-sm-8">
             <div class="row labelDetail">
-                <input id="AdressePersonne"/>
+                <input id="Restaurant"/>
             </div>
             <div class="row labelDetail">
-                <input id="CodePostalPersonne"/>
+                <input id="DateRepas"/>
             </div>
             <div class="row labelDetail">
-                <input id="VillePersonne"/>
+                <input id="CreneauRepas"/>
             </div>
         </div>
     </div>
@@ -109,96 +93,102 @@
 <script>
 
     $(document).ready(function(){
-        $("#EmailPersonne").kendoTextBox({
-            label: "Email",
-            value: '{{participant.emailP}}',
-            size: "large",
-            rounded: "medium",
-
-        });
-
-        $("#PasswordPersonne").kendoTextBox({
-            label: "Mot de passe",
-            size: "large",
-            value: '{{participant.mdpP}}',
-        });
 
         $("#idPersonne").kendoTextBox({
             label: "ID",
             size: "large",
-            value: '{{participant.idP}}',
+            value: '{{consommateur.idP}}',
             enable: false,
         });
+
+        $("#idRepas").kendoTextBox({
+            label: "ID Repas",
+            size: "large",
+            value: '{{idR}}',
+            enable: false,
+        });
+        
         $("#NomPersonne").kendoTextBox({
             label: "Nom",
             size: "large",
-            value: '{{participant.nomP}}',
+            value: '{{consommateur.nomP}}',
+            enable: false
             
         });
         $("#PrenomPersonne").kendoTextBox({
-            label: "Prenom",
+            label: "Prénom",
             size: "large",
-            value: '{{participant.prenomP}}',
+            value: '{{consommateur.prenomP}}',
+            enable: false
         });
-        $("#DdnPersonne").kendoDatePicker({
-            label: "Date de naissance",
+        $("#RegimePersonne").kendoTextBox({
+            label: "Régime(s)",
             size: "large",
-            value: '{{participant.ddnP}}',
+            value: '{{regimes}}',
+            enable: false,
+
+        });
+        $.ajax({
+            url: "/api/data/nomRestaurant",
+            type:'get',
+            dataType:'json',
+            async: false,
+            success:function (response) {  
+              var mesRestaurants = [];
+              for (var i = 0; i < response.length; i++) {
+                mesRestaurants.push({ text: response[i], value: response[i] });
+              }
+              $("#Restaurant").kendoComboBox({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesRestaurants , label: "Restaurant"
+              });
+            },
+          }),
+
+        $("#DateRepas").kendoDatePicker({
+            label: "Date repas",
+            size: "large",
+            value: '{{dateRepas}}',
             culture:"fr-FR",
         });
-        $("#TelPersonne").kendoTextBox({
-            label: "Telephone",
-            size: "large",
-            value: '{{participant.telP}}',
-        });
-        $("#remarquesPersonne").kendoTextBox({
-            label: "Remarques",
-            size: "large",
-            value: '{{participant.remarques}}',
-        });
-        $("#AdressePersonne").kendoTextBox({
-            label: "Adresse",
-            size: "large",
-            value: '{{participant.adresseP}}',
-        });
-        $("#CodePostalPersonne").kendoTextBox({
-            label: "Code Postal",
-            size: "large",
-            value: '{{participant.codePostalP}}',
-        });
-        $("#VillePersonne").kendoTextBox({
-            label: "Ville",
-            size: "large",
-            value: '{{participant.villeP}}',
-        });
+
+        $.ajax({
+            url: "/api/data/creneauRepas",
+            type:'get',
+            dataType:'json',
+            async: false,
+            success:function (response) {  
+              var mesCreneaux = [];
+              for (var i = 0; i < response.length; i++) {
+                mesCreneaux.push({ text: response[i], value: response[i] });
+              }
+              $("#CreneauRepas").kendoComboBox({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesCreneaux, label: "Créneau"
+              });
+            },
+          });
        
         $("#save").on("click",function(){
             $("#loader-background").show()
-            var ville = $("#VillePersonne").val()
-            var code_postal = $("#CodePostalPersonne").val()
-            var adresse = $("#AdressePersonne").val()
-            var remarques = $("#remarquesPersonne").val()
-            var tel = $("#TelPersonne").val()
-            var ddn = $("#DdnPersonne").val()
+            var creneauRepas = $("#CreneauRepas").val()
+            var dateRepas = $("#DateRepas").val()
+            var restaurant = $("#Restaurant").val()
+            var regimePersonne = $("#RegimePersonne").val()
             var prenom = $("#PrenomPersonne").val()
             var nom = $("#NomPersonne").val()
             var id = $("#idPersonne").val()
-            var password = $("#PasswordPersonne").val()
-            var email = $("#EmailPersonne").val()
-            $.ajax({
-                url : '{{url_for("UpdateParticipant")}}',
+            var idRepas = $("#idRepas").val()
+
+            let table = $.ajax({
+                url : '{{url_for("UpdateConsommateur")}}',
                 data:{
-                    "ville":ville,
-                    "code_postal":code_postal,
-                    "adresse":adresse,
-                    "remarques":remarques,
-                    "tel":tel,
-                    "ddn":ddn,
+                    "creneauRepas":creneauRepas,
+                    "dateRepas":dateRepas,
+                    "restaurant":restaurant,
+                    "regimePersonne":regimePersonne,
                     "prenom":prenom,
                     "nom":nom,
                     "id":id,
-                    "password":password,
-                    "email":email,
+                    "idRepas":idRepas,
                 
                 },
                 type:'POST',
@@ -207,7 +197,7 @@
                         alert("Problème lors de la sauvegarde")
                     }else{
                         await delay(1);
-                        $("#loader-background").hide()
+                        $("#loader-background").hide();
                     }
                 }
             });
@@ -221,3 +211,4 @@
     }
 
 </script>
+
