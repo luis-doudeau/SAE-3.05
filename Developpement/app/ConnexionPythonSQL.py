@@ -90,8 +90,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 
@@ -1129,6 +1129,9 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
     except : 
         print("erreur")
         sessionSQL.rollback() 
+
+def verif_existe_regime(sessionSQL, nomRegime) : 
+    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter(Regime.nomRegime == nomRegime).all() != []
     
 def est_intervenant(sessionSQL, idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()

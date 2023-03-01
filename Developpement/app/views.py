@@ -125,7 +125,7 @@ def inserer_formulaire_reservation():
     request.form["dimanche_midi"],request.form["dimanche_soir"]]
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
     
-    if regime.isalpha(): # si le champ 'regime' contient des caractères
+    if regime.isalpha() and not verif_existe_regime: # si le champ 'regime' contient des caractères
         id_regime = ajoute_regime(sessionSQL, regime)
         ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
     remarques = request.form["remarque"]
@@ -486,7 +486,7 @@ def feuille_route():
     repas = get_repas(sessionSQL, idP, annee)
     return render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, idP), transports=requete_transport_annee2(sessionSQL, idP, annee),\
         periodes=get_assister(sessionSQL, idP, annee), navette=get_navette(sessionSQL, idP, annee), repas=repas, regime=get_regime(sessionSQL, idP),\
-        hotels=(get_dormir(sessionSQL, idP, annee)), intervention=get_intervenirs(sessionSQL, idP))
+        hotels=(get_dormir(sessionSQL, idP, annee)), interventions=get_intervenirs(sessionSQL, idP))
 
 
     

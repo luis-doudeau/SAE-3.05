@@ -48,7 +48,9 @@
           </table>
         </div>
 
+        
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Transport</h2>
+        {%if transports != []%}
         <div class="form-group ml-3 mt-4">
           <table>
             <thead>
@@ -86,8 +88,13 @@
             </tbody>
           </table>
         </div>
+        {% else %}
+        <p class="ml-3">Pas de transport</p>
+
+        {% endif %}
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Navettes</h2>
+        {%if transports != []%}
         <div class="form-group ml-3 mt-4">
           <table>
             <thead>
@@ -112,8 +119,12 @@
             </tbody>
           </table>
         </div>
+        {% else %}
+        <p class="ml-3">Pas de navette</p>
+        {% endif %}
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Repas</h2>
+        {%if repas != []%}
         <div class="form-group ml-3 mt-4">
             <table>
                 <thead>
@@ -140,9 +151,14 @@
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <p class="ml-3">Pas de repas</p>
+        {% endif %}
+       
 
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Régime Alimentaire</h2>
+        {%if regime != []%}
         <div class="form-group ml-3 mt-4">
             <table>
                 <thead>
@@ -157,9 +173,13 @@
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <p class="ml-3">Pas de régime</p>
+        {% endif %}
 
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Hotel</h2>
+        {%if hotels != []%}
         <div class="form-group ml-3 mt-4">
             <table>
                 <thead>
@@ -180,10 +200,13 @@
                 </tbody>
             </table>
         </div>
-
+        {% else %}
+        <p class="ml-3">Pas de nuit à l'hotel</p>
+        {% endif %}
 
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Interventions</h2>
+        {%if transports != []%}
         <div class="form-group ml-3 mt-4">
             <table>
                 <thead>
@@ -196,7 +219,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for intervenir, lieu, intervention, creneau, jour in intervention %}
+                    {% for intervenir, lieu, intervention, creneau, jour in interventions %}
                     <tr>
                         <td>{{jour}}</td>
                         <td>Le {{ creneau.dateDebut.day }}/{{ creneau.dateDebut.month }}/{{ creneau.dateDebut.year }} à {{ creneau.dateDebut.hour }}:{{ creneau.dateDebut.minute }}</td>
@@ -208,9 +231,9 @@
                 </tbody>
             </table>
         </div>
-
-
-
+        {% else %}
+        <p class="ml-3">Pas d'intervention</p>
+        {% endif %}
         
       </section>
     </main>
