@@ -14,9 +14,9 @@
             </div>
           </nav> 
     </header>
-    <main id="main_feuille_route" class="ftco-section row justify-content-center shadow-lg">
-      <h1 class="text-center fs-4 mb-3">Bienvenue , voici votre feuille de route</h1>
-      <section class="ml-5 container flex w-100 wrap p-4">
+    <main id="main_feuille_route" style="margin-top : -3%;" class="ftco-section row justify-content-center shadow-lg">
+      <h1 class="text-center fs-4 mb-3">Bienvenue {{infos_perso.prenomP}}, voici votre feuille de route !</h1>
+      <section style="margin-left : 10% !important;" class="ml-5 container flex w-100 wrap p-4">
 
         <h2 class="fs-5 mt-3" style="text-decoration: underline;">Information Général</h2>
         <div class="form-group ml-3 mt-4">
@@ -53,8 +53,8 @@
           <table>
             <thead>
               <tr>
-                <th >Transport</th>
-                <th class="pr-4">Lieu de départ</th>
+                <th>Transport</th>
+                <th>Lieu de départ</th>
                 <th>Lieu d'arrivée</th>
               </tr>
             </thead>
@@ -75,7 +75,7 @@
             <thead>
               <tr>
                 <th>Date Arrivé</th>
-                <th class="pr-4">Date Départ</th>
+                <th>Date Départ</th>
               </tr>
             </thead>
             <tbody>
@@ -92,7 +92,7 @@
           <table>
             <thead>
               <tr>
-                <th> Numéro</th>
+                <th>Numéro</th>
                 <th>Horaire</th>
                 <th>Direction</th>
               </tr>
@@ -190,7 +190,7 @@
                     <tr>
                         <th>Jour</th>
                         <th>Horaire Début</th>
-                        <th>Horaire Début</th>
+                        <th>Horaire Fin</th>
                         <th>Intervention</th>
                         <th>Lieu</th>
                     </tr>
@@ -657,7 +657,7 @@
 #main_feuille_route{
 	display : flex;
 	min-height : 40%;
-	max-width : 95%;
+	max-width : 90%;
 	margin-left :auto;
 	margin-right:auto;
 }
