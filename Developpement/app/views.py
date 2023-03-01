@@ -26,14 +26,13 @@ import xlsxwriter
 from flask_mail import Mail, Message
 import pdfkit
 
+
+
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
 DATE_FESTIVAL = ["2023-11-16", "2023-11-17", "2023-11-18", "2023-11-19"]
 DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : DATE_FESTIVAL[0]+"-19-30-00/"+DATE_FESTIVAL[0]+"-22-00-00", "vendredi_midi": DATE_FESTIVAL[1]+"-11-30-00/"+DATE_FESTIVAL[1]+"-14-00-00", "vendredi_soir": DATE_FESTIVAL[1]+"-19-30-00/"+DATE_FESTIVAL[1]+"-22-00-00", "samedi_midi" : DATE_FESTIVAL[2]+"-11-30-00/"+DATE_FESTIVAL[2]+"-14-00-00", "samedi_soir":DATE_FESTIVAL[2]+"-19-30-00/"+DATE_FESTIVAL[2]+"-22-00-00", "dimanche_midi": DATE_FESTIVAL[3]+"-11-30-00/"+DATE_FESTIVAL[3]+"-14-00-00", "dimanche_soir": DATE_FESTIVAL[3]+"-19-30-00/"+DATE_FESTIVAL[3]+"-22-00-00"}
 LISTE_HORAIRE_RESTAURANT = ["jeudi_soir", "vendredi_midi", "vendredi_soir", "samedi_midi" , "samedi_soir", "dimanche_midi", "dimanche_soir"]
-
-
-
 LISTE_ROUTE = ["connexion", "page_inscription", "page_secretaire_accueil"]
 
 @app.route('/', methods = ["GET", "POST"])
@@ -74,7 +73,7 @@ def page_inscription():
         if est_intervenant(sessionSQL, current_user.idP):
             return redirect(url_for('formulaire_auteur_transport', idp = current_user.idP))
         else:
-            return redirect(url_for('page_fin'))
+            return redirect(url_for('page_fin', idp = current_user.idP))
     return render_template('coordonneeForms.html')
 
 
@@ -151,9 +150,9 @@ def formulaire_reservation():
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
 def page_fin():
-    if  est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("pageFin.html")
+    return render_template("pageFin.html", idP = current_user.idP)
 
 
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
@@ -482,10 +481,12 @@ def UpdateParticipant():
 
 @app.route("/feuille_route/")
 def feuille_route():
-    annee = datetime.datetime.year
-    res = render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, current_user.idP), transport=requete_transport_annee(sessionSQL, current_user.idP, annee), periodes=get_assister(sessionSQL, current_user.idP, annee), navette=None, repas=None, regime=None, hotel=None, intervention=None)
-    reponsestring = pdfkit.from_string(res, False)
-    reponse = make_response(reponsestring)
-    reponse.headers['Content-Type'] = "application/pdf"
-    reponse.headers["Content-Disposition"] = "attachement;filename=Feuille_route.pdf"
-    return reponse
+    idP = request.args.get('idP')
+    annee = datetime.datetime.now().year
+    repas = get_repas(sessionSQL, idP, annee)
+    return render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, idP), transports=requete_transport_annee2(sessionSQL, idP, annee),\
+        periodes=get_assister(sessionSQL, idP, annee), navette=get_navette(sessionSQL, idP, annee), repas=repas, regime=get_regime(sessionSQL, idP),\
+        hotels=(get_dormir(sessionSQL, idP, annee)), intervention=get_intervenirs(sessionSQL, idP))
+
+
+    
