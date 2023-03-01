@@ -535,10 +535,9 @@ def participant_detail(id):
 
 @app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET"])
 def consommateur_detail(id, idRepas):
-    print(id, idRepas)
     return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
     regimes = get_regime(sessionSQL, id), nomRestaurant = get_restaurant(sessionSQL, idRepas),
-    creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas))
+    creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas)
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():
@@ -563,17 +562,12 @@ def UpdateParticipant():
 @app.route('/Consommateur/Update',methods=['POST'])
 def UpdateConsommateur():
     id = request.form["id"]
-    prenom = request.form["prenom"]
-    nom = request.form["nom"]
     dateRepas = request.form["dateRepas"]
     creneauRepas = request.form["creneauRepas"]
     restaurant = request.form["restaurant"]
-    regimePersonne = request.form["regimePersonne"]
-    save_consommateur = modifier_consommateur(sessionSQL, id, nom, prenom, regimePersonne, restaurant, dateRepas, creneauRepas)
-
-
-    res = save_consommateur
-    return "true" if res == True else res
+    idRepas = request.form["idRepas"]
+    save_repas = modifier_repas(id, restaurant, dateRepas, creneauRepas, idRepas)
+    return "true" if save_repas == True else save_repas
 
 @app.route('/invite_les_participants', methods=['POST'])
 def traitement():

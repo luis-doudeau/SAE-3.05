@@ -45,6 +45,9 @@
                 <input id="idPersonne"/>
             </div>
             <div class="row labelDetail">
+                <input id="idRepas"/>
+            </div>
+            <div class="row labelDetail">
                 <input id="NomPersonne"/>
             </div>
             <div class="row labelDetail">
@@ -97,22 +100,33 @@
             value: '{{consommateur.idP}}',
             enable: false,
         });
+
+        $("#idRepas").kendoTextBox({
+            label: "ID Repas",
+            size: "large",
+            value: '{{idR}}',
+            enable: false,
+        });
         
         $("#NomPersonne").kendoTextBox({
             label: "Nom",
             size: "large",
             value: '{{consommateur.nomP}}',
+            enable: false
             
         });
         $("#PrenomPersonne").kendoTextBox({
             label: "Prénom",
             size: "large",
             value: '{{consommateur.prenomP}}',
+            enable: false
         });
         $("#RegimePersonne").kendoTextBox({
             label: "Régime(s)",
             size: "large",
             value: '{{regimes}}',
+            enable: false,
+
         });
         $.ajax({
             url: "/api/data/nomRestaurant",
@@ -162,8 +176,9 @@
             var prenom = $("#PrenomPersonne").val()
             var nom = $("#NomPersonne").val()
             var id = $("#idPersonne").val()
+            var idRepas = $("#idRepas").val()
 
-            $.ajax({
+            let table = $.ajax({
                 url : '{{url_for("UpdateConsommateur")}}',
                 data:{
                     "creneauRepas":creneauRepas,
@@ -173,6 +188,7 @@
                     "prenom":prenom,
                     "nom":nom,
                     "id":id,
+                    "idRepas":idRepas,
                 
                 },
                 type:'POST',
@@ -181,7 +197,7 @@
                         alert("Problème lors de la sauvegarde")
                     }else{
                         await delay(1);
-                        $("#loader-background").hide()
+                        $("#loader-background").hide();
                     }
                 }
             });

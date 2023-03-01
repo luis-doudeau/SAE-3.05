@@ -697,35 +697,66 @@ def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, t
         return False
 
 def verif_regime_existe(sessionSQL, nomRegime):
-    regime = sessionSQL.query(Regime).filter(Regime.nomRegime == nomRegime)
+    regime = sessionSQL.query(Regime).filter(Regime.nomRegime == nomRegime).first()
     if regime is not None:
         return regime.idRegime
     else:
         ajoute_regime(sessionSQL, nomRegime)
 
-def modifier_consommateur(sessionSQL, idP, nomP, prenomP, regimePersonne):
-    id_regime = verif_regime_existe(sessionSQL, regimePersonne)
+def get_id_creneau_repas(date_debut, date_fin):
+    id_creneau = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()).idCreneau
+    return id_creneau
 
-    sessionSQL.query(Consommateur).join(Avoir, Consommateur.idP == Avoir.idP).filter(Consommateur.idP == idP).update(
-        {Consommateur.nomP : nomP, Consommateur.prenomP : prenomP, Avoir.idRegime : id_regime})
+def est_midi(date_debut):
+    # Obtenir l'heure de la date de début
+    heure_debut = date_debut.time()
+    
+    # Définir l'heure de début et de fin de la période midi
+    heure_midi_debut = datetime.time(11, 0)
+    heure_midi_fin = datetime.time(13, 0)
+    
+    # Vérifier si l'heure de début est comprise entre l'heure de début et de fin de la période midi
+    if heure_debut >= heure_midi_debut and heure_debut <= heure_midi_fin:
+        return True
+    else:
+        return False    
+
+def verif_repas_existe(nomRestaurant, date_debut, date_fin):
+    id_restaurant = get_id_restaurant(sessionSQL, nomRestaurant)
+    id_creneau = get_id_creneau_repas(date_debut, date_fin)
+    repas = sessionSQL.query(Repas).filter(Repas.idCreneau == id_creneau).filter(Repas.idRest == id_restaurant).first()
+    if repas is not None:
+        return repas.idRepas
+    elif est_midi(date_debut):
+        id = ajoute_repas(True, id_restaurant, id_creneau)
+        return id
+    else:
+        id = ajoute_repas(False, id_restaurant, id_creneau)
+        return id
+
+def modifier_repas(idP, nomRestaurant, dateRepas, creneauRepas, idRepas):
+
+    creneau_debut = creneauRepas.split("-")[0]
+    liste_creneau_debut = creneau_debut.split(":")
+
+    creneau_fin = creneauRepas.split("-")[1]
+    liste_creneau_fin = creneau_fin.split(":")
+
+    liste_date = dateRepas.split("-")
+
+    date_debut = datetime.datetime(int(liste_date[2]), int(liste_date[1]), int(liste_date[0]), int(liste_creneau_debut[0]), int(liste_creneau_debut[1]), int(liste_creneau_debut[2]))
+    date_fin = datetime.datetime(int(liste_date[2]), int(liste_date[1]), int(liste_date[0]), int(liste_creneau_fin[0]), int(liste_creneau_fin[1]), int(liste_creneau_fin[2]))
+
+    new_idRepas = verif_repas_existe(nomRestaurant, date_debut, date_fin)
+    sessionSQL.query(Manger).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).update({Manger.idRepas: new_idRepas})
+
     try : 
         sessionSQL.commit()
-        print("Le participant a bien été modifié")
+        print("Le repas associé à ce participant a bien été modifié")
         return True
     except : 
         sessionSQL.rollback()
-        print("erreur lors de la modif du participant")
-        return False
-
-def modifier_repas(sessionSQL, idP, nomRestaurant, dateRepas, creneauRepas):
-    id_manger = verif_repas_existe(sessionSQL, )
-    try : 
-        sessionSQL.commit()
-        print("Le participant a bien été modifié")
-        return True
-    except : 
-        sessionSQL.rollback()
-        print("erreur lors de la modif du participant")
+        print("erreur lors de la modif du repas")
         return False
     
 def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
@@ -838,7 +869,10 @@ def get_nom(sessionSQL, id_participant):
 
 def get_id_hotel(sessionSQL, nom_hotel):
     return (sessionSQL.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
-   
+
+
+def get_id_restaurant(sessionSQL, nom_restaurant):
+    return (sessionSQL.query(Restaurant).filter(Restaurant.nomRest == nom_restaurant).first()).idRest
 
 def get_utilisateur(sessionSQL, id_utilisateur):
     return sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).first()
@@ -1085,7 +1119,7 @@ def ajoute_deplacer(sessionSQL, idP, idTransport, lieuDepart, lieuArrive, annee)
 
 def supprime_mangeur(sessionSQL, idP):
     annee = datetime.datetime.now().year
-    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(extract('year', Creneau.dateDebut) == annee).all()
+    manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(extract('year', CreneauRepas.dateDebut) == annee).all()
     for mang in manger :
         sessionSQL.query(Manger).filter(Manger.idP == mang.idP).filter(Manger.idRepas == mang.idRepas).delete()
         sessionSQL.commit()
@@ -1315,8 +1349,8 @@ def ajoute_creneau_travail(session, date_debut, date_fin):
         print("un creneau similaire existe déjà")
         return creneau_test.idCreneau    
 
-def ajoute_repas(session, estMidi,idRest,idCreneau) : 
-    repas_verif = session.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
+def ajoute_repas(estMidi,idRest,idCreneau) : 
+    repas_verif = sessionSQL.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
     if repas_verif is None :
         idRepas = get_max_id_repas(sessionSQL)+1
         repas = Repas(idRepas, estMidi, idRest, idCreneau)
