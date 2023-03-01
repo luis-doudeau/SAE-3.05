@@ -1,4 +1,4 @@
-from sqlalchemy import DATETIME, BOOLEAN
+from sqlalchemy import DATETIME, BOOLEAN, TIME
 from sqlalchemy import Column , Integer, Text
 from sqlalchemy . ext . declarative import declarative_base
 
@@ -8,7 +8,7 @@ class Voyage(Base):
     __tablename__ = "VOYAGE"
     idVoy = Column(Integer, primary_key = True)
     heureDebVoy = Column(DATETIME)
-    DureeVoy = Column(DATETIME)
+    DureeVoy = Column(TIME)
     directionGare = Column(BOOLEAN)
     idNavette = Column(Integer)
 
@@ -37,8 +37,8 @@ class Voyage(Base):
         else:
             return "Gare Blois → Festival"
     def get_duree(self):
-        nb_minutes = (self.DureeVoy.seconds % 3600) // 60
-        nb_secondes = self.DureeVoy.seconds // 3600
+        nb_minutes = (self.DureeVoy.second % 3600) // 60
+        nb_secondes = self.DureeVoy.second // 3600
         res = str(nb_minutes) +" minutes"
         if nb_secondes != 0:
             res += " "+str(nb_secondes) + " secondes"
