@@ -1,6 +1,8 @@
 import json
 
-from .app import app, mail
+from .ConnexionPythonSQL import get_all_creneauxRepas
+
+from .app import app
 
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify
@@ -204,7 +206,7 @@ def dataDormeurs():
 def data_nom_hotel():
     return jsonify(get_nom_hotel())
 
-@app.route("/api/data/nomRestaurant")
+@app.route("/api/data/nomRestaurant", methods= ["GET"])
 def data_nom_restaurant():
     return jsonify(get_liste_nom_restaurant())
 
@@ -286,7 +288,6 @@ def dataTransport():
     liste_transport = []
     res = sessionSQL.query(Deplacer, Transport, Assister).join(Transport, Deplacer.idTransport==Transport.idTransport).join(Assister, Assister.idP == Deplacer.idP).all()
     for transport in res:
-        print(transport)
         voyages_dico = {}
         voyages_dico["transport"] = transport[1].nomTransport
         voyages_dico["lieuDepart"] = transport[0].lieuDepart
@@ -296,7 +297,6 @@ def dataTransport():
         voyages_dico["dateArrive"] = datetime_to_heure(transport[2].dateDepart)
         voyages_dico["prenomP"] = get_prenom(sessionSQL, transport[0].idP)
         voyages_dico["nomP"] = get_nom(sessionSQL, transport[0].idP)
-        print(voyages_dico)
         liste_transport.append(voyages_dico)
     return {'data': liste_transport}
 
@@ -501,7 +501,6 @@ def envoie_mail(mail_destination):
     html_content='<strong>and easy to do anywhere, even with Python</strong>')
     body = "test"
     try:
-        print("l475")
         sg = SendGridAPIClient('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')
         response = sg.send(message)
     except Exception as e:
@@ -524,11 +523,14 @@ def before_request():
 def participant_detail(id):
     return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
 
-@app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET"])
+@app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET", "POST"])
 def consommateur_detail(id, idRepas):
+    creneaux = get_all_creneauxRepas()
+    restaurant = get_restaurant(sessionSQL, idRepas)
+    creneauRepas = get_creneau_repas(sessionSQL, idRepas)
     return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
-    regimes = get_regime(sessionSQL, id), nomRestaurant = get_restaurant(sessionSQL, idRepas),
-    creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas)
+    regimes = get_regime(sessionSQL, id), nomRestaurant = restaurant,
+    creneauRepas = creneauRepas, dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas, creneaux = creneaux)
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():

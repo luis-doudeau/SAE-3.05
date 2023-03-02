@@ -78,9 +78,9 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
@@ -836,6 +836,8 @@ def get_all_auteur(sessionSQL):
     liste_auteur = sessionSQL.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
     return {auteur.idP : auteur for auteur in liste_auteur}
 
+
+
 def get_all_interventions(sessionSQL) :
     """" Récupère un dictionnaire d'intervervention 
         Key : id de l'intervention (id_intervention)
@@ -930,13 +932,13 @@ def get_liste_nom_restaurant():
     return liste_nom_resteau
 
 def get_liste_creneau_repas():
-    liste_creneau = []
+    liste_creneau = set()
     for creneau in sessionSQL.query(CreneauRepas):
         debut = creneau.dateDebut
         fin = creneau.dateFin
         format = format_creneau(debut, fin)
-        liste_creneau.append(format)
-    return liste_creneau
+        liste_creneau.add(format)
+    return list(liste_creneau)
 
 def get_nom_hotel():
     liste_nom_hotel = []
@@ -1455,3 +1457,10 @@ def date_str_datetime(date_str):
     date_object = datetime.datetime.strptime(date_str, date_format)
     return date_object
 
+def get_all_creneauxRepas():
+    creneaux = sessionSQL.query(CreneauRepas).all()
+    liste_creneaux = []
+    for cren in creneaux:
+        format_cren = format_creneau(cren.dateDebut, cren.dateFin)
+        liste_creneaux.append(format_cren)
+    return liste_creneaux
