@@ -111,7 +111,9 @@ def insererTransportPersonne():
 def formulaire_auteur_transport():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
+    dateArr = DATE_FESTIVAL[0]
+    print(dateArr)
+    return render_template("transportForms.html", date_arr=dateArr, limite_arr=dateArr, limite_dep = DATE_FESTIVAL[-1], liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
         
 
 

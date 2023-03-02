@@ -327,7 +327,7 @@
 
   $("#save").on("click", function(){
     console.log("essaieverif");
-    if(verif_transport() && verif_date()){
+    if(verif_date() && verif_transport()){
       console.log("verig");
       var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
       var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
@@ -398,9 +398,10 @@ function verif_date(){
   const selectedDateDep = new Date(dateDep.value);
   var arrive = false;
   var depart = false;
+  var ordre = false;
 
-  var beginDate = new Date("2023-11-02");
-  var endDate = new Date("2023-11-24"); 
+  var beginDate = new Date("{{limite_arr}}");
+  var endDate = new Date("{{limite_dep}}"); 
   // Vérifier si la date sélectionnée est compris dans les dates du festival
   if (selectedDateArr.getTime() < beginDate.getTime() || selectedDateArr.getTime() > endDate.getTime()) {
     // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
@@ -421,7 +422,18 @@ function verif_date(){
     dateDep.setCustomValidity('');
     depart = true;
   }
-  return depart && arrive;
+  console.log(beginDate.getTime());
+  console.log(endDate.getTime());
+  if (selectedDateArr.getTime() > selectedDateDep.getTime()){
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateDep.setCustomValidity('Veuillez sélectionner une date ultérieur !');
+    ordre = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateArr.setCustomValidity('');
+    ordre = true;
+  }
+  return depart && arrive && ordre;
 }
 
 
@@ -670,7 +682,7 @@ cardAutre.addEventListener("click", function(){
 
 
 
-let today = new Date().toISOString().substr(0, 10); 
+let today = new Date("{{date_arr}}").toISOString().substr(0, 10); 
 
 document.getElementById("dateDep").value = today;
 document.getElementById("dateArr").value = today;

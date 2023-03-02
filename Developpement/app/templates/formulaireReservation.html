@@ -84,9 +84,7 @@
 
 
   function convertirListe(liste) {
-    return liste.map(function(element) {
-      return element.replace(/'/g, '');
-    });
+    return liste.replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
   }
 
 
@@ -100,24 +98,25 @@ function verifFormulaire(){
     return true;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  liste_id = convertirListe({{repas}});
-  console.log(liste_id);
-
+  document.addEventListener("DOMContentLoaded", function() {
+    liste_id = convertirListe("{{repas}}");
+    for(id of liste_id){
+      document.getElementById(id.trim()).checked = true;
+    }
 })
 
   $(document).ready(function(){
     $("#save").on("click",function(){
     if(verifFormulaire()){
       var button1 = $("#jeudi_soir")[0].checked
-      var button2 = $("#vendredi_midi")[0].checked 
+      var button2 = $("#vendredi_midi")[0].checked
       var button3 = $("#vendredi_soir")[0].checked
-      var button4 = $("#samedi_midi")[0].checked 
+      var button4 = $("#samedi_midi")[0].checked
       var button5 = $("#samedi_soir")[0].checked
-      var button6 = $("#dimanche_midi")[0].checked 
-      var regime = $("#regime").val() 
+      var button6 = $("#dimanche_midi")[0].checked
+      var regime = $("#regime").val()
       var hebergement = $("#success")[0].value
-      var button7 = $("#dimanche_soir")[0].checked 
+      var button7 = $("#dimanche_soir")[0].checked
       var remarque = $("#remarque").val()
       $.ajax({
         url:"{{url_for('inserer_formulaire_reservation')}}",
