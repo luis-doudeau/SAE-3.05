@@ -28,13 +28,7 @@ import pandas as pd
 from io import BytesIO
 import xlsxwriter
 import threading
-
-TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
-TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
-DATE_FESTIVAL = ["2023-11-16", "2023-11-17", "2023-11-18", "2023-11-19"]
-DICO_HORAIRE_RESTAURANT = {"jeudi_soir" : DATE_FESTIVAL[0]+"-19-30-00/"+DATE_FESTIVAL[0]+"-22-00-00", "vendredi_midi": DATE_FESTIVAL[1]+"-11-30-00/"+DATE_FESTIVAL[1]+"-14-00-00", "vendredi_soir": DATE_FESTIVAL[1]+"-19-30-00/"+DATE_FESTIVAL[1]+"-22-00-00", "samedi_midi" : DATE_FESTIVAL[2]+"-11-30-00/"+DATE_FESTIVAL[2]+"-14-00-00", "samedi_soir":DATE_FESTIVAL[2]+"-19-30-00/"+DATE_FESTIVAL[2]+"-22-00-00", "dimanche_midi": DATE_FESTIVAL[3]+"-11-30-00/"+DATE_FESTIVAL[3]+"-14-00-00", "dimanche_soir": DATE_FESTIVAL[3]+"-19-30-00/"+DATE_FESTIVAL[3]+"-22-00-00"}
-LISTE_HORAIRE_RESTAURANT = ["jeudi_soir", "vendredi_midi", "vendredi_soir", "samedi_midi" , "samedi_soir", "dimanche_midi", "dimanche_soir"]
-LISTE_ROUTE = ["connexion", "page_inscription", "page_secretaire_accueil"]
+from .constants import *
 
 @app.route('/', methods = ["GET", "POST"])
 def connexion():
@@ -115,7 +109,9 @@ def insererTransportPersonne():
 def formulaire_auteur_transport():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("transportForms.html", liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
+    dateArr = DATE_FESTIVAL[0]
+    print(dateArr)
+    return render_template("transportForms.html", date_arr=dateArr, limite_arr=dateArr, limite_dep = DATE_FESTIVAL[-1], liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
         
 
 
@@ -125,17 +121,23 @@ def inserer_formulaire_reservation():
     liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
     request.form["dimanche_midi"],request.form["dimanche_soir"]]
-    print(current_user)
-    print(current_user.prenomP)
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
     
-    if regime.isalpha() and not verif_existe_regime(sessionSQL, regime): # si le champ 'regime' contient des caractères et n'existe pas déjà
-        id_regime = ajoute_regime(sessionSQL, regime)
-        ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
+    if not regime.isspace() and not (len(regime)==0) and not verif_existe_regime(sessionSQL, regime): # si le champ 'regime' contient des caractères et n'existe pas déjà
+        idRegime = possede_regime(sessionSQL, current_user.idP) # verifie si la personne possede un regime et si oui on recupere l'id de ce regime
+        if idRegime is not None : # si il possède un regime
+            update_regime(sessionSQL, idRegime, regime)
+        else :
+            id_regime = ajoute_regime(sessionSQL, regime)
+            ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
+    else :
+        idRegime = possede_regime(sessionSQL, current_user.idP) 
+        if idRegime is not None : # si il possède un regime
+            supprime_regime(sessionSQL, current_user.idP, idRegime)
+            
     remarques = request.form["remarque"]
     if remarques.isalpha():  # si le champ 'remarques' contient des caractères
         modif_participant_remarque(sessionSQL, current_user.idP, remarques)
-    
     suppprime_loger(sessionSQL, current_user.idP)
     if request.form["hebergement"] =="true":
         ajoute_hebergement(sessionSQL, current_user.idP)
@@ -152,7 +154,8 @@ def formulaire_reservation():
         regime = ""
     else : 
         regime = get_regime(sessionSQL, current_user.idP)
-    return render_template("formulaireReservation.html", regimes=regime)
+    print(get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year))
+    return render_template("formulaireReservation.html",repas=get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year),regimes=regime)
 
 
 @app.route('/pageFin/', methods = ["GET"])
