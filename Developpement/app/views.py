@@ -27,14 +27,7 @@ import json
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
-<<<<<<< HEAD
 import threading
-=======
-from flask_mail import Mail, Message
-import pdfkit
-
-
->>>>>>> feuille_route
 
 TYPE_PARTICIPANT = ["Auteur", "Consommateur", "Exposant", "Intervenant", "Invite", "Presse", "Staff", "Secretaire"]
 TYPE_PARTICIPANT_FINALE = ["Auteur", "Exposant", "Invite", "Presse", "Staff", "Secretaire"]
@@ -138,7 +131,7 @@ def inserer_formulaire_reservation():
     print(current_user.prenomP)
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
     
-    if regime.isalpha() and not verif_existe_regime: # si le champ 'regime' contient des caractères
+    if regime.isalpha() and not verif_existe_regime(sessionSQL, regime): # si le champ 'regime' contient des caractères et n'existe pas déjà
         id_regime = ajoute_regime(sessionSQL, regime)
         ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
     remarques = request.form["remarque"]
@@ -157,7 +150,11 @@ def inserer_formulaire_reservation():
 def formulaire_reservation():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    return render_template("formulaireReservation.html")
+    if get_regime(sessionSQL, current_user.idP) == "Pas de régime" :
+        regime = ""
+    else : 
+        regime = get_regime(sessionSQL, current_user.idP)
+    return render_template("formulaireReservation.html", regimes=regime)
 
 
 @app.route('/pageFin/', methods = ["GET"])
@@ -565,7 +562,6 @@ def UpdateParticipant():
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
 
-<<<<<<< HEAD
 @app.route('/Consommateur/Update',methods=['POST'])
 def UpdateConsommateur():
     id = request.form["id"]
@@ -592,14 +588,6 @@ def traitement():
     return jsonify({"status": "success"})
 
 
-
-@app.route('/testt', methods=['GET'])
-def test():
-    affecter_intervenant_voyage(sessionSQL, 303)
-    return "OK"
-=======
-
-
 @app.route("/feuille_route/")
 def feuille_route():
     idP = request.args.get('idP')
@@ -611,4 +599,3 @@ def feuille_route():
 
 
     
->>>>>>> feuille_route

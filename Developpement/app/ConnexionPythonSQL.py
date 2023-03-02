@@ -90,8 +90,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
@@ -191,12 +191,12 @@ def get_all_lieu(session) :
 
 
 def get_repas(sessionSQL, idP, annee):
-    resultat = sessionSQL.query(Repas, Creneau, Restaurant)\
-        .join(Creneau, Creneau.idCreneau == Repas.idCreneau)\
+    resultat = sessionSQL.query(Repas, CreneauRepas, Restaurant)\
+        .join(CreneauRepas, CreneauRepas.idCreneau == Repas.idCreneau)\
         .join(Restaurant, Restaurant.idRest == Repas.idRest)\
         .join(Manger, Manger.idRepas == Repas.idRepas)\
         .filter(Manger.idP == idP)\
-        .filter(extract('year', Creneau.dateDebut) == annee).order_by(Creneau.dateDebut.asc()).all()
+        .filter(extract('year', CreneauRepas.dateDebut) == annee).order_by(CreneauRepas.dateDebut.asc()).all()
     
     liste_res = []
     if resultat:
@@ -885,7 +885,7 @@ def get_intervenirs(sessionSQL) :
     return sessionSQL.query(Intervenir).all()
 
 def get_intervenirs(sessionSQL, idP) : 
-    resultat = sessionSQL.query(Intervenir, Lieu, Intervention, Creneau).join(Lieu, Lieu.idLieu == Intervenir.idLieu).join(Intervention, Intervention.idIntervention == Intervenir.idIntervention).join(Creneau, Creneau.idCreneau == Intervenir.idCreneau).filter(Intervenir.idP == idP).all()
+    resultat = sessionSQL.query(Intervenir, Lieu, Intervention, CreneauTravail).join(Lieu, Lieu.idLieu == Intervenir.idLieu).join(Intervention, Intervention.idIntervention == Intervenir.idIntervention).join(CreneauTravail, CreneauTravail.idCreneau == Intervenir.idCreneau).filter(Intervenir.idP == idP).all()
     liste_res = list()
     if resultat:
         for res in resultat:
@@ -993,8 +993,6 @@ def get_nom_hotel():
     return liste_nom_hotel
 
 
-    
-        
 def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
@@ -1049,10 +1047,6 @@ def get_liste_participant_idp_regime(sessionSQL, liste_id):
             liste_participants.append((une_personne, get_regime(sessionSQL, une_personne.idP)))
     return liste_participants
 
-<<<<<<< HEAD
-#Inutile ???
-""" 
-=======
 
 def get_navette(sessionSQL, idP, annee) : 
         resultat = sessionSQL.query(Voyage).join(Transporter, Transporter.idVoy == Voyage.idVoy).filter(Transporter.idP == idP).filter(extract('year', Voyage.heureDebVoy) == annee).all()
@@ -1061,7 +1055,6 @@ def get_navette(sessionSQL, idP, annee) :
             liste_res.append((res, JOURS_SEMAINES[res.heureDebVoy.strftime("%A")]))
         return liste_res
 
->>>>>>> feuille_route
 def affiche_navette(sessionSQL, date, navette, directionGare):
     if navette != "Navette" :
         navette = int(navette)
@@ -1097,7 +1090,7 @@ def affiche_navette(sessionSQL, date, navette, directionGare):
             liste_transport.append(tran[3])
 
     return liste_transport
-"""
+
 # affiche_navette(sessionSQL, "Date", "Navette", "Direction")
          
 
@@ -1113,7 +1106,7 @@ def get_regime(sessionSQL, id_p):
     str_regime = ""
     liste_regime = sessionSQL.query(Regime.nomRegime).join(Avoir, Avoir.idRegime == Regime.idRegime).filter(Avoir.idP == id_p).all()
     if len(liste_regime) == 0:
-        str_regime = "Pas de regime"
+        str_regime = "Pas de régime"
     else:
         for un_regime in liste_regime:
             str_regime += str(un_regime[0]) + ", "
@@ -1272,14 +1265,18 @@ def get_assister(sessionSQL, idP, annee):
 def ajoute_regime(sessionSQL,regime) :
     sessionSQL.query
     id_regime = get_max_id_regime(sessionSQL)+1
-    regime = Regime(id_regime, regime)
-    sessionSQL.add(regime)
-    try :
-        sessionSQL.commit()
-        return id_regime
-    except : 
-        print("erreur")
-        sessionSQL.rollback() 
+    regime_existant = sessionSQL.query(Regime.idRegime).filter(Regime.nomRegime == regime).all() != []
+    if not regime_existant : 
+        return regime_existant[0]
+    else : 
+        regime = Regime(id_regime, regime)
+        sessionSQL.add(regime)
+        try :
+            sessionSQL.commit()
+            return id_regime
+        except : 
+            print("erreur")
+            sessionSQL.rollback() 
         
 def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
     avoir_regime = Avoir(id_consommateur, id_regime)
@@ -1289,10 +1286,11 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
         print("L'association regime-consommateur à bien été ajoutée !")
     except : 
         print("erreur")
-        sessionSQL.rollback() 
+        sessionSQL.rollback()
 
-def verif_existe_regime(sessionSQL, nomRegime) : 
-    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter(Regime.nomRegime == nomRegime).all() != []
+def verif_existe_regime(sessionSQL, nomRegime) :
+    search_term = '%'+nomRegime+'%' 
+    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter().filter(Regime.nomRegime == nomRegime).all() != []
     
 def est_intervenant(sessionSQL, idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
@@ -1483,7 +1481,7 @@ def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dic
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
             idCreneau = ajoute_creneau_repas_v1(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
             idRest = choix_restaurant(sessionSQL) # ajouter ROLE TODO
-            idRepas = ajoute_repas(sessionSQL, False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
+            idRepas = ajoute_repas(False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
             ajoute_mangeur(sessionSQL, idP, idRepas)
 
 def invite_un_participant(sessionSQL, idP):
