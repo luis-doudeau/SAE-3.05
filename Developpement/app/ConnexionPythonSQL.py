@@ -94,7 +94,7 @@ connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnard
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
-#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 
 
 
@@ -1501,7 +1501,7 @@ def supprimer_intervenant_voyage_navette(sessionSQL, idP):
                 
 def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
     annee_en_cours =  datetime.date.today().year
-    date_arrive = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
+    date_arrive = sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
     if date_arrive is None:
         print("Pas de date d'arrive")
         return None
@@ -1561,6 +1561,16 @@ def reiniatilise_invitation(sessionSQL):
         sessionSQL.query(Participant).filter(Participant.idP == p.idP).update({Participant.invite : False})
         sessionSQL.commit()
 
+
+def get_date_heure_arrive_intervenant(idP):
+    annee_en_cours =  datetime.date.today().year
+    return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours) ).first().dateArrive
+
+def get_date_heure_depart_intervenant(idP):
+    annee_en_cours =  datetime.date.today().year
+    return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
+
+
 @staticmethod
 def generate_password(length=8):
   # Get a list of all the ASCII lowercase letters, uppercase letters, and digits
@@ -1596,7 +1606,13 @@ def date_str_datetime(date_str):
     date_object = datetime.datetime.strptime(date_str, date_format)
     return date_object
 
+def datetime_str_to_datetime(date_str, heure_str):
+    date_obj = datetime.datetime.strptime(date_str, "%d/%m/%Y")
+    time_obj = datetime.datetime.strptime(heure_str, "%H:%M")
 
+    # Combiner la date et l'heure pour créer un objet datetime unique
+    datetime_obj = datetime.datetime.combine(date_obj.date(), time_obj.time())
+    return datetime_obj
 
 
 """def affiche_navette(sessionSQL, date, navette, directionGare):
