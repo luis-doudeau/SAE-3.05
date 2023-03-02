@@ -52,7 +52,7 @@ from .Utilisateur import Utilisateur
 from .constants import * 
 
 from .app import login_manager
-# pour avoir sqlalchemy:
+# pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
 # pip3 install mysql-connector-python
@@ -81,8 +81,8 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
@@ -1046,43 +1046,6 @@ def get_navette(sessionSQL, idP, annee) :
             liste_res.append((res, JOURS_SEMAINES[res.heureDebVoy.strftime("%A")]))
         return liste_res
 
-def affiche_navette(sessionSQL, date, navette, directionGare):
-    if navette != "Navette" :
-        navette = int(navette)
-    if directionGare == "true" : 
-        directionGare = True
-    elif directionGare == "false" : 
-        directionGare = False
-    liste_consommateurs = []
-    liste_creneau = []
-    liste_transport = []
-    liste_mangeur = []
-    if navette != "Navette" and directionGare != "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).filter(Voyage.directionGare == directionGare).distinct().all()
-    elif navette == "Navette" and directionGare == "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.idP, Participant.prenomP, Participant.nomP, Voyage.directionGare, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).distinct().all()
-    elif navette != "Restaurant":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).distinct().all()
-    elif directionGare != "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Voyage.directionGare == directionGare).distinct().all()
-    
-    
-    if date[0] != "Date":
-        date = date(int(date[0]), int(date[1]), int(date[2])) # modifier ça et modifier le HTML
-        for cren in transport:
-            if cren[1].date() == date:
-                liste_creneau.append(cren[2])
-        transport = sessionSQL.query(Repas, Repas.idCreneau, Repas.idRepas).all()
-        for rep in transport:
-            if rep[1] in liste_creneau:
-                liste_transport.append(rep[2])
-    else:
-        for tran in transport:
-            liste_transport.append(tran[3])
-
-    return liste_transport
-
-# affiche_navette(sessionSQL, "Date", "Navette", "Direction")
          
 
 def get_liste_participant_id_consommateur(sessionSQL, liste_id):
@@ -1522,7 +1485,18 @@ def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
     id_navette_dispo = get_navette_dispo(sessionSQL, heureDebVoy, heureDebVoy+datetime.timedelta(minutes=10))
     nouvelle_id_voyage = get_max_id_voyage(sessionSQL)+1
     if id_navette_dispo is not None:
-        sessionSQL.add(Voyage(nouvelle_id_voyage, heureDebVoy, datetime.time(0, 10, 0), directionGARE, id_navette_dispo))
+        if directionGARE : 
+            t = datetime.time(0,20)
+            t0 = datetime.time(0,0)
+            dt = datetime.datetime.combine(heureDebVoy.date(), t)
+            dt2 = datetime.datetime.combine(heureDebVoy.date(), t0)
+            diff = heureDebVoy - dt
+            # Ajouter la différence à l'objet datetime d'origine
+            heureDebVoy2 = dt2 + diff
+
+        else : 
+            heureDebVoy2 = heureDebVoy
+        sessionSQL.add(Voyage(nouvelle_id_voyage, heureDebVoy2, datetime.time(0, 10, 0), directionGARE, id_navette_dispo))
         sessionSQL.commit()
         return nouvelle_id_voyage
 
@@ -1541,7 +1515,7 @@ def supprimer_intervenant_voyage_navette(sessionSQL, idP):
                 
 def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
     annee_en_cours =  datetime.date.today().year
-    date_arrive = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
+    date_arrive = sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
     if date_arrive is None:
         print("Pas de date d'arrive")
         return None
@@ -1623,6 +1597,16 @@ def reiniatilise_invitation(sessionSQL):
 def string_to_datetime(s):
     return datetime.datetime.strptime(s, '%Y-%m-%d-%H-%M-%S')
 
+
+def get_date_heure_arrive_intervenant(idP):
+    annee_en_cours =  datetime.date.today().year
+    return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours) ).first().dateArrive
+
+def get_date_heure_depart_intervenant(idP):
+    annee_en_cours =  datetime.date.today().year
+    return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
+
+
 @staticmethod
 def generate_password(length=8):
   # Get a list of all the ASCII lowercase letters, uppercase letters, and digits
@@ -1658,3 +1642,49 @@ def date_str_datetime(date_str):
     date_object = datetime.datetime.strptime(date_str, date_format)
     return date_object
 
+def datetime_str_to_datetime(date_str, heure_str):
+    date_obj = datetime.datetime.strptime(date_str, "%d/%m/%Y")
+    time_obj = datetime.datetime.strptime(heure_str, "%H:%M")
+
+    # Combiner la date et l'heure pour créer un objet datetime unique
+    datetime_obj = datetime.datetime.combine(date_obj.date(), time_obj.time())
+    return datetime_obj
+
+
+"""def affiche_navette(sessionSQL, date, navette, directionGare):
+    if navette != "Navette" :
+        navette = int(navette)
+    if directionGare == "true" : 
+        directionGare = True
+    elif directionGare == "false" : 
+        directionGare = False
+    liste_consommateurs = []
+    liste_creneau = []
+    liste_transport = []
+    liste_mangeur = []
+    if navette != "Navette" and directionGare != "Direction":
+        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).filter(Voyage.directionGare == directionGare).distinct().all()
+    elif navette == "Navette" and directionGare == "Direction":
+        transport = sessionSQL.query(Voyage.idVoy, Participant.idP, Participant.prenomP, Participant.nomP, Voyage.directionGare, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).distinct().all()
+    elif navette != "Restaurant":
+        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).distinct().all()
+    elif directionGare != "Direction":
+        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Voyage.directionGare == directionGare).distinct().all()
+    
+    
+    if date[0] != "Date":
+        date = date(int(date[0]), int(date[1]), int(date[2])) # modifier ça et modifier le HTML
+        for cren in transport:
+            if cren[1].date() == date:
+                liste_creneau.append(cren[2])
+        transport = sessionSQL.query(Repas, Repas.idCreneau, Repas.idRepas).all()
+        for rep in transport:
+            if rep[1] in liste_creneau:
+                liste_transport.append(rep[2])
+    else:
+        for tran in transport:
+            liste_transport.append(tran[3])
+
+    return liste_transport"""
+
+# affiche_navette(sessionSQL, "Date", "Navette", "Direction")
