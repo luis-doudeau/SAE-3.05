@@ -546,7 +546,7 @@ def navette_detail(idP):
     date_heure_arrive = get_date_heure_arrive_intervenant(idP)
     date_heure_depart = get_date_heure_depart_intervenant(idP)
     dateArrive = date_heure_arrive.date()
-    dateDepart = date_heure_depart.date()
+    dateDepart = date_heure_depart.date() 
     heureArrive = date_heure_arrive.time()
     heureDepart = date_heure_depart.time()
     return render_template("detail_navette.html", intervenant=get_intervenant(sessionSQL, idP), dateArrive = dateArrive, 
