@@ -83,6 +83,13 @@
 <script>
 
 
+  function convertirListe(liste) {
+    return liste.map(function(element) {
+      return element.replace(/'/g, '');
+    });
+  }
+
+
 function verifFormulaire(){
     success = document.getElementById("success").value;
     echec = document.getElementById("echec").value;
@@ -92,6 +99,12 @@ function verifFormulaire(){
     }
     return true;
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+  liste_id = convertirListe({{repas}});
+  console.log(liste_id);
+
+})
 
   $(document).ready(function(){
     $("#save").on("click",function(){

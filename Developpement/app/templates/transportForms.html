@@ -238,7 +238,7 @@
             <div class="form-group row ml-5 mb-5">
                 <div class="col-sm-10 form-row">
                   <label for="inputEmail3" class="mr-3 col-form-label fs-4" style="padding-top:15.5px;">Le</label>
-                  <input id="dateArr" style="height: 113%;font-size : 1.25rem;" name="dateArr" class="col-sm-4 form-control pl-3" type="date" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <input id="dateArr" style="height: 113%;font-size : 1.25rem;" name="dateArr" class="col-sm-4 form-control pl-3" pattern="02-03-2023" type="date" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
                   <label for="inputEmail3" class="mr-3 ml-3 col-form-label fs-4" style="padding-top:15.5px;">à</label>
                   <input type="time" style="height: 113%; font-size : 1.25rem;" id="hArrive" name="hArrive" class="form-control col-sm-2 col-form-label pl-3" required>
                 </div>
@@ -268,7 +268,6 @@
 <script>
 
   document.addEventListener("DOMContentLoaded", function() {
-
 
     //TRAIN
     var liste_dep_train = "{{liste_lieu_train}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
@@ -328,7 +327,7 @@
 
   $("#save").on("click", function(){
     console.log("essaieverif");
-    if(verif_transport()){
+    if(verif_transport() && verif_date()){
       console.log("verig");
       var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
       var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
@@ -389,6 +388,41 @@
   
   })
 })
+
+
+function verif_date(){
+  // Récupérer l'élément input date par son ID
+  const dateArr = document.getElementById('dateArr');
+  const dateDep = document.getElementById('dateDep');
+  const selectedDateArr = new Date(dateArr.value);
+  const selectedDateDep = new Date(dateDep.value);
+  var arrive = false;
+  var depart = false;
+
+  var beginDate = new Date("2023-11-02");
+  var endDate = new Date("2023-11-24"); 
+  // Vérifier si la date sélectionnée est compris dans les dates du festival
+  if (selectedDateArr.getTime() < beginDate.getTime() || selectedDateArr.getTime() > endDate.getTime()) {
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateArr.setCustomValidity('Veuillez sélectionner les dates du festival !');
+    arrive = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateArr.setCustomValidity('');
+    arrive = true;
+  }
+  // Vérifier si la date sélectionnée est compris dans les dates du festival
+  if ( selectedDateDep.getTime() < beginDate.getTime() || selectedDateDep.getTime() > endDate.getTime()){
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateDep.setCustomValidity('Veuillez sélectionner les dates du festival !');
+    depart = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateDep.setCustomValidity('');
+    depart = true;
+  }
+  return depart && arrive;
+}
 
 
 

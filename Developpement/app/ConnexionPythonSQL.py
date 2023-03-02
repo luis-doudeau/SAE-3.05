@@ -49,23 +49,14 @@ from .Travailler import Travailler
 from .Voyage import Voyage
 from .Transport import Transport
 from .Utilisateur import Utilisateur
-
+from .constants import * 
 
 from .app import login_manager
 # pour avoir sqlalchemy :
 # sudo apt-get update 
 # sudo apt-get install python3-sqlalchemy
 # pip3 install mysql-connector-python
-ROLE = ["Auteur", "Exposant", "Staff", "Presse", "Invite", "Secretaire", "Participant"]
-JOURS_SEMAINES = {
-    "Monday": "Lundi",
-    "Tuesday": "Mardi",
-    "Wednesday": "Mercredi",
-    "Thursday": "Jeudi",
-    "Friday": "Vendredi",
-    "Saturday": "Samedi",
-    "Sunday": "Dimanche"
-}
+
 
 def ouvrir_connexion(user,passwd,host,database):
     """
@@ -1261,22 +1252,37 @@ def get_max_id_regime(sessionSQL):
 def get_assister(sessionSQL, idP, annee):
     return sessionSQL.query(Assister).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
 
+def possede_regime(sessionSQL, idP) -> bool :
+    res = sessionSQL.query(Avoir.idRegime).filter(Avoir.idP == idP).first()
+    if res is not None : 
+        return res[0]
+    else : 
+        return None
+
+def update_regime(sessionSQL, idR, new_regime) :    
+    return sessionSQL.query(Regime).filter(Regime.idRegime == idR).update({Regime.nomRegime : new_regime})
 
 def ajoute_regime(sessionSQL,regime) :
-    sessionSQL.query
     id_regime = get_max_id_regime(sessionSQL)+1
     regime_existant = sessionSQL.query(Regime.idRegime).filter(Regime.nomRegime == regime).all() != []
-    if not regime_existant : 
+    if regime_existant : 
         return regime_existant[0]
     else : 
         regime = Regime(id_regime, regime)
         sessionSQL.add(regime)
+        print("l1276")
         try :
             sessionSQL.commit()
             return id_regime
         except : 
             print("erreur")
             sessionSQL.rollback() 
+        
+        
+def supprime_regime(sessionSQL, idP, idR) : 
+    sessionSQL.query(Avoir).filter(Avoir.idP == idP).delete()
+    sessionSQL.query(Regime).filter(Regime.idRegime == idR).delete()
+
         
 def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
     avoir_regime = Avoir(id_consommateur, id_regime)
@@ -1289,8 +1295,7 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
         sessionSQL.rollback()
 
 def verif_existe_regime(sessionSQL, nomRegime) :
-    search_term = '%'+nomRegime+'%' 
-    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter().filter(Regime.nomRegime == nomRegime).all() != []
+    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter(Regime.nomRegime == nomRegime).all() != []
     
 def est_intervenant(sessionSQL, idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
@@ -1582,6 +1587,24 @@ def affecter_intervenant_voyage_depart_festival(sessionSQL, idP):
     sessionSQL.commit()
     return True
 
+def liste_datetime_horaire_restaurant() : 
+    res = list()
+    for (jour, creneau) in DICO_HORAIRE_RESTAURANT.items() : 
+        deb, fin = creneau.split("/")
+        res.append((string_to_datetime(deb), string_to_datetime(fin), jour))
+    return res
+
+def get_repas_present(sessionSQL, idP, annee) : 
+    liste_creneau_repas_present = list()
+    assister = get_assister(sessionSQL, idP, annee)
+    date_arrive = assister.dateArrive
+    date_depart = assister.dateDepart # look like : (datetime.datetime(2023, 11, 16, 19, 30)
+    liste_creneau = liste_datetime_horaire_restaurant() # liste sous cette forme : [(datetime.datetime(2023, 11, 16, 19, 30), datetime.datetime(2023, 11, 16, 22, 0), 'jeudi_soir'), ...]
+    for creneau in liste_creneau : 
+        if date_arrive <= creneau[0] and date_depart > creneau[1]:
+            liste_creneau_repas_present.append(creneau[2])
+    return liste_creneau_repas_present
+
 @login_manager.user_loader
 def load_user(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
@@ -1595,6 +1618,10 @@ def reiniatilise_invitation(sessionSQL):
     for p in participants : 
         sessionSQL.query(Participant).filter(Participant.idP == p.idP).update({Participant.invite : False})
         sessionSQL.commit()
+        
+@staticmethod
+def string_to_datetime(s):
+    return datetime.datetime.strptime(s, '%Y-%m-%d-%H-%M-%S')
 
 @staticmethod
 def generate_password(length=8):
