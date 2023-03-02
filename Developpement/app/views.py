@@ -1,6 +1,6 @@
 import json
 
-from .app import app, mail
+from .app import app
 
 from datetime import date, datetime
 from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify, make_response
@@ -105,8 +105,6 @@ def insererTransportPersonne():
     print(request.form["train"])
     supprimer_intervenant_voyage_navette(sessionSQL, current_user.idP)
     if request.form["train"] == "true" and "BLOIS" in request.form["lieuArriveTrain"].upper():
-        print(current_user.idP)
-        print(type(current_user.idP))
         affecter_intervenant_voyage_depart_gare(sessionSQL, current_user.idP)
         affecter_intervenant_voyage_depart_festival(sessionSQL, current_user.idP)
     return jsonify({"status": "success"})
@@ -285,6 +283,7 @@ def dataNavettes():
             voyages_dico = voyages.to_dict()
             voyages_dico["prenom"] = intervenant.prenomP
             voyages_dico["nom"] = intervenant.nomP
+            voyages_dico["idPersonne"] = intervenant.idP
             liste_voyages.append(voyages_dico)
     session["data"] = {'data': liste_voyages}
     return {'data': liste_voyages}
@@ -542,6 +541,18 @@ def consommateur_detail(id, idRepas):
     regimes = get_regime(sessionSQL, id), nomRestaurant = get_restaurant(sessionSQL, idRepas),
     creneauRepas = get_creneau_repas(sessionSQL, idRepas), dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas)
 
+@app.route('/navetteSecretaire/<idP>',methods=["GET"])
+def navette_detail(idP):
+    date_heure_arrive = get_date_heure_arrive_intervenant(idP)
+    date_heure_depart = get_date_heure_depart_intervenant(idP)
+    dateArrive = date_heure_arrive.date()
+    dateDepart = date_heure_depart.date()
+    heureArrive = date_heure_arrive.time()
+    heureDepart = date_heure_depart.time()
+    return render_template("detail_navette.html", intervenant=get_intervenant(sessionSQL, idP), dateArrive = dateArrive, 
+                                                  dateDepart = dateDepart, heureArrive=heureArrive, heureDepart=heureDepart)
+
+
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():
     id = request.form["id"]
@@ -571,6 +582,24 @@ def UpdateConsommateur():
     idRepas = request.form["idRepas"]
     save_repas = modifier_repas(id, restaurant, dateRepas, creneauRepas, idRepas)
     return "true" if save_repas == True else save_repas
+
+
+@app.route('/navette/intervenant/update',methods=['POST'])
+def update_navette_intervenant():
+    id_personne = request.form["idP"]
+    dateArrive = request.form["dateArrive"]
+    dateDepart = request.form["dateDepart"]
+    heureArrive = request.form["heureArrive"]
+    heureDepart = request.form["heureDepart"]
+    datetime_arrive = datetime_str_to_datetime(dateArrive, heureArrive)
+    datetime_depart = datetime_str_to_datetime(dateDepart, heureDepart)
+    ajoute_assister(sessionSQL, id_personne, datetime_arrive, datetime_depart)
+    supprimer_intervenant_voyage_navette(sessionSQL, id_personne)
+    affecter_intervenant_voyage_depart_gare(sessionSQL, id_personne)
+    affecter_intervenant_voyage_depart_festival(sessionSQL, id_personne)
+    return "true"
+    #return "true" if save_repas == True else save_repas
+
 
 @app.route('/invite_les_participants', methods=['POST'])
 def traitement():

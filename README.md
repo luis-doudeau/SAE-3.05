@@ -13,12 +13,7 @@ pip install flask-wtf
 pip install flask-login
 pip install xlsxwriter
 pip install pandas
-<<<<<<< HEAD
 pip install sendgrid
-=======
-pip install Flask-Mail
-pip install pdfkit
->>>>>>> feuille_route
 
 ## Link GitHub
 
