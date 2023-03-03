@@ -232,7 +232,8 @@ INSERT INTO DEPLACER (idP, idTransport, lieuDepart, lieuArrive, annee) values (3
 
 
 
-INSERT INTO ASSISTER(idP, dateArrive, dateDepart) VALUES  (301,STR_TO_DATE("2023-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2023 19:30", "%d-%m-%Y %H:%i")),
+INSERT INTO ASSISTER(idP, dateArrive, dateDepart) VALUES  (300,STR_TO_DATE("2023-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2023 19:30", "%d-%m-%Y %H:%i")),
+                                                          (301,STR_TO_DATE("2023-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("20-11-2023 19:30", "%d-%m-%Y %H:%i")),
                                                           (302,STR_TO_DATE("2023-11-19 10:35", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2023 10:25", "%d-%m-%Y %H:%i")),
                                                           (303,STR_TO_DATE("2023-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("21-11-2023 10:38", "%d-%m-%Y %H:%i")),
                                                           (304,STR_TO_DATE("2023-11-19 10:30", "%Y-%m-%d %H:%i"),STR_TO_DATE("19-11-2023 10:00", "%d-%m-%Y %H:%i")),
