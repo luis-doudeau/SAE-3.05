@@ -1679,6 +1679,12 @@ def afficher_consommateur(date_jour, restaurant, midi):
     return liste_participants
 
 def get_liste_participant_idp_regime(liste_id):
+    """
+    Il renvoie pour une liste de personne données tous leurs régimes sous forme de tuple
+    
+    :param liste_id: liste des identifiants des participants
+    :return: Une liste de tuples, où chaque tuple est un participant et leur régime.
+    """
     liste_participants = []
     participants = sessionSQL.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
     for une_personne in participants:
@@ -1688,23 +1694,27 @@ def get_liste_participant_idp_regime(liste_id):
 
 
 def get_navette(idP, annee) : 
-        resultat = sessionSQL.query(Voyage).join(Transporter, Transporter.idVoy == Voyage.idVoy).filter(Transporter.idP == idP).filter(extract('year', Voyage.heureDebVoy) == annee).all()
-        liste_res = []
-        for res in resultat : 
-            liste_res.append((res, JOURS_SEMAINES[res.heureDebVoy.strftime("%A")]))
-        return liste_res
-
-         
-
-def get_liste_participant_id_consommateur(liste_id):
-    liste_participants = []
-    participants = sessionSQL.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
-    for une_personne in participants:
-        if une_personne.idP in liste_id:
-            liste_participants.append(une_personne)
-    return liste_participants
+    """
+    Il la liste des navette utilisé par une personne à une année
+    
+    :param idP: l'identifiant de la personne
+    :param annee: l'année de la navette
+    :return: Une liste de tuples, chaque tuple contenant un objet Voyage et une chaîne représentant le
+    jour de la semaine.
+    """
+    resultat = sessionSQL.query(Voyage).join(Transporter, Transporter.idVoy == Voyage.idVoy).filter(Transporter.idP == idP).filter(extract('year', Voyage.heureDebVoy) == annee).all()
+    liste_res = []
+    for res in resultat : 
+        liste_res.append((res, JOURS_SEMAINES[res.heureDebVoy.strftime("%A")]))
+    return liste_res
 
 def get_regime(id_p):
+    """
+    Il renvoie une chaîne contenant les noms des régimes d'une personne donnée
+    
+    :param id_p: l'identifiant de la personne
+    :return: Une chaîne contenant le nom du ou des régimes du patient avec l'identifiant donné.
+    """
     str_regime = ""
     liste_regime = sessionSQL.query(Regime.nomRegime).join(Avoir, Avoir.idRegime == Regime.idRegime).filter(Avoir.idP == id_p).all()
     if len(liste_regime) == 0:
@@ -1715,42 +1725,29 @@ def get_regime(id_p):
         str_regime = str_regime[:-2]
     return str_regime
 
-def get_dormeur(date_jour, hotel):
-    if date_jour[0] != "Date":
-        date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
-    else:
-        date_jour = date_jour[0]
-    liste_dormeur_date_hotel = []
-    if hotel == "Hôtel":
-        hotel = None
-    else:
-        hotel = int(hotel)
-    dormeurs = sessionSQL.query(Loger.idP, Loger.dateDebut, Loger.dateFin, Loger.idHotel).all()
-    for un_dormeur in dormeurs:
-        date_deb = un_dormeur[1].date()
-        date_fin = un_dormeur[2].date()
-        if date_jour == "Date" :
-            if hotel is None or un_dormeur.idHotel == hotel:
-                liste_dormeur_date_hotel.append(un_dormeur[0])
-
-        elif date_deb <= date_jour and date_fin >= date_jour and hotel is None or un_dormeur.idHotel == hotel : 
-            liste_dormeur_date_hotel.append(un_dormeur[0])
-                
-    liste_participants = get_liste_participant_id_consommateur(liste_dormeur_date_hotel)
-
-    return liste_participants
-
 def get_dormir(idP, annee):  
+    """
+    Il renvoie tous les hotels où une personne donnée dort à une année donnée
+
+    :param idP: l'identifiant de la personne
+    :param annee: l'année pour laquelle vous souhaitez obtenir les données
+    :return: Une liste de tuples.
+    """
     resultat = sessionSQL.query(Loger, Hotel).join(Hotel, Hotel.idHotel == Loger.idHotel).filter(Loger.idP == idP).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut)==annee).all()
     liste_res = []
     if resultat:
         for res in resultat:
             loger, hotel = res
             liste_res.append((loger, hotel, JOURS_SEMAINES[loger.dateDebut.strftime("%A")], JOURS_SEMAINES[loger.dateFin.strftime("%A")]))
-    
     return liste_res
 
 def id_transport_with_name(nom_transport):
+    """
+    Il prend un transport en entrée et retourne son id
+    
+    :param nom_transport: the name of the transport (avion, train, voiture, covoiturage)
+    :return: L'id du transport avec le nom donné en paramètre
+    """
     if nom_transport == "avion" : 
         return 1
     elif nom_transport == "train" : 
@@ -1762,6 +1759,12 @@ def id_transport_with_name(nom_transport):
     
 
 def supprime_deplacer_annee(idP, annee):
+    """
+    Il supprime tous les déplacements pour une personne donnée à une date données
+
+    :param idP: l'identifiant de la personne
+    :param annee: l'année des données que vous souhaitez supprimer
+    """
     deplacement = sessionSQL.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee)
     for dep in deplacement : 
         sessionSQL.delete(dep)
@@ -1774,6 +1777,15 @@ def supprime_deplacer_annee(idP, annee):
 
 
 def ajoute_deplacer(idP, idTransport, lieuDepart, lieuArrive, annee) :
+    """
+    Affecte un déplacement à une personne
+    
+    :param idP: l'identifiant de la personne
+    :param idTransport: 1 = voiture, 2 = train, 3 = avion, 4 = bateau
+    :param lieuDepart: Le lieu de départ
+    :param lieuArrive: L'endroit où la personne est arrivée
+    :param annee: année
+    """
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive, annee)
     deplacer = sessionSQL.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:
@@ -1789,6 +1801,9 @@ def ajoute_deplacer(idP, idTransport, lieuDepart, lieuArrive, annee) :
   
 
 def supprime_mangeur(idP):
+    """
+    Il supprime tous les repas pour une personne donnée de l'année actuelle
+    """
     annee = datetime.datetime.now().year
     manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(extract('year', CreneauRepas.dateDebut) == annee).all()
     for mang in manger :
@@ -1797,6 +1812,11 @@ def supprime_mangeur(idP):
 
 
 def ajoute_mangeur(idP, idRepas):
+    """
+    Il affecte un repas à une personne
+    :param idP: l'identifiant du consommateur
+    :param idRepas: l'identifiant du repas
+    """
     mangeur = Manger(idP, idRepas)
     manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
     if manger is None:
@@ -1815,6 +1835,11 @@ def ajoute_mangeur(idP, idRepas):
         
 
 def suppprime_loger(idP):
+    """
+    Il supprime tous les logements de cette année pour une personne données
+    
+    :param idP: L'identifiant de la personne que vous souhaitez supprimer
+    """
     annee = datetime.datetime.today().year
     loger = sessionSQL.query(Loger).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut) == annee).all()
     for log in loger :
@@ -1823,6 +1848,15 @@ def suppprime_loger(idP):
 
 
 def ajoute_loger(idP, dateDebut, dateFin, idHotel):
+    """
+    Il prend l'identifiant d'une personne, une date de début, une date de fin et un identifiant d'hôtel,
+    et ajoute une nouvelle ligne à la table Loger dans la base de données
+    
+    :param idP: l'identifiant de la personne
+    :param dateDebut: La date à laquelle la personne s'est enregistrée
+    :param dateFin: dateheure.dateheure(2019, 12, 31, 0, 0)
+    :param idHotel: l'identifiant de l'hôtel
+    """
     date_debut = datetime.datetime(dateDebut.year, dateDebut.month, dateDebut.day, dateDebut.hour, dateDebut.minute, dateDebut.second)
     date_fin = datetime.datetime(dateFin.year, dateFin.month, dateFin.day, dateFin.hour, dateFin.minute, dateFin.second)
 
@@ -1840,19 +1874,35 @@ def ajoute_loger(idP, dateDebut, dateFin, idHotel):
         
         
 def choix_hotel(idP):
+    """
+    Il renvoie l'identifiant de l'hôtel auquel l'utilisateur avec l'identifiant idP doit être affecté
+    
+    :param idP: l'identifiant de la personne qui effectue la réservation
+    :return: L'identifiant de l'hôtel
+    """
     return 1 #TODO
         
         
 def ajoute_hebergement(idP): 
+    """
+    Il prend un idP comme entrée, puis trouve les dates de la conférence à laquelle le participant
+    assiste, puis trouve l'hôtel dans lequel le participant séjourne, puis ajoute le participant à la
+    table des logements
+    
+    :param idP: l'identifiant de la personne
+    """
     annee = datetime.datetime.today().year
     dates = sessionSQL.query(Assister.dateArrive, Assister.dateDepart).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
-    print("d ",dates)
     dateDebut = dates[0]
     dateFin = dates[1]
     idHotel = choix_hotel(idP)
     ajoute_loger(idP, dateDebut, dateFin, idHotel)
         
 def get_max_id_regime(): 
+    """
+    Il renvoie la valeur idRegime maximale de la table Regime dans la base de données
+    :return: L'idRegime maximum de la table Regime.
+    """
     regime= sessionSQL.query(func.max(Regime.idRegime)).first()
     if (regime[0]) is None:
         return 0
@@ -1861,9 +1911,21 @@ def get_max_id_regime():
         
         
 def get_assister(idP, annee):
+    """
+    Il renvoie si la personne assiste au féstival pour une année donnée
+    
+    :param idP: l'identifiant du patient
+    :param annee: l'année de la saison
+    :return: la personne assiste au féstival pour une année donnée
+    """
     return sessionSQL.query(Assister).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
 
 def possede_regime(idP) -> bool :
+    """
+    > La fonction renvoie si la personne possede un régime ou non
+    
+    :param idP: l'identifiant de la personne
+    """
     res = sessionSQL.query(Avoir.idRegime).filter(Avoir.idP == idP).first()
     if res is not None : 
         return res[0]
@@ -1871,9 +1933,23 @@ def possede_regime(idP) -> bool :
         return None
 
 def update_regime(idR, new_regime) :    
+    """
+    > Met à jour le nom du régime pour un identifiant donnée
+    
+    :param idR: l'identifiant du régime que vous souhaitez mettre à jour
+    :param new_regime: le nom du nouveau régime
+    :return: Le nombre de lignes mises à jour.
+    """
     return sessionSQL.query(Regime).filter(Regime.idRegime == idR).update({Regime.nomRegime : new_regime})
 
 def ajoute_regime(regime) :
+    """
+    Ajoute un regime à la base de données si il n'existe pas
+    
+    
+    :param regime: le nom du régime
+    :return: L'identité du régime
+    """
     id_regime = get_max_id_regime()+1
     regime_existant = sessionSQL.query(Regime.idRegime).filter(Regime.nomRegime == regime).all() != []
     if regime_existant : 
@@ -1891,11 +1967,23 @@ def ajoute_regime(regime) :
         
         
 def supprime_regime(idP, idR) : 
+    """
+    Il supprime le régime pour une personne donnée
+    
+    :param idP: l'identifiant du patient
+    :param idR: l'identité du régime
+    """
     sessionSQL.query(Avoir).filter(Avoir.idP == idP).delete()
     sessionSQL.query(Regime).filter(Regime.idRegime == idR).delete()
 
         
 def ajoute_avoir_regime(id_consommateur, id_regime) :
+    """
+    Il ajoute un régime à une personne donnée
+    
+    :param id_consommateur: L'identifiant du consommateur
+    :param id_regime: l'id du régime
+    """
     avoir_regime = Avoir(id_consommateur, id_regime)
     sessionSQL.add(avoir_regime)
     try :
@@ -1906,37 +1994,49 @@ def ajoute_avoir_regime(id_consommateur, id_regime) :
         sessionSQL.rollback()
     
 def est_intervenant(idP):
+    """
+    Il renvoie Vrai si la personne avec l'idP donné est un intervenant, Faux sinon
+    
+    :param idP: l'identifiant de la personne
+    :return: Une valeur booléenne.
+    """
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
     return intervenant is not None
             
 def est_secretaire(idP):
+    """
+    Il renvoie True si la personne avec l'identifiant donné est une secrétaire, et False sinon
+    
+    :param idP: l'identifiant de la personne
+    :return: Une valeur booléenne.
+    """
     secretaire = get_secretaire(idP)
     return secretaire is not None
         
-        
-def requete_transport_annee(idP, annee) : 
-    liste_transport = sessionSQL.query(Deplacer, Assister.dateDepart).join(Assister, Deplacer.idP == Assister.idP).filter(Deplacer.idP == idP).all()
-    liste_deplacement = list()
-    annee = annee.year
-    for transport in liste_transport: 
-        annee_req = transport[1].year
-        if annee_req == annee: 
-            liste_deplacement.append(transport)
-    return liste_deplacement  
-
-
 def requete_transport_annee2(idP, annee) : 
+    """
+    Il renvoie tous les transport utilisé par une personne au cours d'une année
+    
+    :param idP: l'identifiant de la personne
+    :param annee: l'année pour laquelle vous souhaitez obtenir les données
+    :return: Une liste de tuples de la forme (Deplacer, Transport)
+    """
     return sessionSQL.query(Deplacer, Transport).join(Transport, Transport.idTransport == Deplacer.idTransport).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee).all()
     
 
 
 
 def ajoute_assister(idP, dateArrive, dateDepart):
-    print("test asssist")
+    """
+    Si la personne n'a pas de date d'arrivé et de départ les ajoutes sinon
+    cela les met à jour
+    
+    :param idP: L'identifiant de la personne
+    :param dateArrive: La date à laquelle la personne est arrivée à l'événement
+    :param dateDepart: La date à laquelle la personne a quitté le projet
+    """
     assisteur = Assister(idP, dateArrive, dateDepart)
     assister = sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).first()
-    print(assisteur)
-    print(assister)
     if assister is None :
         sessionSQL.add(assisteur)
         try : 
@@ -1947,18 +2047,18 @@ def ajoute_assister(idP, dateArrive, dateDepart):
             sessionSQL.rollback()
     else :
         sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).update({Assister.dateArrive: dateArrive, Assister.dateDepart: dateDepart},synchronize_session='fetch')
-        sessionSQL.commit()
-        
-def cherche_transport(nom_transport) : 
-    liste_transport = sessionSQL.query(Transport.idTransport, Transport.nomTransport).all()
-    res = list()
-    for transport in liste_transport : 
-        if nom_transport in transport : 
-            res.append(transport)
-    return res
-
+        sessionSQL.commit()  
 
 def modif_participant_remarque(idP, remarques) : 
+    """
+    Cette fonction prend un idP et une chaîne de remarques, et si la chaîne est alphabétique, elle
+    ajoute les remarques aux remarques existantes du participant avec l'idP donné.
+    
+    La fonction renvoie True si les remarques ont été ajoutées avec succès, et False sinon.
+    
+    :param idP: l'identifiant du participant
+    :param remarques: les nouvelles remarques à ajouter au participant
+    """
     if remarques.isalpha():
         nouvelles_remarques = remarques + " / "+str((sessionSQL.query(Participant).filter(Participant.idP == idP).first()).remarques)
         sessionSQL.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
@@ -1971,6 +2071,14 @@ def modif_participant_remarque(idP, remarques) :
 
 
 def get_utilisateur_email_mdp(mail, mdp):
+    """
+    Il renvoie le mot de passe de l'utilisateur de la base de données dont l'e-mail et le mot de passe
+    correspondent à ceux donnés en paramètres
+    
+    :param mail: l'email de l'utilisateur
+    :param mdp: Le mot de passe que vous souhaitez utiliser
+    :return: L'utilisateur qui correspond à l'e-mail et au mot de passe
+    """
     utilisateur = sessionSQL.query(Utilisateur).filter(Utilisateur.emailP == mail).filter(Utilisateur.mdpP == mdp).first()
     if utilisateur is not None :
         return utilisateur
@@ -1978,6 +2086,12 @@ def get_utilisateur_email_mdp(mail, mdp):
 
 @staticmethod
 def transforme_datetime(date):
+    """
+    Il prend une date sous forme de chaîne et la renvoie sous forme d'une liste d'entiers
+    
+    :param date: La date en string
+    :return: Une liste de la date divisée par le "-" ou "/"
+    """
     if "-" in date:
         date = date.split("-")
     elif "/" in date:
@@ -1985,6 +2099,13 @@ def transforme_datetime(date):
     return date
 
 def ajoute_creneau_repas_v1(dateDebut,dateFin):
+    """
+    Il ajoute un créneau horaire de repas à la base de données
+    
+    :param dateDebut: la date de début du créneau repas
+    :param dateFin: La date de fin du créneau repas
+    :return: L'id du créneau
+    """
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -2003,6 +2124,13 @@ def ajoute_creneau_repas_v1(dateDebut,dateFin):
     return creneau_test.idCreneau
 
 def ajoute_creneau_travail_v1(dateDebut,dateFin):
+    """
+    Il ajoute un créneau de travail à la base de données
+    
+    :param dateDebut: La date de début du créneau de travail
+    :param dateFin: La date de fin du créneau de travail
+    :return: L'id du créneau
+    """
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -2022,6 +2150,13 @@ def ajoute_creneau_travail_v1(dateDebut,dateFin):
 
 
 def ajoute_creneau_repas(date_debut, date_fin):
+    """
+    Il ajoute un nouveau créneau horaire de repas à la base de données s'il n'existe pas déjà
+    
+    :param date_debut: la date de début du créneau repas
+    :param date_fin: La date de fin de la période de repas
+    :return: L'id du créneau
+    """
     creneau_test = sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()
     if creneau_test is None :
         idCreneau = get_max_id_creneau_repas()+1
@@ -2038,6 +2173,13 @@ def ajoute_creneau_repas(date_debut, date_fin):
         return creneau_test.idCreneau
 
 def ajoute_creneau_travail(date_debut, date_fin):
+    """
+    Il ajoute un nouveau créneau de travail à la base de données s'il n'existe pas déjà
+    
+    :param date_debut: la date de début du créneau de travail
+    :param date_fin: La date de fin du créneau de travail
+    :return: L'id du créneau
+    """
     creneau_test = sessionSQL.query(CreneauTravail).filter(CreneauTravail.dateDebut == date_debut).filter(CreneauTravail.dateFin == date_fin).first()
     if creneau_test is None :
         idCreneau = get_max_id_creneau_travail()+1
@@ -2054,6 +2196,14 @@ def ajoute_creneau_travail(date_debut, date_fin):
         return creneau_test.idCreneau    
 
 def ajoute_repas(estMidi,idRest,idCreneau) : 
+    """
+    Il ajoute un nouveau repas à la base de données s'il n'existe pas déjà
+    
+    :param estMidi: Vrai si c'est un déjeuner, Faux si c'est un dîner
+    :param idRest: l'identifiant du restaurant
+    :param idCreneau: l'identifiant du créneau horaire
+    :return: L'identifiant du repas
+    """
     repas_verif = sessionSQL.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
     if repas_verif is None :
         idRepas = get_max_id_repas()+1
@@ -2071,6 +2221,12 @@ def ajoute_repas(estMidi,idRest,idCreneau) :
     return repas_verif.idRepas
 
 def ajoute_restaurant(nomRest) : 
+    """
+    Il ajoute un restaurant à la base de données s'il n'existe pas déjà
+    
+    :param nomRest: Le nom du restaurant
+    :return: L'identifiant du restaurant
+    """
     restaurant_test = sessionSQL.query(Restaurant).filter(Restaurant.nomRest == nomRest).first()
     if restaurant_test is None :
         idRestaurant = get_max_id_restaurant()+1
@@ -2083,50 +2239,77 @@ def ajoute_restaurant(nomRest) :
             sessionSQL.rollback()
     return restaurant_test.idRest
 
-def choix_restaurant(): 
-    pass # TODO SELON LE ROLE METTRE UN CERTAIN RESTAU 
-    
+   
  
 def ajoute_repas_mangeur(idP, liste_repas, liste_horaire_restau, dico_horaire_restau):
+    """
+    Il ajoute un repas à une personne
+    
+    :param idP: l'identifiant de la personne
+    :param liste_repas: une liste de booléens, un pour chaque repas, indiquant si la personne veut
+    manger à ce repas
+    :param liste_horaire_restau: une liste de chaînes, chaque chaîne est le nom d'un restaurant
+    :param dico_horaire_restau: un dictionnaire de la forme {'midi': '12:00/14:00', 'soir':
+    '19:00/21:00'}
+    """
     supprime_mangeur(idP)
     for i in range(0, len(liste_repas)):
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
             idCreneau = ajoute_creneau_repas_v1(horaire.split("/")[0], horaire.split("/")[1])
-            idRest = choix_restaurant() # ajouter ROLE TODO
-            idRepas = ajoute_repas(False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
+            idRepas = ajoute_repas(False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau)
             ajoute_mangeur(idP, idRepas)
 
 def invite_un_participant(idP):
+    """
+    Il met à jour la valeur de la colonne "invite" de la table "Participant" à True pour la personne
+    donnée
+    
+    :param idP: L'identifiant du participant
+    """
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.invite : True})
     sessionSQL.commit()
 
 def voyage_est_complet(voyage):
+    """
+    Elle renvoie Vrai si le voyage est complet
+    
+    :param voyage: le voyage que nous voulons vérifier
+    :return: Une valeur booléenne
+    """
     nb_place_dispo = sessionSQL.query(Navette).filter(Navette.idNavette == voyage.idNavette).first().capaciteNavette
     voyageurs = sessionSQL.query(Transporter).filter(Transporter.idVoy == voyage.idVoy).all()
-    print("place dispo ",nb_place_dispo)
-    print("voyageur ",voyageurs)
-    print("nb_voyageur ",len(voyageurs))
     return (voyageurs is not None and len(voyageurs)>=nb_place_dispo)
 
 def get_navette_dispo(heureDeb, heureFin):
+    """
+    Il renvoie l'identifiant de la première navette qui n'est pas déjà réservée pour l'intervalle de
+    temps donné
+    
+    :param heureDeb: l'heure à laquelle le voyage commence
+    :param heureFin: l'heure à laquelle le voyage se termine
+    :return: L'identifiant de la première navette disponible
+    """
     voyages = sessionSQL.query(Voyage).filter((Voyage.heureDebVoy <= heureFin) &
                               (Voyage.heureDebVoy+Voyage.DureeVoy >= heureDeb) &
                               func.date(Voyage.heureDebVoy) == heureDeb.date()).all()
     navette_ids = {voyage.idNavette for voyage in voyages}
     navettes = sessionSQL.query(Navette).all()
-    print("nav")
-    print(navette_ids)
-    print(navettes)
     for navette in navettes:
         if not navette.idNavette in navette_ids:
             return navette.idNavette
-    print("Pas de navette dispo")
     
 
 
 def cree_un_voyage(heureDebVoy, directionGARE):
+    """
+    Il crée un nouveau voyage, et renvoie son identifiant
+    
+    :param heureDebVoy: le temps du voyage
+    :param directionGARE: Vrai si la navette va à la gare, Faux si elle va à l'aéroport
+    :return: L'identifiant du nouveau voyage
+    """
     id_navette_dispo = get_navette_dispo(heureDebVoy, heureDebVoy+datetime.timedelta(minutes=10))
     nouvelle_id_voyage = get_max_id_voyage()+1
     if id_navette_dispo is not None:
@@ -2146,6 +2329,11 @@ def cree_un_voyage(heureDebVoy, directionGARE):
         return nouvelle_id_voyage
 
 def supprimer_intervenant_voyage_navette(idP):
+    """
+    Il supprime tous les voyages en navette pour une personne données
+    
+    :param idP: l'identifiant de la personne à supprimer de la base de données
+    """
     annee_en_cours =  datetime.date.today().year
     transports = sessionSQL.query(Transporter).filter(Transporter.idP == idP).all()
     for transport in transports:
@@ -2159,15 +2347,17 @@ def supprimer_intervenant_voyage_navette(idP):
                 sessionSQL.commit()
                 
 def affecter_intervenant_voyage_depart_gare(idP):
+    """
+    Il prend l'identité d'une personne comme argument, et lui affecte une navette pour le voyage entre la gare et le festival
+    
+    :param idP: l'identifiant de la personne
+    :return: Vrai si il a bien était affecté
+    """
     annee_en_cours =  datetime.date.today().year
     date_arrive = sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
     if date_arrive is None:
         print("Pas de date d'arrive")
         return None
-    print("depart gare")
-    print(date_arrive)
-    print(date_arrive-datetime.timedelta(seconds=1))
-    print(date_arrive+datetime.timedelta(minutes=10,seconds=1))
     voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.directionGare == False).filter(Voyage.heureDebVoy.between(date_arrive-datetime.timedelta(seconds=1), date_arrive+datetime.timedelta(minutes=10,seconds=1))).all()
     print("voy dispo ",voyages_dispo)
     if voyages_dispo is not None:
@@ -2184,17 +2374,18 @@ def affecter_intervenant_voyage_depart_gare(idP):
     return True
 
 def affecter_intervenant_voyage_depart_festival(idP):
+    """
+    Il prend l'identité d'une personne comme argument, et lui affecte une navette pour le voyage entre le festival et la gare
+    
+    :param idP: l'identifiant de la personne
+    :return: Vrai si il a bien était affecté
+    """
     annee_en_cours =  datetime.date.today().year
     date_depart = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
     if date_depart is None:
         print("Pas de date de depart")
         return None
-    print("depart festival")
-    print(date_depart)
-    print(date_depart-datetime.timedelta(seconds=1))
-    print(date_depart+datetime.timedelta(minutes=10,seconds=1))
     voyages_dispo = sessionSQL.query(Voyage).filter(Voyage.directionGare == True).filter(Voyage.heureDebVoy.between(date_depart-datetime.timedelta(seconds=1), date_depart+datetime.timedelta(minutes=10,seconds=1))).all()
-    print("voy dispo ",voyages_dispo)
     if voyages_dispo is not None:
         for voyage in voyages_dispo:
             if not voyage_est_complet(voyage) and voyage.directionGare:
@@ -2207,6 +2398,11 @@ def affecter_intervenant_voyage_depart_festival(idP):
     return True
 
 def liste_datetime_horaire_restaurant() : 
+    """
+    Il convertit le dictionnaire des heures d'ouverture en une liste de tuples, chaque tuple contenant
+    les heures d'ouverture et de fermeture du restaurant pour un jour donné
+    :return: Une liste de tuples.
+    """
     res = list()
     for (jour, creneau) in DICO_HORAIRE_RESTAURANT.items() : 
         deb, fin = creneau.split("/")
@@ -2214,6 +2410,14 @@ def liste_datetime_horaire_restaurant() :
     return res
 
 def get_repas_present(idP, annee) : 
+    """
+    > La fonction `get_repas_present` prend en entrée l'id d'une personne et l'année de l'événement, et
+    renvoie une liste de chaînes représentant les repas auxquels la personne sera présente
+    
+    :param idP: l'identifiant du participant
+    :param annee: l'année de l'événement
+    :return: liste_creneau_repas_present est une liste de chaînes.
+    """
     liste_creneau_repas_present = list()
     assister = get_assister(idP, annee)
     date_arrive = assister.dateArrive
@@ -2226,6 +2430,13 @@ def get_repas_present(idP, annee) :
 
 @login_manager.user_loader
 def load_user(participant_id):
+    """
+    Si l'utilisateur est une secrétaire, retourner l'objet secrétaire, sinon retourner l'objet
+    participant
+    
+    :param participant_id: L'identifiant de l'utilisateur à charger
+    :return: L'objet utilisateur
+    """
     # since the user_id is just the primary key of our user table, use it in the query for the user
     if est_secretaire(participant_id):
         return get_secretaire(participant_id)
@@ -2233,6 +2444,11 @@ def load_user(participant_id):
         return get_participant(participant_id)
 
 def reiniatilise_invitation(): 
+    """
+    Il prend tous les participants dans la base de données et définit leur statut d'invitation sur faux.
+    
+    Ceci est utile si vous souhaitez réinviter tous les participants de la base de données.
+    """
     participants = sessionSQL.query(Participant).all()
     for p in participants : 
         sessionSQL.query(Participant).filter(Participant.idP == p.idP).update({Participant.invite : False})
@@ -2240,19 +2456,43 @@ def reiniatilise_invitation():
         
 @staticmethod
 def string_to_datetime(s):
+    """
+    Il prend une chaîne au format 'AAAA-MM-JJ-HH-MM-SS' et renvoie un objet datetime
+    
+    :param s: la chaîne à convertir
+    :return: Un objet datetime
+    """
     return datetime.datetime.strptime(s, '%Y-%m-%d-%H-%M-%S')
 
 
 def get_date_heure_arrive_intervenant(idP):
+    """
+    Il renvoie la date et l'heure d'arrivée de la personne avec l'idP donné
+    
+    :param idP: l'identifiant de la personne
+    :return: La date et l'heure d'arrivée de l'intervenant auprès de l'idP
+    """
     annee_en_cours =  datetime.date.today().year
     return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours) ).first().dateArrive
 
 def get_date_heure_depart_intervenant(idP):
+    """
+    Il renvoie la date et l'heure de départ de la personne avec l'idP donné
+    
+    :param idP: l'identifiant de la personne
+    :return: La date et l'heure de départ de l'intervenant avec l'idP = idP
+    """
     annee_en_cours =  datetime.date.today().year
     return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
 
 
 def cree_mail(id_participant):
+    """
+    Il crée un contenu de courrier pour un participant
+    
+    :param id_participant: L'identifiant du participant auquel vous souhaitez envoyer un e-mail
+    :return: Le contenu du courrier
+    """
     status = get_role(id_participant)
     nom = get_nom(id_participant)
     prenom = get_prenom(id_participant)
@@ -2269,15 +2509,28 @@ def cree_mail(id_participant):
 
 @staticmethod
 def generate_password(length=8):
-  # Get a list of all the ASCII lowercase letters, uppercase letters, and digits
-  characters = string.ascii_letters + string.digits + string.punctuation
-  # Use the random.sample function to get a list of `length` random elements from the list of characters
-  password = ''.join(random.sample(characters, length))
-  return password
+    """
+    Il génère un mot de passe aléatoire d'une longueur donnée
+    
+    :param length: La longueur du mot de passe à générer. La valeur par défaut est 8, defaults to 8
+    (optional)
+    :return: Une chaîne de caractères aléatoires
+    """
+    # Get a list of all the ASCII lowercase letters, uppercase letters, and digits
+    characters = string.ascii_letters + string.digits + string.punctuation
+    # Use the random.sample function to get a list of `length` random elements from the list of characters
+    password = ''.join(random.sample(characters, length))
+    return password
 
 
 @staticmethod
 def get_heure(time) :
+    """
+    Il prend une chaîne de la forme "hh:mm" et renvoie un tuple de la forme (hh, mm)
+    
+    :param time: l'heure de la journée, au format HH:MM:SS
+    :return: L'heure et la minute du temps.
+    """
     heure = time.split(':')[0]
     minute = time.split(':')[1][0:2]
     return (heure, minute)
@@ -2285,6 +2538,13 @@ def get_heure(time) :
 
 @staticmethod
 def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"): 
+    """
+    Il ouvre le fichier, lit toutes les lignes et renvoie une liste des lignes
+    
+    :param file_path: Le chemin d'accès au fichier que vous voulez lire, defaults to
+    ./Developpement/app/static/txt/gare.txt (optional)
+    :return: Une liste de toutes les gares de France
+    """
     with open(file_path, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
@@ -2292,59 +2552,41 @@ def get_all_lieu_train(file_path="./Developpement/app/static/txt/gare.txt"):
 
 @staticmethod
 def get_all_lieu_avion(file_path="./Developpement/app/static/txt/aeroport.txt"): 
+    """
+    > La fonction `get_all_lieu_avion` prend en argument un chemin de fichier et renvoie la liste de
+    toutes les lignes du fichier
+    
+    :param file_path: Le chemin d'accès au fichier que vous voulez lire, defaults to
+    ./Developpement/app/static/txt/aeroport.txt (optional)
+    :return: Une liste de tous les aéroports du monde.
+    """
     with open(file_path, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
     
 
 def date_str_datetime(date_str):
+    """
+    Il prend une chaîne au format jj/mm/aaaa et renvoie un objet datetime
+    
+    :param date_str: La chaîne de date que vous souhaitez convertir en objet datetime
+    :return: Un objet datetime
+    """
     date_format = "%d/%m/%Y"
     date_object = datetime.datetime.strptime(date_str, date_format)
     return date_object
 
 def datetime_str_to_datetime(date_str, heure_str):
+    """
+    Il prend une chaîne de date et une chaîne d'heure, et renvoie un objet datetime
+    
+    :param date_str: La date au format chaîne
+    :param heure_str: La chaîne d'heure, au format "HH:MM"
+    :return: Un objet datetime
+    """
     date_obj = datetime.datetime.strptime(date_str, "%d/%m/%Y")
     time_obj = datetime.datetime.strptime(heure_str, "%H:%M")
 
     # Combiner la date et l'heure pour créer un objet datetime unique
     datetime_obj = datetime.datetime.combine(date_obj.date(), time_obj.time())
     return datetime_obj
-
-
-"""def affiche_navette(sessionSQL, date, navette, directionGare):
-    if navette != "Navette" :
-        navette = int(navette)
-    if directionGare == "true" : 
-        directionGare = True
-    elif directionGare == "false" : 
-        directionGare = False
-    liste_consommateurs = []
-    liste_creneau = []
-    liste_transport = []
-    liste_mangeur = []
-    if navette != "Navette" and directionGare != "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).filter(Voyage.directionGare == directionGare).distinct().all()
-    elif navette == "Navette" and directionGare == "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.idP, Participant.prenomP, Participant.nomP, Voyage.directionGare, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).distinct().all()
-    elif navette != "Restaurant":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Navette.idNavette == navette).distinct().all()
-    elif directionGare != "Direction":
-        transport = sessionSQL.query(Voyage.idVoy, Participant.prenomP, Participant.nomP, Voyage.directionGare, Navette.nomNavette, Voyage.heureDebVoy).join(Mobiliser, Mobiliser.idVoy == Voyage.idVoy).join(Navette, Navette.idNavette == Mobiliser.idNavette).join(Transporter, Voyage.idVoy == Transporter.idVoy).join(Intervenant, Intervenant.idP == Transporter.idP).join(Participant, Participant.idP == Intervenant.idP).filter(Voyage.directionGare == directionGare).distinct().all()
-    
-    
-    if date[0] != "Date":
-        date = date(int(date[0]), int(date[1]), int(date[2])) # modifier ça et modifier le HTML
-        for cren in transport:
-            if cren[1].date() == date:
-                liste_creneau.append(cren[2])
-        transport = sessionSQL.query(Repas, Repas.idCreneau, Repas.idRepas).all()
-        for rep in transport:
-            if rep[1] in liste_creneau:
-                liste_transport.append(rep[2])
-    else:
-        for tran in transport:
-            liste_transport.append(tran[3])
-
-    return liste_transport"""
-
-# affiche_navette(sessionSQL, "Date", "Navette", "Direction")
