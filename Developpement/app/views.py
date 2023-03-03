@@ -120,7 +120,6 @@ def formulaire_auteur_transport():
         time_arr = assister.dateArrive.strftime("%H:%M")
         time_dep = assister.dateDepart.strftime("%H:%M")
     liste_transport = requete_transport_annee2(current_user.idP, datetime.datetime.now().year)
-    print(liste_transport)
     response= make_response(render_template("transportForms.html", date_arr=dateArr,date_dep=dateDep, limite_arr=dateArr, timeArr=time_arr, timeDep=time_dep, limite_dep = DATE_FESTIVAL[-1], listeTransport=liste_transport, liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion()))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
@@ -160,7 +159,6 @@ def inserer_formulaire_reservation():
     suppprime_loger(current_user.idP)
     if request.form["hebergement"] =="true":
         ajoute_hebergement(current_user.idP)
-    print("success")
     return jsonify({"status": "success"})
 
 
