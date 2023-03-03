@@ -14,7 +14,6 @@ pip install flask-login
 pip install xlsxwriter
 pip install pandas
 pip install sendgrid
-pip install pdfkit
 
 ## Link GitHub
 
