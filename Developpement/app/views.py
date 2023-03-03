@@ -525,7 +525,6 @@ def envoie_mail(mail_destination, id_participant):
     to_emails=mail_destination,
     subject='Invitation au festival bdBOUM ' + "2023",
     html_content=cree_mail(id_participant))
-    body = cree_mail(id_participant)
     try:
         sg = SendGridAPIClient('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')
         response = sg.send(message)
@@ -638,15 +637,13 @@ def UpdateDormeur():
 @app.route('/invite_les_participants', methods=['POST'])
 def traitement():
     ids = request.form.getlist('ids[]')
-    threads = []
     for id_participant in ids:
         id_participant = int(id_participant)
+        invite_un_participant(id_participant)
         email = get_mail(id_participant)
         if email is not None:
-            invite_un_participant(id_participant)
-            t = threading.Thread(target=envoie_mail, args=(email, id_participant))
-            threads.append(t)
-            t.start()
+            print("mon id "+str(id_participant))
+            envoie_mail(email, id_participant)
     # Traiter les IDs récupérés
     return jsonify({"status": "success"})
 
