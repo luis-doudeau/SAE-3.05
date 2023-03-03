@@ -138,8 +138,8 @@
               for (var i = 0; i < response.length; i++) {
                 mesRestaurants.push({ text: response[i], value: response[i] });
               }
-              $("#Restaurant").kendoComboBox({ 
-                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesRestaurants , label: "Restaurant"
+              $("#Restaurant").kendoDropDownList({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesRestaurants , label: "Restaurant", value: '{{nomRestaurant}}'
               });
             },
           }),
@@ -161,12 +161,12 @@
               for (var i = 0; i < response.length; i++) {
                 mesCreneaux.push({ text: response[i], value: response[i] });
               }
-              $("#CreneauRepas").kendoComboBox({ 
-                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesCreneaux, label: "Créneau"
+              $("#CreneauRepas").kendoDropDownList({ 
+                dataTextField: "text", dataValueField: "value", size: "medium", dataSource: mesCreneaux, label: "Créneau", readonly: true, value: '{{creneauRepas}}'
               });
             },
           });
-       
+
         $("#save").on("click",function(){
             $("#loader-background").show()
             var creneauRepas = $("#CreneauRepas").val()

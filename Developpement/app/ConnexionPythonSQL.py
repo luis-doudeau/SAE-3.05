@@ -81,11 +81,11 @@ def ouvrir_connexion(user,passwd,host,database):
 
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
-#connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
+connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
-connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 
 
 
@@ -961,21 +961,31 @@ def affiche_participant_trier_consommateur(sessionSQL):
     return participant
 
 
-
 def get_liste_nom_restaurant():
     liste_nom_resteau = []
     for nom in sessionSQL.query(Restaurant):
         liste_nom_resteau.append(nom.nomRest)
     return liste_nom_resteau
 
+
 def get_liste_creneau_repas():
-    liste_creneau = []
+    liste_creneau = set()
     for creneau in sessionSQL.query(CreneauRepas):
         debut = creneau.dateDebut
         fin = creneau.dateFin
         format = format_creneau(debut, fin)
-        liste_creneau.append(format)
-    return liste_creneau
+        liste_creneau.add(format)
+    return list(liste_creneau)
+
+
+def get_all_creneauxRepas():
+    creneaux = sessionSQL.query(CreneauRepas).all()
+    liste_creneaux = []
+    for cren in creneaux:
+        format_cren = format_creneau(cren.dateDebut, cren.dateFin)
+        liste_creneaux.append(format_cren)
+    return liste_creneaux
+
 
 def get_nom_hotel():
     liste_nom_hotel = []
@@ -1256,9 +1266,6 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
     except : 
         print("erreur")
         sessionSQL.rollback()
-
-def verif_existe_regime(sessionSQL, nomRegime) :
-    return sessionSQL.query(Regime).join(Avoir, Regime.idRegime == Avoir.idRegime).filter(Regime.nomRegime == nomRegime).all() != []
     
 def est_intervenant(sessionSQL, idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
@@ -1606,6 +1613,15 @@ def get_date_heure_depart_intervenant(idP):
     annee_en_cours =  datetime.date.today().year
     return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
 
+
+def cree_mail(status, nom, prenom):
+    msg = "Cher(e)"+prenom +" "+nom+", Nous avons le plaisir de vous inviter au festival bdBOUM en tant qu'"+ status+", un événement incontournable pour les fans de bandes dessinées.\
+    Cette année, le festival se déroulera du vendredi 17 Novembre au Dimanche 19 Novembre 2023, à Blois.\ Durant ces trois jours, vous aurez l'opportunité de découvrir\
+    les dernières tendances en matière de BD, de rencontrer des auteurs talentueux et de participer à des activités ludiques et éducatives.\
+    Nous espérons que vous pourrez vous joindre à nous pour célébrer la passion de la BD et passer un moment inoubliable en notre compagnie.\
+    Bien cordialement,\
+    [Nom de l'organisateur]"
+    return msg
 
 @staticmethod
 def generate_password(length=8):

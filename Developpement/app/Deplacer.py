@@ -20,5 +20,5 @@ class Deplacer(Base):
         self.annee = annee
 
     def __repr__(self) -> str:
-        return "ID Intervenant : " + str(self.idP) + " - ID Transport : " + str(self.idTransport)+ " - Lieu Depart : " + self.lieuDepart + " - Lieu Arrive : " + self.lieuArrive
+        return str(self.idP) + ","+str(self.idTransport)+ ",\"" + self.lieuDepart + "\",\"" + self.lieuArrive+"\"" # ne pas changé
         

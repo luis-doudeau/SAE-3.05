@@ -267,7 +267,60 @@
 
 <script>
 
+  
+
   document.addEventListener("DOMContentLoaded", function() {
+
+
+    if("{{date_dep}}" !== "None"){
+      let arrive = new Date("{{date_arr}}").toISOString().substr(0, 10); 
+      let depart = new Date("{{date_dep}}").toISOString().substr(0, 10); 
+      document.getElementById("dateDep").value = depart;
+      document.getElementById("dateArr").value = arrive;
+      document.getElementById("hArrive").value = "{{timeArr}}";
+      document.getElementById("hDep").value = "{{timeDep}}";
+    }
+    else{
+      let debut_festival = new Date("{{date_arr}}").toISOString().substr(0, 10); 
+      document.getElementById("dateDep").value = debut_festival;
+      document.getElementById("dateArr").value = debut_festival;
+      let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById("hArrive").value = currentTime; // ENLEVER
+      document.getElementById("hDep").value = currentTime;
+  }
+
+  if("{{listeTransport}}" != "[]"){
+
+    let str = "{{listeTransport}}".replace(/&#34;/g, "\"").replace(/\(/g,"[").replace(/\)/g, "]");  console.log(str);
+    let list = "["+ str.replace(/&#34;|\(|/g, "\"") + "]";
+    let lst = str.slice(2, -2).split("], [").map(subStr => {
+      return subStr.split(",").map(val => {
+        if (isNaN(val)) {
+          return val.replace(/"/g, "");
+        } else {
+          return parseInt(val);
+        }
+      });
+    });
+
+    dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],"voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],"autre": ["precision"]};
+    
+    for(transport of lst){
+      nom_transport = transport[5].toLowerCase()
+      name_transport = document.getElementById("card"+transport[5])
+      if(name_transport != null){
+        var lieu__depart = document.getElementById(dico_champs_box[nom_transport][0]);
+        var lieu__arrive = document.getElementById(dico_champs_box[nom_transport][1]);
+        lieu__depart.value = transport[2];
+        lieu__arrive.value = transport[3];
+        document.getElementById("card"+transport[5]).click();
+      }
+    }
+  }
+
+    
+
+ 
 
     //TRAIN
     var liste_dep_train = "{{liste_lieu_train}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
@@ -677,22 +730,7 @@ cardAutre.addEventListener("click", function(){
     window.scrollTo(0, rect.top + window.pageYOffset+offest);
 });
 
-
-// FIN AUTRE
-
-
-
-let today = new Date("{{date_arr}}").toISOString().substr(0, 10); 
-
-document.getElementById("dateDep").value = today;
-document.getElementById("dateArr").value = today;
-
-
-let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-document.getElementById("hArrive").value = currentTime; // ENLEVER
-document.getElementById("hDep").value = currentTime;
-
+// Mise dans les input date, des valeurs correct
 
 
 </script>

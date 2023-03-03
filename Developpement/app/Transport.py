@@ -13,5 +13,5 @@ class Transport(Base):
         self.nomTransport = nomTransport
 
     def __repr__(self) -> str:
-        return "ID transport : " + str(self.idTransport) + ", nom du Transport : " + self.nomTransport
+        return "\""+str(self.idTransport) + "\"," + self.nomTransport # ne pas changé
         
