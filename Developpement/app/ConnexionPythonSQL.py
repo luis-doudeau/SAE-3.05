@@ -82,10 +82,10 @@ def ouvrir_connexion(user,passwd,host,database):
 #connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
-connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
+#connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
-#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 
 
 
@@ -126,62 +126,62 @@ def datetime_to_heure(date):
     new_date = str(date)
     return new_date[11:]
 
-def get_hotel(sessionSQL, idH):
+def get_hotel(idH):
     return (sessionSQL.query(Hotel).filter(Hotel.idHotel == idH).first()).nomHotel
 
-def get_nom_hotel_idP(sessionSQL, idP) : 
+def get_nom_hotel_idP(idP) : 
     return sessionSQL.query(Hotel).join(Loger, Loger.idHotel == Hotel.idHotel).filter(Loger.idP == idP).first().nomHotel
 
-def get_periode_hotel(sessionSQL, idP):
+def get_periode_hotel(idP):
     debut = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateDebut
     fin = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateFin
     return format_creneau(debut, fin)
 
-def get_date_dormeur(sessionSQL, idP):
+def get_date_dormeur(idP):
     dateDeb = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateDebut
     dateFin = (sessionSQL.query(Loger).filter(Loger.idP == idP).first()).dateFin
     return (datetime_to_dateFrancais(dateDeb), datetime_to_dateFrancais(dateFin))
 
-def get_consommateur(sessionSQL, idP):
+def get_consommateur(idP):
     return sessionSQL.query(Consommateur).filter(Consommateur.idP == idP).first()
 
-def get_restaurant(sessionSQL, idRepas):
+def get_restaurant(idRepas):
     idRestaurant = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idRest
     return (sessionSQL.query(Restaurant).filter(Restaurant.idRest == idRestaurant).first()).nomRest
 
 
-def get_creneau_repas(sessionSQL, idRepas):
+def get_creneau_repas(idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateDebut
     fin = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateFin
     return format_creneau(debut, fin)
 
-def get_intervenant(sessionSQL, idP):
+def get_intervenant(idP):
     return sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
 
-def get_date_repas(sessionSQL, idRepas):
+def get_date_repas(idRepas):
     idCreneau = (sessionSQL.query(Repas).filter(Repas.idRepas == idRepas).first()).idCreneau
     debut = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.idCreneau == idCreneau).first()).dateDebut
     return datetime_to_dateFrancais(debut)
 
 
-def get_deb_voyage(sessionSQL, idVoyage):
+def get_deb_voyage(idVoyage):
     return sessionSQL.query(Voyage).filter(Voyage.idVoy == idVoyage).first().heureDebVoy
 
-def get_lieu_depart_voyage(sessionSQL, idVoyage):
+def get_lieu_depart_voyage(idVoyage):
     if (sessionSQL.query(Voyage).filter(Voyage.idVoy == idVoyage).first()).directionGare:
         return "Festival → Gare Blois"
     else:
         return "Gare Blois → Festival"
 
 
-def get_all_lieu(session) : 
-    lieux = session.query(Lieu).all()
+def get_all_lieu() : 
+    lieux = sessionSQL.query(Lieu).all()
     lieux_dict = {lieu.idLieu: lieu for lieu in lieux}
     return lieux_dict
 
 
-def get_repas(sessionSQL, idP, annee):
+def get_repas(idP, annee):
     resultat = sessionSQL.query(Repas, CreneauRepas, Restaurant)\
         .join(CreneauRepas, CreneauRepas.idCreneau == Repas.idCreneau)\
         .join(Restaurant, Restaurant.idRest == Repas.idRest)\
@@ -208,21 +208,21 @@ def get_repas(sessionSQL, idP, annee):
 #         return max_id[0]
     
 
-def get_max_id_secretaire(sessionSQL):
+def get_max_id_secretaire():
     max_id = sessionSQL.query(func.max(Secretaire.idP)).first()
     if (max_id[0]) is None:
         return 0
     else:
         return max_id[0]
     
-def get_max_id_exposant(sessionSQL):
+def get_max_id_exposant():
     max_id = sessionSQL.query(func.max(Exposant.idP)).first()
     if (max_id[0]) is None:
         return 0
     else:
         return max_id[0]
 
-def get_max_id_auteur(sessionSQL):
+def get_max_id_auteur():
     max_id = sessionSQL.query(func.max(Auteur.idP)).first()
     
     if (max_id[0]) is None:
@@ -230,7 +230,7 @@ def get_max_id_auteur(sessionSQL):
     else:
         return max_id[0]
 
-def get_max_id_invite(sessionSQL):
+def get_max_id_invite():
     max_id = sessionSQL.query(func.max(Invite.idP)).first()
     
     if (max_id[0]) is None:
@@ -238,7 +238,7 @@ def get_max_id_invite(sessionSQL):
     else:
         return max_id[0]
 
-def get_max_id_presse(sessionSQL):
+def get_max_id_presse():
     max_id = sessionSQL.query(func.max(Presse.idP)).first()
     
     if (max_id[0]) is None:
@@ -246,7 +246,7 @@ def get_max_id_presse(sessionSQL):
     else:
         return max_id[0]
 
-def get_max_id_staff(sessionSQL):
+def get_max_id_staff():
     max_id = sessionSQL.query(func.max(Staff.idP)).first()
     
     if (max_id[0]) is None:
@@ -254,7 +254,7 @@ def get_max_id_staff(sessionSQL):
     else:
         return max_id[0]
 
-def get_max_num_stand(sessionSQL):
+def get_max_num_stand():
     max_num = sessionSQL.query(func.max(Exposant.numStand)).first()
     if (max_num[0]) is None:
         return 0
@@ -262,47 +262,47 @@ def get_max_num_stand(sessionSQL):
         return max_num._data[0]
 
         
-def get_max_id_repas(sessionSQL):        
+def get_max_id_repas():        
     max_num = sessionSQL.query(func.max(Repas.idRepas)).first()
     if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
     
-def get_mail(sessionSQL, idParticipant):
+def get_mail(idParticipant):
     email = (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idParticipant).first()).emailP
     if email:
         return email
     return None
 
-def get_max_id_creneau_repas(sessionSQL):        
+def get_max_id_creneau_repas():        
     max_num = sessionSQL.query(func.max(CreneauRepas.idCreneau)).first()
     if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
 
-def get_max_id_creneau_travail(sessionSQL):        
+def get_max_id_creneau_travail():        
     max_num = sessionSQL.query(func.max(CreneauTravail.idCreneau)).first()
     if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
 
-def get_max_id_restaurant(sessionSQL):
+def get_max_id_restaurant():
     max_num = sessionSQL.query(func.max(Restaurant.idRest)).first()
     if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
     
-def get_max_id_voyage(sessionSQL):
+def get_max_id_voyage():
     max_num = sessionSQL.query(func.max(Voyage.idVoy)).first()
     if (max_num[0]) is None:
         return 0
     else:
         return max_num._data[0]
-def get_info_all_participants(sessionSQL, prenomP, nomP, emailP, ddnP, role):
+def get_info_all_participants(prenomP, nomP, emailP, ddnP, role):
     participants = sessionSQL.query(Participant)
     if(prenomP != ""):
         participants = participants.filter(Participant.prenomP == prenomP)
@@ -322,7 +322,7 @@ def get_info_all_participants(sessionSQL, prenomP, nomP, emailP, ddnP, role):
 
 
 
-def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role): 
+def get_info_all_invite(prenomP, nomP, emailP, invite, role): 
     participants = sessionSQL.query(Participant)
     if(prenomP != ""):
         participants = participants.filter(Participant.prenomP == prenomP)
@@ -344,7 +344,7 @@ def get_info_all_invite(sessionSQL, prenomP, nomP, emailP, invite, role):
  
 
 
-def get_tout_dormeurs_avec_filtre(sessionSQL, prenomP, nomP, nomHotel, dateArrive, dateDeparts):
+def get_tout_dormeurs_avec_filtre(prenomP, nomP, nomHotel, dateArrive, dateDeparts):
     participants = sessionSQL.query(Loger).join(Intervenant, Loger.idP == Intervenant.idP).join(Hotel, Loger.idHotel == Hotel.idHotel)
     if(prenomP != ""):
         participants = participants.filter(Intervenant.prenomP == prenomP)
@@ -368,7 +368,7 @@ def get_tout_dormeurs_avec_filtre(sessionSQL, prenomP, nomP, nomHotel, dateArriv
         participants = participants.filter(Loger.dateFin >= date_jour_debut).filter(Loger.dateFin <= date_jour_fin)
     return participants.all()
 
-def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, creneau):
+def get_info_all_consommateurs(prenomC, nomC, restaurant, la_date, creneau):
     consommateurs = sessionSQL.query(Manger).join(
                         Repas, Manger.idRepas == Repas.idRepas).join(
                         Restaurant, Repas.idRest == Restaurant.idRest).join(
@@ -395,7 +395,7 @@ def get_info_all_consommateurs(sessionSQL, prenomC, nomC, restaurant, la_date, c
 
     return consommateurs.all()
 
-def get_tout_voyage_avec_filtre(sessionSQL,id_voyage, direction, id_navette, date_depart):
+def get_tout_voyage_avec_filtre(id_voyage, direction, id_navette, date_depart):
     print(sessionSQL,id_voyage, direction, id_navette, date_depart)
     voyages = sessionSQL.query(Voyage)
     if(id_voyage != ""):
@@ -416,7 +416,7 @@ def get_tout_voyage_avec_filtre(sessionSQL,id_voyage, direction, id_navette, dat
     return voyages.all()
 
 
-def get_intervenant_dans_voyage_avec_filtre(sessionSQL,id_voyage, prenom_p, nom_p):
+def get_intervenant_dans_voyage_avec_filtre(id_voyage, prenom_p, nom_p):
     print(sessionSQL,id_voyage, prenom_p, nom_p)
     #intervenants = sessionSQL.query(Transporter).filter(
     #                Transporter.idVoy == id_voyage).join(
@@ -445,7 +445,7 @@ def filtrer_par_role(role, participants):
     if role == "Invite":
         return participants.join(Invite, Participant.idP == Invite.idP)
 
-def ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP): 
+def ajoute_secretaire(idP, prenomP, nomP, emailP, mdpP): 
     secretaire = Secretaire(idP, prenomP, nomP, emailP, mdpP)
     sessionSQL.add(secretaire)
     try:
@@ -455,7 +455,7 @@ def ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP):
         print("Erreur")
 
 
-def ajoute_exposant(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+def ajoute_exposant(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
     exposant = Exposant(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     sessionSQL.add(exposant)
     try:
@@ -464,7 +464,7 @@ def ajoute_exposant(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adr
         print(inst)
         sessionSQL.rollback()
 
-def ajoute_staff(sessionSQL,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+def ajoute_staff(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
     staff = Staff(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     personne = sessionSQL.query(Participant).filter(Participant.idP == staff.idP).first()
     sessionSQL.add(staff)
@@ -476,7 +476,7 @@ def ajoute_staff(sessionSQL,idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adress
         sessionSQL.rollback()
 
         
-def ajoute_intervenant(sessionSQL, idP):
+def ajoute_intervenant(idP):
     intervenant = Intervenant(idP)
     personne = sessionSQL.query(Participant).filter(Participant.idP == intervenant.idP).first()
     sessionSQL.add(intervenant)
@@ -488,7 +488,7 @@ def ajoute_intervenant(sessionSQL, idP):
         sessionSQL.rollback()
 
     
-def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+def ajoute_auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
     auteur = Auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP)
     sessionSQL.add(auteur)
     try:
@@ -497,7 +497,7 @@ def ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adre
         print(inst)
         sessionSQL.rollback()
 
-def ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP):
+def ajoute_presse(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP):
     presse = Presse(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP)
     sessionSQL.add(presse)
     try:
@@ -506,7 +506,7 @@ def ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adre
         print("Erreur")
         sessionSQL.rollback()
 
-def ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
+def ajoute_invite(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostalP, villeP):
     invite = Invite(idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP,codePostalP, villeP)
     sessionSQL.add(invite)
     try:
@@ -516,34 +516,34 @@ def ajoute_invite(sessionSQL, idP,prenomP, nomP, emailP, mdpP, ddnP, telP, adres
         sessionSQL.rollback()
         
 
-def ajoute_participant_role(sessionSQL, prenomP, nomP, emailP, adresseP, codePostal, ville, telP, ddnP, role):
+def ajoute_participant_role(prenomP, nomP, emailP, adresseP, codePostal, ville, telP, ddnP, role):
     if role in ROLE:
         mdpP = generate_password()
         if role == "Secretaire" : 
-            idP = get_max_id_secretaire(sessionSQL)+1
-            ajoute_secretaire(sessionSQL, idP, prenomP, nomP, emailP, mdpP )
+            idP = get_max_id_secretaire()+1
+            ajoute_secretaire(idP, prenomP, nomP, emailP, mdpP )
         elif role == "Exposant":
-            idP = get_max_id_exposant(sessionSQL)+1
-            ajoute_exposant(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
+            idP = get_max_id_exposant()+1
+            ajoute_exposant(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Staff":
-            idP = get_max_id_staff(sessionSQL)+1
-            ajoute_staff(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal, ville)
+            idP = get_max_id_staff()+1
+            ajoute_staff(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal, ville)
         elif role == "Auteur":
-            idP = get_max_id_auteur(sessionSQL)+1
-            ajoute_auteur(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
+            idP = get_max_id_auteur()+1
+            ajoute_auteur(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Presse":
-            idP = get_max_id_presse(sessionSQL)+1
-            ajoute_presse(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
+            idP = get_max_id_presse()+1
+            ajoute_presse(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
         elif role == "Invite" :
-            idP = get_max_id_invite(sessionSQL)+1
-            ajoute_invite(sessionSQL, idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
+            idP = get_max_id_invite()+1
+            ajoute_invite(idP, prenomP, nomP, emailP, mdpP, ddnP, telP, adresseP, codePostal,ville)
     else:
         print("Le rôle n'est pas reconnu")
 
 
-def ajoute_intervention(session, idP, idCreneau, idLieu, idIntervention, descIntervention):
+def ajoute_intervention(idP, idCreneau, idLieu, idIntervention, descIntervention):
     intervenir = Intervenir(idP, idCreneau, idLieu, idIntervention, descIntervention)
-    intervention = session.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).filter(Intervenir.idIntervention == idIntervention).first()
+    intervention = sessionSQL.query(Intervenir).filter(Intervenir.idP == intervenir.idP).filter(Intervenir.idCreneau == intervenir.idCreneau).filter(Intervenir.idIntervention == idIntervention).first()
     if intervention is None:
         sessionSQL.add(intervenir)
         try:
@@ -556,7 +556,7 @@ def ajoute_intervention(session, idP, idCreneau, idLieu, idIntervention, descInt
     else:
         print("Une intervention a déjà lieu à ce créneau pour cette personne")
 
-def ajouter_navette(sessionSQL, idNavette, nomNavette, capaciteNavette):
+def ajouter_navette(idNavette, nomNavette, capaciteNavette):
     navette = Navette(idNavette, nomNavette, capaciteNavette)
     navette_existe = sessionSQL.query(Navette).filter(Navette.idNavette == idNavette).first()
     if navette_existe is None:
@@ -572,7 +572,7 @@ def ajouter_navette(sessionSQL, idNavette, nomNavette, capaciteNavette):
 
 
 #FONCTION A TESTER AVEC DES INSERTIONS
-def supprimer_personne_transporter(sessionSQL, idP, idVoyage):
+def supprimer_personne_transporter(idP, idVoyage):
     liste_personne = sessionSQL.query(Transporter.idP).filter(Transporter.idVoy == idVoyage).all()
     if len(liste_personne) == 1:
         sessionSQL.query(Transporter).filter(Transporter.idP == idP).filter(Transporter.idVoy == idVoyage).delete()
@@ -587,22 +587,22 @@ def supprimer_personne_transporter(sessionSQL, idP, idVoyage):
 
 # ajoute_intervention(sessionSQL, 300, 1, 1, "Dédicace", "Séance de dédicace avec les spectateurs")
         
-def supprimer_utilisateur(sessionSQL, id_utilisateur):
+def supprimer_utilisateur(id_utilisateur):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).delete()
     sessionSQL.commit()
     print("L'utilisateur' a été supprimé")
 
-def supprimer_secretaire(sessionSQL, id_secretaire):
+def supprimer_secretaire(id_secretaire):
     sessionSQL.query(Secretaire).filter(Secretaire.idP == id_secretaire).delete()
     sessionSQL.commit()
     print("La secretaire a été supprimé")
 
-def supprimer_participant(sessionSQL, id_participant):
+def supprimer_participant(id_participant):
     sessionSQL.query(Participant).filter(Participant.idP == id_participant).delete()
     sessionSQL.commit()
     print("Le participant a été supprimé")
 
-def supprimer_consommateur(sessionSQL, id_consommateur):
+def supprimer_consommateur(id_consommateur):
     sessionSQL.query(Manger).filter(Manger.idP == id_consommateur).delete()
     sessionSQL.query(Avoir).filter(Avoir.idP == id_consommateur).delete()
     sessionSQL.commit()
@@ -611,7 +611,7 @@ def supprimer_consommateur(sessionSQL, id_consommateur):
     sessionSQL.commit()
     print("Le consommateur a été supprimé")
 
-def supprimer_intervenant(sessionSQL, id_intervenant):
+def supprimer_intervenant(id_intervenant):
     sessionSQL.query(Transporter).filter(Transporter.idP == id_intervenant).delete()
     sessionSQL.query(Deplacer).filter(Deplacer.idP == id_intervenant).delete()
     sessionSQL.query(Assister).filter(Assister.idP == id_intervenant).delete()
@@ -622,12 +622,12 @@ def supprimer_intervenant(sessionSQL, id_intervenant):
     sessionSQL.commit()
     print("L'intervenant a été supprimé")
 
-def supprimer_exposant(sessionSQL, id_exposant):
+def supprimer_exposant(id_exposant):
     sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).delete()
     sessionSQL.commit()
     print("L'exposant a été supprimé")
   
-def supprimer_staff(sessionSQL, id_staff):
+def supprimer_staff(id_staff):
     sessionSQL.query(Travailler).filter(Travailler.idP == id_staff).delete()
     sessionSQL.commit()
 
@@ -635,28 +635,28 @@ def supprimer_staff(sessionSQL, id_staff):
     sessionSQL.commit()
     print("Le staff a été supprimé")
 
-def supprimer_auteur(sessionSQL, id_auteur):
+def supprimer_auteur(id_auteur):
     sessionSQL.query(Intervenir).filter(Intervenir.idP == id_auteur).delete()
     sessionSQL.commit()
     sessionSQL.query(Auteur).filter(Auteur.idP == id_auteur).delete()
     sessionSQL.commit()
     print("L'auteur a été supprimé")
 
-def supprimer_presse(sessionSQL, id_presse):
+def supprimer_presse(id_presse):
     sessionSQL.query(Presse).filter(Presse.idP == id_presse).delete()
     sessionSQL.commit()
     print("Le membre de la presse a été supprimé")
 
-def supprimer_invite(sessionSQL, id_invite):
+def supprimer_invite(id_invite):
     sessionSQL.query(Invite).filter(Invite.idP == id_invite).delete()
     sessionSQL.commit()        
     print("L'invité a été supprimé")
 
-def supprimer_repas_consommateur(sessionSQL, id_consommateur, id_repas):
+def supprimer_repas_consommateur(id_consommateur, id_repas):
     sessionSQL.query(Manger).filter(Manger.idP == id_consommateur).filter(Manger.idRepas == id_repas).delete()
     sessionSQL.commit()
 
-def supprimer_nuit_dormeur(sessionSQL, id_dormeur, id_hotel, dateDeb, dateFin):
+def supprimer_nuit_dormeur(id_dormeur, id_hotel, dateDeb, dateFin):
     liste_date_deb = transforme_datetime(dateDeb)
     liste_date_fin = transforme_datetime(dateFin)
     dateDeb_datetime = datetime.date(int(liste_date_deb[2]), int(liste_date_deb[1]), int(liste_date_deb[0]))
@@ -665,59 +665,59 @@ def supprimer_nuit_dormeur(sessionSQL, id_dormeur, id_hotel, dateDeb, dateFin):
     sessionSQL.query(Loger).filter(Loger.idP == test.idP).filter(Loger.idHotel == test.idHotel).filter(Loger.dateDebut == test.dateDebut).filter(Loger.dateFin == test.dateFin).delete()
     sessionSQL.commit()
 
-def get_role(sessionSQL, id_utilisateur):
-    utilisateur_existe = get_utilisateur(sessionSQL, id_utilisateur)
+def get_role(id_utilisateur):
+    utilisateur_existe = get_utilisateur(id_utilisateur)
     if utilisateur_existe is None:
         return None
-    secretaire = get_secretaire(sessionSQL, id_utilisateur)
+    secretaire = get_secretaire(id_utilisateur)
     if secretaire is not None:
         return "Secretaire"
-    exposant = get_exposant(sessionSQL, id_utilisateur)
+    exposant = get_exposant(id_utilisateur)
     if exposant is not None:
         return "Exposant"
-    staff = get_staff(sessionSQL, id_utilisateur)
+    staff = get_staff(id_utilisateur)
     if staff is not None:
         return "Staff"
-    auteur = get_auteur(sessionSQL, id_utilisateur)
+    auteur = get_auteur(id_utilisateur)
     if auteur is not None:
         return "Auteur"
-    presse = get_presse(sessionSQL, id_utilisateur)
+    presse = get_presse(id_utilisateur)
     if presse is not None:
         return "Presse"
-    invite = get_invite(sessionSQL, id_utilisateur)
+    invite = get_invite(id_utilisateur)
     if invite is not None:
         return "Invite"
     return "Pas de rôle"
 
 
 
-def supprimer_utilisateur_role(sessionSQL, id_utilisateur):
-    role_utilisateur = get_role(sessionSQL, id_utilisateur)
+def supprimer_utilisateur_role(id_utilisateur):
+    role_utilisateur = get_role(id_utilisateur)
     if role_utilisateur is not None:
         if role_utilisateur == "Secretaire":
-            supprimer_secretaire(sessionSQL, id_utilisateur)
+            supprimer_secretaire(id_utilisateur)
         else:
             if role_utilisateur == "Exposant":
-                supprimer_exposant(sessionSQL, id_utilisateur)
+                supprimer_exposant(id_utilisateur)
             else:
                 if role_utilisateur == "Staff":
-                    supprimer_staff(sessionSQL, id_utilisateur)
+                    supprimer_staff(id_utilisateur)
                 else:
                     if role_utilisateur == "Auteur":
-                        supprimer_auteur(sessionSQL, id_utilisateur)
+                        supprimer_auteur(id_utilisateur)
                     elif role_utilisateur == "Presse":
-                        supprimer_presse(sessionSQL, id_utilisateur)
+                        supprimer_presse(id_utilisateur)
                     elif role_utilisateur == "Invite":
-                        supprimer_invite(sessionSQL, id_utilisateur)
-                    supprimer_intervenant(sessionSQL, id_utilisateur)
-                supprimer_consommateur(sessionSQL, id_utilisateur)
-            supprimer_participant(sessionSQL, id_utilisateur)
-        supprimer_utilisateur(sessionSQL, id_utilisateur)
+                        supprimer_invite(id_utilisateur)
+                    supprimer_intervenant(id_utilisateur)
+                supprimer_consommateur(id_utilisateur)
+            supprimer_participant(id_utilisateur)
+        supprimer_utilisateur(id_utilisateur)
     else:
         print("La personne que vous voulez supprimer n'existe pas")
 
      
-def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, telP):
+def modifier_participant(idP, adresseP, codePostalP, villeP, ddnP, telP):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.adresseP : adresseP, Participant.codePostalP : codePostalP, Participant.villeP : villeP,
         Participant.ddnP : ddnP, Participant.telP : telP})
@@ -730,12 +730,12 @@ def modifier_participant(sessionSQL, idP, adresseP, codePostalP, villeP, ddnP, t
         print("erreur lors de la modif du participant")
         return False
 
-def verif_regime_existe(sessionSQL, nomRegime):
+def verif_regime_existe(nomRegime):
     regime = sessionSQL.query(Regime).filter(Regime.nomRegime == nomRegime).first()
     if regime is not None:
         return regime.idRegime
     else:
-        ajoute_regime(sessionSQL, nomRegime)
+        ajoute_regime(nomRegime)
 
 def get_id_creneau_repas(date_debut, date_fin):
     id_creneau = (sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()).idCreneau
@@ -756,7 +756,7 @@ def est_midi(date_debut):
         return False    
 
 def verif_repas_existe(nomRestaurant, date_debut, date_fin):
-    id_restaurant = get_id_restaurant(sessionSQL, nomRestaurant)
+    id_restaurant = get_id_restaurant(nomRestaurant)
     id_creneau = get_id_creneau_repas(date_debut, date_fin)
     repas = sessionSQL.query(Repas).filter(Repas.idCreneau == id_creneau).filter(Repas.idRest == id_restaurant).first()
     if repas is not None:
@@ -793,7 +793,7 @@ def modifier_repas(idP, nomRestaurant, dateRepas, creneauRepas, idRepas):
         print("erreur lors de la modif du repas")
         return False
     
-def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
+def modifier_utilisateur(idP, prenomP, nomP, emailP):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update(
         {Utilisateur.prenomP : prenomP, Utilisateur.nomP : nomP, Utilisateur.emailP : emailP})
     try : 
@@ -805,7 +805,7 @@ def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
         return False
     
 
-def modifier_password(sessionSQL, idP, new_password):
+def modifier_password(idP, new_password):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update({Utilisateur.mdpP : new_password})
     try : 
         sessionSQL.commit()
@@ -815,7 +815,7 @@ def modifier_password(sessionSQL, idP, new_password):
         print("erreur lors de la modif du MDP")
         return False
     
-def modifier_participant_tout(sessionSQL, idP, prenomP, nomP, ddnP, telP, emailP, adresseP, codePostalP, villeP, mdpP, invite, emailEnvoye, remarques):
+def modifier_participant_tout(idP, prenomP, nomP, ddnP, telP, emailP, adresseP, codePostalP, villeP, mdpP, invite, emailEnvoye, remarques):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.prenomP : prenomP, Participant.nomP : nomP, Participant.ddnP : ddnP, 
          Participant.telP : telP, Participant.emailP : emailP, Participant.adresseP : adresseP, Participant.codePostalP : codePostalP,
@@ -832,39 +832,39 @@ def modifier_participant_tout(sessionSQL, idP, prenomP, nomP, ddnP, telP, emailP
 #     ajoute_participant_role_id(sessionSQL, ancien_participant, metier)
 #     print("Le role du participant a bien été modifié")
 
-def modif_loger(sessionSQL, ancien_loger, nouveau_loger):
+def modif_loger(ancien_loger, nouveau_loger):
     sessionSQL.query(Loger).filter(Loger.idP == ancien_loger.idP).filter(Loger.idHotel == ancien_loger.idHotel).filter(Loger.dateDebut == ancien_loger.dateDebut).update({
         Loger.dateDebut : nouveau_loger.dateDebut, Loger.dateFin : nouveau_loger.dateFin, Loger.idHotel : nouveau_loger.idHotel})
     sessionSQL.commit()
     print("Le logement de cette personne a bien été modifié")  
           
 
-def modif_repas(sessionSQL, ancien_repas, nouveau_repas):
+def modif_repas(ancien_repas, nouveau_repas):
     sessionSQL.query(Manger).filter(Manger.idP == ancien_repas.idP).filter(Manger.idRepas == ancien_repas.idRepas).update(
         {Manger.idRepas : nouveau_repas.idRepas}
     )
     sessionSQL.commit()
     print("Le repas du participant a bien été modifié")     
 
-def get_info_personne(sessionSQL, email, mdp):
+def get_info_personne(email, mdp):
     personne = sessionSQL.query(Participant).filter(Participant.emailP == email).filter(Participant.mdpP == mdp).first()
     if personne is None:
         return None
     else:
         return personne
 
-def get_participant(sessionSQL, id_participant):
+def get_participant(id_participant):
     return sessionSQL.query(Participant).filter(Participant.idP == id_participant).first()
 
-def get_exposant(sessionSQL, id_exposant):
+def get_exposant(id_exposant):
     return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
-def get_all_auteur(sessionSQL):
+def get_all_auteur():
     Auteur_alias = aliased(Auteur)
     liste_auteur = sessionSQL.query(Auteur_alias).join(Participant, Auteur_alias.idP==Participant.idP).all()
     return {auteur.idP : auteur for auteur in liste_auteur}
 
-def get_all_interventions(sessionSQL) :
+def get_all_interventions() :
     """" Récupère un dictionnaire d'intervervention 
         Key : id de l'intervention (id_intervention)
         Value : l'intervention : (Intervention)
@@ -872,10 +872,10 @@ def get_all_interventions(sessionSQL) :
     liste_interventions =  sessionSQL.query(Intervention).all()
     return {intervention.idIntervention : intervention for intervention in liste_interventions}
 
-def get_intervenirs(sessionSQL) : 
+def get_intervenirs() : 
     return sessionSQL.query(Intervenir).all()
 
-def get_intervenirs(sessionSQL, idP) : 
+def get_intervenirs(idP) : 
     resultat = sessionSQL.query(Intervenir, Lieu, Intervention, CreneauTravail).join(Lieu, Lieu.idLieu == Intervenir.idLieu).join(Intervention, Intervention.idIntervention == Intervenir.idIntervention).join(CreneauTravail, CreneauTravail.idCreneau == Intervenir.idCreneau).filter(Intervenir.idP == idP).all()
     liste_res = list()
     if resultat:
@@ -886,43 +886,46 @@ def get_intervenirs(sessionSQL, idP) :
     return liste_res
 
 
-def get_exposant(sessionSQL, id_exposant):
+def get_exposant(id_exposant):
     return sessionSQL.query(Exposant).filter(Exposant.idP == id_exposant).first()
 
-def get_invite(sessionSQL, id_invite):
+def get_invite(id_invite):
     return sessionSQL.query(Invite).filter(Invite.idP == id_invite).first()
 
-def get_staff(sessionSQL, id_staff):
+def get_staff(id_staff):
     return sessionSQL.query(Staff).filter(Staff.idP == id_staff).first()
 
-def get_auteur(sessionSQL, id_auteur):
+def get_auteur(id_auteur):
     return sessionSQL.query(Auteur).filter(Auteur.idP == id_auteur).first()
 
-def get_presse(sessionSQL, id_presse):
+def get_presse(id_presse):
     return sessionSQL.query(Presse).filter(Presse.idP == id_presse).first()
 
 
-def get_secretaire(sessionSQL, id_secretaire):
+def get_secretaire(id_secretaire):
     secretaire = sessionSQL.query(Secretaire).filter(Secretaire.idP == id_secretaire).first()
     return secretaire
 
-def get_prenom(sessionSQL, id_participant):
+def get_prenom(id_participant):
     return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).prenomP
 
-def get_nom(sessionSQL, id_participant):
+def get_mot_de_passe(id_participant):
+    return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).mdpP
+
+def get_nom(id_participant):
     return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).nomP
 
-def get_id_hotel(sessionSQL, nom_hotel):
+def get_id_hotel(nom_hotel):
     return (sessionSQL.query(Hotel).filter(Hotel.nomHotel == nom_hotel).first()).idHotel
 
 
-def get_id_restaurant(sessionSQL, nom_restaurant):
+def get_id_restaurant(nom_restaurant):
     return (sessionSQL.query(Restaurant).filter(Restaurant.nomRest == nom_restaurant).first()).idRest
 
-def get_utilisateur(sessionSQL, id_utilisateur):
+def get_utilisateur(id_utilisateur):
     return sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_utilisateur).first()
 
-def affiche_participants(sessionSQL):
+def affiche_participants():
     liste_participants = []
     participants = sessionSQL.query(Participant)
     for part in participants:
@@ -930,7 +933,7 @@ def affiche_participants(sessionSQL):
     return liste_participants
    
 
-def affiche_participant_trier(sessionSQL, trie):
+def affiche_participant_trier(trie):
      
         if trie == "Auteur" :
             return sessionSQL.query(Participant).join(Auteur, Participant.idP==Auteur.idP).all()
@@ -956,7 +959,7 @@ def affiche_participant_trier(sessionSQL, trie):
         else: 
             return sessionSQL.query(Participant).order_by(Participant.idP.asc()).all()
 
-def affiche_participant_trier_consommateur(sessionSQL):
+def affiche_participant_trier_consommateur():
     participant = sessionSQL.query(Participant).all()
     return participant
 
@@ -994,7 +997,7 @@ def get_nom_hotel():
     return liste_nom_hotel
 
 
-def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
+def afficher_consommateur(date_jour, restaurant, midi):
     if restaurant != "Restaurant":
         restaurant = int(restaurant)
     if midi == "true":
@@ -1037,19 +1040,19 @@ def afficher_consommateur(sessionSQL, date_jour, restaurant, midi):
     for consomm in consommateurs:
         if consomm[1] in liste_mangeur:
             liste_consommateurs.append(consomm[1])
-    liste_participants = get_liste_participant_idp_regime(sessionSQL, liste_consommateurs)
+    liste_participants = get_liste_participant_idp_regime(liste_consommateurs)
     return liste_participants
 
-def get_liste_participant_idp_regime(sessionSQL, liste_id):
+def get_liste_participant_idp_regime(liste_id):
     liste_participants = []
     participants = sessionSQL.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
     for une_personne in participants:
         if une_personne.idP in liste_id:
-            liste_participants.append((une_personne, get_regime(sessionSQL, une_personne.idP)))
+            liste_participants.append((une_personne, get_regime(une_personne.idP)))
     return liste_participants
 
 
-def get_navette(sessionSQL, idP, annee) : 
+def get_navette(idP, annee) : 
         resultat = sessionSQL.query(Voyage).join(Transporter, Transporter.idVoy == Voyage.idVoy).filter(Transporter.idP == idP).filter(extract('year', Voyage.heureDebVoy) == annee).all()
         liste_res = []
         for res in resultat : 
@@ -1058,7 +1061,7 @@ def get_navette(sessionSQL, idP, annee) :
 
          
 
-def get_liste_participant_id_consommateur(sessionSQL, liste_id):
+def get_liste_participant_id_consommateur(liste_id):
     liste_participants = []
     participants = sessionSQL.query(Participant).join(Consommateur, Participant.idP == Consommateur.idP).all()
     for une_personne in participants:
@@ -1066,7 +1069,7 @@ def get_liste_participant_id_consommateur(sessionSQL, liste_id):
             liste_participants.append(une_personne)
     return liste_participants
 
-def get_regime(sessionSQL, id_p):
+def get_regime(id_p):
     str_regime = ""
     liste_regime = sessionSQL.query(Regime.nomRegime).join(Avoir, Avoir.idRegime == Regime.idRegime).filter(Avoir.idP == id_p).all()
     if len(liste_regime) == 0:
@@ -1077,7 +1080,7 @@ def get_regime(sessionSQL, id_p):
         str_regime = str_regime[:-2]
     return str_regime
 
-def get_dormeur(sessionSQL, date_jour, hotel):
+def get_dormeur(date_jour, hotel):
     if date_jour[0] != "Date":
         date_jour = datetime.date(int(date_jour[0]), int(date_jour[1]), int(date_jour[2]))
     else:
@@ -1098,11 +1101,11 @@ def get_dormeur(sessionSQL, date_jour, hotel):
         elif date_deb <= date_jour and date_fin >= date_jour and hotel is None or un_dormeur.idHotel == hotel : 
             liste_dormeur_date_hotel.append(un_dormeur[0])
                 
-    liste_participants = get_liste_participant_id_consommateur(sessionSQL, liste_dormeur_date_hotel)
+    liste_participants = get_liste_participant_id_consommateur(liste_dormeur_date_hotel)
 
     return liste_participants
 
-def get_dormir(sessionSQL, idP, annee):  
+def get_dormir(idP, annee):  
     resultat = sessionSQL.query(Loger, Hotel).join(Hotel, Hotel.idHotel == Loger.idHotel).filter(Loger.idP == idP).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut)==annee).all()
     liste_res = []
     if resultat:
@@ -1123,7 +1126,7 @@ def id_transport_with_name(nom_transport):
         return 4
     
 
-def supprime_deplacer_annee(sessionSQL, idP, annee):
+def supprime_deplacer_annee(idP, annee):
     deplacement = sessionSQL.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee)
     for dep in deplacement : 
         sessionSQL.delete(dep)
@@ -1135,7 +1138,7 @@ def supprime_deplacer_annee(sessionSQL, idP, annee):
 
 
 
-def ajoute_deplacer(sessionSQL, idP, idTransport, lieuDepart, lieuArrive, annee) :
+def ajoute_deplacer(idP, idTransport, lieuDepart, lieuArrive, annee) :
     deplacement = Deplacer(idP, idTransport, lieuDepart, lieuArrive, annee)
     deplacer = sessionSQL.query(Deplacer).filter(Deplacer.idP == idP).filter(Deplacer.idTransport == idTransport).filter(Deplacer.lieuDepart == lieuDepart).filter(Deplacer.lieuArrive == lieuArrive).filter(Deplacer.annee == annee).first()
     if deplacer is None:
@@ -1150,7 +1153,7 @@ def ajoute_deplacer(sessionSQL, idP, idTransport, lieuDepart, lieuArrive, annee)
         print("Un même déplacement existe déjà pour cette personne")
   
 
-def supprime_mangeur(sessionSQL, idP):
+def supprime_mangeur(idP):
     annee = datetime.datetime.now().year
     manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(extract('year', CreneauRepas.dateDebut) == annee).all()
     for mang in manger :
@@ -1158,7 +1161,7 @@ def supprime_mangeur(sessionSQL, idP):
         sessionSQL.commit()
 
 
-def ajoute_mangeur(sessionSQL, idP, idRepas):
+def ajoute_mangeur(idP, idRepas):
     mangeur = Manger(idP, idRepas)
     manger = sessionSQL.query(Manger).join(Repas, Manger.idRepas == Repas.idRepas).join(CreneauRepas, Repas.idCreneau == CreneauRepas.idCreneau).filter(Manger.idP == idP).filter(Manger.idRepas == idRepas).first()
     if manger is None:
@@ -1176,7 +1179,7 @@ def ajoute_mangeur(sessionSQL, idP, idRepas):
         print("Un consommateur mange déjà ce repas")
         
 
-def suppprime_loger(sessionSQL, idP):
+def suppprime_loger(idP):
     annee = datetime.datetime.today().year
     loger = sessionSQL.query(Loger).filter(Loger.idP == idP).filter(extract('year', Loger.dateDebut) == annee).all()
     for log in loger :
@@ -1184,7 +1187,7 @@ def suppprime_loger(sessionSQL, idP):
         sessionSQL.commit()
 
 
-def ajoute_loger(sessionSQL, idP, dateDebut, dateFin, idHotel):
+def ajoute_loger(idP, dateDebut, dateFin, idHotel):
     date_debut = datetime.datetime(dateDebut.year, dateDebut.month, dateDebut.day, dateDebut.hour, dateDebut.minute, dateDebut.second)
     date_fin = datetime.datetime(dateFin.year, dateFin.month, dateFin.day, dateFin.hour, dateFin.minute, dateFin.second)
 
@@ -1201,20 +1204,20 @@ def ajoute_loger(sessionSQL, idP, dateDebut, dateFin, idHotel):
         sessionSQL.rollback()
         
         
-def choix_hotel(sessionSQL, idP):
+def choix_hotel(idP):
     return 1 #TODO
         
         
-def ajoute_hebergement(sessionSQL, idP): 
+def ajoute_hebergement(idP): 
     annee = datetime.datetime.today().year
     dates = sessionSQL.query(Assister.dateArrive, Assister.dateDepart).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
     print("d ",dates)
     dateDebut = dates[0]
     dateFin = dates[1]
-    idHotel = choix_hotel(sessionSQL, idP)
-    ajoute_loger(sessionSQL, idP, dateDebut, dateFin, idHotel)
+    idHotel = choix_hotel(idP)
+    ajoute_loger(idP, dateDebut, dateFin, idHotel)
         
-def get_max_id_regime(sessionSQL): 
+def get_max_id_regime(): 
     regime= sessionSQL.query(func.max(Regime.idRegime)).first()
     if (regime[0]) is None:
         return 0
@@ -1222,21 +1225,21 @@ def get_max_id_regime(sessionSQL):
         return regime._data[0]
         
         
-def get_assister(sessionSQL, idP, annee):
+def get_assister(idP, annee):
     return sessionSQL.query(Assister).filter(Assister.idP == idP).filter(extract('year', Assister.dateArrive) == annee).first()
 
-def possede_regime(sessionSQL, idP) -> bool :
+def possede_regime(idP) -> bool :
     res = sessionSQL.query(Avoir.idRegime).filter(Avoir.idP == idP).first()
     if res is not None : 
         return res[0]
     else : 
         return None
 
-def update_regime(sessionSQL, idR, new_regime) :    
+def update_regime(idR, new_regime) :    
     return sessionSQL.query(Regime).filter(Regime.idRegime == idR).update({Regime.nomRegime : new_regime})
 
-def ajoute_regime(sessionSQL,regime) :
-    id_regime = get_max_id_regime(sessionSQL)+1
+def ajoute_regime(regime) :
+    id_regime = get_max_id_regime()+1
     regime_existant = sessionSQL.query(Regime.idRegime).filter(Regime.nomRegime == regime).all() != []
     if regime_existant : 
         return regime_existant[0]
@@ -1252,12 +1255,12 @@ def ajoute_regime(sessionSQL,regime) :
             sessionSQL.rollback() 
         
         
-def supprime_regime(sessionSQL, idP, idR) : 
+def supprime_regime(idP, idR) : 
     sessionSQL.query(Avoir).filter(Avoir.idP == idP).delete()
     sessionSQL.query(Regime).filter(Regime.idRegime == idR).delete()
 
         
-def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
+def ajoute_avoir_regime(id_consommateur, id_regime) :
     avoir_regime = Avoir(id_consommateur, id_regime)
     sessionSQL.add(avoir_regime)
     try :
@@ -1267,16 +1270,16 @@ def ajoute_avoir_regime(sessionSQL, id_consommateur, id_regime) :
         print("erreur")
         sessionSQL.rollback()
     
-def est_intervenant(sessionSQL, idP):
+def est_intervenant(idP):
     intervenant = sessionSQL.query(Intervenant).filter(Intervenant.idP == idP).first()
     return intervenant is not None
             
-def est_secretaire(sessionSQL, idP):
-    secretaire = get_secretaire(sessionSQL, idP)
+def est_secretaire(idP):
+    secretaire = get_secretaire(idP)
     return secretaire is not None
         
         
-def requete_transport_annee(sessionSQL, idP, annee) : 
+def requete_transport_annee(idP, annee) : 
     liste_transport = sessionSQL.query(Deplacer, Assister.dateDepart).join(Assister, Deplacer.idP == Assister.idP).filter(Deplacer.idP == idP).all()
     liste_deplacement = list()
     annee = annee.year
@@ -1287,13 +1290,13 @@ def requete_transport_annee(sessionSQL, idP, annee) :
     return liste_deplacement  
 
 
-def requete_transport_annee2(sessionSQL, idP, annee) : 
+def requete_transport_annee2(idP, annee) : 
     return sessionSQL.query(Deplacer, Transport).join(Transport, Transport.idTransport == Deplacer.idTransport).filter(Deplacer.idP == idP).filter(Deplacer.annee == annee).all()
     
 
 
 
-def ajoute_assister(sessionSQL, idP, dateArrive, dateDepart):
+def ajoute_assister(idP, dateArrive, dateDepart):
     print("test asssist")
     assisteur = Assister(idP, dateArrive, dateDepart)
     assister = sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).first()
@@ -1311,7 +1314,7 @@ def ajoute_assister(sessionSQL, idP, dateArrive, dateDepart):
         sessionSQL.query(Assister).filter(extract('year', Assister.dateArrive) == dateArrive.year).filter(Assister.idP == idP).update({Assister.dateArrive: dateArrive, Assister.dateDepart: dateDepart},synchronize_session='fetch')
         sessionSQL.commit()
         
-def cherche_transport(sessionSQL, nom_transport) : 
+def cherche_transport(nom_transport) : 
     liste_transport = sessionSQL.query(Transport.idTransport, Transport.nomTransport).all()
     res = list()
     for transport in liste_transport : 
@@ -1320,7 +1323,7 @@ def cherche_transport(sessionSQL, nom_transport) :
     return res
 
 
-def modif_participant_remarque(sessionSQL, idP, remarques) : 
+def modif_participant_remarque(idP, remarques) : 
     if remarques.isalpha():
         nouvelles_remarques = remarques + " / "+str((sessionSQL.query(Participant).filter(Participant.idP == idP).first()).remarques)
         sessionSQL.query(Participant).filter(Participant.idP == idP).update({Participant.remarques : nouvelles_remarques})
@@ -1332,7 +1335,7 @@ def modif_participant_remarque(sessionSQL, idP, remarques) :
         return False
 
 
-def get_utilisateur_email_mdp(sessionSQL, mail, mdp):
+def get_utilisateur_email_mdp(mail, mdp):
     utilisateur = sessionSQL.query(Utilisateur).filter(Utilisateur.emailP == mail).filter(Utilisateur.mdpP == mdp).first()
     if utilisateur is not None :
         return utilisateur
@@ -1353,7 +1356,7 @@ def ajoute_creneau_repas_v1(session, dateDebut,dateFin):
     dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
     creneau_test = sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == dateDebut).filter(CreneauRepas.dateFin == dateFin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau_repas(sessionSQL)+1
+        idCreneau = get_max_id_creneau_repas()+1
         creneau = CreneauRepas(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
@@ -1371,7 +1374,7 @@ def ajoute_creneau_travail_v1(session, dateDebut,dateFin):
     dateFin = datetime.datetime(int(liste_date_fin[0]), int(liste_date_fin[1]), int(liste_date_fin[2]), int(liste_date_fin[3]), int(liste_date_fin[4]), int(liste_date_fin[5]))
     creneau_test = sessionSQL.query(CreneauTravail).filter(CreneauTravail.dateDebut == dateDebut).filter(CreneauTravail.dateFin == dateFin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau_travail(sessionSQL)+1
+        idCreneau = get_max_id_creneau_travail()+1
         creneau = CreneauTravail(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
@@ -1383,33 +1386,33 @@ def ajoute_creneau_travail_v1(session, dateDebut,dateFin):
     return creneau_test.idCreneau
 
 
-def ajoute_creneau_repas(session, date_debut, date_fin):
-    creneau_test = session.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()
+def ajoute_creneau_repas(date_debut, date_fin):
+    creneau_test = sessionSQL.query(CreneauRepas).filter(CreneauRepas.dateDebut == date_debut).filter(CreneauRepas.dateFin == date_fin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau_repas(session)+1
+        idCreneau = get_max_id_creneau_repas()+1
         creneau = CreneauRepas(idCreneau, date_debut, date_fin)
-        session.add(creneau)
+        sessionSQL.add(creneau)
         try :
-            session.commit()
+            sessionSQL.commit()
         except : 
             print("erreur creneau")
-            session.rollback()
+            sessionSQL.rollback()
         return creneau.idCreneau
     else : 
         print("un creneau similaire existe déjà")
         return creneau_test.idCreneau
 
-def ajoute_creneau_travail(session, date_debut, date_fin):
-    creneau_test = session.query(CreneauTravail).filter(CreneauTravail.dateDebut == date_debut).filter(CreneauTravail.dateFin == date_fin).first()
+def ajoute_creneau_travail(date_debut, date_fin):
+    creneau_test = sessionSQL.query(CreneauTravail).filter(CreneauTravail.dateDebut == date_debut).filter(CreneauTravail.dateFin == date_fin).first()
     if creneau_test is None :
-        idCreneau = get_max_id_creneau_travail(session)+1
+        idCreneau = get_max_id_creneau_travail()+1
         creneau = CreneauTravail(idCreneau, date_debut, date_fin)
-        session.add(creneau)
+        sessionSQL.add(creneau)
         try :
-            session.commit()
+            sessionSQL.commit()
         except : 
             print("erreur creneau")
-            session.rollback()
+            sessionSQL.rollback()
         return creneau.idCreneau
     else : 
         print("un creneau similaire existe déjà")
@@ -1418,7 +1421,7 @@ def ajoute_creneau_travail(session, date_debut, date_fin):
 def ajoute_repas(estMidi,idRest,idCreneau) : 
     repas_verif = sessionSQL.query(Repas).filter(Repas.estMidi == estMidi).filter(Repas.idRest == idRest).filter(Repas.idCreneau == idCreneau).first()
     if repas_verif is None :
-        idRepas = get_max_id_repas(sessionSQL)+1
+        idRepas = get_max_id_repas()+1
         repas = Repas(idRepas, estMidi, idRest, idCreneau)
         sessionSQL.add(repas)
         try : 
@@ -1432,10 +1435,10 @@ def ajoute_repas(estMidi,idRest,idCreneau) :
         return repas.idRepas
     return repas_verif.idRepas
 
-def ajoute_restaurant(sessionSQL, nomRest) : 
+def ajoute_restaurant(nomRest) : 
     restaurant_test = sessionSQL.query(Restaurant).filter(Restaurant.nomRest == nomRest).first()
     if restaurant_test is None :
-        idRestaurant = get_max_id_restaurant(sessionSQL)+1
+        idRestaurant = get_max_id_restaurant()+1
         restaurant = Restaurant(idRestaurant, nomRest)
         sessionSQL.add(restaurant)
         try : 
@@ -1445,26 +1448,26 @@ def ajoute_restaurant(sessionSQL, nomRest) :
             sessionSQL.rollback()
     return restaurant_test.idRest
 
-def choix_restaurant(sessionSQL): 
+def choix_restaurant(): 
     pass # TODO SELON LE ROLE METTRE UN CERTAIN RESTAU 
     
  
-def ajoute_repas_mangeur(sessionSQL, idP, liste_repas, liste_horaire_restau, dico_horaire_restau):
-    supprime_mangeur(sessionSQL, idP)
+def ajoute_repas_mangeur(idP, liste_repas, liste_horaire_restau, dico_horaire_restau):
+    supprime_mangeur(idP)
     for i in range(0, len(liste_repas)):
         if liste_repas[i] == 'true':
             horaire = dico_horaire_restau[liste_horaire_restau[i]]
-            idCreneau = ajoute_creneau_repas_v1(sessionSQL, horaire.split("/")[0], horaire.split("/")[1])
-            idRest = choix_restaurant(sessionSQL) # ajouter ROLE TODO
+            idCreneau = ajoute_creneau_repas_v1(horaire.split("/")[0], horaire.split("/")[1])
+            idRest = choix_restaurant() # ajouter ROLE TODO
             idRepas = ajoute_repas(False if liste_horaire_restau[i][-4:] == "soir" else True, 1 if liste_horaire_restau[i][-4:] == "soir" else 1 , idCreneau) #TODO
-            ajoute_mangeur(sessionSQL, idP, idRepas)
+            ajoute_mangeur(idP, idRepas)
 
-def invite_un_participant(sessionSQL, idP):
+def invite_un_participant(idP):
     sessionSQL.query(Participant).filter(Participant.idP == idP).update(
         {Participant.invite : True})
     sessionSQL.commit()
 
-def voyage_est_complet(sessionSQL, voyage):
+def voyage_est_complet(voyage):
     nb_place_dispo = sessionSQL.query(Navette).filter(Navette.idNavette == voyage.idNavette).first().capaciteNavette
     voyageurs = sessionSQL.query(Transporter).filter(Transporter.idVoy == voyage.idVoy).all()
     print("place dispo ",nb_place_dispo)
@@ -1472,7 +1475,7 @@ def voyage_est_complet(sessionSQL, voyage):
     print("nb_voyageur ",len(voyageurs))
     return (voyageurs is not None and len(voyageurs)>=nb_place_dispo)
 
-def get_navette_dispo(sessionSQL, heureDeb, heureFin):
+def get_navette_dispo(heureDeb, heureFin):
     voyages = sessionSQL.query(Voyage).filter((Voyage.heureDebVoy <= heureFin) &
                               (Voyage.heureDebVoy+Voyage.DureeVoy >= heureDeb) &
                               func.date(Voyage.heureDebVoy) == heureDeb.date()).all()
@@ -1488,9 +1491,9 @@ def get_navette_dispo(sessionSQL, heureDeb, heureFin):
     
 
 
-def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
-    id_navette_dispo = get_navette_dispo(sessionSQL, heureDebVoy, heureDebVoy+datetime.timedelta(minutes=10))
-    nouvelle_id_voyage = get_max_id_voyage(sessionSQL)+1
+def cree_un_voyage(heureDebVoy, directionGARE):
+    id_navette_dispo = get_navette_dispo(heureDebVoy, heureDebVoy+datetime.timedelta(minutes=10))
+    nouvelle_id_voyage = get_max_id_voyage()+1
     if id_navette_dispo is not None:
         if directionGARE : 
             t = datetime.time(0,20)
@@ -1507,7 +1510,7 @@ def cree_un_voyage(sessionSQL, heureDebVoy, directionGARE):
         sessionSQL.commit()
         return nouvelle_id_voyage
 
-def supprimer_intervenant_voyage_navette(sessionSQL, idP):
+def supprimer_intervenant_voyage_navette(idP):
     annee_en_cours =  datetime.date.today().year
     transports = sessionSQL.query(Transporter).filter(Transporter.idP == idP).all()
     for transport in transports:
@@ -1520,7 +1523,7 @@ def supprimer_intervenant_voyage_navette(sessionSQL, idP):
                 sessionSQL.delete(voyage)
                 sessionSQL.commit()
                 
-def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
+def affecter_intervenant_voyage_depart_gare(idP):
     annee_en_cours =  datetime.date.today().year
     date_arrive = sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateArrive) == annee_en_cours)).first().dateArrive
     if date_arrive is None:
@@ -1534,18 +1537,18 @@ def affecter_intervenant_voyage_depart_gare(sessionSQL, idP):
     print("voy dispo ",voyages_dispo)
     if voyages_dispo is not None:
         for voyage in voyages_dispo:
-            if not voyage_est_complet(sessionSQL, voyage) and not voyage.directionGare:
+            if not voyage_est_complet(voyage) and not voyage.directionGare:
                 print("ici")
                 print(idP, voyage.idVoy)
                 sessionSQL.add(Transporter(idP, voyage.idVoy))
                 sessionSQL.commit()
                 return True
-    id_voyage = cree_un_voyage(sessionSQL, date_arrive, False)
+    id_voyage = cree_un_voyage(date_arrive, False)
     sessionSQL.add(Transporter(idP, id_voyage))
     sessionSQL.commit()
     return True
 
-def affecter_intervenant_voyage_depart_festival(sessionSQL, idP):
+def affecter_intervenant_voyage_depart_festival(idP):
     annee_en_cours =  datetime.date.today().year
     date_depart = sessionSQL.query(Assister).filter((Assister.idP == idP) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
     if date_depart is None:
@@ -1559,11 +1562,11 @@ def affecter_intervenant_voyage_depart_festival(sessionSQL, idP):
     print("voy dispo ",voyages_dispo)
     if voyages_dispo is not None:
         for voyage in voyages_dispo:
-            if not voyage_est_complet(sessionSQL, voyage) and voyage.directionGare:
+            if not voyage_est_complet(voyage) and voyage.directionGare:
                 sessionSQL.add(Transporter(idP, voyage.idVoy))
                 sessionSQL.commit()
                 return True
-    id_voyage = cree_un_voyage(sessionSQL, date_depart, True)
+    id_voyage = cree_un_voyage(date_depart, True)
     sessionSQL.add(Transporter(idP, id_voyage))
     sessionSQL.commit()
     return True
@@ -1575,9 +1578,9 @@ def liste_datetime_horaire_restaurant() :
         res.append((string_to_datetime(deb), string_to_datetime(fin), jour))
     return res
 
-def get_repas_present(sessionSQL, idP, annee) : 
+def get_repas_present(idP, annee) : 
     liste_creneau_repas_present = list()
-    assister = get_assister(sessionSQL, idP, annee)
+    assister = get_assister(idP, annee)
     date_arrive = assister.dateArrive
     date_depart = assister.dateDepart # look like : (datetime.datetime(2023, 11, 16, 19, 30)
     liste_creneau = liste_datetime_horaire_restaurant() # liste sous cette forme : [(datetime.datetime(2023, 11, 16, 19, 30), datetime.datetime(2023, 11, 16, 22, 0), 'jeudi_soir'), ...]
@@ -1589,12 +1592,12 @@ def get_repas_present(sessionSQL, idP, annee) :
 @login_manager.user_loader
 def load_user(participant_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
-    if est_secretaire(sessionSQL, participant_id):
-        return get_secretaire(sessionSQL, participant_id)
+    if est_secretaire(participant_id):
+        return get_secretaire(participant_id)
     else:
-        return get_participant(sessionSQL, participant_id)
+        return get_participant(participant_id)
 
-def reiniatilise_invitation(sessionSQL): 
+def reiniatilise_invitation(): 
     participants = sessionSQL.query(Participant).all()
     for p in participants : 
         sessionSQL.query(Participant).filter(Participant.idP == p.idP).update({Participant.invite : False})
@@ -1614,11 +1617,16 @@ def get_date_heure_depart_intervenant(idP):
     return sessionSQL.query(Assister).filter((Assister.idP == int(idP)) & (extract('year', Assister.dateDepart) == annee_en_cours)).first().dateDepart
 
 
-def cree_mail(status, nom, prenom):
+def cree_mail(id_participant):
+    status = get_role(id_participant)
+    nom = get_nom(id_participant)
+    prenom = get_prenom(id_participant)
+    mdp = get_mot_de_passe(id_participant)
     msg = "Cher(e)"+prenom +" "+nom+", Nous avons le plaisir de vous inviter au festival bdBOUM en tant qu'"+ status+", un événement incontournable pour les fans de bandes dessinées.\
     Cette année, le festival se déroulera du vendredi 17 Novembre au Dimanche 19 Novembre 2023, à Blois.\ Durant ces trois jours, vous aurez l'opportunité de découvrir\
     les dernières tendances en matière de BD, de rencontrer des auteurs talentueux et de participer à des activités ludiques et éducatives.\
     Nous espérons que vous pourrez vous joindre à nous pour célébrer la passion de la BD et passer un moment inoubliable en notre compagnie.\
+    Votre mot de passe est le suivant pour vous connecter au site "+mdp+"\
     Bien cordialement,\
     [Nom de l'organisateur]"
     return msg

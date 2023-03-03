@@ -38,14 +38,14 @@ def connexion():
         email = request.form["email"]
         mdp = request.form["mdp"]
         
-        utilisateur = get_utilisateur_email_mdp(sessionSQL, email, mdp)
+        utilisateur = get_utilisateur_email_mdp(email, mdp)
         if utilisateur is not None:
-            if est_secretaire(sessionSQL, utilisateur.idP):
-                secretaire = get_secretaire(sessionSQL, utilisateur.idP)
+            if est_secretaire(utilisateur.idP):
+                secretaire = get_secretaire(utilisateur.idP)
                 login_user(secretaire)
                 return redirect(url_for("page_secretaire_accueil"))
             else:
-                participant = get_participant(sessionSQL, utilisateur.idP)
+                participant = get_participant(utilisateur.idP)
                 login_user(participant)
                 return redirect(url_for('page_inscription'))
         return render_template('login.html', mail = request.form["email"])
@@ -55,12 +55,12 @@ def connexion():
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
 @login_required
 def page_inscription():
-    if est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
-        modifier_participant(sessionSQL, current_user.idP,request.form["adresse"], request.form["codePostal"], request.form["ville"],request.form["ddn"],request.form["tel"])
-        modifier_utilisateur(sessionSQL, current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
-        if est_intervenant(sessionSQL, current_user.idP):
+        modifier_participant(current_user.idP,request.form["adresse"], request.form["codePostal"], request.form["ville"],request.form["ddn"],request.form["tel"])
+        modifier_utilisateur(current_user.idP, request.form["prenom"], request.form["nom"], request.form["email"])
+        if est_intervenant(current_user.idP):
             return redirect(url_for('formulaire_auteur_transport', idp = current_user.idP))
         else:
             return redirect(url_for('page_fin', idp = current_user.idP))
@@ -77,14 +77,14 @@ def insererTransportPersonne():
     currentDateTime = datetime.datetime.now()
     date = currentDateTime.date()
     year = date.strftime("%Y")
-    supprime_deplacer_annee(sessionSQL, current_user.idP, year)
+    supprime_deplacer_annee(current_user.idP, year)
     for transport in liste_id_box:
         if request.form[transport] == "true" and transport != "autre" :
             lieu_depart = request.form[dico_champs_box[transport][0]]
             lieu_arrive = request.form[dico_champs_box[transport][1]]   
-            ajoute_deplacer(sessionSQL, current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
+            ajoute_deplacer(current_user.idP, id_transport_with_name(transport), lieu_depart, lieu_arrive, year)
         elif transport == "autre" : 
-            modif_participant_remarque(sessionSQL, current_user.idP, request.form[dico_champs_box[transport][0]])
+            modif_participant_remarque(current_user.idP, request.form[dico_champs_box[transport][0]])
 
     dateArr = request.form["dateArr"].split("-")
     heureArr = request.form["hArrive"].split(":")
@@ -93,20 +93,20 @@ def insererTransportPersonne():
     dateDep = request.form["dateDep"].replace("-",",").split(",")
     heureDep = request.form["hDep"].replace(":",",").split(",")
     date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-    ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
-    supprimer_intervenant_voyage_navette(sessionSQL, current_user.idP)
+    ajoute_assister(current_user.idP, date_arr, date_dep)
+    supprimer_intervenant_voyage_navette(current_user.idP)
     if request.form["train"] == "true" and "BLOIS" in request.form["lieuArriveTrain"].upper():
-        affecter_intervenant_voyage_depart_gare(sessionSQL, current_user.idP)
-        affecter_intervenant_voyage_depart_festival(sessionSQL, current_user.idP)
+        affecter_intervenant_voyage_depart_gare(current_user.idP)
+        affecter_intervenant_voyage_depart_festival(current_user.idP)
     return jsonify({"status": "success"})
 
 
 @app.route('/transportForms/', methods = ["POST", "GET"])
 @login_required
 def formulaire_auteur_transport():
-    if est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    assister = get_assister(sessionSQL, current_user.idP, datetime.datetime.now().year)
+    assister = get_assister(current_user.idP, datetime.datetime.now().year)
     dateArr = DATE_FESTIVAL[0]
     dateDep=None
     time_arr = None
@@ -116,7 +116,7 @@ def formulaire_auteur_transport():
         dateDep = str(assister.dateDepart.year)+"-"+str(assister.dateDepart.month)+"-"+str(assister.dateDepart.day)
         time_arr = assister.dateArrive.strftime("%H:%M")
         time_dep = assister.dateDepart.strftime("%H:%M")
-    liste_transport = requete_transport_annee2(sessionSQL, current_user.idP, datetime.datetime.now().year)
+    liste_transport = requete_transport_annee2(current_user.idP, datetime.datetime.now().year)
     print(liste_transport)
     response= make_response(render_template("transportForms.html", date_arr=dateArr,date_dep=dateDep, limite_arr=dateArr, timeArr=time_arr, timeDep=time_dep, limite_dep = DATE_FESTIVAL[-1], listeTransport=liste_transport, liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion()))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -131,26 +131,26 @@ def inserer_formulaire_reservation():
     liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
     request.form["dimanche_midi"],request.form["dimanche_soir"]]
-    ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
+    ajoute_repas_mangeur(current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
 
     if not regime.isspace() and not (len(regime)==0): # si le champ 'regime' contient des caractères et n'existe pas déjà
-        idRegime = possede_regime(sessionSQL, current_user.idP) # verifie si la personne possede un regime et si oui on recupere l'id de ce regime
+        idRegime = possede_regime(current_user.idP) # verifie si la personne possede un regime et si oui on recupere l'id de ce regime
         if idRegime is not None : # si il possède un regime
-            update_regime(sessionSQL, idRegime, regime)
+            update_regime(idRegime, regime)
         else :
-            id_regime = ajoute_regime(sessionSQL, regime)
-            ajoute_avoir_regime(sessionSQL, current_user.idP, id_regime)
+            id_regime = ajoute_regime(regime)
+            ajoute_avoir_regime(current_user.idP, id_regime)
     else :
-        idRegime = possede_regime(sessionSQL, current_user.idP) 
+        idRegime = possede_regime(current_user.idP) 
         if idRegime is not None : # si il possède un regime
-            supprime_regime(sessionSQL, current_user.idP, idRegime)
+            supprime_regime(current_user.idP, idRegime)
             
     remarques = request.form["remarque"]
     if remarques.isalpha():  # si le champ 'remarques' contient des caractères
-        modif_participant_remarque(sessionSQL, current_user.idP, remarques)
-    suppprime_loger(sessionSQL, current_user.idP)
+        modif_participant_remarque(current_user.idP, remarques)
+    suppprime_loger(current_user.idP)
     if request.form["hebergement"] =="true":
-        ajoute_hebergement(sessionSQL, current_user.idP)
+        ajoute_hebergement(current_user.idP)
     print("success")
     return jsonify({"status": "success"})
 
@@ -158,15 +158,15 @@ def inserer_formulaire_reservation():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
-    if est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
-    if get_regime(sessionSQL, current_user.idP) == "Pas de régime" :
+    if get_regime(current_user.idP) == "Pas de régime" :
         regime = ""
     else : 
-        regime = get_regime(sessionSQL, current_user.idP)
+        regime = get_regime(current_user.idP)
     # Rendering the template "formulaireReservation.html" and passing the variables repas, regimes,
     # and dormeur to the template.
-    response = make_response(render_template("formulaireReservation.html",repas=get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year),regimes=regime, dormeur=get_dormir(sessionSQL, current_user.idP, datetime.datetime.now().year)))
+    response = make_response(render_template("formulaireReservation.html",repas=get_repas_present(current_user.idP, datetime.datetime.now().year),regimes=regime, dormeur=get_dormir(current_user.idP, datetime.datetime.now().year)))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
@@ -175,7 +175,7 @@ def formulaire_reservation():
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
 def page_fin():
-    if est_secretaire(sessionSQL, current_user.idP):
+    if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     return render_template("pageFin.html", idP = current_user.idP)
 
@@ -183,11 +183,11 @@ def page_fin():
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
 @login_required
 def secretaire_consommateur():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))       
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
-        liste_consommateur = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
+        liste_consommateur = afficher_consommateur(la_date, request.form["nomR"],request.form["heureR"])
         return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_consommateur)
     return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant())
     
@@ -195,7 +195,7 @@ def secretaire_consommateur():
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         return render_template("dormeurSecretaire.html")
@@ -205,7 +205,7 @@ def dormeur_secretaire():
 
 @app.route('/api/dataDormeurs', methods = ["POST"])
 def dataDormeurs():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     prenom = request.form["prenom"]
     nom = request.form["nom"]
@@ -214,10 +214,10 @@ def dataDormeurs():
     dateFin = request.form["dateFin"]
 
     liste_dormeurs = []
-    liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(sessionSQL, prenom, nom, hotel, dateDebut, dateFin)
+    liste_dormeur_sans_info = get_tout_dormeurs_avec_filtre(prenom, nom, hotel, dateDebut, dateFin)
     for intervenants in liste_dormeur_sans_info:
-        dormeurs_dico = get_intervenant(sessionSQL, intervenants.idP).to_dict()
-        dormeurs_dico["hotel"] = get_hotel(sessionSQL, intervenants.idHotel)
+        dormeurs_dico = get_intervenant(intervenants.idP).to_dict()
+        dormeurs_dico["hotel"] = get_hotel(intervenants.idHotel)
         dormeurs_dico["idHotel"] = intervenants.idHotel
         dormeurs_dico["dateDeb"] = intervenants.dateDebut.date()
         dormeurs_dico["dateFin"] = intervenants.dateFin.date()
@@ -242,7 +242,7 @@ def data_creneauRepas():
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
 def dataParticipant():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_participants = []
     prenom = request.form["prenom"]
@@ -250,10 +250,10 @@ def dataParticipant():
     adresseEmail = request.form["adresseEmail"]
     naissance = request.form["naissance"]
     role = request.form["role"]
-    participants = get_info_all_participants(sessionSQL, prenom, nom, adresseEmail,naissance, role)
+    participants = get_info_all_participants(prenom, nom, adresseEmail,naissance, role)
     for participant in participants:
         participant_dico = participant.to_dict()
-        participant_dico["role"] = get_role(sessionSQL, participant.idP)
+        participant_dico["role"] = get_role(participant.idP)
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
 
@@ -261,21 +261,21 @@ def dataParticipant():
 @app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
 def dataConsommateurs():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     prenom = request.form["prenom"]
     nom = request.form["nom"]
     restaurant = request.form["restaurant"]
     la_date = request.form["la_date"]
     creneau = request.form["creneau"]
-    consommateurs = get_info_all_consommateurs(sessionSQL, prenom, nom, restaurant, la_date, creneau)
+    consommateurs = get_info_all_consommateurs(prenom, nom, restaurant, la_date, creneau)
     liste_consommateur = []
     for consommateur in consommateurs:
-        consommateur_dico = get_consommateur(sessionSQL, consommateur.idP).to_dict_sans_ddn()
-        consommateur_dico["regime"] = get_regime(sessionSQL, consommateur.idP)
-        consommateur_dico["restaurant"] = get_restaurant(sessionSQL, consommateur.idRepas)
-        consommateur_dico["date"] = get_date_repas(sessionSQL, consommateur.idRepas)
-        consommateur_dico["creneau"] = get_creneau_repas(sessionSQL, consommateur.idRepas)
+        consommateur_dico = get_consommateur(consommateur.idP).to_dict_sans_ddn()
+        consommateur_dico["regime"] = get_regime(consommateur.idP)
+        consommateur_dico["restaurant"] = get_restaurant(consommateur.idRepas)
+        consommateur_dico["date"] = get_date_repas(consommateur.idRepas)
+        consommateur_dico["creneau"] = get_creneau_repas(consommateur.idRepas)
         consommateur_dico["idRepas"] = consommateur.idRepas
         liste_consommateur.append(consommateur_dico)
     return {'data': liste_consommateur}
@@ -284,7 +284,7 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes', methods = ["POST", "GET"])
 @login_required
 def dataNavettes():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     id_voyage = request.form["idVoyage"]
     prenom = request.form["prenom"]
@@ -292,10 +292,10 @@ def dataNavettes():
     direction = request.form["depart"]
     id_navette = request.form["idNavette"]
     dateDepart = request.form["dateDepart"]
-    liste_voyages_sans_info = get_tout_voyage_avec_filtre(sessionSQL, id_voyage, direction, id_navette, dateDepart)   
+    liste_voyages_sans_info = get_tout_voyage_avec_filtre(id_voyage, direction, id_navette, dateDepart)   
     liste_voyages = []
     for voyages in liste_voyages_sans_info:
-        intervenants_navette = get_intervenant_dans_voyage_avec_filtre(sessionSQL, voyages.idVoy, prenom, nom)
+        intervenants_navette = get_intervenant_dans_voyage_avec_filtre(voyages.idVoy, prenom, nom)
         for intervenant in intervenants_navette:
             voyages_dico = voyages.to_dict()
             voyages_dico["prenom"] = intervenant.prenomP
@@ -309,7 +309,7 @@ def dataNavettes():
 @app.route('/api/dataTransporte')
 @login_required
 def dataTransport():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_transport = []
     res = sessionSQL.query(Deplacer, Transport, Assister).join(Transport, Deplacer.idTransport==Transport.idTransport).join(Assister, Assister.idP == Deplacer.idP).all()
@@ -321,8 +321,8 @@ def dataTransport():
         voyages_dico["lieuArrive"] = transport[0].lieuArrive
         voyages_dico["date"] = str(transport[2].dateArrive).split(" ")[0]
         voyages_dico["dateArrive"] = datetime_to_heure(transport[2].dateDepart)
-        voyages_dico["prenomP"] = get_prenom(sessionSQL, transport[0].idP)
-        voyages_dico["nomP"] = get_nom(sessionSQL, transport[0].idP)
+        voyages_dico["prenomP"] = get_prenom(transport[0].idP)
+        voyages_dico["nomP"] = get_nom(transport[0].idP)
         liste_transport.append(voyages_dico)
     return {'data': liste_transport}
 
@@ -330,7 +330,7 @@ def dataTransport():
 @app.route('/api/dataInvitation', methods = ["POST"])
 @login_required
 def dataInvitation():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     liste_participants = []
     prenom = request.form["prenom"]
@@ -338,10 +338,10 @@ def dataInvitation():
     adresseEmail = request.form["adresseEmail"]
     invite = request.form["invite"]
     role = request.form["role"]
-    invites = get_info_all_invite(sessionSQL, prenom, nom, adresseEmail, invite, role)
+    invites = get_info_all_invite(prenom, nom, adresseEmail, invite, role)
     for inv in invites:
         participant_dico = inv.to_dict()
-        participant_dico["role"] = get_role(sessionSQL, inv.idP)
+        participant_dico["role"] = get_role(inv.idP)
         participant_dico["invite"] = inv.invite
         liste_participants.append(participant_dico)
     return {'data': liste_participants}
@@ -350,7 +350,7 @@ def dataInvitation():
 @app.route('/api/dataInterventions', methods = ["POST"])
 @login_required
 def dataIntervenir():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_intervenir = []
     for intervenir in sessionSQL.query(Intervenir, Intervention, CreneauTravail, Lieu, Auteur).join(
@@ -373,7 +373,7 @@ def dataIntervenir():
 @app.route('/interventionsSecretaire/', methods = ["POST", "GET"])
 @login_required
 def interventions_secretaire():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         return render_template("datatable_interventions.html")
@@ -384,10 +384,10 @@ def interventions_secretaire():
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 @login_required
 def participant_secretaire():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
-        liste_personne = affiche_participant_trier(sessionSQL, request.form["trier"])
+        liste_personne = affiche_participant_trier(request.form["trier"])
         return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
     return render_template('participantSecretaire.html', type_participant = TYPE_PARTICIPANT)
 
@@ -395,7 +395,7 @@ def participant_secretaire():
 @app.route('/secretaireIntervention/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_intervention():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
         idP = request.form["participant"]
@@ -410,23 +410,23 @@ def page_secretaire_intervention():
         day = date_intervention.split("/")[1]
         heure_debut2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_debut)[0]), int(get_heure(heure_debut)[1]),0)
         heure_fin2 = datetime.datetime(int(year), int(month), int(day),int(get_heure(heure_fin)[0]), int(get_heure(heure_fin)[1]),0)
-        idCreneau = ajoute_creneau_travail(sessionSQL, heure_debut2, heure_fin2)
+        idCreneau = ajoute_creneau_travail(heure_debut2, heure_fin2)
         try : 
-            ajoute_intervention(sessionSQL, int(idP), idCreneau, int(id_lieu), int(id_type), desc)
+            ajoute_intervention(int(idP), idCreneau, int(id_lieu), int(id_type), desc)
         except : 
             print("erreur dans l'ajout de l'intervention")
         
-    return render_template('secretaireIntervention.html', lieux=get_all_lieu(sessionSQL), participants=get_all_auteur(sessionSQL), type_inter=get_all_interventions(sessionSQL))
+    return render_template('secretaireIntervention.html', lieux=get_all_lieu(), participants=get_all_auteur(), type_inter=get_all_interventions())
 
 
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
         la_date = request.form["jours"].split(",")
-        liste_navette = afficher_consommateur(sessionSQL,la_date, request.form["nomR"],request.form["heureR"])
+        liste_navette = afficher_consommateur(la_date, request.form["nomR"],request.form["heureR"])
         return render_template('secretaire_consommateur.html', nomsRestau = get_liste_nom_restaurant(), liste_conso = liste_navette)
     return render_template('secretaireNavette.html', nomsRestau = get_liste_nom_restaurant())
 
@@ -435,7 +435,7 @@ def page_secretaire_navette():
 @app.route('/secretaireGererTransport/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_gerer_participants():
-    if not  est_secretaire(sessionSQL, current_user.idP):
+    if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
         return render_template('secretaireGererTransport.html')
@@ -445,7 +445,7 @@ def page_secretaire_gerer_participants():
 @app.route('/secretaire/', methods = ["GET"])
 @login_required
 def page_secretaire_accueil():
-    if  est_secretaire(sessionSQL, current_user.idP):
+    if  est_secretaire(current_user.idP):
         return render_template("secretaire.html")
     else:
         return redirect(url_for('logout'))
@@ -459,7 +459,7 @@ def logout():
 @app.route('/inscrireSecretaire/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_inscrire():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
         role = request.form["role"]
@@ -471,7 +471,7 @@ def page_secretaire_inscrire():
         ville = request.form["ville"]
         tel = request.form["tel"]
         ddn = request.form["ddn"]
-        ajoute_participant_role(sessionSQL, prenom, nom, email, adresse, codePostal, ville, tel, ddn,role)
+        ajoute_participant_role(prenom, nom, email, adresse, codePostal, ville, tel, ddn,role)
         return render_template("secretaire.html")
     return render_template("inscrireSecretaire.html", liste_roles=TYPE_PARTICIPANT_FINALE)
 
@@ -480,32 +480,32 @@ def page_secretaire_inscrire():
 @app.route('/inviteSecretaire/', methods = ["POST", "GET"])
 @login_required
 def invite_secretaire():
-    if not est_secretaire(sessionSQL, current_user.idP):
+    if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
-        liste_personne = affiche_participant_trier(sessionSQL, request.form["trier"])
+        liste_personne = affiche_participant_trier(request.form["trier"])
         return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT, liste_personne = liste_personne)
     return render_template('secretaireInvite.html', type_participant = TYPE_PARTICIPANT)
 
 @app.route('/resetInvitations/', methods = ["POST"])
 @login_required
 def reset_invite():
-    reiniatilise_invitation(sessionSQL)
+    reiniatilise_invitation()
     return redirect(url_for("invite_secretaire"))
 
 @app.route('/delete_utilisateur',methods=['POST'])
 def delete_utilisateur():
-    supprimer_utilisateur_role(sessionSQL, request.form["id"])
+    supprimer_utilisateur_role(request.form["id"])
     return ""
 
 @app.route('/delete_consommateur',methods=['POST'])
 def delete_consommateur():
-    supprimer_repas_consommateur(sessionSQL, request.form["idConsommateur"], request.form["idRepas"])
+    supprimer_repas_consommateur(request.form["idConsommateur"], request.form["idRepas"])
     return ""
 
 @app.route('/delete_dormeur',methods=['POST'])
 def delete_dormeur():
-    supprimer_nuit_dormeur(sessionSQL, request.form["idDormeur"], request.form["idHotel"], request.form["dateDeb"], request.form["dateFin"])
+    supprimer_nuit_dormeur(request.form["idDormeur"], request.form["idHotel"], request.form["dateDeb"], request.form["dateFin"])
     return ""
 
 @app.route("/download")
@@ -519,13 +519,13 @@ def download_file():
     return response
 
 
-def envoie_mail(mail_destination, status, nom, prenom):
+def envoie_mail(mail_destination, id_participant):
     message = Mail(
     from_email="bdboum45@gmail.com",
     to_emails=mail_destination,
     subject='Invitation au festival bdBOUM ' + "2023",
-    html_content='')
-    body = cree_mail(status, nom, prenom)
+    html_content=cree_mail(id_participant))
+    body = cree_mail(id_participant)
     try:
         sg = SendGridAPIClient('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')
         response = sg.send(message)
@@ -547,16 +547,16 @@ def before_request():
 
 @app.route('/participantSecretaire/<id>',methods=['POST',"GET"])
 def participant_detail(id):
-    return render_template("detail_participant.html", participant=get_participant(sessionSQL, id))
+    return render_template("detail_participant.html", participant=get_participant(id))
 
 @app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET", "POST"])
 def consommateur_detail(id, idRepas):
     creneaux = get_all_creneauxRepas()
-    restaurant = get_restaurant(sessionSQL, idRepas)
-    creneauRepas = get_creneau_repas(sessionSQL, idRepas)
-    return render_template("detail_consommateur.html", consommateur=get_consommateur(sessionSQL, id),
-    regimes = get_regime(sessionSQL, id), nomRestaurant = restaurant,
-    creneauRepas = creneauRepas, dateRepas = get_date_repas(sessionSQL, idRepas), idR = idRepas, creneaux = creneaux)
+    restaurant = get_restaurant(idRepas)
+    creneauRepas = get_creneau_repas(idRepas)
+    return render_template("detail_consommateur.html", consommateur=get_consommateur(id),
+    regimes = get_regime(id), nomRestaurant = restaurant,
+    creneauRepas = creneauRepas, dateRepas = get_date_repas(idRepas), idR = idRepas, creneaux = creneaux)
 
 @app.route('/navetteSecretaire/<idP>',methods=["GET"])
 def navette_detail(idP):
@@ -566,7 +566,7 @@ def navette_detail(idP):
     dateDepart = date_heure_depart.date() 
     heureArrive = date_heure_arrive.time()
     heureDepart = date_heure_depart.time()
-    return render_template("detail_navette.html", intervenant=get_intervenant(sessionSQL, idP), dateArrive = dateArrive, 
+    return render_template("detail_navette.html", intervenant=get_intervenant(idP), dateArrive = dateArrive, 
                                                   dateDepart = dateDepart, heureArrive=heureArrive, heureDepart=heureDepart)
 
 
@@ -583,10 +583,10 @@ def UpdateParticipant():
     ville = request.form["ville"]
     tel = request.form["tel"]
     password = request.form["password"]
-    save_participant = modifier_participant(sessionSQL,id,adresse,code_postal,ville,date_str_datetime(ddn),tel)
-    save_remarques = modif_participant_remarque(sessionSQL, id, remarques)
-    save_user = modifier_utilisateur(sessionSQL,id,prenom,nom,email)
-    save_pw = modifier_password(sessionSQL, id, password)
+    save_participant = modifier_participant(id,adresse,code_postal,ville,date_str_datetime(ddn),tel)
+    save_remarques = modif_participant_remarque(id, remarques)
+    save_user = modifier_utilisateur(id,prenom,nom,email)
+    save_pw = modifier_password(id, password)
     res = save_participant and save_user and save_remarques and save_pw
     return "true" if res == True else res
 
@@ -610,10 +610,10 @@ def update_navette_intervenant():
     heureDepart = request.form["heureDepart"]
     datetime_arrive = datetime_str_to_datetime(dateArrive, heureArrive)
     datetime_depart = datetime_str_to_datetime(dateDepart, heureDepart)
-    ajoute_assister(sessionSQL, id_personne, datetime_arrive, datetime_depart)
-    supprimer_intervenant_voyage_navette(sessionSQL, id_personne)
-    affecter_intervenant_voyage_depart_gare(sessionSQL, id_personne)
-    affecter_intervenant_voyage_depart_festival(sessionSQL, id_personne)
+    ajoute_assister(id_personne, datetime_arrive, datetime_depart)
+    supprimer_intervenant_voyage_navette(id_personne)
+    affecter_intervenant_voyage_depart_gare(id_personne)
+    affecter_intervenant_voyage_depart_festival(id_personne)
     return "true"
     #return "true" if save_repas == True else save_repas
 
@@ -624,13 +624,10 @@ def traitement():
     threads = []
     for id_participant in ids:
         id_participant = int(id_participant)
-        invite_un_participant(sessionSQL, id_participant)
-        email = get_mail(sessionSQL, id_participant)
-        status = get_role(sessionSQL, id_participant)
-        nom = get_nom(sessionSQL, id_participant)
-        prenom = get_prenom(sessionSQL, id_participant)
+        email = get_mail(id_participant)
         if email is not None:
-            t = threading.Thread(target=envoie_mail, args=(email,status,nom,prenom))
+            invite_un_participant(id_participant)
+            t = threading.Thread(target=envoie_mail, args=(email, id_participant))
             threads.append(t)
             t.start()
     # Traiter les IDs récupérés
@@ -641,10 +638,10 @@ def traitement():
 def feuille_route():
     idP = request.args.get('idP')
     annee = datetime.datetime.now().year
-    repas = get_repas(sessionSQL, idP, annee)
-    return render_template("feuille_route.html", infos_perso=get_participant(sessionSQL, idP), transports=requete_transport_annee2(sessionSQL, idP, annee),\
-        periodes=get_assister(sessionSQL, idP, annee), navette=get_navette(sessionSQL, idP, annee), repas=repas, regime=get_regime(sessionSQL, idP),\
-        hotels=(get_dormir(sessionSQL, idP, annee)), interventions=get_intervenirs(sessionSQL, idP))
+    repas = get_repas(idP, annee)
+    return render_template("feuille_route.html", infos_perso=get_participant(idP), transports=requete_transport_annee2(idP, annee),\
+        periodes=get_assister(idP, annee), navette=get_navette(idP, annee), repas=repas, regime=get_regime(idP),\
+        hotels=(get_dormir(idP, annee)), interventions=get_intervenirs(idP))
 
 
     
