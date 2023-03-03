@@ -501,6 +501,9 @@ def page_secretaire_intervention():
 @app.route('/secretaireNavette/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_navette():
+    """
+    Envoie à la page pour gérer les navettes
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
@@ -514,6 +517,9 @@ def page_secretaire_navette():
 @app.route('/secretaireGererTransport/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_gerer_participants():
+    """
+    Envoie à la page pour gérer les transports
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
@@ -524,6 +530,9 @@ def page_secretaire_gerer_participants():
 @app.route('/secretaire/', methods = ["GET"])
 @login_required
 def page_secretaire_accueil():
+    """
+    Envoie à la page accueil de la secretaire
+    """
     if  est_secretaire(current_user.idP):
         return render_template("secretaire.html")
     else:
@@ -532,12 +541,18 @@ def page_secretaire_accueil():
 @app.route("/logout/")
 @login_required
 def logout():
+    """
+    Permet à un utilisateur de se déconnecter
+    """
     logout_user()
     return redirect(url_for("connexion"))
 
 @app.route('/inscrireSecretaire/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_inscrire():
+    """
+    Permet à la secrétaire d'inscrire une personne
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     if request.method == 'POST':
@@ -559,6 +574,9 @@ def page_secretaire_inscrire():
 @app.route('/inviteSecretaire/', methods = ["POST", "GET"])
 @login_required
 def invite_secretaire():
+    """
+    Permet à la secrétaire d'inviter une personne
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
@@ -569,26 +587,45 @@ def invite_secretaire():
 @app.route('/resetInvitations/', methods = ["POST"])
 @login_required
 def reset_invite():
+    """
+    Réinitialise toutes les invitations des participants
+    """
     reiniatilise_invitation()
     return redirect(url_for("invite_secretaire"))
 
 @app.route('/delete_utilisateur',methods=['POST'])
+@login_required
 def delete_utilisateur():
+    """
+    Supprime un utilisateur
+    """
     supprimer_utilisateur_role(request.form["id"])
     return ""
 
 @app.route('/delete_consommateur',methods=['POST'])
+@login_required
 def delete_consommateur():
+    """
+    Supprime un consommateur
+    """
     supprimer_repas_consommateur(request.form["idConsommateur"], request.form["idRepas"])
     return ""
 
 @app.route('/delete_dormeur',methods=['POST'])
+@login_required
 def delete_dormeur():
+    """
+    Supprime un dormeur
+    """
     supprimer_nuit_dormeur(request.form["idDormeur"], request.form["idHotel"], request.form["dateDeb"], request.form["dateFin"])
     return ""
 
 @app.route("/download")
+@login_required
 def download_file():
+    """
+    Télécharge un fichier xlsx avec toutes les informations qu'il y a sur la page
+    """
     df = pd.DataFrame.from_dict(session["data"]["data"])
     output = BytesIO()
     with pd.ExcelWriter(output) as writer:
@@ -599,6 +636,9 @@ def download_file():
 
 
 def envoie_mail(mail_destination, id_participant):
+    """
+    Envoie un mail à l'id du participant
+    """
     message = Mail(
     from_email="bdboum45@gmail.com",
     to_emails=mail_destination,
@@ -610,25 +650,20 @@ def envoie_mail(mail_destination, id_participant):
     except Exception as e:
         print(e)
 
-    
-
-#Ne pas effacer test
-"""@app.before_request
-def before_request():
-    if request.endpoint in LISTE_ROUTE:
-        print("JE change de page")
-        print("path ",request.path)
-        print("request ",request)
-        print("referrer ",request.referrer)
-        print("Ref2:", request.values.get("url"))"""
-        
-
 @app.route('/participantSecretaire/<id>',methods=['POST',"GET"])
+@login_required
 def participant_detail(id):
+    """
+    Envoie sur la page participantSecretaire avec toutes les informations nécessaires
+    """
     return render_template("detail_participant.html", participant=get_participant(id))
 
 @app.route('/consommateurSecretaire/<id>/<idRepas>',methods=["GET", "POST"])
+@login_required
 def consommateur_detail(id, idRepas):
+    """
+    Envoie sur la page consommateurSecretaire avec toutes les informations nécessaires
+    """
     creneaux = get_all_creneauxRepas()
     restaurant = get_restaurant(idRepas)
     creneauRepas = get_creneau_repas(idRepas)
@@ -637,7 +672,11 @@ def consommateur_detail(id, idRepas):
     creneauRepas = creneauRepas, dateRepas = get_date_repas(idRepas), idR = idRepas, creneaux = creneaux)
 
 @app.route('/navetteSecretaire/<idP>',methods=["GET"])
+@login_required
 def navette_detail(idP):
+    """
+    Envoie sur la page navetteSecretaire avec toutes les informations nécessaires
+    """
     date_heure_arrive = get_date_heure_arrive_intervenant(idP)
     date_heure_depart = get_date_heure_depart_intervenant(idP)
     dateArrive = date_heure_arrive.date()
@@ -647,14 +686,20 @@ def navette_detail(idP):
     return render_template("detail_navette.html", intervenant=get_intervenant(idP), dateArrive = dateArrive, 
                                                   dateDepart = dateDepart, heureArrive=heureArrive, heureDepart=heureDepart)
 
-
 @app.route('/dormeurSecretaire/<id>/<idHotel>/<dateDeb>/<dateFin>',methods=["GET", "POST"])
+@login_required
 def dormeur_detail(id, idHotel, dateDeb, dateFin):
-    print(dateDeb, dateFin)
+    """
+    Envoie sur la page dormeurSecretaire
+    """
     return render_template("detail_dormeur.html", intervenant = get_intervenant(id), nomHotel = get_hotel(idHotel), idH = idHotel, DateDeb = dateDeb, DateFin = dateFin)
 
 @app.route('/Personne/Update',methods=['POST'])
+@login_required
 def UpdateParticipant():
+    """
+    Permet de récupérer les informations sur la page et de modifier un participant
+    """
     id = request.form["id"]
     prenom = request.form["prenom"]
     nom = request.form["nom"]
@@ -674,7 +719,11 @@ def UpdateParticipant():
     return "true" if res == True else res
 
 @app.route('/Consommateur/Update',methods=['POST'])
+@login_required
 def UpdateConsommateur():
+    """
+    Permet de récupérer les informations sur la page et de modifier le repas d'un consommateur
+    """
     id = request.form["id"]
     dateRepas = request.form["dateRepas"]
     creneauRepas = request.form["creneauRepas"]
@@ -683,9 +732,12 @@ def UpdateConsommateur():
     save_repas = modifier_repas(id, restaurant, dateRepas, creneauRepas, idRepas)
     return "true" if save_repas == True else save_repas
 
-
 @app.route('/navette/intervenant/update',methods=['POST'])
+@login_required
 def update_navette_intervenant():
+    """
+    Permet de récupérer les informations sur la page et de modifier les navettes et les voyages d'un intervenant
+    """
     id_personne = request.form["idP"]
     dateArrive = request.form["dateArrive"]
     dateDepart = request.form["dateDepart"]
@@ -698,9 +750,13 @@ def update_navette_intervenant():
     affecter_intervenant_voyage_depart_gare(id_personne)
     affecter_intervenant_voyage_depart_festival(id_personne)
     return "true"
-    #return "true" if save_repas == True else save_repas
+
 @app.route('/Dormeur/Update',methods=['POST'])
+@login_required
 def UpdateDormeur():
+    """
+    Permet de récupérer les informations sur la page et de modifier l'hébergement
+    """
     id = request.form["id"]
     nomHotel = request.form["Hotel"]
     dateFin = request.form["DateFin"]
@@ -714,21 +770,28 @@ def UpdateDormeur():
 
 
 @app.route('/invite_les_participants', methods=['POST'])
+@login_required
 def traitement():
+    """
+    Il invite les particiants où leur id se trouve dans la liste ids
+    """
     ids = request.form.getlist('ids[]')
     for id_participant in ids:
         id_participant = int(id_participant)
         invite_un_participant(id_participant)
         email = get_mail(id_participant)
         if email is not None:
-            print("mon id "+str(id_participant))
             envoie_mail(email, id_participant)
     # Traiter les IDs récupérés
     return jsonify({"status": "success"})
 
 
 @app.route("/feuille_route/")
+@login_required
 def feuille_route():
+    """
+    Il renvoie vers la feuille de route avec toutes les informations nécessaires
+    """
     idP = request.args.get('idP')
     annee = datetime.datetime.now().year
     repas = get_repas(idP, annee)
