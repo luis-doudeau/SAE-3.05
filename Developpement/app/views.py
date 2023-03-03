@@ -570,6 +570,11 @@ def navette_detail(idP):
                                                   dateDepart = dateDepart, heureArrive=heureArrive, heureDepart=heureDepart)
 
 
+@app.route('/dormeurSecretaire/<id>/<idHotel>/<dateDeb>/<dateFin>',methods=["GET", "POST"])
+def dormeur_detail(id, idHotel, dateDeb, dateFin):
+    print(dateDeb, dateFin)
+    return render_template("detail_dormeur.html", intervenant = get_intervenant(sessionSQL, id), nomHotel = get_hotel(sessionSQL, idHotel), idH = idHotel, DateDeb = dateDeb, DateFin = dateFin)
+
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():
     id = request.form["id"]
@@ -616,6 +621,18 @@ def update_navette_intervenant():
     affecter_intervenant_voyage_depart_festival(id_personne)
     return "true"
     #return "true" if save_repas == True else save_repas
+@app.route('/Dormeur/Update',methods=['POST'])
+def UpdateDormeur():
+    id = request.form["id"]
+    nomHotel = request.form["Hotel"]
+    dateFin = request.form["DateFin"]
+    dateDeb = request.form["DateDeb"]
+    ancienHotel = request.form["ancienHotel"]
+    ancienDateDeb = request.form["ancienDateDeb"]
+    ancienDateFin = request.form["ancienDateFin"]
+
+    save_hebergement = modifier_hebergement(id, nomHotel, dateDeb, dateFin, ancienHotel, ancienDateDeb, ancienDateFin)
+    return "true" if save_hebergement == True else save_hebergement
 
 
 @app.route('/invite_les_participants', methods=['POST'])
