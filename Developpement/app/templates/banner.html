@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
 {% include 'head.html' %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color :#435f77;">
         <img id="imgbdboum" class="img-fluid2 mr-3" src="{{url_for('static', filename='img/bdboum.svg')}}" alt="">
-        <a class="navbar-brand fs-1 bdboum" id="bdboum" href="">bd BOUM</a>
+        <a class="navbar-brand ml-4" id="bdboum" href="">bd BOUM</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
               
-        <div class="collapse navbar-collapse ml-5 " id="navbarSupportedContent">
+        <div class="collapse navbar-collapse ml-5" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto"> 
             <li class="nav-item active">
               <div>
-              <a class="nav-link text-white fs-5 justify-content-" href="../secretaire"><img class="img_nav" style="height:26px;width:auto; padding-right: 10px;" src="{{url_for('static', filename='img/home.png')}}"><span class="sr-only">(current)</span>MENU</a>
               </div>
             </li>
 
-            <li class="ml-4 navi-item dropdown"><a href=""><span class="fs-5 text-white">LIENS UTILES</span><i class="bi bi-chevron-down"></i></a>
-              <ul>
-                <li><a href="https://www.maisondelabd.com/">Site bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/bdboum.png')}}"></a></li>
-                <li><a href="https://www.blois.fr/attractive/remarquable/maison-de-la-bd">Maison de la BD <img class="img_nav" src="{{url_for('static', filename='img/logo_maison_de_la_bd.png')}}"></a></li>
-                <li><a href="https://www.instagram.com/bdboum/?hl=fr">Instagram bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/insta.png')}}"></a></li>
-                <li><a href="https://www.youtube.com/@maisondelabdblois4612">Youtube bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/ytb.png')}}"></a></li>
-              </ul>
-            </li>
-            <img class="img_nav ml-4 baniere2023" style="height:40%;width:40%;" src="{{url_for('static', filename='img/banner.png')}}">
-
+            <ul class="nav nav-tabs mb-2">
+              <li class="nav-item">
+                <a class="nav-link text-white fs-5 justify-content-" href="../secretaire"><img class="img_nav" style="height:20px;width:auto; padding-right: 10px;" src="{{url_for('static', filename='img/home.png')}}"><span class="sr-only">(current)</span>Menu</a>
+              </li>
+              
+              <li class="nav-item dropdown"><a href=""><span class="fs-5 text-white nav-link">Liens utiles</span><i class="bi bi-chevron-down"></i></a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a href="https://www.maisondelabd.com/">Site bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/bdboum.png')}}"></a>
+                  <a href="https://www.blois.fr/attractive/remarquable/maison-de-la-bd">Maison de la BD <img class="img_nav" src="{{url_for('static', filename='img/logo_maison_de_la_bd.png')}}"></a>
+                  <a href="https://www.instagram.com/bdboum/?hl=fr">Instagram bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/insta.png')}}"></a>
+                  <a href="https://www.youtube.com/@maisondelabdblois4612">Youtube bdBOUM <img class="img_nav" src="{{url_for('static', filename='img/ytb.png')}}"></a>
+                </div>
+              </li>
+            </ul>  
+            <img class="img_nav ml-5 baniere2023" style="height:80px;width:auto;" src="{{url_for('static', filename='img/banner.png')}}">
           </ul>
+
           <ul class="nav navbar-nav navbar-right autentifie">
             {% if current_user.is_authenticated %} <!--is_authenticated()-->
-            <li>
-              
+            <li>    
               <a class="text-white btn-primary rounded submit px-3 py-2 mr-5"> <img id="img_account" src="{{url_for('static', filename='img/user.png')}}"><span style="font-size : 115%;">{{ current_user.prenomP }}</span></a></li>
             <li>
               <a class="rounded submit px-3 py-2 mr-5 text-white bg-danger" href="{{ url_for("logout") }}"><img id="img_logout" src="{{url_for('static', filename='img/logout.png')}}"><span style="font-size : 115%;">Déconnexion</span></a>
@@ -50,3 +53,4 @@
         </div>
       </nav> 
 </header>
+</html>

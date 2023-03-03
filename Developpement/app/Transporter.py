@@ -13,5 +13,5 @@ class Transporter(Base):
         self.idVoy = idVoy
 
     def __repr__(self) -> str:
-        return "ID intervenant : " + str(self.idP) + ", id voyage : " + str(self.idVoy)
+        return str(self.idP) + "," + str(self.idVoy)
         

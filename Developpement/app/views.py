@@ -93,10 +93,7 @@ def insererTransportPersonne():
     dateDep = request.form["dateDep"].replace("-",",").split(",")
     heureDep = request.form["hDep"].replace(":",",").split(",")
     date_dep = datetime.datetime(int(dateDep[0]), int(dateDep[1]), int(dateDep[2]), int(heureDep[0]), int(heureDep[1]))
-    print(date_arr, date_dep)
     ajoute_assister(sessionSQL, current_user.idP, date_arr, date_dep)
-    print("on insere")
-    print(request.form["train"])
     supprimer_intervenant_voyage_navette(sessionSQL, current_user.idP)
     if request.form["train"] == "true" and "BLOIS" in request.form["lieuArriveTrain"].upper():
         affecter_intervenant_voyage_depart_gare(sessionSQL, current_user.idP)
@@ -109,10 +106,23 @@ def insererTransportPersonne():
 def formulaire_auteur_transport():
     if est_secretaire(sessionSQL, current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
+    assister = get_assister(sessionSQL, current_user.idP, datetime.datetime.now().year)
     dateArr = DATE_FESTIVAL[0]
-    print(dateArr)
-    return render_template("transportForms.html", date_arr=dateArr, limite_arr=dateArr, limite_dep = DATE_FESTIVAL[-1], liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion())
-        
+    dateDep=None
+    time_arr = None
+    time_dep = None
+    if assister is not None :
+        dateArr = str(assister.dateArrive.year)+"-"+str(assister.dateArrive.month)+"-"+str(assister.dateArrive.day)
+        dateDep = str(assister.dateDepart.year)+"-"+str(assister.dateDepart.month)+"-"+str(assister.dateDepart.day)
+        time_arr = assister.dateArrive.strftime("%H:%M")
+        time_dep = assister.dateDepart.strftime("%H:%M")
+    liste_transport = requete_transport_annee2(sessionSQL, current_user.idP, datetime.datetime.now().year)
+    print(liste_transport)
+    response= make_response(render_template("transportForms.html", date_arr=dateArr,date_dep=dateDep, limite_arr=dateArr, timeArr=time_arr, timeDep=time_dep, limite_dep = DATE_FESTIVAL[-1], listeTransport=liste_transport, liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion()))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 @app.route('/insererFormulaireReservation/', methods = ["POST"])
@@ -122,8 +132,8 @@ def inserer_formulaire_reservation():
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
     request.form["dimanche_midi"],request.form["dimanche_soir"]]
     ajoute_repas_mangeur(sessionSQL, current_user.idP, liste_jour_manger, LISTE_HORAIRE_RESTAURANT, DICO_HORAIRE_RESTAURANT)
-    
-    if not regime.isspace() and not (len(regime)==0) and not verif_existe_regime(sessionSQL, regime): # si le champ 'regime' contient des caractères et n'existe pas déjà
+
+    if not regime.isspace() and not (len(regime)==0): # si le champ 'regime' contient des caractères et n'existe pas déjà
         idRegime = possede_regime(sessionSQL, current_user.idP) # verifie si la personne possede un regime et si oui on recupere l'id de ce regime
         if idRegime is not None : # si il possède un regime
             update_regime(sessionSQL, idRegime, regime)
@@ -154,9 +164,13 @@ def formulaire_reservation():
         regime = ""
     else : 
         regime = get_regime(sessionSQL, current_user.idP)
-    print(get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year))
-    return render_template("formulaireReservation.html",repas=get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year),regimes=regime)
-
+    # Rendering the template "formulaireReservation.html" and passing the variables repas, regimes,
+    # and dormeur to the template.
+    response = make_response(render_template("formulaireReservation.html",repas=get_repas_present(sessionSQL, current_user.idP, datetime.datetime.now().year),regimes=regime, dormeur=get_dormir(sessionSQL, current_user.idP, datetime.datetime.now().year)))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
@@ -505,13 +519,13 @@ def download_file():
     return response
 
 
-def envoie_mail(mail_destination):
+def envoie_mail(mail_destination, status, nom, prenom):
     message = Mail(
     from_email="bdboum45@gmail.com",
-    to_emails="compte368@gmail.com",
-    subject='Invitation au festival bdBOUM ' + "2023", # a changé
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
-    body = "test"
+    to_emails=mail_destination,
+    subject='Invitation au festival bdBOUM ' + "2023",
+    html_content='')
+    body = cree_mail(status, nom, prenom)
     try:
         sg = SendGridAPIClient('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')
         response = sg.send(message)
@@ -608,12 +622,15 @@ def update_navette_intervenant():
 def traitement():
     ids = request.form.getlist('ids[]')
     threads = []
-    for id_partcipant in ids:
-        id_partcipant = int(id_partcipant)
-        invite_un_participant(sessionSQL, id_partcipant)
-        email = get_mail(sessionSQL, id_partcipant)
+    for id_participant in ids:
+        id_participant = int(id_participant)
+        invite_un_participant(sessionSQL, id_participant)
+        email = get_mail(sessionSQL, id_participant)
+        status = get_role(sessionSQL, id_participant)
+        nom = get_nom(sessionSQL, id_participant)
+        prenom = get_prenom(sessionSQL, id_participant)
         if email is not None:
-            t = threading.Thread(target=envoie_mail, args=(email))
+            t = threading.Thread(target=envoie_mail, args=(email,status,nom,prenom))
             threads.append(t)
             t.start()
     # Traiter les IDs récupérés

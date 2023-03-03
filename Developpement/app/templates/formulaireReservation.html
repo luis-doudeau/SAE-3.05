@@ -58,7 +58,7 @@
             <input type="textarea" style="width: 35%; height:65px; font-size:110%;" class="form-control mt-3 ml-4 mr-5" id="remarque" placeholder="Écrivez d'autres remarques éventuelles" rows="3" name="remarques">
           </div>
             <small id="prise_en_charge" class="col-form-label mb-3 ml-4 mt-4 form-text text-muted" style="font-size:1.2rem;"><em>PRISE EN CHARGE</em> : Les frais annexes tels que téléphone, bar, ... sont à votre charge
-                ainsi que les repas, transport, hebergement du conjoint.</small>
+                ainsi que les repas, transport, hebergement du <strong>conjoint</strong>.</small>
             <div class="form-group text-center mt-3">
               <button type="button" class="btn text-light mr-4 mt-3 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
               <button id="save" style="width: 140px; height: 45px;font-size:130%;" type="button" class="btn mt-3 text-light mr-2 bg-warning ">Suivant</button>
@@ -142,9 +142,6 @@ function verifFormulaire(){
       
     }
     
-    
-    
-
   })
 })
 const infoButton = document.getElementById('info-button');
@@ -163,8 +160,8 @@ infoButton.addEventListener('click', function() {
 });
 
   var btnSuccess = document.getElementById("success");
-  var btnDanger = document.getElementById("echec");
-  
+  var btnDanger = document.getElementById("echec");   
+
   btnSuccess.addEventListener("click", function() {
     if(btnDanger.style.border = "3px solid black"){
       btnDanger.style.border = "";
@@ -182,5 +179,11 @@ infoButton.addEventListener('click', function() {
     this.style.border = "3px solid black";
     btnDanger.value = "true";
   });
+
+  
+  console.log("{{dormeur}}")
+  if("{{dormeur}}" != "[]"){
+    btnSuccess.click();
+  }
 
 </script>
