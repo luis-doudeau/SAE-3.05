@@ -19,6 +19,7 @@ import traceback
 import sys
 from sqlalchemy.sql import operators, extract
 from sqlalchemy.orm import aliased
+from sendgrid.helpers.mail import Content
 
 from .Exposant import Exposant
 from .Intervenir import Intervenir
@@ -911,7 +912,10 @@ def get_prenom(id_participant):
     return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).prenomP
 
 def get_mot_de_passe(id_participant):
-    return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).mdpP
+    print("het mdp")
+    mdp = (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).mdpP
+    print(mdp)
+    return mdp
 
 def get_nom(id_participant):
     return (sessionSQL.query(Utilisateur).filter(Utilisateur.idP == id_participant).first()).nomP
@@ -1350,7 +1354,7 @@ def transforme_datetime(date):
         date = date.split("/")
     return date
 
-def ajoute_creneau_repas_v1(session, dateDebut,dateFin):
+def ajoute_creneau_repas_v1(dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -1361,14 +1365,14 @@ def ajoute_creneau_repas_v1(session, dateDebut,dateFin):
         creneau = CreneauRepas(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
-            session.commit()
+            sessionSQL.commit()
         except :
             print("erreur creneau")
             sessionSQL.rollback()
         return creneau.idCreneau
     return creneau_test.idCreneau
 
-def ajoute_creneau_travail_v1(session, dateDebut,dateFin):
+def ajoute_creneau_travail_v1(dateDebut,dateFin):
     liste_date_deb = transforme_datetime(dateDebut)
     liste_date_fin = transforme_datetime(dateFin)
     dateDebut = datetime.datetime(int(liste_date_deb[0]), int(liste_date_deb[1]), int(liste_date_deb[2]), int(liste_date_deb[3]), int(liste_date_deb[4]),int(liste_date_deb[5]))
@@ -1379,7 +1383,7 @@ def ajoute_creneau_travail_v1(session, dateDebut,dateFin):
         creneau = CreneauTravail(idCreneau, dateDebut, dateFin)
         sessionSQL.add(creneau)
         try :
-            session.commit()
+            sessionSQL.commit()
         except :
             print("erreur creneau")
             sessionSQL.rollback()
@@ -1623,14 +1627,15 @@ def cree_mail(id_participant):
     nom = get_nom(id_participant)
     prenom = get_prenom(id_participant)
     mdp = get_mot_de_passe(id_participant)
-    msg = "Cher(e)"+prenom +" "+nom+", Nous avons le plaisir de vous inviter au festival bdBOUM en tant qu'"+ status+", un événement incontournable pour les fans de bandes dessinées.\
-    Cette année, le festival se déroulera du vendredi 17 Novembre au Dimanche 19 Novembre 2023, à Blois.\ Durant ces trois jours, vous aurez l'opportunité de découvrir\
-    les dernières tendances en matière de BD, de rencontrer des auteurs talentueux et de participer à des activités ludiques et éducatives.\
-    Nous espérons que vous pourrez vous joindre à nous pour célébrer la passion de la BD et passer un moment inoubliable en notre compagnie.\
-    Votre mot de passe est le suivant pour vous connecter au site "+mdp+"\
-    Bien cordialement,\
-    [Nom de l'organisateur]"
-    return msg
+    content = Content("text/plain",
+    "Cher(e)"+prenom +" "+nom+", Nous avons le plaisir de vous inviter au festival bdBOUM en tant qu'"+ status+", un événement incontournable pour les fans de bandes dessinées.\
+ Cette année, le festival se déroulera du vendredi 17 Novembre au Dimanche 19 Novembre 2023, à Blois.\ Durant ces trois jours, vous aurez l'opportunité de découvrir\
+ les dernières tendances en matière de BD, de rencontrer des auteurs talentueux et de participer à des activités ludiques et éducatives.\
+ Nous espérons que vous pourrez vous joindre à nous pour célébrer la passion de la BD et passer un moment inoubliable en notre compagnie.\n\
+ Votre mot de passe est le suivant pour vous connecter au site : "+mdp+"\n\
+ Bien cordialement,\n\
+ L'équipe BDBOUM")
+    return content
 
 @staticmethod
 def generate_password(length=8):
