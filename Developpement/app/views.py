@@ -573,7 +573,7 @@ def navette_detail(idP):
 @app.route('/dormeurSecretaire/<id>/<idHotel>/<dateDeb>/<dateFin>',methods=["GET", "POST"])
 def dormeur_detail(id, idHotel, dateDeb, dateFin):
     print(dateDeb, dateFin)
-    return render_template("detail_dormeur.html", intervenant = get_intervenant(sessionSQL, id), nomHotel = get_hotel(sessionSQL, idHotel), idH = idHotel, DateDeb = dateDeb, DateFin = dateFin)
+    return render_template("detail_dormeur.html", intervenant = get_intervenant(id), nomHotel = get_hotel(idHotel), idH = idHotel, DateDeb = dateDeb, DateFin = dateFin)
 
 @app.route('/Personne/Update',methods=['POST'])
 def UpdateParticipant():

@@ -79,14 +79,14 @@ def ouvrir_connexion(user,passwd,host,database):
     print("connexion réussie")
     return cnx,engine
 
-#connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
+connexion ,engine = ouvrir_connexion("nardi","nardi",'servinfo-mariadb', "DBnardi")
 #connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau",'servinfo-mariadb', "DBdoudeau")
 #connexion ,engine = ouvrir_connexion("doudeau","doudeau","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("nardi","nardi","localhost", "BDBOUM")
 #connexion ,engine = ouvrir_connexion("root","charpentier","localhost", "BDBOUM")
-connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
+#connexion ,engine = ouvrir_connexion("charpentier","charpentier","servinfo-mariadb", "DBcharpentier")
 
 
 
@@ -808,10 +808,10 @@ def modifier_hebergement(idp, nomHotel, dateDeb, dateFin, ancienHotel, ancienDat
     ancien_dateD = datetime.date(int(liste_ancien_dateDeb[2]), int(liste_ancien_dateDeb[1]), int(liste_ancien_dateDeb[0]))
     ancien_dateF = datetime.date(int(liste_ancien_dateFin[2]), int(liste_ancien_dateFin[1]), int(liste_ancien_dateFin[0]))
 
-    idHotel = get_id_hotel(sessionSQL, nomHotel)
-    ancien_idHotel = get_id_hotel(sessionSQL, ancienHotel)
-
-    test = sessionSQL.query(Loger).filter(Loger.idP == idp).filter(Loger.idHotel == ancien_idHotel).filter(func.date(Loger.dateDebut) == ancien_dateD).filter(func.date(Loger.dateFin) == ancien_dateF).first()
+    idHotel = get_id_hotel(nomHotel)
+    ancien_idHotel = get_id_hotel(ancienHotel)
+    print(ancien_idHotel)
+    test = sessionSQL.query(Loger).filter(Loger.idP == idp).filter(Loger.idHotel == ancien_idHotel).first()
     print(test)
 
     sessionSQL.query(Loger).filter(Loger.idP == idp).filter(Loger.idHotel == ancien_idHotel).filter(func.date(Loger.dateDebut) == ancien_dateD).filter(func.date(Loger.dateFin) == ancien_dateF).update({
