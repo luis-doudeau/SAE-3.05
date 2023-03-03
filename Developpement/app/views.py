@@ -1,43 +1,32 @@
-import json
-
 from .app import app
 
-from datetime import date, datetime
-from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify, make_response
-from flask_login import login_required, login_user, LoginManager, current_user, logout_user
+from datetime import datetime
+from flask import  render_template, request, redirect, url_for, send_file, session, jsonify, make_response
+from flask_login import login_required, login_user, current_user, logout_user
 from secrets import token_urlsafe
 
-from .Navette import Navette
-from .Transporter import Transporter
-from .Consommateur import Consommateur
-from .Participant import Participant
-from .Avoir import Avoir
-from .Manger import Manger
-from .Intervenant import Intervenant
-from .Loger import Loger
 from .Deplacer import Deplacer
 from .Assister import Assister
 from .Transport import Transport
-from .Intervenant import Intervenant
 from .ConnexionPythonSQL import *
-import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import json
 import pandas as pd
 from io import BytesIO
-import xlsxwriter
-import threading
 from .constants import *
 
 @app.route('/', methods = ["GET", "POST"])
 def connexion():
+    """
+    Si l'utilisateur s'est bien connecté renvoie vers la bonne page sinon,
+    renvoie vers la page login
+    :return: la page de connexion.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('logout'))
     if request.method == "POST":
         email = request.form["email"]
         mdp = request.form["mdp"]
-        
         utilisateur = get_utilisateur_email_mdp(email, mdp)
         if utilisateur is not None:
             if est_secretaire(utilisateur.idP):
@@ -55,6 +44,10 @@ def connexion():
 @app.route('/coordonneeForms/', methods = ["GET", "POST"])
 @login_required
 def page_inscription():
+    """
+    Il redirige l'utilisateur vers la page où il peut renseigner ses informations personnelles
+    :return: le modèle de la page.
+    """
     if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if request.method == "POST":
@@ -68,7 +61,12 @@ def page_inscription():
 
 
 @app.route('/insereTransportForms/', methods = ["POST"])
+@login_required
 def insererTransportPersonne():
+    """
+    Il prend les données du formulaire transport personne et les insère dans la base de données
+    :return: Un objet JSON avec un statut de réussite.
+    """
     liste_id_box = ["avion", "train", "voiture", "covoiturage", "autre"]
     dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],\
                         "voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],\
@@ -104,6 +102,11 @@ def insererTransportPersonne():
 @app.route('/transportForms/', methods = ["POST", "GET"])
 @login_required
 def formulaire_auteur_transport():
+    """
+    Il renvoie une page avec un formulaire pour renseigner les informations de transport de
+    l'utilisateur courant
+    :return: Un objet de réponse
+    """
     if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     assister = get_assister(current_user.idP, datetime.datetime.now().year)
@@ -126,7 +129,13 @@ def formulaire_auteur_transport():
 
 
 @app.route('/insererFormulaireReservation/', methods = ["POST"])
+@login_required
 def inserer_formulaire_reservation():
+    """
+    Il prend les données du formulaire de réservation et les insère dans la base de
+    données
+    :return: un objet json avec le statut "success"
+    """
     regime = request.form["regime"] # stocker en variable car réutilisé ensuite
     liste_jour_manger = [request.form["jeudi_soir"],request.form["vendredi_midi"],\
     request.form["vendredi_soir"],request.form["samedi_midi"],request.form["samedi_soir"],\
@@ -158,6 +167,11 @@ def inserer_formulaire_reservation():
 @app.route('/FormulaireReservation/', methods = ["POST","GET"])
 @login_required
 def formulaire_reservation():
+    """
+    Il rend le template "formulaireReservation.html" et passe les variables repas, regimes et dormeur au
+    template
+    :return: un objet de réponse.
+    """
     if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     if get_regime(current_user.idP) == "Pas de régime" :
@@ -175,6 +189,10 @@ def formulaire_reservation():
 @app.route('/pageFin/', methods = ["GET"])
 @login_required
 def page_fin():
+    """
+    Afficher le modèle pageFin.html
+    :return: le modèle pageFin.html.
+    """
     if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     return render_template("pageFin.html", idP = current_user.idP)
@@ -183,6 +201,10 @@ def page_fin():
 @app.route('/secretaire_consommateur/', methods = ["POST", "GET"])
 @login_required
 def secretaire_consommateur():
+    """
+    Il renvoie vers le modele secretaire consommateur
+    :return: Une liste de dictionnaires.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))       
     if request.method == 'POST':
@@ -195,6 +217,10 @@ def secretaire_consommateur():
 @app.route('/dormeurSecretaire/', methods = ["POST", "GET"])
 @login_required
 def dormeur_secretaire():
+    """
+    Renvoie vers le modele secretaire dormeur
+    :return: The dormeur_secretaire function is returning the dormeurSecretaire.html page.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
@@ -204,7 +230,12 @@ def dormeur_secretaire():
 
 
 @app.route('/api/dataDormeurs', methods = ["POST"])
+@login_required
 def dataDormeurs():
+    """
+    Créé la page api dormeurs avec les bonnes informations en fonctions des filtres
+    :return: Un dictionnaire avec une clé de 'data' et une valeur de liste_dormeurs
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     prenom = request.form["prenom"]
@@ -228,20 +259,39 @@ def dataDormeurs():
 
   
 @app.route("/api/data/nomHotel")
+@login_required
 def data_nom_hotel():
+    """
+    Il renvoie un objet JSON contenant les noms de tous les hôtels de la base de données
+    :return: Le nom de l'hôtel
+    """
     return jsonify(get_nom_hotel())
 
 @app.route("/api/data/nomRestaurant", methods= ["GET"])
+@login_required
 def data_nom_restaurant():
+    """
+    Il renvoie un objet JSON contenant la liste des noms de restaurants
+    :return: Une liste de tous les restaurants de la base de données
+    """
     return jsonify(get_liste_nom_restaurant())
 
 @app.route("/api/data/creneauRepas", methods = ["GET"])
+@login_required
 def data_creneauRepas():
+    """
+    Il retourne un objet JSON contenant la liste des créneaux repas
+    :return: Une liste de dictionnaires.
+    """
     return jsonify(get_liste_creneau_repas())
 
 @app.route('/api/dataParticipant', methods = ["POST"])
 @login_required
 def dataParticipant():
+    """
+    Créé la page api participant avec les bonnes informations en fonctions des filtres
+    :return: Une liste de dictionnaires.
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_participants = []
@@ -261,6 +311,10 @@ def dataParticipant():
 @app.route('/api/dataConsommateurs', methods = ["POST"])
 @login_required
 def dataConsommateurs():
+    """
+    Créé la page api consommateur avec les bonnes informations en fonctions des filtres
+    :return: Un dictionnaire avec une clé 'data' et une valeur d'une liste de dictionnaires.
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     prenom = request.form["prenom"]
@@ -284,6 +338,10 @@ def dataConsommateurs():
 @app.route('/api/dataNavettes', methods = ["POST", "GET"])
 @login_required
 def dataNavettes():
+    """
+    Créé la page api navette avec les bonnes informations en fonctions des filtres
+    :return: Un dictionnaire avec une clé de 'data' et une valeur de liste_voyages
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     id_voyage = request.form["idVoyage"]
@@ -309,6 +367,10 @@ def dataNavettes():
 @app.route('/api/dataTransporte')
 @login_required
 def dataTransport():
+    """
+    Créé la page api transport avec les bonnes informations en fonctions des filtres
+    :return: Un dictionnaire avec une clé 'data' et une valeur d'une liste de dictionnaires.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_transport = []
@@ -330,6 +392,10 @@ def dataTransport():
 @app.route('/api/dataInvitation', methods = ["POST"])
 @login_required
 def dataInvitation():
+    """
+    Créé la page api invitation avec les bonnes informations en fonctions des filtres
+    :return: Une liste de dictionnaires.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))
     liste_participants = []
@@ -350,6 +416,10 @@ def dataInvitation():
 @app.route('/api/dataInterventions', methods = ["POST"])
 @login_required
 def dataIntervenir():
+    """
+    Créé la page api interventions avec les bonnes informations en fonctions des filtres
+    :return: Un dictionnaire avec une clé 'data' et une valeur d'une liste de dictionnaires.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout')) 
     liste_intervenir = []
@@ -373,17 +443,24 @@ def dataIntervenir():
 @app.route('/interventionsSecretaire/', methods = ["POST", "GET"])
 @login_required
 def interventions_secretaire():
+    """
+    Il rend le modèle datatable_interventions.html
+    :return: Le modèle datatable_interventions.html est renvoyé.
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
         return render_template("datatable_interventions.html")
-
     return render_template('datatable_interventions.html')
 
 
 @app.route('/participantSecretaire/', methods = ["POST", "GET"])
 @login_required
 def participant_secretaire():
+    """
+    Il rend le modèle participantSecretaire.html
+    :return: le template de la page participantSecretaire.html
+    """
     if not est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == "POST":
@@ -395,6 +472,9 @@ def participant_secretaire():
 @app.route('/secretaireIntervention/', methods = ["POST","GET"])
 @login_required
 def page_secretaire_intervention():
+    """
+    Il rend le modèle secretaireIntervention.html
+    """
     if not  est_secretaire(current_user.idP):
         return redirect(url_for('logout'))   
     if request.method == 'POST':
@@ -415,7 +495,6 @@ def page_secretaire_intervention():
             ajoute_intervention(int(idP), idCreneau, int(id_lieu), int(id_type), desc)
         except : 
             print("erreur dans l'ajout de l'intervention")
-        
     return render_template('secretaireIntervention.html', lieux=get_all_lieu(), participants=get_all_auteur(), type_inter=get_all_interventions())
 
 
@@ -565,8 +644,6 @@ def navette_detail(idP):
     dateDepart = date_heure_depart.date() 
     heureArrive = date_heure_arrive.time()
     heureDepart = date_heure_depart.time()
-    print(dateArrive)
-    print(heureArrive)
     return render_template("detail_navette.html", intervenant=get_intervenant(idP), dateArrive = dateArrive, 
                                                   dateDepart = dateDepart, heureArrive=heureArrive, heureDepart=heureDepart)
 
