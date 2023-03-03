@@ -801,6 +801,39 @@ def modifier_repas(idP, nomRestaurant, dateRepas, creneauRepas, idRepas):
         sessionSQL.rollback()
         print("erreur lors de la modif du repas")
         return False
+
+
+def modifier_hebergement(idp, nomHotel, dateDeb, dateFin, ancienHotel, ancienDateDeb, ancienDateFin):
+    liste_dateDeb = dateDeb.split("-")
+    liste_dateFin = dateFin.split("-")
+
+    dateD = datetime.date(int(liste_dateDeb[2]), int(liste_dateDeb[1]), int(liste_dateDeb[0]))
+    dateF = datetime.date(int(liste_dateFin[2]), int(liste_dateFin[1]), int(liste_dateFin[0]))
+
+    liste_ancien_dateDeb = ancienDateDeb.split("-")
+    liste_ancien_dateFin = ancienDateFin.split("-")
+
+    ancien_dateD = datetime.date(int(liste_ancien_dateDeb[2]), int(liste_ancien_dateDeb[1]), int(liste_ancien_dateDeb[0]))
+    ancien_dateF = datetime.date(int(liste_ancien_dateFin[2]), int(liste_ancien_dateFin[1]), int(liste_ancien_dateFin[0]))
+
+    idHotel = get_id_hotel(sessionSQL, nomHotel)
+    ancien_idHotel = get_id_hotel(sessionSQL, ancienHotel)
+
+    test = sessionSQL.query(Loger).filter(Loger.idP == idp).filter(Loger.idHotel == ancien_idHotel).filter(func.date(Loger.dateDebut) == ancien_dateD).filter(func.date(Loger.dateFin) == ancien_dateF).first()
+    print(test)
+
+    sessionSQL.query(Loger).filter(Loger.idP == idp).filter(Loger.idHotel == ancien_idHotel).filter(func.date(Loger.dateDebut) == ancien_dateD).filter(func.date(Loger.dateFin) == ancien_dateF).update({
+        Loger.idHotel: idHotel, Loger.dateDebut: dateD, Loger.dateFin: dateF
+    }, synchronize_session=False)
+
+    try : 
+        sessionSQL.commit()
+        print("L'hébergement associé à ce participant a bien été modifié")
+        return True
+    except : 
+        sessionSQL.rollback()
+        print("erreur lors de la modif de l'hébergement")
+        return False
     
 def modifier_utilisateur(sessionSQL, idP, prenomP, nomP, emailP):
     sessionSQL.query(Utilisateur).filter(Utilisateur.idP == idP).update(
