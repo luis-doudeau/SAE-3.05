@@ -1,0 +1,69 @@
+{% include 'banner.html' %}
+<body>
+    <main style="background-color : #ebf3fc;">
+        <section class="ftco-section row justify-content-center shadow-lg"> 
+                         
+          <form method="POST" id="formCoo" class="container flex w-100 wrap p-4" style="min-width: 40%;">
+            <div class="form-group">
+                <h3 class="text-center pb-3 fs-2">Veuillez confirmer ce formulaire</h3> 
+            </div>    
+            <div class="form-group">
+                <label for="exampleInputPrenom" class="fs-5">Prénom</label>
+                <input type="text" class="form-control textFieldInfo" id="exampleInputPrenom" aria-describedby="emailHelp" placeholder="Entrer votre prénom" name="prenom" id="PrenomPersonne" value= "{{ current_user.prenomP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputNom" class="fs-5">Nom</label>
+                <input type="text" class="form-control textFieldInfo" id="exampleInputNom" placeholder="Entrer votre nom" name="nom" value = "{{ current_user.nomP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1" class="fs-5">Adresse Mail</label>
+                <input type="email" class="form-control textFieldInfo" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Entrer votre Email" name="email" value= "{{ current_user.emailP }}" required>
+                <small id="emailHelp" class="form-text text-muted ml-1 fs-6">Nous ne partagerons jamais votre adresse mail à quiconque.</small>
+            </div>
+            <div class="form-group">
+                <label for="adressePostal" class="fs-5">Adresse Postal</label>
+                <input type="text" class="form-control textFieldInfo" id="adressePostal" placeholder="Entrer votre adresse postal" name="adresse" value= "{{ current_user.adresseP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="codePostal" class="fs-5">Code Postal</label>
+                <input type="text" class="form-control textFieldInfo" id="codePostal" placeholder="Entrer votre code postal" pattern="[0-9]{5}" name="codePostal" value= "{{ current_user.codePostalP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="ville" class="fs-5">Ville</label>
+                <input type="text" class="form-control textFieldInfo" id="ville" placeholder="Entrer votre ville" name="ville" value= "{{ current_user.villeP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="numTel" class="fs-5">Téléphone</label>
+                <input type="tel" class="form-control textFieldInfo" id="numTel" placeholder="Entrer votre téléphone" name="tel" pattern="0[1-9][0-9]{8}" value= "{{ current_user.telP }}" required>
+            </div>
+            <div class="form-group">
+                <label for="ddn" class="fs-5">Date de naissance</label>
+                <input type="date" class="form-control textFieldInfo" id="ddn" placeholder="Entrer votre date de naissance" name="ddn" value= "{{ current_user.ddnP }}" required>
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn text-light mr-4 mt-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
+                <button type="submit" class="btn text-light mr-2 mt-4 bg-warning" style="width: 140px; height: 45px;font-size:130%;">Suivant</button>
+            </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
+
+
+<script>
+
+    let verif_champs_rempli = function(){
+        var requiredTextFields = $(':text');
+        // mail, tel, date
+        console.log(requiredTextFields);
+        for(let i=0; i<requiredTextFields.length; i++){
+            if(requiredTextFields[i].value == ""){
+                window.alert("Vous devez remplir tout les champs")
+                return false;
+            }
+        }
+    }
+    
+
+</script>

@@ -1,0 +1,266 @@
+body {
+    background-color: #7eafe5;
+    margin : 0;
+}
+
+body > header{
+    background-color: #0c0a60;
+    color: #ffffff;
+}
+
+body header ul{
+    display: flex; /* or inline-flex */
+    flex-wrap: nowrap;
+    list-style-type: none;
+    align-items: center;
+}
+
+body>header li{
+    font-size: 1.3em;
+    letter-spacing: 2px;
+    font-family: 'Libre Franklin';
+}
+
+
+
+body header li:last-child{
+    right: 0;
+    position: absolute;
+}
+
+body>header li:first-child{
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
+}
+
+body>header li:first-child span{
+    font-weight: bold;
+}
+
+body header a:link, body header a:visited {
+    color: white;
+  }
+  
+
+body header ul li{
+    margin-right: 3rem;
+
+}
+
+body header{
+    display: flex; /* or inline-flex */
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+#imginsta{
+    width: 2rem;
+    height: 2rem;
+}
+#imgface{
+    width: 1.2rem;
+    height: 2rem;
+}
+#imgyout{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+#imgLogoMaison{
+    width: 108px;
+    height: 102px;
+    left: 48px;
+    top: 93px;
+}
+
+#imgheader39festival{
+    width: 511px;
+    height: 93px;
+    left: 194px;
+    top: 98px;
+}
+
+#p39e{
+    white-space:nowrap;
+    border-right: 0.15rem solid white;
+    padding-right: 2rem;
+    color: #fcba42;
+    font-size: 2.2rem;
+    font-family: 'Miltonian Tattoo';
+    text-shadow: #000000 1px 1px, #000000 -1px 1px, #000000 -1px -1px, #000000 1px -1px;
+}
+
+main{
+    background-color: #7eafe5;
+    background-attachment: fixed; /*edit*/
+}
+
+main > header{
+    background-color: #5774d8;
+    color: white;
+    height: 133px;
+    left: -8px;
+    top: 78px;
+}
+
+main header li{
+    font-size: 1.5rem;
+}
+
+section ul{
+    list-style-type: none;
+}
+
+
+#box-info {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3rem;
+    width: 30%;
+    background: #6e8eff;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: solid #d9e1f6;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+#box-info h2{
+    font-family: 'Londrina Shadow';
+}
+
+#p2{
+    text-align: center;
+}
+
+
+#div-cbSouvenir{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+}
+#CbSouvenir{
+    width:1rem;
+    height:1rem;
+    outline: 1px solid black;
+    accent-color: pink;
+}
+
+.input-user-box{
+    display: flex;
+    width: 15rem;
+    height: 2rem;
+    border-radius: 10px;
+    border:solid #17557b;
+    margin-bottom: 2rem;
+}
+
+
+#boutonConnecter{
+    display : flex;
+    color: white;
+    background-color: #0c0a60;
+    border:0 none;
+    border-radius: 10px;
+    font-family: Kreon;
+    width: 10rem;
+    height: 2.5rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    font-size: 100%;
+    margin:auto;
+    margin-bottom: 3%;
+}
+
+#transport{
+    display : flex;
+    flex-direction: column;
+    margin-top: 5%;
+}
+
+
+#rectangle_principale{
+    display: flex;
+    background-color:#5576f1;
+    justify-content: space-around;
+    width: 70%;
+    height:100%;
+    filter:drop-shadow(0px 7px 7px rgba(0,0,0,0.25));
+    border-radius:7px;
+    padding:0px;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid #d9e1f6;
+    border-width: 2px;
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+
+#rectangle_principale h2{
+    color : white;
+}
+
+section label{
+    color : white;
+    font-size: 120%;
+    font-weight: bold;
+    font-family: "Gill Sans", sans-serif;
+} 
+
+#formulaire{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    
+}
+
+#avion, #train, #voiture, #covoiturage, #autre{
+    height: 30%;
+    transform: scale(1.4);
+    margin-bottom: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#av, #tr, #au{
+    display: flex;
+
+    flex-direction: row;
+}
+
+#justificatif{
+    display : none;
+}
+
+#texte_justificatif{
+    font-size: 90%;
+    text-decoration: underline;
+    
+}
+
+#date{
+    margin-bottom : 5%;
+}
+
+#aeroportWarning, #gareWarning, #precisionWarning{
+    display: None;
+    margin-top : 0.5%;
+    margin-left : 0.5%;
+    color : rgb(216, 4, 4);
+    font-size : 80%;
+}
+
+
+
+
+#aeroport, #gare, #precision{
+    height: 50%;
+    width: auto;
+    margin-left : 2%;
+    margin-right : 2%;
+}

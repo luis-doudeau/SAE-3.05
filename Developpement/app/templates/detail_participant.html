@@ -1,0 +1,223 @@
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+    </style> 
+<style>
+    .k-input-inner {font-size: 120%;}
+    h1,h2{
+        font-weight: bold;
+        font-family: 'Source Sans Pro', sans-serif;
+        
+    }
+    .k-label{
+        margin: 0;
+        padding: 0;
+    }
+    #loader-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(82, 82, 82, 0.1); /* Opacité de 50% */
+        z-index: 999; /* Place l'élément en arrière-plan */
+    }
+
+    #loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centre l'SVG du loader */
+    }
+</style>
+{% include 'banner.html' %}
+<div class="container" style="margin-top: 1em;">
+    <div class="row" style="border-bottom: solid 1px">
+        <h2 for="InfoP">Compte</h2>
+    </div>
+
+    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
+        <div class="col-sm-4">
+            <h4 for="InfoP" style="color: gray;">Informations Connexion</h4>
+        </div>
+        <div class="col-sm-8">
+            <div class="row">
+                <input id="EmailPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="PasswordPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="idPersonne"/>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
+        <div class="col-sm-4">
+            <h4 for="InfoP" style="color: gray;">Informations Personnel</h4>
+        </div>
+        <div class="col-sm-8">
+            <div class="row labelDetail">
+                <input id="NomPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="PrenomPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="DdnPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="TelPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="remarquesPersonne"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="border-bottom: solid 1px;padding: 1em;">
+        <div class="col-sm-4">
+            <h4 for="InfoP"style="color: gray;" >Localisation</h4>
+        </div>
+        <div class="col-sm-8">
+            <div class="row labelDetail">
+                <input id="AdressePersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="CodePostalPersonne"/>
+            </div>
+            <div class="row labelDetail">
+                <input id="VillePersonne"/>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="row justify-content-center" style="margin: 1em 0;">
+        <div class="col-4 d-flex justify-content-center">
+            <button id="save" type="button" class="btn btn-success">Sauvegarder</button>
+        </div>
+
+    </div>
+</div>
+
+<div id="loader-background" style="display: none;">
+    <img id="loader" src="{{url_for('static', filename='img/loader.svg')}}"/>
+</div>
+
+<script src="https://kendo.cdn.telerik.com/2022.3.1109/js/cultures/kendo.culture.fr-FR.min.js"></script>
+<script>
+
+    $(document).ready(function(){
+        $("#EmailPersonne").kendoTextBox({
+            label: "Email",
+            value: '{{participant.emailP}}',
+            size: "large",
+            rounded: "medium",
+
+        });
+
+        $("#PasswordPersonne").kendoTextBox({
+            label: "Mot de passe",
+            size: "large",
+            value: '{{participant.mdpP}}',
+        });
+
+        $("#idPersonne").kendoTextBox({
+            label: "ID",
+            size: "large",
+            value: '{{participant.idP}}',
+            enable: false,
+        });
+        $("#NomPersonne").kendoTextBox({
+            label: "Nom",
+            size: "large",
+            value: '{{participant.nomP}}',
+            
+        });
+        $("#PrenomPersonne").kendoTextBox({
+            label: "Prenom",
+            size: "large",
+            value: '{{participant.prenomP}}',
+        });
+        $("#DdnPersonne").kendoDatePicker({
+            label: "Date de naissance",
+            size: "large",
+            value: '{{participant.ddnP}}',
+            culture:"fr-FR",
+        });
+        $("#TelPersonne").kendoTextBox({
+            label: "Telephone",
+            size: "large",
+            value: '{{participant.telP}}',
+        });
+        $("#remarquesPersonne").kendoTextBox({
+            label: "Remarques",
+            size: "large",
+            value: '{{participant.remarques}}',
+        });
+        $("#AdressePersonne").kendoTextBox({
+            label: "Adresse",
+            size: "large",
+            value: '{{participant.adresseP}}',
+        });
+        $("#CodePostalPersonne").kendoTextBox({
+            label: "Code Postal",
+            size: "large",
+            value: '{{participant.codePostalP}}',
+        });
+        $("#VillePersonne").kendoTextBox({
+            label: "Ville",
+            size: "large",
+            value: '{{participant.villeP}}',
+        });
+       
+        $("#save").on("click",function(){
+            $("#loader-background").show()
+            var ville = $("#VillePersonne").val()
+            var code_postal = $("#CodePostalPersonne").val()
+            var adresse = $("#AdressePersonne").val()
+            var remarques = $("#remarquesPersonne").val()
+            var tel = $("#TelPersonne").val()
+            var ddn = $("#DdnPersonne").val()
+            var prenom = $("#PrenomPersonne").val()
+            var nom = $("#NomPersonne").val()
+            var id = $("#idPersonne").val()
+            var password = $("#PasswordPersonne").val()
+            var email = $("#EmailPersonne").val()
+            $.ajax({
+                url : '{{url_for("UpdateParticipant")}}',
+                data:{
+                    "ville":ville,
+                    "code_postal":code_postal,
+                    "adresse":adresse,
+                    "remarques":remarques,
+                    "tel":tel,
+                    "ddn":ddn,
+                    "prenom":prenom,
+                    "nom":nom,
+                    "id":id,
+                    "password":password,
+                    "email":email,
+                
+                },
+                type:'POST',
+                success:async function(response){
+                    if(response == "false"){
+                        alert("Problème lors de la sauvegarde")
+                    }else{
+                        await delay(1);
+                        $("#loader-background").hide()
+                    }
+                }
+            });
+        })
+        
+    });
+    function delay(n){
+        return new Promise(function(resolve){
+            setTimeout(resolve,n*1000);
+        });
+    }
+
+</script>

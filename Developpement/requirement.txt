@@ -1,0 +1,13 @@
+flask
+flask_login
+flask_sqlalchemy
+pymysql
+mysql-connector-python
+flask_mail
+pandas
+XlsxWriter
+<<<<<<< HEAD
+sendgrid
+=======
+pdfkit
+>>>>>>> feuille_route

@@ -1,0 +1,736 @@
+{% include 'banner.html' %}
+<body>
+    <main style="background-color : #ebf3fc;">
+        <section class="ftco-section row justify-content-center shadow-lg">    
+          <form id="formCoo" class="container shadow flex wrap p-4" style="overflow : scroll;" method="POST">
+            <label style="text-decoration : underline;" for="transport" class="col-sm-2 col-form-label mb-1 fs-3 ml-2" id="voyage">Transport</label>
+            <small id="emailHelp" class="col-form-label mb-3 ml-4 form-text text-muted fs-5">Si vous utilisez plusieurs d'entre-eux, cocher plusieurs cases.</small>
+            
+            <div class="container-fluid justify-content-center" style="margin-bottom : 6%;">
+
+              <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-5">
+
+                  <div class="col-sm-6 col-lg-3 btn-custom" id="cardAvion">
+                      <!-- Simple card -->
+                      <div class="card d-block text-center shadow mt-5 card_hover">
+                          <div class=""> 
+                            <img class="imgTransport" src="{{url_for('static', filename='img/plane.png')}}" alt="Card image cap">
+                          </div>
+                          <div class="card-body">
+                              <h4 class="card-title mb-2">Avion</h4>
+                          </div> <!-- end card-body-->
+                      </div> <!-- end card-->
+                  </div><!-- end col -->
+
+                  
+                  <div class="col-sm-6 col-lg-3 btn-custom" id="cardTrain">
+                    <!-- Simple card -->
+                    <div class="card d-block text-center shadow mt-5 card_hover">
+                        <div class=""> 
+                          <img class="imgTransport" src="{{url_for('static', filename='img/train.png')}}" alt="Card image cap">
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">Train</h4>
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div><!-- end col -->
+                  
+
+                <div class="col-sm-6 col-lg-3 btn-custom" id="cardVoiture">
+                  <!-- Simple card -->
+                  <div class="card d-block text-center shadow mt-5 card_hover">
+                      <div class=""> 
+                        <img class="imgTransport" src="{{url_for('static', filename='img/car.png')}}" alt="Card image cap">
+                      </div>
+                      <div class="card-body">
+                          <h4 class="card-title mb-2">Voiture</h4>
+                      </div> <!-- end card-body-->
+                  </div> <!-- end card-->
+              </div><!-- end col -->
+              </div>
+            
+              
+
+
+              <div style="margin-left : 0.20em;" class="row col d-flex justify-content-center mt-3">
+
+                <div class="col-sm-6 col-lg-3 btn-custom" id="cardCovoiturage">
+                  <!-- Simple card -->
+                  <div class="card d-block text-center shadow mt-5 card_hover">
+                      <div class=""> 
+                        <img class="imgTransport" src="{{url_for('static', filename='img/carpooling.png')}}" alt="Card image cap">
+                      </div>
+                      <div class="card-body">
+                          <h4 class="card-title mb-2">Covoiturage</h4>
+                      </div> <!-- end card-body-->
+                  </div> <!-- end card-->
+              </div><!-- end col -->
+
+                
+              <div class="col-sm-6 col-lg-3 btn-custom" id="cardAutre">
+                <!-- Simple card -->
+                <div class="card d-block text-center shadow mt-5 card_hover">
+                    <div class=""> 
+                      <img class="imgTransport" src="{{url_for('static', filename='img/other.png')}}" alt="Card image cap">
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title mb-2">Autre</h4>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div><!-- end col -->
+            </div>
+            </div>
+            
+            <!-- div qui vont contenir les détails sur les transports-->
+              
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAvion" style="display : none; background-color: rgb(247, 248, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/plane.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_avion">
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input autocomplete="off" id="lieuDepartAvion" placeholder="Aéroport Départ" required="true" inputmode="text" spellcheck="false" style="height:60px; max-width:350px; font-size : 110%;">
+                  </div>
+                </div>
+                <div class="col-1" style="display : flex;">
+                  <button type="button" autocomplete="off" id="boutonReverseAvion" class="btn btn-light boutonReverse" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" id="reverseButtonImgAvion" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+                      </path> 
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input autocomplete="off" id="lieuArriveAvion" placeholder="Aéroport Arrivé" required="true" inputmode="text" spellcheck="false" style="height:60px; max-width:350px; font-size : 110%;">
+                  </div>
+                </div>
+                <div class="col-1" style = "margin-top : 5px;">
+                  <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprAvion" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                  </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveTrain" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/train.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_train">
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input id="lieuDepartTrain" name="lieuDepartTrain" placeholder="Gare Départ" style=" height:60px; max-width:350px; font-size : 110%;" required />
+                  </div>
+                </div>
+                <div class="col-1" style="display : flex;">
+                  <button type="button" autocomplete="off" class="btn btn-light boutonReverse" id="boutonReverseTrain" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" id="reverseButtonImgTrain" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                      <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                      <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-4">
+                  <div class="k-w-300">
+                    <input id="lieuArriveTrain" name="lieuArriveTrain" placeholder="Gare Arrivé" style=" height:60px; max-width:350px; font-size : 110%;" required />
+                  </div>
+                </div>
+                <div class="col-1" style = "margin-top : 5px;">
+                  <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprTrain" inputmode="text" spellcheck="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveVoiture" style="display:none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/car.png">
+              </div>
+              <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_voiture">
+                <div class="col-4">
+                  <input autocomplete="off" id="lieuDepartVoiture" placeholder="Lieu Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 100%; width: 100%;" class="form-control">
+                </div>
+                <div class="col-1" style="display : flex;">
+                  <button type="button" autocomplete="off" class="btn-light btn boutonReverse" id="boutonReverseVoiture">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" id="reverseButtonImgVoiture" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+                    </path>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="col-4">
+                <input autocomplete="off" id="lieuArriveVoiture" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
+              </div>
+              <div class="col-1" style = "margin-top : 5px;">
+                <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprVoiture" inputmode="text" spellcheck="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                  </svg>
+                </button>
+              </div>
+              
+            </div>
+           </div>
+
+          
+           <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveCovoiturage" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+            <div class="imgTransport">
+              <img style="height: 100%;" src="/static/img/carpooling.png">
+            </div>
+            <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_covoiturage">
+              <div class="col-4">
+                <input autocomplete="off" id="lieuDepartCovoiturage" placeholder="Lieu Départ" inputmode="text" spellcheck="false" required="true" style="font-size: 1.1em; height: 100%; width: 100%;" class="form-control">
+              </div>
+              <div class="col-1" style="display : flex;">
+                <button type="button" autocomplete="off" class="btn btn-light boutonReverse" id="boutonReverseCovoiturage" inputmode="text" spellcheck="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" id="reverseButtonImgCo" viewBox="0 0 16 16" class="bi bi-arrow-repeat rotate">
+                  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+                  <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="col-4">
+              <input autocomplete="off" id="lieuArriveCovoiturage" placeholder="Lieu Arrivé" required="true" inputmode="text" spellcheck="false" class="form-control" style="font-size: 1.1em; height: 100%; width: 100%;">
+            </div>
+            <div class="col-1" style = "margin-top : 5px;">
+              <button type="button" class="btn btn-danger" autocomplete="off" id="boutonSupprCovoiturage" inputmode="text" spellcheck="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                </svg>
+              </button>
+            </div>
+           </div>
+           </div>
+            
+
+            <div class="container-fluid justify-content-center divLieuDepArrive" id="divLieuDepArriveAutre" style="display : none; background-color: rgb(245, 247, 250); height: 185px; border-radius: 0px 0.5rem 0.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 24px 2px; width: 85%;">
+              <div class="imgTransport">
+                <img style="height: 100%;" src="/static/img/other.png">
+              </div>
+                <div class="row d-flex justify-content-center container_lieu_transport" style="height :60px;" id="container_lieu_autre">
+                  <div class="col-4"><input autocomplete="off" id="precision" placeholder="Précision" inputmode="text" spellcheck="false" style="font-size: 1.1em; height: 100%; width: 100%;" class="form-control"></div>
+                    <div class="col-1" style = "margin-top : 5px;">
+                      <button type="button" autocomplete="off" id="boutonSupprAutre" inputmode="text" spellcheck="false" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+              
+    
+
+            <label for="transport" class="col-form-label mb-4 ml-4 fs-3" style="text-decoration : underline;" id="voyage">Arrivé à Blois</label>
+            <div class="form-group row ml-5 mb-5">
+                <div class="col-sm-10 form-row">
+                  <label for="inputEmail3" class="mr-3 col-form-label fs-4" style="padding-top:15.5px;">Le</label>
+                  <input id="dateArr" style="height: 113%;font-size : 1.25rem;" name="dateArr" class="col-sm-4 form-control pl-3" pattern="02-03-2023" type="date" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label fs-4" style="padding-top:15.5px;">à</label>
+                  <input type="time" style="height: 113%; font-size : 1.25rem;" id="hArrive" name="hArrive" class="form-control col-sm-2 col-form-label pl-3" required>
+                </div>
+            </div>
+            <label for="transport" class="col-form-label mb-4 ml-4 fs-3" style="text-decoration : underline;" id="voyage">Départ de Blois</label>
+            <div class="form-group row ml-5 mb-5">
+                <div class="col-sm-10 form-row">
+                  <label for="inputEmail3" class="mr-3 col-form-label fs-4" style="padding-top:15.5px;">Le</label>
+                  <input id="dateDep" style="height: 113%;font-size : 1.25rem;" name="dateDep" class="col-sm-4 form-control pl-3 pt-2" type="date" title="Veuillez saisir une date valide au format : jj/mm/aaaa " required>
+                  <label for="inputEmail3" class="mr-3 ml-3 col-form-label fs-4" style="padding-top:15.5px;">à</label>
+                  <input type="time" style="height: 113%; font-size : 1.25rem;" id="hDep" name="hDep" class="form-control col-sm-2 col-form-label pl-3" required>
+                </div>
+            </div>
+            <small id="emailHelp" class="col-form-label mb-3 ml-3 fs-5 ml-4 form-text text-muted">Si vous prenez le train, préciser l'heure d'arrivé/départ précise à la gare.</small>
+              <div class="form-group text-center mt-5 mb-1">
+                <button type="submit" class="btn text-light mr-4 bg-danger" style="width: 140px; height: 45px;font-size:130%;">Retour</button>
+                <button id="save" type="submit" class="btn text-light mr-2 bg-warning" style="width: 140px; height: 45px;font-size:130%;">Suivant</button>
+            </div>
+          </form>
+        
+        </section>
+    </main>
+  </body>
+</html>
+
+
+<script>
+
+  
+
+  document.addEventListener("DOMContentLoaded", function() {
+
+
+    if("{{date_dep}}" !== "None"){
+      let arrive = new Date("{{date_arr}}").toISOString().substr(0, 10); 
+      let depart = new Date("{{date_dep}}").toISOString().substr(0, 10); 
+      document.getElementById("dateDep").value = depart;
+      document.getElementById("dateArr").value = arrive;
+      document.getElementById("hArrive").value = "{{timeArr}}";
+      document.getElementById("hDep").value = "{{timeDep}}";
+    }
+    else{
+      let debut_festival = new Date("{{date_arr}}").toISOString().substr(0, 10); 
+      document.getElementById("dateDep").value = debut_festival;
+      document.getElementById("dateArr").value = debut_festival;
+      let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById("hArrive").value = currentTime; // ENLEVER
+      document.getElementById("hDep").value = currentTime;
+  }
+
+  if("{{listeTransport}}" != "[]"){
+
+    let str = "{{listeTransport}}".replace(/&#34;/g, "\"").replace(/\(/g,"[").replace(/\)/g, "]");  console.log(str);
+    let list = "["+ str.replace(/&#34;|\(|/g, "\"") + "]";
+    let lst = str.slice(2, -2).split("], [").map(subStr => {
+      return subStr.split(",").map(val => {
+        if (isNaN(val)) {
+          return val.replace(/"/g, "");
+        } else {
+          return parseInt(val);
+        }
+      });
+    });
+
+    dico_champs_box = {"avion" : ["lieuDepartAvion", "lieuArriveAvion"], "train": ["lieuDepartTrain", "lieuArriveTrain"],"voiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "covoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],"autre": ["precision"]};
+    
+    for(transport of lst){
+      nom_transport = transport[5].toLowerCase()
+      name_transport = document.getElementById("card"+transport[5])
+      if(name_transport != null){
+        var lieu__depart = document.getElementById(dico_champs_box[nom_transport][0]);
+        var lieu__arrive = document.getElementById(dico_champs_box[nom_transport][1]);
+        lieu__depart.value = transport[2];
+        lieu__arrive.value = transport[3];
+        document.getElementById("card"+transport[5]).click();
+      }
+    }
+  }
+
+    
+
+ 
+
+    //TRAIN
+    var liste_dep_train = "{{liste_lieu_train}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
+    var dataSource = liste_dep_train
+      .map(lieu_dep_train => lieu_dep_train.trim())
+      .filter(Boolean)
+      .map(lieu_dep_train => ({text: lieu_dep_train, value: lieu_dep_train}));
+  
+    $("#lieuDepartTrain").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+  
+    $("#lieuArriveTrain").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+
+    //AVION
+    var liste_dep_train = "{{liste_lieu_avion}}".replace(/&#39;|&#34;/g, "").replace(/\[|\]/g, "").split(",");
+    var dataSource = liste_dep_train
+      .map(lieu_dep_train => lieu_dep_train.trim())
+      .filter(Boolean)
+      .map(lieu_dep_train => ({text: lieu_dep_train, value: lieu_dep_train}));
+  
+    // { text: "Cotton", value: "1" }
+    $("#lieuDepartAvion").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+  
+    $("#lieuArriveAvion").kendoComboBox({
+      dataTextField: "text",
+      dataValueField: "value",
+      dataSource: dataSource,
+      filter: "contains",
+      suggest: true,
+      size : "large"
+    });
+
+
+
+  $("#save").on("click", function(){
+    console.log("essaieverif");
+    if(verif_date() && verif_transport()){
+      console.log("verig");
+      var avion = document.getElementById("divLieuDepArriveAvion").style.display != "none";
+      var train = document.getElementById("divLieuDepArriveTrain").style.display != "none";
+      var voiture = document.getElementById("divLieuDepArriveVoiture").style.display != "none";
+      var covoiturage = document.getElementById("divLieuDepArriveCovoiturage").style.display != "none";
+      var autre = document.getElementById("divLieuDepArriveAutre").style.display != "none";
+      var dateArr = document.getElementById("dateArr").value;
+      var hArrive = document.getElementById("hArrive").value;
+      var dateDep = document.getElementById("dateDep").value;
+      var hDep = document.getElementById("hDep").value;
+
+      var lieuDepartAvion = document.getElementById("lieuDepartAvion") != null ? document.getElementById("lieuDepartAvion").value : null;
+      var lieuArriveAvion = document.getElementById("lieuArriveAvion")!=null ? document.getElementById("lieuArriveAvion").value : null;
+
+      var lieuDepartTrain = document.getElementById("lieuDepartTrain") != null ? document.getElementById("lieuDepartTrain").value : null;
+      var lieuArriveTrain = document.getElementById("lieuArriveTrain") != null ? document.getElementById("lieuArriveTrain").value : null;
+
+      var lieuDepartVoiture = document.getElementById("lieuDepartVoiture")!=null ? document.getElementById("lieuDepartVoiture").value : null;
+      var lieuArriveVoiture = document.getElementById("lieuArriveVoiture")!= null ? document.getElementById("lieuArriveVoiture").value : null;
+
+      var lieuDepartCovoiturage = document.getElementById("lieuDepartCovoiturage") != null ? document.getElementById("lieuDepartCovoiturage").value : null;
+      var lieuArriveCovoiturage = document.getElementById("lieuArriveCovoiturage") != null ? document.getElementById("lieuArriveCovoiturage").value : null;
+
+      var precision = document.getElementById("precision") != null ? document.getElementById("precision").value : null;
+
+
+      $.ajax({
+        url : "{{url_for('insererTransportPersonne')}}",
+        type : "POST",
+        dataType : "json",
+        data : {
+          "avion" : avion,
+          "train" : train,
+          "voiture" : voiture,
+          "covoiturage" : covoiturage,
+          "autre" : autre,
+          "dateArr" : dateArr,
+          "hArrive" : hArrive,
+          "dateDep" : dateDep,
+          "hDep"  : hDep,
+
+          "lieuDepartAvion" : lieuDepartAvion,  
+          "lieuArriveAvion" : lieuArriveAvion,
+          "lieuDepartTrain" : lieuDepartTrain,
+          "lieuArriveTrain" : lieuArriveTrain,
+          "lieuDepartVoiture" : lieuDepartVoiture,
+          "lieuArriveVoiture" : lieuArriveVoiture,
+          "lieuDepartCovoiturage" : lieuDepartCovoiturage,
+          "lieuArriveCovoiturage" : lieuArriveCovoiturage,
+          "precision" : precision
+        },
+        success: function() {
+          console.log("sucess");
+          window.location.href = "{{url_for('formulaire_reservation')}}";
+        }
+      })
+}
+  
+  })
+})
+
+
+function verif_date(){
+  // Récupérer l'élément input date par son ID
+  const dateArr = document.getElementById('dateArr');
+  const dateDep = document.getElementById('dateDep');
+  const selectedDateArr = new Date(dateArr.value);
+  const selectedDateDep = new Date(dateDep.value);
+  var arrive = false;
+  var depart = false;
+  var ordre = false;
+
+  var beginDate = new Date("{{limite_arr}}");
+  var endDate = new Date("{{limite_dep}}"); 
+  // Vérifier si la date sélectionnée est compris dans les dates du festival
+  if (selectedDateArr.getTime() < beginDate.getTime() || selectedDateArr.getTime() > endDate.getTime()) {
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateArr.setCustomValidity('Veuillez sélectionner les dates du festival !');
+    arrive = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateArr.setCustomValidity('');
+    arrive = true;
+  }
+  // Vérifier si la date sélectionnée est compris dans les dates du festival
+  if ( selectedDateDep.getTime() < beginDate.getTime() || selectedDateDep.getTime() > endDate.getTime()){
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateDep.setCustomValidity('Veuillez sélectionner les dates du festival !');
+    depart = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateDep.setCustomValidity('');
+    depart = true;
+  }
+  console.log(beginDate.getTime());
+  console.log(endDate.getTime());
+  if (selectedDateArr.getTime() > selectedDateDep.getTime()){
+    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    dateDep.setCustomValidity('Veuillez sélectionner une date ultérieur !');
+    ordre = false;
+  } else {
+    // Réinitialiser le message d'erreur s'il est présent
+    dateArr.setCustomValidity('');
+    ordre = true;
+  }
+  return depart && arrive && ordre;
+}
+
+
+
+function verif_transport(){
+  var liste = new Array();
+  var transport = false;
+  var champ_transport = true;
+  var res = false;
+  liste.push("divLieuDepArriveAvion", "divLieuDepArriveTrain", "divLieuDepArriveVoiture", "divLieuDepArriveCovoiturage", "divLieuDepArriveAutre");
+  for(let element of liste){
+    var elem = document.getElementById(element);
+    if (elem.style.display != "none") {
+      transport = true;
+      if(!verif_champ_transport(element)){
+        champ_transport = false;
+      }
+    }
+  }
+
+  if(champ_transport && transport){
+    res = true;
+  }
+  else if(!transport){
+    window.alert("Vous devez choisir un moyen de transport");
+    res = false;
+  }
+  else{
+    res = false;
+  }
+
+  return res;
+
+} 
+
+
+
+function verif_champ_transport(transport){
+  const dico_champs_box = {"divLieuDepArriveAvion" : ["lieuDepartAvion", "lieuArriveAvion"], "divLieuDepArriveTrain": ["lieuDepartTrain", "lieuArriveTrain"],
+  "divLieuDepArriveVoiture": ["lieuDepartVoiture", "lieuArriveVoiture"], "divLieuDepArriveCovoiturage": ["lieuDepartCovoiturage", "lieuArriveCovoiturage"],
+  "divLieuDepArriveAutre": ["precision"]};
+
+  var arrive = true;
+  var depart = true;
+
+  if(transport != "divLieuDepArriveAutre"){
+    var champ_dep = document.getElementById(dico_champs_box[transport][0]);
+    var champ_arr = document.getElementById(dico_champs_box[transport][1]);
+
+    console.log(champ_arr);
+
+    if(!champ_dep.value.trim()){
+      champ_dep.classList.add("error");
+      depart = false;
+    }
+    else{
+      champ_dep.classList.remove("error");
+    }
+    if(!champ_arr.value.trim()){
+      champ_arr.classList.add("error");
+      arrive = false;
+    }
+    else{
+      champ_arr.classList.remove("error");
+    }
+    return arrive && depart;
+  }
+  else{
+    var champ_dep = document.getElementById(dico_champs_box[transport][0]);
+
+    if(!champ_dep.value.trim()){
+      champ_dep.classList.add("error");
+      depart = false;
+    }
+    else{
+      champ_dep.classList.remove("error");
+    }
+    return depart;
+  }
+}
+
+
+function verif_reverse(departInputID, arriveInputID, reverseImg ){
+  var departInput = document.getElementById(departInputID);
+  var arriveInput = document.getElementById(arriveInputID);
+  if(departInput.value != "" && arriveInput.value != ""){
+          const img_svg = document.getElementById(reverseImg);
+          img_svg.classList.toggle("reverse");
+          const lieuDep = departInput.value;
+          if (departInputID == "lieuDepartAvion" || departInputID == "lieuDepartTrain"){
+          var dep = $("#"+departInputID).data("kendoComboBox");
+          dep.value(arriveInput.value);
+          var arr = $("#"+arriveInputID).data("kendoComboBox");
+          arr.value(lieuDep);
+          }
+          else{
+            departInput.value = arriveInput.value;
+            arriveInput.value = lieuDep;
+          }
+        }
+}
+
+const cardAvion = document.getElementById("cardAvion");
+
+cardAvion.addEventListener("click", function(){
+  var deleteButton = document.getElementById("boutonSupprAvion");
+  var container = document.getElementById("divLieuDepArriveAvion");
+  container.style.display = "block";
+  deleteButton.addEventListener("click", function(){
+    container.style.display = "none";
+    document.body.scrollIntoView({ behavior: 'smooth' });
+}); 
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveAvion");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+var reverseButton = document.getElementById("boutonReverseAvion");
+  reverseButton.addEventListener("click", function() {
+  verif_reverse("lieuDepartAvion", "lieuArriveAvion", "reverseButtonImgAvion");
+        });
+
+
+// FIN AVION
+
+
+// TRAIN
+
+const cardTrain = document.getElementById("cardTrain");
+
+cardTrain.addEventListener("click", function(){
+  var deleteButton = document.getElementById("boutonSupprTrain");
+  var container = document.getElementById("divLieuDepArriveTrain");
+  container.style.display = "block";
+  deleteButton.addEventListener("click", function(){
+    container.style.display = "none";
+    document.body.scrollIntoView({ behavior: 'smooth' });
+});
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveTrain");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+var reverseButton = document.getElementById("boutonReverseTrain");
+  reverseButton.addEventListener("click", function() {
+  verif_reverse("lieuDepartTrain", "lieuArriveTrain", "reverseButtonImgTrain");
+        });
+
+// FIN TRAIN 
+
+
+// VOITURE
+
+const cardVoiture = document.getElementById("cardVoiture");
+
+cardVoiture.addEventListener("click", function(){
+  var deleteButton = document.getElementById("boutonSupprVoiture");
+  var container = document.getElementById("divLieuDepArriveVoiture");
+  container.style.display = "block";
+  deleteButton.addEventListener("click", function(){
+      container.style.display = "none";
+      document.body.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveVoiture");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+var reverseButton = document.getElementById("boutonReverseVoiture");
+  reverseButton.addEventListener("click", function() {
+  verif_reverse("lieuDepartVoiture", "lieuArriveVoiture", "reverseButtonImgVoiture");
+        });
+
+// FIN VOITURE
+
+
+// COVOITURAGE
+
+const cardCovoiturage = document.getElementById("cardCovoiturage");
+
+cardCovoiturage.addEventListener("click", function(){
+  var deleteButton = document.getElementById("boutonSupprCovoiturage");
+  var container = document.getElementById("divLieuDepArriveCovoiturage");
+  container.style.display = "block";
+  deleteButton.addEventListener("click", function(){
+    container.style.display = "none";
+    document.body.scrollIntoView({ behavior: 'smooth' });
+});
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveCovoiturage");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+var reverseButton = document.getElementById("boutonReverseCovoiturage");
+  reverseButton.addEventListener("click", function() {
+  verif_reverse("lieuDepartCovoiturage", "lieuArriveCovoiturage", "reverseButtonImgCo");
+        });
+
+
+// FIN COVOITURAGE
+
+// AUTRE
+
+const cardAutre = document.getElementById("cardAutre");
+
+cardAutre.addEventListener("click", function(){
+  var deleteButton = document.getElementById("boutonSupprAutre");
+  var container = document.getElementById("divLieuDepArriveAutre");
+  container.style.display = "block";
+  deleteButton.addEventListener("click", function(){
+    container.style.display = "none";
+    document.body.scrollIntoView({ behavior: 'smooth' });
+});
+
+  //décalage en px
+  var offest = -60;
+
+  var element = document.getElementById("divLieuDepArriveAutre");
+    var rect = element.getBoundingClientRect();
+    // Faire défiler la page jusqu'à l'élément
+    window.scrollTo(0, rect.top + window.pageYOffset+offest);
+});
+
+// Mise dans les input date, des valeurs correct
+
+
+</script>

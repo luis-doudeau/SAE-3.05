@@ -1,0 +1,28 @@
+SET foreign_key_checks = 0;
+drop table if exists INTERVENIR;
+drop table if exists TRAVAILLER;
+drop table if exists DEPLACER;
+drop table if exists LOGER;
+drop table if exists TRANSPORTER;
+drop table if exists AVOIR;
+drop table if exists AUTEUR;
+drop table if exists INVITE;
+drop table if exists PRESSE;
+drop table if exists MANGER;
+drop table if exists STAFF;
+drop table if exists INTERVENANT;
+drop table if exists REPAS;
+drop table if exists CONSOMMATEUR;
+drop table if exists TRANSPORT;
+drop table if exists REGIME;
+drop table if exists EXPOSANT;
+drop table if exists PARTICIPANT;
+drop table if exists VOYAGE;
+drop table if exists NAVETTE;
+drop table if exists MAISON_EDITION;
+drop table if exists LIEU;
+drop table if exists HOTEL;
+drop table if exists CRENEAU;
+drop table if exists RESTAURANT;
+SET foreign_key_checks = 1;
+    

@@ -1,3 +1,7 @@
+body{
+    margin : 0;
+}
+
 body > header{
     background-color: #0c0a60;
     color: #ffffff;
@@ -61,6 +65,9 @@ body header{
 
 main header{
     background-color:#5774d8;
+    height: 133px;
+    left: -8px;
+    top: 78px;
 }
 
 body{
@@ -72,13 +79,17 @@ main header li{
 }
 
 #imgLogoMaison{
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 108px;
+    height: 102px;
+    left: 48px;
+    top: 93px;
 }
 
 #imgheader39festival{
-    width: 20rem;
-    height: 4rem;
+    width: 511px;
+    height: 93px;
+    left: 194px;
+    top: 98px;
 }
 
 #p39e{
