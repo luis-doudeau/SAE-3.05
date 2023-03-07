@@ -110,17 +110,18 @@ def formulaire_auteur_transport():
     if est_secretaire(current_user.idP):
         return redirect(url_for("page_secretaire_accueil"))
     assister = get_assister(current_user.idP, datetime.datetime.now().year)
-    dateArr = DATE_FESTIVAL[0]
-    dateDep=None
+    dateArrLimite = DATE_FESTIVAL[0]
+    dateDepLimite=DATE_FESTIVAL[-1]
     time_arr = None
     time_dep = None
+    date_arr = None
     if assister is not None :
         dateArr = str(assister.dateArrive.year)+"-"+str(assister.dateArrive.month)+"-"+str(assister.dateArrive.day)
         dateDep = str(assister.dateDepart.year)+"-"+str(assister.dateDepart.month)+"-"+str(assister.dateDepart.day)
         time_arr = assister.dateArrive.strftime("%H:%M")
         time_dep = assister.dateDepart.strftime("%H:%M")
     liste_transport = requete_transport_annee2(current_user.idP, datetime.datetime.now().year)
-    response= make_response(render_template("transportForms.html", date_arr=dateArr,date_dep=dateDep, limite_arr=dateArr, timeArr=time_arr, timeDep=time_dep, limite_dep = DATE_FESTIVAL[-1], listeTransport=liste_transport, liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion()))
+    response= make_response(render_template("transportForms.html", arrLimite = dateArrLimite, depLimite = dateDepLimite, date_arr=dateArr,date_dep=dateDep, timeArr=time_arr, timeDep=time_dep, listeTransport=liste_transport, liste_lieu_train=get_all_lieu_train(), liste_lieu_avion=get_all_lieu_avion()))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
