@@ -99,9 +99,11 @@ function verifFormulaire(){
 }
 
   document.addEventListener("DOMContentLoaded", function() {
-    liste_id = convertirListe("{{repas}}");
-    for(id of liste_id){
-      document.getElementById(id.trim()).checked = true;
+    if("{{repas}}" !== "[]"){
+      liste_id = convertirListe("{{repas}}");
+      for(id of liste_id){
+        document.getElementById(id.trim()).checked = true;
+      }
     }
 })
 

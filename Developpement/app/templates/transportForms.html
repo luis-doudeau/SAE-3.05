@@ -272,16 +272,16 @@
   document.addEventListener("DOMContentLoaded", function() {
 
 
-    if("{{date_dep}}" !== "None"){
-      let arrive = new Date("{{date_arr}}").toISOString().substr(0, 10); 
-      let depart = new Date("{{date_dep}}").toISOString().substr(0, 10); 
+    if("{{date_arr}}" !== "None"){
+      let arrive = new Date("{{date_arr}}").toISOString().substr(0, 10);
+      let depart = new Date("{{date_dep}}").toISOString().substr(0, 10);
       document.getElementById("dateDep").value = depart;
       document.getElementById("dateArr").value = arrive;
       document.getElementById("hArrive").value = "{{timeArr}}";
       document.getElementById("hDep").value = "{{timeDep}}";
     }
     else{
-      let debut_festival = new Date("{{date_arr}}").toISOString().substr(0, 10); 
+      let debut_festival = new Date("{{arrLimite}}").toISOString().substr(0, 10); 
       document.getElementById("dateDep").value = debut_festival;
       document.getElementById("dateArr").value = debut_festival;
       let currentTime = new Date().toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -453,8 +453,8 @@ function verif_date(){
   var depart = false;
   var ordre = false;
 
-  var beginDate = new Date("{{limite_arr}}");
-  var endDate = new Date("{{limite_dep}}"); 
+  var beginDate = new Date("{{arrLimite}}");
+  var endDate = new Date("{{depLimite}}"); 
   // Vérifier si la date sélectionnée est compris dans les dates du festival
   if (selectedDateArr.getTime() < beginDate.getTime() || selectedDateArr.getTime() > endDate.getTime()) {
     // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
@@ -465,10 +465,13 @@ function verif_date(){
     dateArr.setCustomValidity('');
     arrive = true;
   }
+  console.log(selectedDateDep.getTime());
+  console.log(beginDate.getTime());
+  console.log(beginDate);
   // Vérifier si la date sélectionnée est compris dans les dates du festival
   if ( selectedDateDep.getTime() < beginDate.getTime() || selectedDateDep.getTime() > endDate.getTime()){
     // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
-    dateDep.setCustomValidity('Veuillez sélectionner les dates du festival !');
+    dateDep.setCustomValidity('Veuillez sélectionner les dates du festival ! 1');
     depart = false;
   } else {
     // Réinitialiser le message d'erreur s'il est présent
@@ -478,7 +481,7 @@ function verif_date(){
   console.log(beginDate.getTime());
   console.log(endDate.getTime());
   if (selectedDateArr.getTime() > selectedDateDep.getTime()){
-    // Afficher un message d'erreur si la date sélectionnée n'est pas le 2 mars 2023
+    // Afficher un message d'erreur si la date de départ est inférieur à la date d'arrivé
     dateDep.setCustomValidity('Veuillez sélectionner une date ultérieur !');
     ordre = false;
   } else {
