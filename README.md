@@ -7,13 +7,13 @@ CHARPENTIER Maxym
 
 ## Use
 install python\
-pip install flask
-pip3 install mysql-connector-python
-pip install flask-wtf
-pip install flask-login
-pip install xlsxwriter
-pip install pandas
-pip install sendgrid
+pip install flask\
+pip3 install mysql-connector-python\
+pip install flask-wtf\
+pip install flask-login\
+pip install xlsxwriter\
+pip install pandas\
+pip install sendgrid\
 
 ## Link GitHub
 
