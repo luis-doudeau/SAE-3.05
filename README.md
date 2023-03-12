@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=1oxLmS8MiEo
 Vous pouvez vérifier que MySQL est bien installé avec ces étapes : 
 
 Ouvrez l'invite de commande en appuyant sur la touche Windows + R, tapez "cmd" et appuyez sur Entrée.
-Dans l'invite de commande, tapez "mysql --version" et appuyez sur Entrée.
+Dans l'invite de commande, tapez `mysql --version` et appuyez sur Entrée.
 Si MySQL est installé, vous devriez voir la version de MySQL installée sur votre machine.
 
 Ensuite vous devez ajouter aux variables d'environnement le programme MySQL afin de pouvoir lancer la base de données ensuite.
@@ -50,9 +50,9 @@ Quitter, puis rendez-vous dans le fichier ConnexionPythonSQL.py qui se trouve da
 
 Maintenant, placez-vous à la racine du projet et ouvrez un terminal puis entrez la commande suivante afin de télécharger toutes les dépendances dont l'application à besoin :
  
-python -m pip install -r Developpement\requirement.txt
+`python -m pip install -r Developpement\requirement.txt`
 OU
-pip install -r Developpement\requirement.txt
+`pip install -r Developpement\requirement.txt`
 
 Dès à présent, vous pouvez lancer l'application. Pour cela, soit vous installer Visual Studio Code, et ouvrez le projet avec ce logiciel. Une fois ouvert, dans le bar de navigation à droite rendez-vous dans l'onglet Extensions et installer python. Ensuite cliquez pour afficher le fichier run.py qui se trouve dans le répertoire : \Developpement\run.py puis cliquer sur l’icône triangle en haut à droite nommée "run the Python file" ou "Éxécuter le fichier Python".
 
@@ -94,9 +94,9 @@ Vérifier que la ligne 88 du fichier soit la seule du paragraphe à être dé-co
 
 Maintenant, placez-vous à la racine du projet et ouvrez un terminal puis entrez la commande suivante afin de télécharger toutes les dépendances dont l'application à besoin :
  
-python -m pip install -r Developpement\requirement.txt
+`python -m pip install -r Developpement\requirement.txt`
 OU
-pip install -r Developpement\requirement.txt
+`pip install -r Developpement\requirement.txt`
 
 Dès à présent, vous pouvez lancer l'application. Pour cela, soit vous pouvez installer Visual Studio Code, et ouvrir le projet avec ce logiciel. Une fois ouvert, dans le bar de navigation à droite rendez-vous dans l'onglet Extensions et installer python. Ensuite cliquer pour afficher le fichier run.py qui se trouve dans le répertoire : \Developpement\run.py puis cliquer sur l’icône triangulaire en haut à droite nommée "run the Python file" ou "Exécuter le fichier Python".
 
